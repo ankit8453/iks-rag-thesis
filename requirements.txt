@@ -1,0 +1,56 @@
+# IKS Agricultural Advisory System — Core Dependencies
+# Python 3.10+ required
+# Install with: pip install -r requirements.txt
+
+# ============= Deep Learning & Computer Vision =============
+torch==2.2.0
+torchvision==0.17.0
+timm==0.9.16
+opencv-python==4.9.0.80
+Pillow==10.2.0
+
+# ============= Data Processing & Numerics =============
+numpy==1.26.4
+pandas==2.2.1
+scikit-learn==1.4.1
+
+# ============= Visualization =============
+matplotlib==3.8.3
+seaborn==0.13.2
+
+# ============= Data Augmentation =============
+albumentations==1.4.0
+
+# ============= NLP & Transformers =============
+transformers==4.39.3
+sentence-transformers==2.6.1
+
+# ============= RAG & Vector Stores =============
+langchain==0.1.16
+langchain-community==0.0.34
+chromadb==0.4.24
+
+# ============= RAG Evaluation =============
+ragas==0.1.7
+
+# ============= Web Interfaces =============
+gradio==4.25.0
+streamlit==1.33.0
+
+# ============= Configuration & Utilities =============
+pyyaml==6.0.1
+tqdm==4.66.2
+
+# ============= Notebooks =============
+jupyter==1.0.0
+ipykernel==6.29.4
+
+# ============= Monitoring & Debugging =============
+tensorboard==2.16.2
+
+# ============= Explainability =============
+grad-cam==1.5.0
+
+# Note: For GPU acceleration, ensure CUDA 12.1 is installed.
+# For CPU-only, no additional setup required.
+# All versions are pinned for reproducibility.

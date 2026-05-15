@@ -1,0 +1,39 @@
+name: iks-agri
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch::pytorch=2.2.0
+  - pytorch::pytorch-cuda=12.1
+  - pytorch::torchvision=0.17.0
+  - pytorch::torchaudio=2.2.0
+  - pytorch::pytorch-cuda=12.1
+  - pip
+  - pip:
+    - torch==2.2.0
+    - torchvision==0.17.0
+    - timm==0.9.16
+    - opencv-python==4.9.0.80
+    - Pillow==10.2.0
+    - numpy==1.26.4
+    - pandas==2.2.1
+    - scikit-learn==1.4.1
+    - matplotlib==3.8.3
+    - seaborn==0.13.2
+    - albumentations==1.4.0
+    - transformers==4.39.3
+    - sentence-transformers==2.6.1
+    - langchain==0.1.16
+    - langchain-community==0.0.34
+    - chromadb==0.4.24
+    - ragas==0.1.7
+    - gradio==4.25.0
+    - streamlit==1.33.0
+    - pyyaml==6.0.1
+    - tqdm==4.66.2
+    - jupyter==1.0.0
+    - ipykernel==6.29.4
+    - tensorboard==2.16.2
+    - grad-cam==1.5.0

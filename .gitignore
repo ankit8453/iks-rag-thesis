@@ -1,0 +1,69 @@
+# Datasets (large, not in repo)
+data/
+corpus/raw/
+corpus/cleaned/
+corpus/chunks/
+
+# Trained models (large)
+models/
+*.pt
+*.pth
+*.ckpt
+
+# Vector database (large)
+corpus/vector_db/
+
+# Results and logs
+results/*.pkl
+results/*.json
+results/logs/
+results/disease/tensorboard/
+results/soil/tensorboard/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.venv
+venv/
+ENV/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Experiments
+experiments/
+tmp/
+temp/
+
+# Cache
+.cache/
+cache/
+
+# Credentials (if any)
+*.key
+*.pem
+credentials.json
+secrets.yaml
