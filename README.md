@@ -286,7 +286,7 @@ If you use this project in your research, please cite:
 
 ```bibtex
 @mastersthesis{thesis_iks_agricultural,
-  author = {[Your Name]},
+  author = {Ankit Pawar},
   title = {An IKS-Grounded Multimodal Agricultural Advisory System: Joint Disease and Soil Analysis with Retrieval-Augmented Generation over Classical Indian Agricultural Texts},
   school = {IIITDM Jabalpur},
   year = {2024-2025},
@@ -322,7 +322,8 @@ If you use this project in your research, please cite:
 
 For questions or collaboration inquiries, please contact:
 - **Advisor:** Dr. Akshay Pandey, IIITDM Jabalpur
-- **GitHub:** [Your repository URL]
+- **Student:** Ankit Pawar, M.Tech CSE, IIITDM Jabalpur
+- **GitHub:**  https://github.com/ankit8453/iks-rag-thesis.git
 
 ---
 
