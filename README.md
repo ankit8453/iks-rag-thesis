@@ -1,330 +1,209 @@
-# An IKS-Grounded Multimodal Agricultural Advisory System: Joint Disease and Soil Analysis with Retrieval-Augmented Generation over Classical Indian Agricultural Texts
+# An IKS-Grounded Multimodal Agricultural Advisory System
 
-**M.Tech Thesis | IIITDM Jabalpur | Department of Computer Science & Engineering**
+**Joint Disease and Soil Analysis with Retrieval-Augmented Generation over Classical Indian Agricultural Texts**
 
-**Supervised by:** Dr. Akshay Pandey
+M.Tech Thesis · IIITDM Jabalpur · Department of Computer Science & Engineering
+Supervisor: **Dr. Akshay Pandey**
+
+> **Project status:** Week 2 of 40 — Foundation infrastructure complete. See [`progress.md`](progress.md) and [`WEEK2_SUMMARY.md`](WEEK2_SUMMARY.md).
 
 ---
 
 ## Overview
 
-This research project presents an **Intelligent Knowledge System (IKS)-grounded multimodal agricultural advisory system** that integrates computer vision and retrieval-augmented generation (RAG) to provide culturally-grounded agricultural recommendations. The system accepts two input images—a plant/leaf photograph and a soil sample photograph—and produces a unified advisory response grounded in classical Indian agricultural texts.
+A multimodal system that takes a plant/leaf photograph and a soil
+photograph, runs each through a dedicated vision model, and feeds the
+joint context plus a user-supplied causal hypothesis into a retrieval-
+augmented generator grounded in classical Indian agricultural texts
+(Vrikshayurveda, Krishi Parashara, Upavanavinoda, plus three optional
+extensions).
 
-**System Pipeline:**
-1. **Disease Detection Module:** Classifies plant diseases from leaf images using fine-tuned ResNet50 (PlantVillage dataset, 38 classes)
-2. **Soil Analysis Module:** Predicts soil type and visual attributes (texture, surface condition, moisture appearance) using multi-task ResNet50 (does NOT predict NPK/pH/fertility)
-3. **Retrieval-Augmented Generation (RAG):** Retrieves relevant treatment protocols from classical texts (Vrikshayurveda, Krishi Parashara, Upavanavinoda) using dense + sparse hybrid retrieval
-4. **Recommendation Generation:** Synthesizes disease-specific and soil-appropriate organic treatment protocols with source citations
+**Novel contributions** (formal statement in the thesis intro):
 
-**Key Features:**
-- Grounded in classical Indian agricultural knowledge (Vrikshayurveda, Krishi Parashara, Upavanavinoda)
-- Explainable AI using Grad-CAM for disease prediction transparency
-- Multi-task soil analysis (type + texture + surface + moisture)
-- Hybrid retrieval (dense embedding + BM25 sparse retrieval) for robustness
-- Source citations for all recommendations
-- Streamlit web interface for end-user interaction
+- **C1** First chunked + metadata-tagged digital corpus of these texts.
+- **C2** Joint disease–soil context module with three ablated integration
+  strategies (template, LLM-mediated, multimodal embedding).
+- **C3** Faithfulness-aware RAG evaluation combining RAGAS with domain
+  experts.
+- **C4** First quantitative hallucination measurement on IKS sources.
+- **C5** Cause-conditional retrieval — the system retrieves *treatment
+  given* a user-provided causal context; it does **not** infer cause
+  from images.
 
 ---
 
-## ⚠️ Important Disclaimer
+## Disclaimer
 
-**This system is a research prototype designed for academic exploration only.** Recommendations are derived from classical texts and modern models and are **NOT substitutes for professional agronomic advice, soil testing, or formal disease diagnosis.** Users must consult qualified agricultural experts for real-world farming decisions. This project is part of an M.Tech thesis and should not be used as a standalone advisory tool in production settings.
+This is a research prototype for academic exploration. Recommendations
+derive from classical texts and modern models and are **not** substitutes
+for professional agronomic advice, soil testing, or formal disease
+diagnosis. Consult qualified agricultural experts for real-world farming
+decisions.
 
 ---
 
 ## Architecture
 
-### Component Overview
-
 ```
-User Input (Plant Photo + Soil Photo)
-         ↓
-    ┌────────────────────────────────────┐
-    │  Disease Detection (ResNet50 CNN)  │ → Disease Class + Confidence
-    └────────────────────────────────────┘
-    ┌────────────────────────────────────┐
-    │  Soil Analysis (ResNet50 Multi-Task)│ → Soil Type, Texture, Surface, Moisture
-    └────────────────────────────────────┘
-         ↓
-    ┌────────────────────────────────────┐
-    │   RAG Pipeline (Hybrid Retrieval)   │
-    │   - Query embedding                 │
-    │   - Dense retrieval (MiniLM-L6)    │
-    │   - Sparse retrieval (BM25)        │
-    │   - Re-ranking (cross-encoder)     │
-    └────────────────────────────────────┘
-         ↓
-    ┌────────────────────────────────────┐
-    │   LLM Generation (Llama-3.1-8B)    │
-    │   + Source Citation                │
-    └────────────────────────────────────┘
-         ↓
-    Unified Advisory Response (Grounded in IKS)
-```
-
-### Module Breakdown
-
-- **`src/disease/`**: Plant disease classification module
-  - `model.py`: ResNet50-based classifier
-  - `dataset.py`: PlantVillage dataset loader
-  - `train.py`: Training pipeline with early stopping
-  - `inference.py`: Inference wrapper
-
-- **`src/soil/`**: Multi-task soil visual analysis
-  - `model.py`: ResNet50 with 4 task heads (soil type, texture, surface, moisture)
-  - `dataset.py`: Custom soil dataset loader
-  - `train.py`: Multi-task training loop
-  - `inference.py`: Inference with per-task outputs
-
-- **`src/rag/`**: Retrieval-Augmented Generation pipeline
-  - `chunker.py`: Sentence-window chunking with semantic tagging
-  - `embedder.py`: Embedding wrapper (sentence-transformers)
-  - `retriever.py`: Hybrid retrieval (dense + BM25)
-  - `generator.py`: LLM generation with prompt engineering
-
-- **`src/explain/`**: Explainability components
-  - `gradcam.py`: Grad-CAM visualization for disease detection
-  - `chunk_viz.py`: Visualize retrieved chunks and re-ranking scores
-
-- **`src/eval/`**: Evaluation framework
-  - `cv_metrics.py`: Classification metrics (accuracy, F1, confusion matrices)
-  - `ragas_eval.py`: RAG evaluation (RAGAS framework: Faithfulness, Relevance, Context Recall)
-  - `expert_annotation.py`: Groundtruth annotation collector
-
-- **`src/integration/`**: Strategy-based integration layer
-  - `template_strategy.py`: Template-based recommendation generation
-  - `llm_strategy.py`: LLM-based recommendation generation
-  - `embedding_strategy.py`: Embedding strategy interface for swappability
-
-- **`src/utils/`**: Utilities
-  - `logger.py`: Structured logging with file + console handlers
-  - `config.py`: YAML configuration loader
-
----
-
-## Setup Instructions
-
-### Prerequisites
-- Python 3.10+
-- CUDA 12.1 (recommended for GPU acceleration) or CPU-only
-- 16+ GB RAM recommended
-
-### Installation
-
-**Option 1: Using Conda (Recommended)**
-
-```bash
-conda env create -f environment.yml
-conda activate iks-agri
+User input: (plant photo, soil photo, crop, causal context)
+        ↓
+   ┌────────────────────────┐    ┌────────────────────────┐
+   │ Disease (EffNet-B4)    │    │ Soil (EffNet-B0, MT)   │
+   │  ↳ DiseasePrediction   │    │  ↳ SoilPrediction      │
+   └────────────────────────┘    └────────────────────────┘
+                          ↓ joint
+        ┌─────────────────────────────────────────┐
+        │   Integration strategy (one of 3)       │
+        │   template │ llm_mediated │ multimodal  │
+        └─────────────────────────────────────────┘
+                          ↓ query (+ CausalContext)
+        ┌─────────────────────────────────────────┐
+        │  Hybrid retrieval                       │
+        │  dense (BGE) + BM25 → cross-encoder     │
+        │  rerank (BGE-reranker)                  │
+        └─────────────────────────────────────────┘
+                          ↓ top-k chunks
+        ┌─────────────────────────────────────────┐
+        │  Llama-3.1-8B-Instruct (4-bit)          │
+        │  Cited answer + refusal mode            │
+        └─────────────────────────────────────────┘
+                          ↓
+   Advisory response with chunk-ID citations + Grad-CAM overlay
 ```
 
-**Option 2: Using pip + venv**
+## Locked Stack
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+| Component               | Choice                                        |
+|-------------------------|-----------------------------------------------|
+| Python                  | `>=3.11,<3.13`                                |
+| Deep learning           | PyTorch 2.x + `timm`                          |
+| Disease backbone        | **EfficientNet-B4** (PlantVillage, 38 cls)    |
+| Soil backbone           | **EfficientNet-B0** (multi-task, visual only) |
+| LLM                     | `meta-llama/Llama-3.1-8B-Instruct`, 4-bit     |
+| Embeddings              | `BAAI/bge-large-en-v1.5`                      |
+| Reranker                | `BAAI/bge-reranker-base`                      |
+| Sparse retrieval        | `rank-bm25`                                   |
+| Vector store            | `chromadb`                                    |
+| RAG orchestration       | Plain Python — **no LangChain / LlamaIndex**  |
+| RAG evaluation          | `ragas` + expert annotation                   |
+| CV metrics              | `torchmetrics` + per-class report (guardrail) |
+| Explainability          | `pytorch-grad-cam`, `captum`                  |
+| Config                  | `pydantic` v2 + YAML                          |
+| Tests / lint / type     | `pytest`, `ruff`, `black`, `mypy`             |
 
-### Verify Installation
+ADRs explaining the non-obvious picks: [`decisions/`](decisions/).
 
-```bash
-cd notebooks
-jupyter notebook 00_environment_check.ipynb
-# Run all cells to verify dependencies
-```
-
-### Download Datasets
-
-1. **PlantVillage (Plant Disease):**
-   - Download from [PlantVillage Dataset](https://github.com/spMohanty/PlantVillage-Dataset)
-   - Extract to `data/plant_disease/`
-
-2. **Soil Type Images:**
-   - Download from [Soil Type Image Classification - Kaggle](https://www.kaggle.com/datasets/abdulqayyum/soil-types-image-classification)
-   - Extract to `data/soil/`
-
-3. **Classical Texts (IKS Corpus):**
-   - Place digitized texts in `corpus/raw/`
-   - Preprocessing scripts will clean and chunk them
-
----
-
-## Usage
-
-### 1. Train Disease Detection Model
-
-```bash
-python scripts/train_disease.py --config configs/disease_config.yaml
-```
-
-### 2. Train Soil Analysis Model
-
-```bash
-python scripts/train_soil.py --config configs/soil_config.yaml
-```
-
-### 3. Prepare RAG Corpus
-
-```python
-from src.rag.chunker import TextChunker
-from src.rag.embedder import Embedder
-
-# Chunk classical texts
-chunker = TextChunker(config)
-chunks = chunker.process_corpus(corpus_dir="corpus/raw/", output_dir="corpus/chunks/")
-
-# Build vector database
-embedder = Embedder(config)
-embedder.build_db(chunks, persist_dir="corpus/vector_db/")
-```
-
-### 4. Run Web Interface
-
-```bash
-streamlit run demo/app.py
-```
-
-Then open `http://localhost:8501` in your browser.
-
-### 5. Evaluate RAG System
-
-```bash
-python scripts/run_rag_eval.py --config configs/rag_config.yaml
-```
-
----
-
-## Project Structure
+## Repository layout
 
 ```
 .
-├── README.md                          # This file
-├── progress.md                        # Weekly progress tracker
-├── requirements.txt                   # Pip dependencies
-├── environment.yml                    # Conda environment
-├── .gitignore                         # Git ignore rules
+├── pyproject.toml              # single source of truth for deps + tooling
+├── requirements.txt            # regenerated from pyproject
+├── requirements-dev.txt
+├── INSTALL.md                  # setup instructions
+├── progress.md                 # weekly progress log
+├── literature_tracker.csv      # paper tracking
 │
-├── data/                              # Datasets (not in repo)
-│   ├── plant_disease/                 # PlantVillage dataset
-│   ├── soil/                          # Soil type images
-│   └── splits/                        # Train/val/test splits
+├── src/
+│   ├── utils/                  # seeding, paths, logging, config
+│   ├── disease/                # EfficientNet-B4 + Grad-CAM
+│   ├── soil/                   # EfficientNet-B0 multi-task (VISUAL ONLY)
+│   ├── rag/                    # corpus, chunker, retrievers, reranker, generator
+│   ├── integration/            # joint context + 3 ablation strategies
+│   ├── explain/                # Grad-CAM + chunk highlighting
+│   └── eval/                   # per-class CV metrics, RAGAS, citation verify
 │
-├── corpus/                            # Classical texts & RAG resources
-│   ├── raw/                           # Raw digitized texts
-│   ├── cleaned/                       # Preprocessed texts
-│   ├── chunks/                        # Text chunks
-│   └── vector_db/                     # ChromaDB vector store
-│
-├── src/                               # Main source code
-│   ├── disease/                       # Disease detection module
-│   │   ├── model.py
-│   │   ├── dataset.py
-│   │   ├── train.py
-│   │   └── inference.py
-│   ├── soil/                          # Soil analysis module
-│   │   ├── model.py
-│   │   ├── dataset.py
-│   │   ├── train.py
-│   │   └── inference.py
-│   ├── rag/                           # RAG pipeline
-│   │   ├── chunker.py
-│   │   ├── embedder.py
-│   │   ├── retriever.py
-│   │   └── generator.py
-│   ├── integration/                   # Integration strategies
-│   ├── explain/                       # Explainability
-│   ├── eval/                          # Evaluation
-│   └── utils/                         # Utilities
-│
-├── notebooks/                         # Jupyter notebooks
-│   ├── 00_environment_check.ipynb
-│   └── README.md
-│
-├── scripts/                           # Training & evaluation scripts
-│   ├── train_disease.py
-│   ├── train_soil.py
-│   └── run_rag_eval.py
-│
-├── configs/                           # YAML configurations
-│   ├── disease_config.yaml
-│   ├── soil_config.yaml
-│   └── rag_config.yaml
-│
-├── results/                           # Results & logs (not in repo)
-│   └── .gitkeep
-│
-├── models/                            # Trained models (not in repo)
-│   └── .gitkeep
-│
-├── demo/                              # Streamlit web app
-│   └── app.py
-│
-└── paper/                             # Thesis writing
-    └── thesis/
+├── tests/                      # mirrors src/ + smoke tests + utils tests
+├── configs/                    # default.yaml per module
+├── corpus/{raw,cleaned,chunks,vector_db}/
+├── data/                       # PlantVillage, soil dataset (gitignored)
+├── models/                     # trained checkpoints (gitignored)
+├── results/{logs,figures}/     # outputs (gitignored except .gitkeep)
+├── notes/{cv,rag,xai,iks}/     # foundation-learning notes (Phase 1)
+├── research_journal/           # daily/weekly/monthly entries
+├── decisions/                  # ADRs
+└── .github/workflows/ci.yml    # lint + tests on push / PR
 ```
 
----
+## Setup
 
-## Timeline
+See [`INSTALL.md`](INSTALL.md) for full instructions. Quick start:
 
-| Phase | Duration | Deliverables |
-|-------|----------|--------------|
-| **Phase 1: Foundation** | Weeks 1-3 | Repo setup, literature review (CV, RAG, XAI basics), environment validation |
-| **Phase 2: Disease Module** | Weeks 4-7 | PlantVillage preprocessing, ResNet50 fine-tuning, Grad-CAM integration |
-| **Phase 3: Soil Module** | Weeks 8-10 | Soil dataset preparation, multi-task architecture, baseline training |
-| **Phase 4: RAG Pipeline** | Weeks 11-14 | Corpus preprocessing, chunking, embedding, hybrid retrieval, LLM integration |
-| **Phase 5: Integration & Optimization** | Weeks 15-17 | System integration, latency optimization, Streamlit UI |
-| **Phase 6: Evaluation & Refinement** | Weeks 18-20 | RAGAS evaluation, expert annotation, ablation studies |
-| **Phase 7: Thesis Writing** | Weeks 21-24 | Paper drafting, results compilation, final revisions |
+```bash
+git clone https://github.com/ankit8453/iks-rag-thesis.git
+cd iks-rag-thesis
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+pre-commit install
+pytest -q
+```
 
----
+## Datasets
+
+Datasets and model weights are **not** in the repo.
+
+1. **PlantVillage** — https://github.com/spMohanty/PlantVillage-Dataset →
+   unpack to `data/plant_disease/PlantVillage/`.
+2. **Soil Type Image Classification (Kaggle)** —
+   https://www.kaggle.com/datasets/abdulqayyum/soil-types-image-classification
+   → unpack to `data/soil/SoilTypes/`.
+3. **Classical texts** — place digitised translations in `corpus/raw/`;
+   preprocessing scripts populate `corpus/cleaned/` and `corpus/chunks/`.
+
+## Timeline (40 weeks)
+
+| Phase   | Weeks   | Focus                                                                 |
+|---------|---------|-----------------------------------------------------------------------|
+| Phase 0 | 1       | Repo scaffolding (done)                                              |
+| Phase 1 | 2–4     | Foundation learning (CV / RAG / XAI notes); **infra built in Week 2** |
+| Phase 2 | 5–8     | Literature review (240 papers in `literature_tracker.csv`)            |
+| Phase 3 | 9–11    | Corpus prep — Vrikshayurveda + Krishi Parashara + Upavanavinoda       |
+| Phase 4 | 12–15   | RAG pipeline                                                          |
+| Phase 5 | 16–19   | Plant disease module                                                  |
+| Phase 6 | 19–21   | Soil module + cross-region validation                                 |
+| Phase 7 | 22–24   | Integration module + three ablations                                  |
+| Phase 8 | 25–27   | Explainability + demo                                                 |
+| Phase 9 | 28–30   | Evaluation (RAGAS + expert annotation)                                |
+| Phase 10| 31–40   | Thesis writing + defence                                              |
+
+Detailed plan and risks: `progress.md`, `research_journal/monthly/`.
+
+## Hard guardrails
+
+These are visible in code and enforced by tests:
+
+1. **Reproducibility** — all stochastic scripts call
+   `src.utils.set_global_seed(seed)` (defaults to 42). Verified in
+   `tests/utils/test_seeding.py`.
+2. **Soil module is visual-only** — `SoilConfig.disallowed_outputs`
+   blocks NPK / pH / fertility / organic-matter / chemical-composition
+   keys. Verified in `tests/soil/test_smoke.py`.
+3. **Per-class metrics, not just accuracy** — every CV report includes
+   per-class precision/recall/F1 + confusion matrix. Shape enforced by
+   `ClassificationReport` in `src/eval/cv_metrics.py`.
+4. **Cross-region validation for soil** — supported via
+   `held_out_regions` in `SoilTypeDataset`.
+5. **No fabricated citations** — the RAG prompt template instructs the
+   LLM to cite chunk IDs, and `src/eval/citation_verification.py`
+   verifies the cited IDs actually appeared in retrieved context.
 
 ## Citation
 
-If you use this project in your research, please cite:
-
 ```bibtex
 @mastersthesis{thesis_iks_agricultural,
-  author = {Ankit Pawar},
-  title = {An IKS-Grounded Multimodal Agricultural Advisory System: Joint Disease and Soil Analysis with Retrieval-Augmented Generation over Classical Indian Agricultural Texts},
-  school = {IIITDM Jabalpur},
-  year = {2024-2025},
-  advisor = {Dr. Akshay Pandey}
+  author    = {Ankit Pawar},
+  title     = {An IKS-Grounded Multimodal Agricultural Advisory System:
+               Joint Disease and Soil Analysis with Retrieval-Augmented
+               Generation over Classical Indian Agricultural Texts},
+  school    = {IIITDM Jabalpur},
+  year      = {2026},
+  advisor   = {Dr. Akshay Pandey}
 }
 ```
 
----
-
-## References
-
-- **Classical Texts:**
-  - Surapala. *Vrikshayurveda* (translated by Nalini Sadhale). Asian Agri-History Foundation, 1996.
-  - Parashara. *Krishi Parashara* (translated by Sadhale & Nene). Asian Agri-History Foundation, 1999.
-  - Sarngadhara. *Upavanavinoda* (translated by Nalini Sadhale).
-
-- **Deep Learning:**
-  - He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. CVPR.
-
-- **RAG:**
-  - Lewis, P., et al. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. NeurIPS.
-  - Asai, A., et al. (2023). Retrieval-augmented generation for large language models. arXiv:2312.10997.
-
-- **Explainability:**
-  - Selvaraju, R. R., et al. (2017). Grad-CAM: Visual explanations from deep networks via gradient-based localization. ICCV.
-
-- **Evaluation:**
-  - Es, S., et al. (2023). RAGAS: A reference-free metric for evaluating retrieval-augmented generation. arXiv:2309.15217.
-
----
-
 ## Contact
 
-For questions or collaboration inquiries, please contact:
-- **Advisor:** Dr. Akshay Pandey, IIITDM Jabalpur
-- **Student:** Ankit Pawar, M.Tech CSE, IIITDM Jabalpur
-- **GitHub:**  https://github.com/ankit8453/iks-rag-thesis.git
-
----
-
-**Last Updated:** May 15, 2026
+- **Student:** Ankit Pawar — M.Tech CSE, IIITDM Jabalpur
+- **Advisor:** Dr. Akshay Pandey — CSE Department, IIITDM Jabalpur
+- **Repo:** https://github.com/ankit8453/iks-rag-thesis
