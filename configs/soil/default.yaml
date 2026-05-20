@@ -1,0 +1,29 @@
+# Default config for the multi-task visual soil classifier.
+# Schema: src.soil.config.SoilConfig
+# Per master reference §11: VISUAL ONLY. Never predict NPK / pH / fertility.
+
+backbone: efficientnet_b0
+image_size: 224
+batch_size: 32
+lr: 0.0001
+epochs: 40
+seed: 42
+pretrained: true
+
+multi_task_heads:
+  - soil_type
+  - texture
+  - surface
+  - moisture
+  - cover
+
+# Hard list of attributes the model is forbidden to predict.
+# Adding to this list is fine; removing entries requires a supervisor sign-off.
+disallowed_outputs:
+  - npk
+  - ph
+  - fertility
+  - organic_matter
+  - chemical_composition
+
+cross_region_validation: true

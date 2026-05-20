@@ -1,0 +1,22 @@
+# Default config for the evaluation harness.
+# Schema: src.eval.config.EvalConfig
+# Per master reference §15 and contributions C3/C4.
+
+cv:
+  report_per_class: true
+  save_confusion_matrix: true
+  average: macro
+
+ragas:
+  metrics:
+    - faithfulness
+    - answer_relevancy
+    - context_precision
+    - context_recall
+  # sample_size: null  # evaluate on the full test set by default
+
+expert:
+  annotation_csv: results/expert_annotations.csv
+  annotators: []
+
+seed: 42

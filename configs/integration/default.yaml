@@ -1,0 +1,20 @@
+# Default config for the joint disease+soil integration module.
+# Schema: src.integration.config.IntegrationConfig
+# Per master reference §13 and contributions C2 and C5.
+# C5: the system does NOT infer causal pathway from images. CausalContext
+# is supplied by the farmer / user.
+
+strategy: template
+require_causal_context: true
+
+template:
+  template_path: configs/integration/templates/joint_advisory.j2
+  include_confidence: true
+
+llm_mediated:
+  summary_max_tokens: 256
+  include_causal_context: true
+
+multimodal_embedding:
+  fusion_method: concat
+  projection_dim: 512

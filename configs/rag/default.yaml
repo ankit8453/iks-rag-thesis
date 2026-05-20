@@ -1,0 +1,28 @@
+# Default config for the RAG pipeline.
+# Schema: src.rag.config.RAGConfig
+# Per master reference §12 and ADR-0003 (no LangChain).
+
+embedding_model: BAAI/bge-large-en-v1.5
+multilingual_fallback: BAAI/bge-m3
+reranker_model: BAAI/bge-reranker-base
+
+top_k_dense: 20
+top_k_bm25: 20
+top_k_rerank: 5
+
+vector_store: chromadb
+collection_name: iks_corpus
+
+llm_model: meta-llama/Llama-3.1-8B-Instruct
+llm_quantization: 4bit
+llm_max_new_tokens: 512
+llm_temperature: 0.2
+
+hybrid_alpha: 0.5
+
+chunker:
+  strategy: paragraph
+  target_tokens: 256
+  overlap_tokens: 32
+
+seed: 42
