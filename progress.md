@@ -14,6 +14,63 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 - Rewrote environment.yml to mirror requirements.txt
 - All tests still passing post-cleanup
 
+### Post-cleanup repository tree (`find . -maxdepth 2 -type d`)
+
+```
+.
+./configs
+./configs/disease
+./configs/eval
+./configs/integration
+./configs/rag
+./configs/soil
+./corpus
+./corpus/chunks
+./corpus/cleaned
+./corpus/raw
+./corpus/vector_db
+./data
+./data/plant_disease
+./data/soil
+./data/splits
+./demo
+./models
+./notebooks
+./notes
+./notes/cv
+./notes/iks
+./notes/rag
+./notes/xai
+./paper
+./research_journal
+./research_journal/daily
+./research_journal/monthly
+./research_journal/weekly
+./results
+./results/figures
+./results/logs
+./scripts
+./src
+./src/disease
+./src/eval
+./src/explain
+./src/integration
+./src/rag
+./src/soil
+./src/utils
+./tests
+./tests/disease
+./tests/eval
+./tests/explain
+./tests/integration
+./tests/rag
+./tests/soil
+./tests/utils
+./thesis
+```
+
+Matches §41 exactly; extras (`notes/`, `tests/`, `research_journal/{daily,weekly,monthly}`) are all `[PDF-implied]` or `[PDF §44]`.
+
 ---
 
 ## Week 1 — Project Setup
