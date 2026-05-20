@@ -16,6 +16,8 @@ from pathlib import Path
 # This file lives at <PROJECT_ROOT>/src/utils/paths.py
 PROJECT_ROOT: Path = Path(__file__).resolve().parents[2]
 
+# Per master reference §41: corpus/ holds ONLY the IKS classical-text
+# corpus; image datasets live under data/ and never inside corpus/.
 CORPUS_DIR: Path = PROJECT_ROOT / "corpus"
 CORPUS_RAW_DIR: Path = CORPUS_DIR / "raw"
 CORPUS_CLEANED_DIR: Path = CORPUS_DIR / "cleaned"
@@ -23,6 +25,10 @@ CORPUS_CHUNKS_DIR: Path = CORPUS_DIR / "chunks"
 VECTOR_DB_DIR: Path = CORPUS_DIR / "vector_db"
 
 DATA_DIR: Path = PROJECT_ROOT / "data"
+DATA_PLANT_DISEASE_DIR: Path = DATA_DIR / "plant_disease"
+DATA_SOIL_DIR: Path = DATA_DIR / "soil"
+DATA_SPLITS_DIR: Path = DATA_DIR / "splits"
+
 MODELS_DIR: Path = PROJECT_ROOT / "models"
 RESULTS_DIR: Path = PROJECT_ROOT / "results"
 LOGS_DIR: Path = RESULTS_DIR / "logs"
@@ -38,6 +44,9 @@ _TRACKED_DIRS: tuple[Path, ...] = (
     CORPUS_CHUNKS_DIR,
     VECTOR_DB_DIR,
     DATA_DIR,
+    DATA_PLANT_DISEASE_DIR,
+    DATA_SOIL_DIR,
+    DATA_SPLITS_DIR,
     MODELS_DIR,
     RESULTS_DIR,
     LOGS_DIR,
@@ -68,6 +77,9 @@ __all__ = [
     "CORPUS_DIR",
     "CORPUS_RAW_DIR",
     "DATA_DIR",
+    "DATA_PLANT_DISEASE_DIR",
+    "DATA_SOIL_DIR",
+    "DATA_SPLITS_DIR",
     "DECISIONS_DIR",
     "FIGURES_DIR",
     "JOURNAL_DIR",

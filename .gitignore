@@ -1,7 +1,15 @@
 # ----------------------------------------------------------------------
-# Datasets (large, never in repo)
+# Image datasets (large, never in repo)
+# Per master reference §41: data/ is for image datasets only;
+# corpus/ is exclusively the IKS classical-text corpus.
+# data/splits/ is intentionally NOT ignored — split JSONs are tracked.
 # ----------------------------------------------------------------------
-data/
+data/plant_disease/*
+!data/plant_disease/.gitkeep
+data/soil/*
+!data/soil/.gitkeep
+
+# IKS corpus directories
 corpus/raw/*
 !corpus/raw/.gitkeep
 corpus/cleaned/*

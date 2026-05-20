@@ -2,7 +2,11 @@
 
 Targets the Kaggle "Soil Type Image Classification" dataset
 (https://www.kaggle.com/datasets/abdulqayyum/soil-types-image-classification).
-Expected on disk at ``data/soil/SoilTypes/`` after manual download.
+
+Per master reference §41 the dataset lives under the top-level ``data/``
+directory, never inside ``corpus/``. The default root resolves from
+:data:`src.utils.paths.DATA_SOIL_DIR` to
+``<repo>/data/soil/SoilTypes/``.
 
 Per guardrail #4 this dataset must support a region-held-out split for
 cross-region validation. Each sample carries an optional ``region`` field
@@ -15,6 +19,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from src.soil.config import SoilConfig
+from src.utils.paths import DATA_SOIL_DIR
+
+SOIL_TYPES_DEFAULT_ROOT: Path = DATA_SOIL_DIR / "SoilTypes"
 
 
 @dataclass
@@ -54,10 +61,11 @@ class SoilTypeDataset:
 
     Parameters
     ----------
-    root : Path
-        Path to the unpacked ``SoilTypes`` directory.
     config : SoilConfig
         Used for image size + augmentation.
+    root : Path, optional
+        Defaults to :data:`SOIL_TYPES_DEFAULT_ROOT`
+        (``<repo>/data/soil/SoilTypes``).
     split : {"train", "val", "test"}
         Which split to load.
     held_out_regions : list[str] | None
@@ -72,12 +80,12 @@ class SoilTypeDataset:
 
     def __init__(
         self,
-        root: Path,
         config: SoilConfig,
+        root: Path | None = None,
         split: str = "train",
         held_out_regions: list[str] | None = None,
     ) -> None:
-        self.root = Path(root)
+        self.root = Path(root) if root is not None else SOIL_TYPES_DEFAULT_ROOT
         self.config = config
         self.split = split
         self.held_out_regions = held_out_regions or []
