@@ -1,112 +1,45 @@
-# ----------------------------------------------------------------------
-# Image datasets (large, never in repo)
-# Per master reference §41: data/ is for image datasets only;
-# corpus/ is exclusively the IKS classical-text corpus.
-# data/splits/ is intentionally NOT ignored — split JSONs are tracked.
-# ----------------------------------------------------------------------
-data/plant_disease/*
-!data/plant_disease/.gitkeep
-data/soil/*
-!data/soil/.gitkeep
-
-# IKS corpus directories
-corpus/raw/*
-!corpus/raw/.gitkeep
-corpus/cleaned/*
-!corpus/cleaned/.gitkeep
-corpus/chunks/*
-!corpus/chunks/.gitkeep
-corpus/vector_db/*
-!corpus/vector_db/.gitkeep
-
-# ----------------------------------------------------------------------
-# Trained model artifacts
-# ----------------------------------------------------------------------
-models/*
-!models/.gitkeep
-*.ckpt
-*.pt
-*.pth
-*.safetensors
-*.bin
-
-# ----------------------------------------------------------------------
-# Results & logs
-# ----------------------------------------------------------------------
-results/logs/*
-!results/logs/.gitkeep
-results/figures/*
-!results/figures/.gitkeep
-results/*.pkl
-results/*.json
-results/disease/tensorboard/
-results/soil/tensorboard/
-
-# ----------------------------------------------------------------------
-# Python build / cache
-# ----------------------------------------------------------------------
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-dist/
-build/
-
-# ----------------------------------------------------------------------
-# Tooling caches
-# ----------------------------------------------------------------------
+*.pyc
+*.pyo
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
-
-# ----------------------------------------------------------------------
-# Jupyter
-# ----------------------------------------------------------------------
 .ipynb_checkpoints/
-*.ipynb_checkpoints
+*.egg-info/
 
-# ----------------------------------------------------------------------
-# IDE
-# ----------------------------------------------------------------------
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# ----------------------------------------------------------------------
-# Environments
-# ----------------------------------------------------------------------
-.env
+# Virtual environments
 .venv/
 venv/
-ENV/
 env/
 
-# ----------------------------------------------------------------------
-# OS
-# ----------------------------------------------------------------------
+# IDE
+.vscode/
+.idea/
 .DS_Store
-Thumbs.db
-*.log
 
-# ----------------------------------------------------------------------
-# Scratch
-# ----------------------------------------------------------------------
-experiments/
-tmp/
-temp/
-.cache/
-cache/
+# Data (large, gitignored per §41 contents but tracking placeholders)
+data/plant_disease/*
+data/soil/*
+!data/plant_disease/.gitkeep
+!data/soil/.gitkeep
+# splits/ is intentionally tracked — those are small JSON files
 
-# ----------------------------------------------------------------------
-# Credentials
-# ----------------------------------------------------------------------
-*.key
-*.pem
-credentials.json
-secrets.yaml
+# Corpus working artifacts (raw OCR and embeddings are large)
+corpus/raw/*
+!corpus/raw/.gitkeep
+corpus/vector_db/*
+!corpus/vector_db/.gitkeep
+# cleaned/ and chunks/ are intentionally tracked once produced
+
+# Models (per §41 — gitignored)
+models/*
+!models/.gitkeep
+
+# Results
+results/logs/*
+!results/logs/.gitkeep
+results/figures/*.png
+results/figures/*.pdf
+!results/figures/.gitkeep
+
+# Local environment
+.env

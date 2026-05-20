@@ -5,8 +5,9 @@ from __future__ import annotations
 from src.utils import paths
 
 
-def test_project_root_contains_pyproject() -> None:
-    assert (paths.PROJECT_ROOT / "pyproject.toml").is_file()
+def test_project_root_contains_requirements_txt() -> None:
+    """§41 names requirements.txt at the repo root; assert it's discoverable."""
+    assert (paths.PROJECT_ROOT / "requirements.txt").is_file()
 
 
 def test_tracked_directories_exist_after_import() -> None:

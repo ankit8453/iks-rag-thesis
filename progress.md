@@ -5,6 +5,17 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Week 2 (continued) — PDF-alignment cleanup
+
+- Removed [ADDED] engineering hygiene (pre-commit, GitHub Actions CI, pyproject.toml + tool configs, decisions/, session reports)
+- Fixed paper/thesis nesting per §41
+- Added §42 references.bib, §43 BACKUP.md, §44 weekly + monthly journal templates, notebooks/00_environment_check.ipynb
+- Rewrote requirements.txt to track §22 exactly
+- Rewrote environment.yml to mirror requirements.txt
+- All tests still passing post-cleanup
+
+---
+
 ## Week 1 — Project Setup
 **Dates:** May 15 - May 21, 2026
 
