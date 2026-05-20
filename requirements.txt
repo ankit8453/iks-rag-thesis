@@ -1,56 +1,46 @@
-# IKS Agricultural Advisory System — Core Dependencies
-# Python 3.10+ required
-# Install with: pip install -r requirements.txt
+# Runtime dependencies for IKS Agricultural Advisory System.
+# Source of truth: pyproject.toml -> [project].dependencies
+# Regenerate from pyproject.toml with `pip-compile` or `uv pip compile pyproject.toml`.
 
-# ============= Deep Learning & Computer Vision =============
-torch==2.2.0
-torchvision==0.17.0
-timm==0.9.16
-opencv-python==4.9.0.80
-Pillow==10.2.0
+# ---------- Deep learning + CV ----------
+torch>=2.2,<2.5
+torchvision>=0.17,<0.20
+timm>=1.0,<2.0
+albumentations>=1.4,<2.0
+opencv-python>=4.9,<5.0
+Pillow>=10.2,<12.0
 
-# ============= Data Processing & Numerics =============
-numpy==1.26.4
-pandas==2.2.1
-scikit-learn==1.4.1
+# ---------- Numerics + data ----------
+numpy>=1.26,<3.0
+pandas>=2.2,<3.0
+scikit-learn>=1.4,<2.0
+scipy>=1.12,<2.0
 
-# ============= Visualization =============
-matplotlib==3.8.3
-seaborn==0.13.2
+# ---------- NLP + LLM ----------
+transformers>=4.41,<5.0
+sentence-transformers>=2.7,<4.0
+accelerate>=0.30,<2.0
 
-# ============= Data Augmentation =============
-albumentations==1.4.0
+# ---------- Retrieval ----------
+chromadb>=0.5,<2.0
+rank-bm25>=0.2.2,<1.0
 
-# ============= NLP & Transformers =============
-transformers==4.39.3
-sentence-transformers==2.6.1
+# ---------- Evaluation ----------
+ragas>=0.1.10,<1.0
+torchmetrics>=1.3,<2.0
 
-# ============= RAG & Vector Stores =============
-langchain==0.1.16
-langchain-community==0.0.34
-chromadb==0.4.24
+# ---------- Explainability ----------
+grad-cam>=1.5,<2.0
+captum>=0.7,<1.0
 
-# ============= RAG Evaluation =============
-ragas==0.1.7
+# ---------- Configuration ----------
+pydantic>=2.6,<3.0
+PyYAML>=6.0,<7.0
 
-# ============= Web Interfaces =============
-gradio==4.25.0
-streamlit==1.33.0
+# ---------- Visualization ----------
+matplotlib>=3.8,<4.0
+seaborn>=0.13,<1.0
 
-# ============= Configuration & Utilities =============
-pyyaml==6.0.1
-tqdm==4.66.2
-
-# ============= Notebooks =============
-jupyter==1.0.0
-ipykernel==6.29.4
-
-# ============= Monitoring & Debugging =============
-tensorboard==2.16.2
-
-# ============= Explainability =============
-grad-cam==1.5.0
-
-# Note: For GPU acceleration, ensure CUDA 12.1 is installed.
-# For CPU-only, no additional setup required.
-# All versions are pinned for reproducibility.
+# ---------- Utilities ----------
+tqdm>=4.66,<5.0
+python-dateutil>=2.9,<3.0
