@@ -1,20 +1,30 @@
-"""Shared pytest fixtures for the IKS Agricultural Advisory System.
+"""Test session configuration and shared fixtures.
+
+Adds the project root to ``sys.path`` so ``from src.utils...`` imports
+work without requiring ``pip install -e .`` (per PDF §41, only
+``requirements.txt`` is named for dependency management; no pyproject).
 
 Conventions:
 - Heavy fixtures (torch tensors, PIL images) are session-scoped where
   possible to keep the test suite fast.
-- Anything that needs determinism uses :func:`src.utils.seeding.set_global_seed`
-  rather than mutating RNG state ad-hoc.
+- Anything that needs determinism uses
+  :func:`src.utils.seeding.set_global_seed` rather than mutating RNG
+  state ad-hoc.
 """
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Generator
 from pathlib import Path
 
-import pytest
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.utils.seeding import set_global_seed
+import pytest  # noqa: E402  — must come after sys.path tweak
+
+from src.utils.seeding import set_global_seed  # noqa: E402
 
 
 @pytest.fixture
