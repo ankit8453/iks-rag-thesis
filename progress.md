@@ -40,20 +40,60 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
-## Week 2 — [To be filled]
-**Dates:** May 22 - May 28, 2026
+## Week 2 — Foundation Infrastructure
+**Dates:** May 20 - May 26, 2026
 
 ### Completed Tasks
-- [ ]
+- [x] §1 Locked-stack `pyproject.toml`, regenerated `requirements.txt`,
+      `requirements-dev.txt`, `.python-version`, `INSTALL.md`.
+- [x] §2 Reproducibility utilities in `src/utils/`: `set_global_seed`,
+      project paths, stdlib logging, Pydantic v2 `BaseConfig`. Unit
+      tests cover seeding reproducibility, strict-extra config validation,
+      directory creation, logger handler attachment.
+- [x] §3 Pydantic config schemas + `configs/<module>/default.yaml` for
+      disease, soil, rag, integration, eval. Soil schema enforces
+      disallowed chemical outputs (guardrail #2). RAG config locks the
+      Llama-3.1-8B / 4-bit / BGE choices. Integration config flags
+      `require_causal_context` (contribution C5).
+- [x] §4 Module skeletons for disease, soil, rag, integration, explain,
+      eval — every public class, dataclass, and function has a
+      NumPy-style docstring and a `NotImplementedError("Phase X — Week Y")`
+      pointer. `src/rag/prompts.py` ships a working citation-enforcing
+      prompt template and renderer. `src/eval/citation_verification.py`
+      has a working extractor + minimal verifier.
+- [x] §5 Testing infrastructure: `tests/` mirrors `src/`, shared
+      `conftest.py` with `tmp_corpus_dir`, `seeded_rng`,
+      `tiny_dummy_image`, `sample_retrieved_chunks` fixtures. Each
+      module has an instantiation smoke test.
+- [x] §6 Code quality + CI: pre-commit (ruff, ruff-format, black, mypy,
+      file-hygiene hooks), GitHub Actions matrix on Python 3.11 + 3.12.
+      Ruff/black/mypy/pytest config lives in `pyproject.toml`.
+- [x] §7 Notes templates under `notes/{cv,rag,xai,iks}/` with the
+      standard skeleton (Key concepts / Papers read / Tricky bits / Open
+      questions / Code I want to try).
+- [x] §8 Research ops: this Week 2 entry, `literature_tracker.csv`
+      (empty), `research_journal/` with a first daily entry,
+      `decisions/0001..0003.md` ADRs.
 
 ### Blockers / Issues
-- 
+- None for the scaffolding. Running the full `pytest` / `pre-commit`
+  loop locally was not attempted in this session — see
+  `WEEK2_SUMMARY.md` for what to verify on the M.Tech workstation.
 
 ### Notes
-- 
+- README, requirements.txt, and environment.yml from Week 1 referenced
+  ResNet50 + LangChain. Both have been brought in line with the locked
+  stack (EfficientNet-B4/B0, plain-Python RAG).
+- ADR-0001 (EfficientNet backbones), ADR-0002 (Pydantic over Hydra),
+  ADR-0003 (no LangChain in RAG) capture the reasoning.
 
 ### Next Week Goals
-- [ ]
+- [ ] Run `pip install -e ".[dev]"` on the workstation and verify
+      `pytest -q`, `ruff check .`, `black --check .`, `mypy src/`,
+      `pre-commit run --all-files` are all green.
+- [ ] Start filling `notes/cv/transfer_learning.md` and `notes/cv/efficientnet.md`.
+- [ ] Begin literature_tracker.csv (target: 20 rows by end of Week 3).
+- [ ] Supervisor meeting with Dr. Pandey to walk through ADR-0001..0003.
 
 ---
 
