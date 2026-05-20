@@ -40,8 +40,8 @@ class MultimodalContext:
         history, etc.).
     """
 
-    disease_pred: "DiseasePrediction"
-    soil_pred: "SoilPrediction"
+    disease_pred: DiseasePrediction
+    soil_pred: SoilPrediction
     crop_type: str
     causal_context: CausalContext
     user_notes: str | None = None

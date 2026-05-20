@@ -84,9 +84,7 @@ def verify_citations_in_context(
     valid = [c for c in cited if c in retrieved_set]
     invalid = [c for c in cited if c not in retrieved_set]
     coverage = (
-        len({c for c in cited if c in retrieved_set}) / len(retrieved_set)
-        if retrieved_set
-        else 0.0
+        len({c for c in cited if c in retrieved_set}) / len(retrieved_set) if retrieved_set else 0.0
     )
     return CitationReport(
         cited_ids=cited,

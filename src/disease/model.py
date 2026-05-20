@@ -86,7 +86,7 @@ class DiseaseClassifier:
         """
         raise NotImplementedError("Phase 5 — Week 16: instantiate timm EfficientNet-B4.")
 
-    def predict(self, image: "object") -> DiseasePrediction:
+    def predict(self, image: object) -> DiseasePrediction:
         """Run inference on a single preprocessed image tensor.
 
         Parameters

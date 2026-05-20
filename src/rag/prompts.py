@@ -13,7 +13,8 @@ The template explicitly instructs the model to:
 
 from __future__ import annotations
 
-RAG_PROMPT_TEMPLATE: str = """You are an agricultural advisor grounded in classical Indian agricultural
+RAG_PROMPT_TEMPLATE: str = """\
+You are an agricultural advisor grounded in classical Indian agricultural
 texts (Vrikshayurveda, Krishi Parashara, Upavanavinoda, and related
 works). Your task is to provide treatment recommendations using ONLY the
 retrieved context below.
@@ -70,9 +71,7 @@ def render_prompt(
     str
         The rendered prompt ready to send to the generator.
     """
-    rendered_chunks = "\n\n".join(
-        f"[{c['chunk_id']}] {c['text']}" for c in retrieved_chunks
-    )
+    rendered_chunks = "\n\n".join(f"[{c['chunk_id']}] {c['text']}" for c in retrieved_chunks)
     return RAG_PROMPT_TEMPLATE.format(
         query=query,
         causal_context=causal_context or "None provided.",

@@ -9,8 +9,8 @@ Conventions:
 
 from __future__ import annotations
 
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import pytest
 
@@ -33,7 +33,7 @@ def seeded_rng() -> Generator[int, None, None]:
 
 
 @pytest.fixture
-def tiny_dummy_image() -> "object":
+def tiny_dummy_image() -> object:
     """A 16x16 RGB PIL image — useful for dataset smoke tests.
 
     Lazily imports PIL so the fixture is only built when requested.

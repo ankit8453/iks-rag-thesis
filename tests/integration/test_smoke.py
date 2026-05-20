@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import dataclasses
+
+import pytest
+
 from src.integration import (
     CausalContext,
     CausalPathway,
@@ -11,6 +15,7 @@ from src.integration import (
     MultimodalEmbeddingStrategy,
     TemplateStrategy,
 )
+from src.integration import context as ctx_mod
 
 
 def test_integration_config_defaults() -> None:
@@ -31,10 +36,6 @@ def test_causal_context_is_user_provided_per_c5() -> None:
     ctx = CausalContext(pathway=CausalPathway.SOIL_DRIVEN, notes="Field waterlogged.")
     assert ctx.pathway is CausalPathway.SOIL_DRIVEN
     # Frozen — mutating must fail.
-    import dataclasses
-
-    import pytest
-
     with pytest.raises(dataclasses.FrozenInstanceError):
         ctx.pathway = CausalPathway.UNKNOWN  # type: ignore[misc]
 
@@ -48,7 +49,5 @@ def test_strategy_classes_instantiate() -> None:
 
 def test_multimodal_context_docstring_mentions_no_image_causation() -> None:
     """Module-level / class-level docstring must mention C5."""
-    from src.integration import context as ctx_mod
-
     combined = (ctx_mod.__doc__ or "") + (MultimodalContext.__doc__ or "")
     assert "NOT infer" in combined or "user-provided" in combined.lower()

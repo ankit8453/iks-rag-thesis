@@ -32,6 +32,14 @@ _DISALLOWED_CHEMICAL_OUTPUTS: frozenset[str] = frozenset(
 
 SoilHead = Literal["soil_type", "texture", "surface", "moisture", "cover"]
 
+_DEFAULT_SOIL_HEADS: list[SoilHead] = [
+    "soil_type",
+    "texture",
+    "surface",
+    "moisture",
+    "cover",
+]
+
 
 class SoilConfig(BaseConfig):
     """Configuration for the multi-task visual soil classifier."""
@@ -45,7 +53,7 @@ class SoilConfig(BaseConfig):
     pretrained: bool = True
 
     multi_task_heads: list[SoilHead] = Field(
-        default_factory=lambda: ["soil_type", "texture", "surface", "moisture", "cover"],
+        default_factory=lambda: list(_DEFAULT_SOIL_HEADS),
         description="Visual heads only. Each head is a separate classifier.",
     )
 

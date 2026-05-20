@@ -27,7 +27,7 @@ def _logs_dir() -> Path:
     """
     # Inline import keeps the dependency graph one-way (utils.paths imports
     # nothing; utils.logging_setup may import utils.paths).
-    from src.utils.paths import LOGS_DIR
+    from src.utils.paths import LOGS_DIR  # noqa: PLC0415 — break import cycle
 
     LOGS_DIR.mkdir(parents=True, exist_ok=True)
     return LOGS_DIR
@@ -38,7 +38,7 @@ def _configure_logging() -> None:
 
     Idempotent — calling multiple times is a no-op after the first.
     """
-    global _configured
+    global _configured  # noqa: PLW0603 — guards one-shot init
     if _configured:
         return
 

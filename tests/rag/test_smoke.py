@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import pytest
+
 from src.rag import (
+    RAG_PROMPT_TEMPLATE,
     BM25Retriever,
     Chunker,
     CrossEncoderReranker,
@@ -11,7 +14,6 @@ from src.rag import (
     HybridRetriever,
     LlamaGenerator,
     RAGConfig,
-    RAG_PROMPT_TEMPLATE,
 )
 from src.rag.config import ChunkerConfig
 
@@ -45,8 +47,6 @@ def test_generator_and_reranker_docstrings() -> None:
 def test_embedder_dim_raises_before_load() -> None:
     cfg = RAGConfig()
     emb = Embedder(cfg)
-    import pytest
-
     with pytest.raises(RuntimeError):
         _ = emb.dim
 

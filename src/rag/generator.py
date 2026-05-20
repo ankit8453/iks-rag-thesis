@@ -81,7 +81,7 @@ class LlamaGenerator:
         self,
         query: str,
         chunks: list[RetrievedChunk],
-        causal_context: "object | None" = None,
+        causal_context: object | None = None,
     ) -> GenerationResult:
         """Generate a cited answer.
 

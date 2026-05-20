@@ -86,7 +86,7 @@ class SoilClassifier:
             )
         raise NotImplementedError("Phase 6 — Week 19: instantiate timm EfficientNet-B0.")
 
-    def predict(self, image: "object") -> SoilPrediction:
+    def predict(self, image: object) -> SoilPrediction:
         """Run multi-task inference on a single image tensor.
 
         Raises

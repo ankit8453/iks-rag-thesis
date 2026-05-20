@@ -35,7 +35,7 @@ class Embedder:
         """
         raise NotImplementedError("Phase 4 — Week 13: load sentence-transformers model.")
 
-    def encode(self, texts: list[str]) -> "object":
+    def encode(self, texts: list[str]) -> object:
         """Encode a batch of strings into a ``(n, dim)`` numpy array.
 
         Raises

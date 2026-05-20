@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 def compute_gradcam(
-    classifier: "DiseaseClassifier",
+    classifier: DiseaseClassifier,
     image_path: Path,
     output_path: Path,
 ) -> None:

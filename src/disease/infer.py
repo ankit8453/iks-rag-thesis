@@ -13,7 +13,9 @@ from src.disease.config import DiseaseConfig
 from src.disease.model import DiseasePrediction
 
 
-def predict_image(image_path: Path, checkpoint_path: Path, config: DiseaseConfig) -> DiseasePrediction:
+def predict_image(
+    image_path: Path, checkpoint_path: Path, config: DiseaseConfig
+) -> DiseasePrediction:
     """Run disease inference on a single image file.
 
     Parameters

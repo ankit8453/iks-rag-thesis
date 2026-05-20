@@ -23,6 +23,13 @@ RAGASMetric = Literal[
     "context_relevancy",
 ]
 
+_DEFAULT_RAGAS_METRICS: list[RAGASMetric] = [
+    "faithfulness",
+    "answer_relevancy",
+    "context_precision",
+    "context_recall",
+]
+
 
 class CVMetricsConfig(BaseConfig):
     """Configuration for the classification metrics reporter."""
@@ -36,12 +43,7 @@ class RAGASConfig(BaseConfig):
     """Subset of RAGAS metrics to compute on each evaluation run."""
 
     metrics: list[RAGASMetric] = Field(
-        default_factory=lambda: [
-            "faithfulness",
-            "answer_relevancy",
-            "context_precision",
-            "context_recall",
-        ]
+        default_factory=lambda: list(_DEFAULT_RAGAS_METRICS),
     )
     sample_size: int | None = Field(
         default=None,

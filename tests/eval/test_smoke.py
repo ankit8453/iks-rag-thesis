@@ -7,7 +7,6 @@ from src.eval import (
     EvalConfig,
     compute_per_class_metrics,
     run_ragas_evaluation,
-    verify_citations_in_context,
 )
 
 

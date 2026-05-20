@@ -25,7 +25,7 @@ class MultimodalEmbeddingStrategy:
     def __init__(self, config: MultimodalEmbeddingStrategyConfig) -> None:
         self.config = config
 
-    def build_query_embedding(self, context: MultimodalContext) -> "object":
+    def build_query_embedding(self, context: MultimodalContext) -> object:
         """Fuse disease + soil features into a single retrieval vector.
 
         Returns

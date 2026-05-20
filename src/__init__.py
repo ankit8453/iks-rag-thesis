@@ -4,4 +4,4 @@ This package contains shared utilities for logging, configuration management, an
 """
 
 __version__ = "0.1.0"
-__author__ = "IIITDM Jabalpur"
+__author__ = "Ankit Pawar"

@@ -42,14 +42,14 @@ def set_global_seed(seed: int = DEFAULT_SEED) -> None:
     random.seed(seed)
 
     try:
-        import numpy as np
+        import numpy as np  # noqa: PLC0415 — deferred so import survives without numpy
 
         np.random.seed(seed)
     except ImportError:  # pragma: no cover - numpy is a hard dep at runtime
         _LOGGER.warning("NumPy not installed; skipping numpy seeding.")
 
     try:
-        import torch
+        import torch  # noqa: PLC0415 — deferred so import survives without torch
 
         torch.manual_seed(seed)
         if torch.cuda.is_available():
@@ -70,8 +70,7 @@ def assert_seed_set() -> None:
     """
     if "PYTHONHASHSEED" not in os.environ:
         raise RuntimeError(
-            "PYTHONHASHSEED is not set. Call set_global_seed() before "
-            "running stochastic code."
+            "PYTHONHASHSEED is not set. Call set_global_seed() before running stochastic code."
         )
 
 

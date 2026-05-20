@@ -48,7 +48,7 @@ class DenseRetriever:
         :data:`src.utils.paths.VECTOR_DB_DIR`).
     """
 
-    def __init__(self, config: RAGConfig, embedder: Embedder, persist_dir: "object") -> None:
+    def __init__(self, config: RAGConfig, embedder: Embedder, persist_dir: object) -> None:
         self.config = config
         self.embedder = embedder
         self.persist_dir = persist_dir
