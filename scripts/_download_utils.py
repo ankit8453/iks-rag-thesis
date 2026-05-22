@@ -41,6 +41,45 @@ def ensure_raw_dir(directory: Path) -> None:
     directory.mkdir(parents=True, exist_ok=True)
 
 
+def kaggle_competition_download(
+    competition: str,
+    target_dir: Path,
+    *,
+    unzip: bool = True,
+) -> None:
+    """Download a Kaggle *competition* archive via the Kaggle Python API.
+
+    Mirrors :func:`kaggle_download` but uses ``competition_download_files``
+    instead. The Kaggle account must have joined the competition on the
+    web UI first; otherwise the API returns 403.
+
+    Parameters
+    ----------
+    competition : str
+        Kaggle competition slug, e.g. ``paddy-disease-classification``.
+    target_dir : Path
+        Where the archive lands. Must exist.
+    unzip : bool, default True
+        Extract the archive in-place after download.
+    """
+    from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: PLC0415
+
+    _LOGGER.info("Kaggle competition download: %s -> %s", competition, target_dir)
+    api = KaggleApi()
+    api.authenticate()
+    api.competition_download_files(competition, path=str(target_dir), quiet=False)
+
+    if not unzip:
+        return
+
+    for archive in sorted(target_dir.glob("*.zip")):
+        unzip_into(archive, target_dir)
+        try:
+            archive.unlink()
+        except OSError:
+            pass
+
+
 def kaggle_download(
     slug: str,
     target_dir: Path,
