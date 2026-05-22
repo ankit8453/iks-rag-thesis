@@ -1,0 +1,327 @@
+[
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (29).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (11).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (3).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (1).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (24).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (5).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (26).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (21).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (3).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (12).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (9).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (14).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (5).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (14).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (5).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (23).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (28).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (7).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (17).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (9).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (23).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (10).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (31).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (17).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (14).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (15).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (7).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (21).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (4).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (2).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (3).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (25).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (22).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (6).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (2).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (20).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (16).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (10).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (15).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (6).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (7).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (17).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (23).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (21).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (13).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (6).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (18).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (11).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (19).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (26).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (16).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (13).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (19).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (20).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (13).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (8).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (12).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (12).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (22).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (8).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (4).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (9).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  },
+  {
+    "path": "bottle_gourd__JAS/bottle_gourd__JAS (19).JPG",
+    "label": "bottle_gourd__JAS",
+    "label_idx": 1
+  },
+  {
+    "path": "bottle_gourd__DM/bottle_gourd__DM (18).JPG",
+    "label": "bottle_gourd__DM",
+    "label_idx": 0
+  },
+  {
+    "path": "bottle_gourd__healthy/bottle_gourd__healthy (30).JPG",
+    "label": "bottle_gourd__healthy",
+    "label_idx": 2
+  }
+]

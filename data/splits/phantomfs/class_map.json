@@ -1,0 +1,9 @@
+{
+  "Alluvial_Soil": 0,
+  "Arid_Soil": 1,
+  "Black_Soil": 2,
+  "Laterite_Soil": 3,
+  "Mountain_Soil": 4,
+  "Red_Soil": 5,
+  "Yellow_Soil": 6
+}

@@ -19,9 +19,11 @@ env/
 # Data (large, gitignored per §41 contents but tracking placeholders)
 data/plant_disease/*
 data/soil/*
+data/causation/*
 !data/plant_disease/.gitkeep
 !data/soil/.gitkeep
-# splits/ is intentionally tracked — those are small JSON files
+!data/causation/.gitkeep
+# data/splits/ is intentionally tracked — small JSON split files
 
 # Corpus working artifacts (raw OCR and embeddings are large)
 corpus/raw/*

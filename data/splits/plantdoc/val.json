@@ -1,0 +1,1282 @@
+[
+  {
+    "path": "Peach leaf/24570793-peach-leaf.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Bell_pepper leaf/ee4ab32985e0f26d556ab9d6ac7d0a35.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Peach leaf/366.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Tomato Septoria leaf spot/septoria_tom_leaves1x1200.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Apple leaf/green-apple-leaf-26110796.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Tomato leaf mosaic virus/tmv-tomato-9.jpg",
+    "label": "Tomato leaf mosaic virus",
+    "label_idx": 22
+  },
+  {
+    "path": "Tomato Septoria leaf spot/636227737977191231-septoria-leaf-spot-VT.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "grape leaf/WildGrapeLeaf_cutout.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Soyabean leaf/soybeans-leaves.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Raspberry leaf/ripe-raspberry-with-green-leaves-and-flowers-Download-Royalty-free-Vector-File-EPS-10297.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Peach leaf/peach-leaf-white-background-40292976.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Strawberry leaf/344d1150577229-strange-strawberry-leaves-unhealthy-maxim.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Corn Gray leaf spot/cornGLS2.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Bell_pepper leaf/007.JPG.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Raspberry leaf/Blackberry-black-raspberry3-1024x665.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Potato leaf early blight/early-blight-potatoes.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Squash Powdery mildew leaf/P1080620.JPG.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Apple rust leaf/20130519cedarapplerust.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Tomato leaf late blight/late_blight_tomato_leaf_sporex1200.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Corn rust leaf/Southern-Corn-Rust1.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Squash Powdery mildew leaf/IW000047.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Tomato leaf mosaic virus/3-tomato-mosaic-virus_web.jpg",
+    "label": "Tomato leaf mosaic virus",
+    "label_idx": 22
+  },
+  {
+    "path": "Tomato Early blight leaf/ealryblight.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Tomato leaf late blight/tomato-late-blight-sporulation-on-a-tomato-leaflet-picture-id81781370_s=612x612.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Corn rust leaf/COURTESY_southernrust-greyleaf.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Tomato leaf/russian-2-319-dt-2010-leaves-high-tunnel-9-29-2014-c.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Tomato leaf bacterial spot/a3fb24f84fe70e5d37352d13106531d6.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Potato leaf late blight/3782849713_398f3a1086_b.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Corn leaf blight/011.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Apple leaf/green-apple-leaf-white-background-33503979.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Potato leaf early blight/potato_early-blight_02_zoom.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Peach leaf/stock-photo-peach-fruits-with-leaf-isolated-on-white-background-639972919.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Tomato Septoria leaf spot/b6ca3f80-cc10-4d4f-be0d-771deb9a4969.jpeg.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Tomato Early blight leaf/web1_copy_early-blight-6-_0.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Bell_pepper leaf/RnGnC.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Raspberry leaf/basketofraspberryleaves.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Corn rust leaf/80104747.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Potato leaf early blight/potato_early-blight_04_zoom.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Corn rust leaf/SouthernRustLeaf.png.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Strawberry leaf/1534854-a-green-strawberry-leaf-isolated-on-a-white-background.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Blueberry leaf/6348380125_ae2d097496_z.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Tomato mold leaf/Tomato+leaf+mold.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "grape leaf/DSCN7317.JPG.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Tomato Septoria leaf spot/2septoria-tomato.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Apple rust leaf/20130610_110525.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Blueberry leaf/blueberry-leaf-set-collection-isolated-white-58283965.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Strawberry leaf/strawberry-leaf-stock-image-3662904.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Apple leaf/depositphotos_30057617-Green-leaf-of-apple-tree.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Blueberry leaf/stock-photo-blueberry-leaves-branch-isolated-on-white-background-490111684.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Tomato leaf mosaic virus/tmv-tomato-16.jpg",
+    "label": "Tomato leaf mosaic virus",
+    "label_idx": 22
+  },
+  {
+    "path": "Soyabean leaf/close-up-shot-of-soy-leaves-glistening-in-the-sunshine-picture-id157639700_s=612x612.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Corn leaf blight/IMG_1347.JPG.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "grape leaf/grape-vine-1238367.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Potato leaf late blight/2976_1600.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Tomato leaf yellow virus/TYLCVDFerrinlr.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Raspberry leaf/5944718_f1024.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Tomato leaf mosaic virus/dahliaviralsymptoms2lowresjpg.jpg",
+    "label": "Tomato leaf mosaic virus",
+    "label_idx": 22
+  },
+  {
+    "path": "grape leaf/grape-leaves-21658567.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Corn leaf blight/stock-photo-northern-corn-leaf-blight-nclb-is-a-foliar-disease-of-corn-maize-caused-by-exserohilum-turcicum-592778840.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Blueberry leaf/P1200644+Vaccinium+alaskaense+Alaska+Blueberry+cr.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Apple rust leaf/cedar_apple_rust_on_jonagold_3.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Peach leaf/peach-with-leaf-picture-id124561113.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Potato leaf late blight/late-blight-leaf-figure1.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Tomato Septoria leaf spot/3-septoria-leaf-blight-n.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Apple Scab Leaf/apple-scab-disease-tree-fungus-906x391.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Bell_pepper leaf/pepper+leaves.JPG.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Tomato Early blight leaf/Early-bligh_t.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Corn leaf blight/disease.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Squash Powdery mildew leaf/squash-powdery-mildew.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Potato leaf early blight/potato-early-blight-alternaria-alternata-discreet-lesions-on-a-potato-BY651F.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Cherry leaf/three-vibrant-leaves-bird-cherry-tree-13905898.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Apple Scab Leaf/appscab.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Tomato Septoria leaf spot/66e7583ebe11cf0bd06435e4167bd4fd.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Peach leaf/stock-photo-peach-leaves-isolated-on-white-background-618456884.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Potato leaf early blight/87A_Pot_Early.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Tomato Septoria leaf spot/tomatofactsheet.png.png",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Apple Scab Leaf/apple-scab-venturia-inaequalis-leaf-symptoms-on-tree-dark-fungal-pustules-aceg6b.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Potato leaf early blight/alternaria%20%2824%29.JPG.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Cherry leaf/yoshino-weeping-cherry-tree9.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Corn rust leaf/Corn-Common-Rust-300x225.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Apple leaf/depositphotos_6657863-stock-photo-single-red-apple-with-leaf.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Tomato Septoria leaf spot/septorialeafspot.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Potato leaf late blight/late-blight-on-potato-leaf-550.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Apple leaf/stock-photo-red-apple-with-leaves-isolated-on-white-99003845.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Tomato leaf bacterial spot/CankerFoliar-copy-50-QUALITY-122b09b.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Tomato leaf late blight/Late-blight-on-a-tomato-leaf.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Soyabean leaf/a-mid-season-soybean-plants-leaves-show-virtually-no-insect-damage-cxy78f.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Raspberry leaf/20130515+008.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Strawberry leaf/4719232-strawberry-with-green-leaves-and-flower-isolated-on-white-background.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Tomato leaf/tomato-leaf-close-up.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Tomato leaf late blight/636368370164094909-late-blight-15-.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "grape leaf black rot/guignardia-bidwellii-05.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "grape leaf black rot/03gb.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "Potato leaf late blight/potato-late-blight-phytophthora-infestans-necrotic-disease-lesions-B7DEW3.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Cherry leaf/red-cherry-tree-leaf-isolated-crisp-white-background-35742030.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Tomato mold leaf/leaf_mold_tomato1x1200.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Apple Scab Leaf/500_F_125294801_k0A2teQwKxZfTV1pcaerZFf9Th04F04q.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Bell_pepper leaf spot/peppers_bacterial_spot_zoom.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Squash Powdery mildew leaf/IMG_1802-1024x768.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Peach leaf/fresh-peach-fruits-green-leaves-15654533.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Tomato Septoria leaf spot/tomato-septoria-leaf-spot-.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Corn Gray leaf spot/GLS-pic-1-1-225x300.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Soyabean leaf/asoybeanleafcloseup.JPG.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "grape leaf/P1130286.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Strawberry leaf/strawberry+leaf+eila+collage+obsession.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Squash Powdery mildew leaf/Mildew-on-cucumber-leaf-1024x768.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Corn leaf blight/Corn020Fig2.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Strawberry leaf/strawberry-leaf-24988739.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Blueberry leaf/4851522550_02e3b9f3b4.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Apple Scab Leaf/Scab+close-up5846.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Raspberry leaf/Blackberry-black-raspberry2-1024x606.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Corn rust leaf/Southern-Rust4-300x200.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Tomato leaf bacterial spot/38849847120_7ae02bd6c3_b.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Peach leaf/image_original.jpeg_1473123508.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Tomato Early blight leaf/Tomato-diseases-prevention-treatment.-Early-blight..jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Apple Scab Leaf/early_symptoms_of_crabapple_scab_on_prairifire.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Tomato mold leaf/leaf_mold_tomato2x1200.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Corn leaf blight/2-3%20Gray%20leaf%20spot%20BRUCE.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Raspberry leaf/gardening+004.JPG.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Tomato leaf/stock-photo-leaves-of-tomato-plant-isolated-on-white-12085288.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Bell_pepper leaf spot/BacterialSpot08.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Apple rust leaf/buckinghamshire-speen-garden-cedar-apple-rust-on-apple-underside-of-F5D3RD.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Bell_pepper leaf spot/e2Vlc.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Tomato Early blight leaf/Tomato-Alternaria-Early-Blight.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Tomato leaf/1686.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Potato leaf early blight/potatoaltkc.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Tomato Septoria leaf spot/1b.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Corn rust leaf/imgF.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Corn leaf blight/80102321.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Apple leaf/June%2B2010%2B022.JPG.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Corn leaf blight/IMG_20140601_143916_7931.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Cherry leaf/yoshino-weeping-cherry-tree2.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Corn Gray leaf spot/grayleafspot99a.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Corn Gray leaf spot/2f73110f80014a25a53f9551c94bf164.png.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Bell_pepper leaf spot/TCSV_Pepper%20%284%29.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Tomato leaf late blight/tomato+blight.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Tomato Septoria leaf spot/tomato_septoria_05_zoom.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Corn leaf blight/bacterial-leaf-streak-of-corn-450-F1.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Potato leaf early blight/maxresdefault.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Corn Gray leaf spot/corn-gray-leaf-spot-backlit-2.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Blueberry leaf/vaccinium-myrtilloides-13-1.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Tomato leaf bacterial spot/Leaf-Spot-300x253.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Tomato mold leaf/119B_Tom_Mold.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Tomato leaf yellow virus/IMG_2684.JPG.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Tomato leaf yellow virus/illustration-thematique-urbino-fig5.plante%20tylcv.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Potato leaf late blight/B2750121-Potato_late_blight-SPL.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Blueberry leaf/lb_blueberry1.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Apple leaf/fruit_apple_apple-tree_wallpaper_EA60026.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Corn rust leaf/0796.39maizerust.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Tomato leaf mosaic virus/D%29AlfMov.jpg",
+    "label": "Tomato leaf mosaic virus",
+    "label_idx": 22
+  },
+  {
+    "path": "Tomato Early blight leaf/039b47d574bc4bb8a14259a1cd96a741.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Tomato Septoria leaf spot/septoria_tom_seedlings5x1200.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Corn rust leaf/disease1.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Raspberry leaf/depositphotos_2795312-stock-photo-green-raspberry-leaf.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Apple leaf/green-leaf-apple-tree-isolated-white-background-33032695.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Tomato leaf late blight/late_blight_tomato_unusual-symptomsx1200.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Squash Powdery mildew leaf/16459846140_4f0a2762e3_z.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Squash Powdery mildew leaf/Aug+16+2010+049.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Potato leaf late blight/Late_blight_on_potato_leaf_3-58bcf5055f9b58af5c27bf74.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Corn rust leaf/corn-rust-5.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Cherry leaf/prunus-pensylvanica-le-ahaines-a.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Tomato leaf late blight/tomato_late-blight_04_zoom.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Potato leaf early blight/agriculture-potato-early-blight-leaf-symptoms-on-a-potato-leaf-caused-picture-id586884353.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Tomato mold leaf/dscf2712.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Soyabean leaf/stock-photo-green-soy-leaves-in-the-field-agricultural-background-31501516.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Tomato mold leaf/tomato.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Apple Scab Leaf/apple_scab2.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Bell_pepper leaf/5493139683d035a18fd0dfa12893f38b--outdoor-decor-worms.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Squash Powdery mildew leaf/powderymildewcucurb-jallen.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Peach leaf/peach-leaf-11810082.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Blueberry leaf/IMG_9275.JPG.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Tomato leaf bacterial spot/Bacterial-speck-tomato-leaves.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "grape leaf black rot/Black_rot_on_grape_leaves5.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "Raspberry leaf/raspberry-leaf-has-traditionally-been-used-during-the-later-stages-raspberry-leaf.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Potato leaf late blight/potatolb_branchx500.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Tomato leaf/9bfac1dea7f401e3b379dab33f535bb4.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Strawberry leaf/giant-leaves.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Raspberry leaf/FsSYF.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Blueberry leaf/P1200665+Vaccinium+alaskaense+vs+ovalifolium+leaf+and++twig+cr.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Apple Scab Leaf/DSCF1248-1gz1wpc.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Corn leaf blight/02.JPG.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Blueberry leaf/IMG_8502.JPG.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Potato leaf early blight/potato_early-blight_01_zoom.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Bell_pepper leaf/stock-photo-black-pepper-plant-with-green-berries-and-leaves-555241408.jpg",
+    "label": "Bell_pepper leaf",
+    "label_idx": 3
+  },
+  {
+    "path": "Apple rust leaf/PLPATH-FRU-02-cedar-apple-rust-figure-1.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Tomato leaf late blight/lb_leaf_lesions3x1200.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "grape leaf/mourvedre3.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Tomato leaf bacterial spot/photo-764060.JPG.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Tomato mold leaf/tomato_leaf-mold_04_zoom.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Potato leaf late blight/460_1600.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Squash Powdery mildew leaf/curcurbit-powdery-mildew-erysiphe-cichoracearum-showing-development-BMMRPG.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Tomato leaf bacterial spot/%2320+Bacterial+Spot+and+Speck.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Tomato Early blight leaf/spotonleaf1.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Tomato leaf late blight/lateblightTom_lesion3.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Tomato leaf bacterial spot/Tomato%2BBacterial%2BSpot%2Bon%2BLeaves.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Corn leaf blight/Corn_Fig10.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Tomato leaf yellow virus/11-40580_5.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "grape leaf black rot/IMG_0830_original.JPG_1472588083.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "Tomato mold leaf/ArticleImage.aspx_imgid=4987.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Corn leaf blight/Corn-northern%20corn%20leaf%20blight-8-21.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Corn Gray leaf spot/Greyleafspot.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Tomato leaf/main-qimg-d9c2a93f60568485c989670d9bbf703b.jpg",
+    "label": "Tomato leaf",
+    "label_idx": 19
+  },
+  {
+    "path": "Tomato leaf yellow virus/IU-TYLCV_img_6.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Tomato mold leaf/23633262_1572609386115825_1396180255_o.jpg",
+    "label": "Tomato mold leaf",
+    "label_idx": 24
+  },
+  {
+    "path": "Corn Gray leaf spot/18largegls0732_copy-143B1EC97E96BA58322.jpg",
+    "label": "Corn Gray leaf spot",
+    "label_idx": 7
+  },
+  {
+    "path": "Peach leaf/020.JPG.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Tomato Septoria leaf spot/6134794031202304-600x272.jpeg.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Corn leaf blight/northern_corn_leaf_blight_university_of_delaware-600x400.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Blueberry leaf/vaccinium-angustifolium-634789-1.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Corn rust leaf/5496239405_d95bdb97d1_z.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Corn leaf blight/Common%20Diseases%20Figure%201.JPG.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "grape leaf/grape-leaf-15796930.jpg",
+    "label": "grape leaf",
+    "label_idx": 26
+  },
+  {
+    "path": "Apple rust leaf/2-Rust-induced-leaf-scorch-1fpa6c3.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Tomato leaf bacterial spot/Leaf%2Bsymptoms%2BMDA.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Raspberry leaf/groovy-raspberry1000x1000.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Corn leaf blight/northern-corn-leaf-blight-exserohilum-turcicum-lesions-on-a-maize-BBFWRB.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Squash Powdery mildew leaf/B9230061-Powdery_Mildew_on_Squash_Leaf-SPL.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Bell_pepper leaf spot/Pepper-BLS-Leaf_93303-e1370119902259.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Cherry leaf/d7b79dbc0bca0eb3e63fbe5dfb256ccd53d90a4eb1413_1260x1260.jpg",
+    "label": "Cherry leaf",
+    "label_idx": 6
+  },
+  {
+    "path": "Squash Powdery mildew leaf/mold_web12.16.14.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Corn leaf blight/1321189.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Potato leaf early blight/f204d9b6516c961f48502e0b7ae3f746.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Corn leaf blight/0c.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Soyabean leaf/detailed-view-single-soybean-leaf-very-green-crop-growing-field-43444691.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Potato leaf early blight/Leaves-with-early-blight-need-to-be-removed-225x300.jpg",
+    "label": "Potato leaf early blight",
+    "label_idx": 11
+  },
+  {
+    "path": "Soyabean leaf/07feb_ma_sbr3.JPG.jpg",
+    "label": "Soyabean leaf",
+    "label_idx": 14
+  },
+  {
+    "path": "Tomato Septoria leaf spot/web1_copy_tomato-septoria-leaf-spot4.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Blueberry leaf/IMG_5310.JPG.jpg",
+    "label": "Blueberry leaf",
+    "label_idx": 5
+  },
+  {
+    "path": "Tomato leaf yellow virus/8226402609_62d16884a7_b.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Apple rust leaf/Cedar-Apple-Rust-aecia-on-leaf-pic-by-NC-State.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Tomato leaf yellow virus/tomato-yellow-closeup-3.jpg",
+    "label": "Tomato leaf yellow virus",
+    "label_idx": 23
+  },
+  {
+    "path": "Squash Powdery mildew leaf/erysiphe-or-spaerotheca-cucurbit-powdery-mildew-on-butternut-squash-f0rh86.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "grape leaf black rot/PLPATH-FRU-24_Fig1-black-rot-spots-on-grape-leaf_Page_1.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "Bell_pepper leaf spot/GX3DYbwOynSj6HftBUajAw_m.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Tomato Septoria leaf spot/tomato_septoria_alternaria_1.jpg",
+    "label": "Tomato Septoria leaf spot",
+    "label_idx": 18
+  },
+  {
+    "path": "Tomato Early blight leaf/gn201410308259997ar-jpg.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Squash Powdery mildew leaf/7e565dd05211332ae896198afc622054.jpg",
+    "label": "Squash Powdery mildew leaf",
+    "label_idx": 15
+  },
+  {
+    "path": "Apple rust leaf/2011-011.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Strawberry leaf/stock-photo-strawberry-leaf-isolated-on-white-background-572055775.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Corn leaf blight/corn-baterial-leaf-stripe-f1b.JPG.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Apple rust leaf/185161-004-EAF28842.jpg",
+    "label": "Apple rust leaf",
+    "label_idx": 2
+  },
+  {
+    "path": "Potato leaf late blight/lateblight2.JPG.jpg",
+    "label": "Potato leaf late blight",
+    "label_idx": 12
+  },
+  {
+    "path": "Apple Scab Leaf/scab-venturia-inaequalis-development-of-disease-on-the-stem-upper-B359MJ.jpg",
+    "label": "Apple Scab Leaf",
+    "label_idx": 0
+  },
+  {
+    "path": "Tomato leaf bacterial spot/250_cb=20100819110637.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "Bell_pepper leaf spot/BacterialSpot10.jpg",
+    "label": "Bell_pepper leaf spot",
+    "label_idx": 4
+  },
+  {
+    "path": "Corn rust leaf/southernrust-seminole-june1.jpg",
+    "label": "Corn rust leaf",
+    "label_idx": 9
+  },
+  {
+    "path": "Peach leaf/stock-photo-two-sides-of-peach-leaf-isolate-on-white-17407162.jpg",
+    "label": "Peach leaf",
+    "label_idx": 10
+  },
+  {
+    "path": "Apple leaf/stock-photo-apple-tree-leaf-isolated-on-a-white-622503302.jpg",
+    "label": "Apple leaf",
+    "label_idx": 1
+  },
+  {
+    "path": "Raspberry leaf/muscari-raspberry-leaf-isolated-white-background-31953078.jpg",
+    "label": "Raspberry leaf",
+    "label_idx": 13
+  },
+  {
+    "path": "Corn leaf blight/Erv-sprayed-4.jpg",
+    "label": "Corn leaf blight",
+    "label_idx": 8
+  },
+  {
+    "path": "Tomato leaf bacterial spot/bac_spot1-300x298.jpg",
+    "label": "Tomato leaf bacterial spot",
+    "label_idx": 20
+  },
+  {
+    "path": "grape leaf black rot/Black_Rot_of_Grapes1166.jpg",
+    "label": "grape leaf black rot",
+    "label_idx": 27
+  },
+  {
+    "path": "Tomato leaf late blight/IMG_5360.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  },
+  {
+    "path": "Tomato Early blight leaf/Early_Blight_of_Tomato1687.jpg",
+    "label": "Tomato Early blight leaf",
+    "label_idx": 17
+  },
+  {
+    "path": "Strawberry leaf/IMG_4696.jpg",
+    "label": "Strawberry leaf",
+    "label_idx": 16
+  },
+  {
+    "path": "Tomato leaf late blight/tomato-late-blight-conn-2015-137c.jpg",
+    "label": "Tomato leaf late blight",
+    "label_idx": 21
+  }
+]
