@@ -5,6 +5,19 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 4 (Weeks 14–15) — Dataset Acquisition & Preprocessing
+
+- 6 datasets acquired: PlantVillage, PlantDoc, Paddy Doctor, Phantom-fs Soil, IRSID, OLID I (smoke sample)
+- Splits generated: 5 standard 80/10/10 stratified splits + 1 cross-region soil split (Phantom-fs train, IRSID test)
+- Normalisation stats computed per dataset (configs/data/*_norm.yaml)
+- Augmentation pipelines defined (disease modest, soil heavier, causation geometric-only)
+- Dataset classes implemented (JSONIndexedImageDataset + MultiLabelImageDataset, factory functions per dataset)
+- Validation: 0 corrupt files across 185,735 images scanned
+- Total disk: 5.4 GB (well under the 20 GB cap)
+- TODO: full OLID I (~14 GB across 19 Zenodo archives) deferred to Phase 11 — flip `OLID_FULL_DOWNLOAD = True` in `scripts/download_olid_i.py` and re-run when C5 evaluation begins
+
+---
+
 ## Week 2 (continued) — PDF-alignment cleanup
 
 - Removed [ADDED] engineering hygiene (pre-commit, GitHub Actions CI, pyproject.toml + tool configs, decisions/, session reports)
