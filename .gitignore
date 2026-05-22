@@ -43,3 +43,6 @@ results/figures/*.pdf
 
 # Local environment
 .env
+
+kaggle.json
+.kaggle/
