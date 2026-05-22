@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import shutil
 import subprocess
-import sys
 import time
 import zipfile
 from pathlib import Path
@@ -48,7 +47,7 @@ def kaggle_download(
     *,
     unzip: bool = True,
 ) -> None:
-    """Run ``kaggle datasets download -d <slug>`` into ``target_dir``.
+    """Download a Kaggle dataset via the Kaggle Python API.
 
     Parameters
     ----------
@@ -58,31 +57,24 @@ def kaggle_download(
         Where the dataset should end up. Must exist (call
         :func:`ensure_raw_dir` first).
     unzip : bool, default True
-        Pass ``--unzip`` to the Kaggle CLI so the archive is extracted
-        in-place. If False, the zip is left next to the data.
+        Extract the archive in-place. If False, the zip is left next to
+        the data.
 
     Notes
     -----
-    Subprocess is used (rather than ``import kaggle``) because the CLI is
-    the documented stable interface and gives the user familiar progress
-    output in the terminal.
+    Uses the Kaggle Python API (``kaggle.api.dataset_download_files``)
+    rather than ``python -m kaggle`` because the ``kaggle`` package does
+    not expose a ``__main__`` module on recent versions. The API call
+    handles authentication via ``~/.kaggle/kaggle.json``.
     """
-    cmd = [
-        sys.executable,
-        "-m",
-        "kaggle",
-        "datasets",
-        "download",
-        "-d",
-        slug,
-        "-p",
-        str(target_dir),
-    ]
-    if unzip:
-        cmd.append("--unzip")
+    # Lazy import so this module remains import-safe in environments
+    # without the kaggle SDK installed.
+    from kaggle.api.kaggle_api_extended import KaggleApi  # noqa: PLC0415
 
     _LOGGER.info("Kaggle download: %s -> %s", slug, target_dir)
-    subprocess.run(cmd, check=True)
+    api = KaggleApi()
+    api.authenticate()
+    api.dataset_download_files(slug, path=str(target_dir), unzip=unzip, quiet=False)
 
 
 def git_clone(repo_url: str, target_dir: Path) -> None:
