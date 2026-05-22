@@ -1,98 +1,198 @@
-"""Dataset wrappers for plant disease training and evaluation.
-
-Implementation lives in Phase 5 (Week 16). Stubs here document the
-expected file layout so the data engineering step is unambiguous.
+"""Dataset wrappers for plant disease training and evaluation (Phase 4 §G).
 
 Per master reference §41 the image datasets live under the top-level
-``data/`` directory, not inside ``corpus/`` (which is reserved for the
-IKS classical-text corpus). The defaults below resolve from
-:data:`src.utils.paths.DATA_PLANT_DISEASE_DIR`.
+``data/`` directory, not inside ``corpus/``. Split JSONs live under
+``data/splits/<dataset>/``.
 
-Expected layout::
+The generic :class:`JSONIndexedImageDataset` reads a Phase 4 split JSON
+(``train.json`` / ``val.json`` / ``test.json``) plus a sibling
+``class_map.json`` and returns ``(image_tensor, label_idx)`` tuples
+suitable for ``torch.utils.data.DataLoader``.
 
-    data/plant_disease/PlantVillage/
-        Apple___Apple_scab/*.jpg
-        Apple___Black_rot/*.jpg
-        ...
-
-PlantDoc (out-of-distribution test set) lives under
-``data/plant_disease/PlantDoc/`` with the same nested structure.
+Three factory functions wire up the per-dataset loaders for
+PlantVillage, PlantDoc, and Paddy Doctor using the right raw root and
+image size from each ``configs/data/<dataset>_norm.yaml``.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from src.disease.config import DiseaseConfig
-from src.utils.paths import DATA_PLANT_DISEASE_DIR
+from src.utils.data_splits import load_class_map, load_split
+from src.utils.data_stats import load_channel_stats
+from src.utils.logging_setup import get_logger
+from src.utils.paths import DATA_PLANT_DISEASE_DIR, PROJECT_ROOT
 
 if TYPE_CHECKING:
-    from torch.utils.data import Dataset  # noqa: F401
+    from torch.utils.data import DataLoader  # noqa: F401
 
-PLANTVILLAGE_DEFAULT_ROOT: Path = DATA_PLANT_DISEASE_DIR / "PlantVillage"
-PLANTDOC_DEFAULT_ROOT: Path = DATA_PLANT_DISEASE_DIR / "PlantDoc"
+_LOGGER = get_logger(__name__)
+
+PLANTVILLAGE_DEFAULT_ROOT: Path = DATA_PLANT_DISEASE_DIR / "plantvillage" / "raw"
+PLANTDOC_DEFAULT_ROOT: Path = DATA_PLANT_DISEASE_DIR / "plantdoc" / "raw"
+PADDY_DOCTOR_DEFAULT_ROOT: Path = DATA_PLANT_DISEASE_DIR / "paddy_doctor" / "raw"
+
+_SPLITS_ROOT = PROJECT_ROOT / "data" / "splits"
+_CONFIGS_DATA = PROJECT_ROOT / "configs" / "data"
 
 
-class PlantVillageDataset:
-    """PlantVillage dataset wrapper (38-class, ~54k images).
+class JSONIndexedImageDataset:
+    """Reads a Phase 4 split JSON and returns ``(image, label_idx)`` items.
+
+    Lives in :mod:`src.disease` but is fully generic — the soil module
+    re-imports the same class rather than duplicating.
 
     Parameters
     ----------
-    root : Path
-        Path to the unpacked PlantVillage directory. Defaults to
-        :data:`PLANTVILLAGE_DEFAULT_ROOT`
-        (``<repo>/data/plant_disease/PlantVillage``).
-    config : DiseaseConfig
-        Used for image size + augmentation.
-    split : {"train", "val", "test"}
-        Which split to load.
-
-    Notes
-    -----
-    Phase 5 implementation will:
-    - read class folders to build the label map
-    - apply albumentations transforms per ``config.augmentation``
-    - return ``(image_tensor, label)`` tuples
+    split_path : Path
+        Path to a ``train.json`` / ``val.json`` / ``test.json`` written
+        by :func:`src.utils.data_splits.save_split`.
+    raw_root : Path
+        Dataset's raw root; ``SplitEntry.path`` is joined onto this.
+    transform : albumentations.Compose | None
+        Albumentations pipeline returning a ``CHW float32`` torch
+        tensor. Pass ``None`` to skip transforms (useful in unit
+        tests).
     """
 
     def __init__(
         self,
-        config: DiseaseConfig,
-        root: Path | None = None,
-        split: str = "train",
+        split_path: Path,
+        raw_root: Path,
+        transform: Any | None = None,
     ) -> None:
-        self.root = Path(root) if root is not None else PLANTVILLAGE_DEFAULT_ROOT
-        self.config = config
-        self.split = split
+        self.entries = load_split(split_path)
+        self.raw_root = Path(raw_root)
+        self.transform = transform
+
+        cm_path = split_path.parent / "class_map.json"
+        if cm_path.is_file():
+            self.class_map = load_class_map(cm_path)
+        else:
+            labels = sorted({e.label for e in self.entries})
+            self.class_map = {label: idx for idx, label in enumerate(labels)}
 
     def __len__(self) -> int:
-        raise NotImplementedError("Phase 5 — Week 16: implement PlantVillageDataset.__len__.")
+        return len(self.entries)
 
-    def __getitem__(self, idx: int) -> tuple[object, int]:
-        raise NotImplementedError("Phase 5 — Week 16: implement PlantVillageDataset.__getitem__.")
+    def __getitem__(self, idx: int) -> tuple[Any, int]:
+        import numpy as np  # noqa: PLC0415
+        from PIL import Image  # noqa: PLC0415
+
+        entry = self.entries[idx]
+        image_path = self.raw_root / entry.path
+        with Image.open(image_path) as img:
+            img = img.convert("RGB")
+            arr = np.asarray(img)
+        if self.transform is not None:
+            arr = self.transform(image=arr)["image"]
+        return arr, entry.label_idx
 
 
-class PlantDocDataset:
-    """PlantDoc out-of-distribution evaluation set.
+def _build_loaders(
+    dataset_name: str,
+    raw_root: Path,
+    image_size: int,
+    config: DiseaseConfig | None,
+    batch_size: int,
+    num_workers: int,
+) -> dict[str, "DataLoader"]:
+    from torch.utils.data import DataLoader  # noqa: PLC0415
 
-    Same interface as :class:`PlantVillageDataset`. Used only at test time
-    to measure OOD generalisation; never in the training mix.
+    from src.disease.transforms import (  # noqa: PLC0415
+        build_disease_eval_aug,
+        build_disease_train_aug,
+    )
 
-    Parameters
-    ----------
-    config : DiseaseConfig
-    root : Path, optional
-        Defaults to :data:`PLANTDOC_DEFAULT_ROOT`
-        (``<repo>/data/plant_disease/PlantDoc``).
-    """
+    stats = load_channel_stats(_CONFIGS_DATA / f"{dataset_name}_norm.yaml")
+    train_aug = build_disease_train_aug(image_size, stats.mean, stats.std)
+    eval_aug = build_disease_eval_aug(image_size, stats.mean, stats.std)
 
-    def __init__(self, config: DiseaseConfig, root: Path | None = None) -> None:
-        self.root = Path(root) if root is not None else PLANTDOC_DEFAULT_ROOT
-        self.config = config
+    splits_dir = _SPLITS_ROOT / dataset_name
+    loaders: dict[str, DataLoader] = {}
+    for split_name, transform in (
+        ("train", train_aug),
+        ("val", eval_aug),
+        ("test", eval_aug),
+    ):
+        ds = JSONIndexedImageDataset(
+            splits_dir / f"{split_name}.json",
+            raw_root,
+            transform=transform,
+        )
+        loaders[split_name] = DataLoader(
+            ds,
+            batch_size=batch_size,
+            shuffle=(split_name == "train"),
+            num_workers=num_workers,
+            pin_memory=True,
+        )
+    _LOGGER.info(
+        "Built %s loaders: train=%d, val=%d, test=%d",
+        dataset_name,
+        len(loaders["train"].dataset),
+        len(loaders["val"].dataset),
+        len(loaders["test"].dataset),
+    )
+    return loaders
 
-    def __len__(self) -> int:
-        raise NotImplementedError("Phase 5 — Week 18: implement PlantDocDataset.__len__.")
 
-    def __getitem__(self, idx: int) -> tuple[object, int]:
-        raise NotImplementedError("Phase 5 — Week 18: implement PlantDocDataset.__getitem__.")
+def make_plantvillage_loaders(
+    batch_size: int = 32,
+    num_workers: int = 0,
+    config: DiseaseConfig | None = None,
+) -> dict[str, "DataLoader"]:
+    """train/val/test DataLoaders for PlantVillage (380×380, EfficientNet-B4)."""
+    return _build_loaders(
+        "plantvillage", PLANTVILLAGE_DEFAULT_ROOT, 380, config, batch_size, num_workers
+    )
+
+
+def make_plantdoc_loaders(
+    batch_size: int = 32,
+    num_workers: int = 0,
+    config: DiseaseConfig | None = None,
+) -> dict[str, "DataLoader"]:
+    """train/val/test DataLoaders for PlantDoc (380×380)."""
+    return _build_loaders(
+        "plantdoc", PLANTDOC_DEFAULT_ROOT, 380, config, batch_size, num_workers
+    )
+
+
+def make_paddy_doctor_loaders(
+    batch_size: int = 32,
+    num_workers: int = 0,
+    config: DiseaseConfig | None = None,
+) -> dict[str, "DataLoader"]:
+    """train/val/test DataLoaders for Paddy Doctor (380×380)."""
+    return _build_loaders(
+        "paddy_doctor",
+        PADDY_DOCTOR_DEFAULT_ROOT,
+        380,
+        config,
+        batch_size,
+        num_workers,
+    )
+
+
+class PlantVillageDataset(JSONIndexedImageDataset):
+    """Backwards-compatible alias — same as :class:`JSONIndexedImageDataset`."""
+
+
+class PlantDocDataset(JSONIndexedImageDataset):
+    """Backwards-compatible alias — same as :class:`JSONIndexedImageDataset`."""
+
+
+__all__ = [
+    "JSONIndexedImageDataset",
+    "PADDY_DOCTOR_DEFAULT_ROOT",
+    "PLANTDOC_DEFAULT_ROOT",
+    "PLANTVILLAGE_DEFAULT_ROOT",
+    "PlantDocDataset",
+    "PlantVillageDataset",
+    "make_paddy_doctor_loaders",
+    "make_plantdoc_loaders",
+    "make_plantvillage_loaders",
+]

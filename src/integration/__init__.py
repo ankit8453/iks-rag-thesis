@@ -6,6 +6,10 @@ retrieval; the system does NOT infer cause from images).
 """
 
 from src.integration.causation import CausalContext, CausalPathway
+from src.integration.causation_dataset import (
+    MultiLabelImageDataset,
+    make_olid_loaders,
+)
 from src.integration.config import IntegrationConfig
 from src.integration.context import MultimodalContext
 from src.integration.strategy_llm_mediated import LLMMediatedStrategy
@@ -17,7 +21,9 @@ __all__ = [
     "CausalPathway",
     "IntegrationConfig",
     "LLMMediatedStrategy",
+    "MultiLabelImageDataset",
     "MultimodalContext",
     "MultimodalEmbeddingStrategy",
     "TemplateStrategy",
+    "make_olid_loaders",
 ]
