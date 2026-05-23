@@ -66,3 +66,24 @@ def test_class_map_round_trips(tmp_path: Path) -> None:
     split, raw_root = _make_fixture(tmp_path)
     ds = JSONIndexedImageDataset(split, raw_root)
     assert ds.class_map == {"a": 0, "b": 1}
+
+
+def test_plantdoc_class_map_has_canonical_27_classes() -> None:
+    """After the §A spider-mites merge, PlantDoc must have 27 classes
+    (Singh et al. 2020 canonical count), not the upstream repo's 28.
+
+    This is a real-data integration check — it relies on
+    ``data/splits/plantdoc/class_map.json`` existing locally. If
+    Phase 4 hasn't been run on this machine, the test skips.
+    """
+    plantdoc_class_map = (
+        Path(__file__).resolve().parents[2]
+        / "data" / "splits" / "plantdoc" / "class_map.json"
+    )
+    if not plantdoc_class_map.is_file():
+        pytest.skip(f"No PlantDoc class map at {plantdoc_class_map}; skip integration check.")
+
+    cm = json.loads(plantdoc_class_map.read_text(encoding="utf-8"))
+    assert len(cm) == 27, f"Expected 27 PlantDoc classes after the merge, got {len(cm)}"
+    # The vestigial folder must NOT appear as its own class.
+    assert "Tomato two spotted spider mites leaf" not in cm

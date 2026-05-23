@@ -12,6 +12,7 @@ different colour distributions.
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -43,58 +44,71 @@ MAX_IMAGES: dict[str, int | None] = {
 }
 
 
-def main() -> int:
-    NORM_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
-    rc = 0
-    for spec in DATASET_SPECS:
-        cap = MAX_IMAGES.get(spec.name)
-        _LOGGER.info(
-            "Computing channel stats for %s (size=%d, cap=%s) ...",
-            spec.name,
-            spec.image_size,
-            cap,
-        )
+def _compute_one(spec) -> int:
+    """Compute and save norm stats for a single DatasetSpec. Returns 0/1."""
+    cap = MAX_IMAGES.get(spec.name)
+    _LOGGER.info(
+        "Computing channel stats for %s (size=%d, cap=%s) ...",
+        spec.name, spec.image_size, cap,
+    )
 
-        # IRSID has no standard 80/10/10 split (it's test-only under §D).
-        # Discover its items directly and feed the path list in.
-        if spec.name == "irsid":
-            items = spec.discover_fn(spec.raw_root, None)
-            paths = [p for p, _ in items]
-            stats = compute_channel_stats_from_paths(
-                image_paths=paths,
-                image_size=spec.image_size,
-                max_images=cap,
-                seed=42,
-            )
-            out_path = NORM_OUTPUT_ROOT / f"{spec.name}_norm.yaml"
-            save_channel_stats(stats, out_path)
-            _LOGGER.info(
-                "%s: n=%d, mean=%s, std=%s",
-                spec.name, stats.n_images_sampled, stats.mean, stats.std,
-            )
-            continue
-
-        split_path = SPLITS_ROOT / spec.name / "train.json"
-        if not split_path.is_file():
-            _LOGGER.warning("Skipping %s — no split JSON at %s", spec.name, split_path)
-            rc = 1
-            continue
-        stats = compute_channel_stats(
-            split_path=split_path,
-            raw_root=spec.raw_root,
-            image_size=spec.image_size,
-            max_images=cap,
-            seed=42,
+    if spec.name == "irsid":
+        items = spec.discover_fn(spec.raw_root, None)
+        paths = [p for p, _ in items]
+        stats = compute_channel_stats_from_paths(
+            image_paths=paths, image_size=spec.image_size, max_images=cap, seed=42,
         )
         out_path = NORM_OUTPUT_ROOT / f"{spec.name}_norm.yaml"
         save_channel_stats(stats, out_path)
         _LOGGER.info(
             "%s: n=%d, mean=%s, std=%s",
-            spec.name,
-            stats.n_images_sampled,
-            stats.mean,
-            stats.std,
+            spec.name, stats.n_images_sampled, stats.mean, stats.std,
         )
+        return 0
+
+    split_path = SPLITS_ROOT / spec.name / "train.json"
+    if not split_path.is_file():
+        _LOGGER.warning("Skipping %s — no split JSON at %s", spec.name, split_path)
+        return 1
+    stats = compute_channel_stats(
+        split_path=split_path, raw_root=spec.raw_root,
+        image_size=spec.image_size, max_images=cap, seed=42,
+    )
+    out_path = NORM_OUTPUT_ROOT / f"{spec.name}_norm.yaml"
+    save_channel_stats(stats, out_path)
+    _LOGGER.info(
+        "%s: n=%d, mean=%s, std=%s",
+        spec.name, stats.n_images_sampled, stats.mean, stats.std,
+    )
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        description="Compute per-dataset RGB channel mean/std.",
+    )
+    parser.add_argument(
+        "--dataset",
+        default=None,
+        help=(
+            "If set, compute stats only for this dataset (must match a "
+            "DatasetSpec.name). Otherwise iterate every registered dataset."
+        ),
+    )
+    args = parser.parse_args(argv)
+
+    NORM_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+    rc = 0
+    specs = [s for s in DATASET_SPECS if args.dataset in (None, s.name)]
+    if args.dataset is not None and not specs:
+        _LOGGER.error(
+            "Unknown --dataset %r. Valid names: %s",
+            args.dataset, [s.name for s in DATASET_SPECS],
+        )
+        return 2
+
+    for spec in specs:
+        rc |= _compute_one(spec)
     return rc
 
 
