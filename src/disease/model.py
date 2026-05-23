@@ -1,9 +1,15 @@
-"""EfficientNet-B4 plant disease classifier.
+"""EfficientNet-B4 plant disease classifier (Phase 5 §D).
 
-Per master reference §10 (Disease Module) the backbone is fixed to
-EfficientNet-B4 via :mod:`timm`. Implementation lands in Phase 5 — this
-file currently exposes only the class shape so callers can type-check
-against it.
+Per the locked stack: 380×380 input, `timm.create_model("efficientnet_b4",
+pretrained=True, num_classes=num_classes)`, custom head with a dropout
+layer in front of the classifier linear.
+
+The class subclasses :class:`torch.nn.Module` so it integrates directly
+with PyTorch training loops, ``torch.cuda.amp.autocast``, and
+``hf_hub_download``-backed checkpoint resume.
+
+This module also keeps the small :class:`DiseasePrediction` dataclass
+used by :mod:`src.disease.infer` for the Phase 8 integration handoff.
 """
 
 from __future__ import annotations
@@ -11,31 +17,30 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from src.disease.config import DiseaseConfig
 from src.utils.logging_setup import get_logger
 
 if TYPE_CHECKING:
-    import torch  # noqa: F401 — type-only import
-    from torch import nn  # noqa: F401
+    import torch
+    from torch import nn
 
 _LOGGER = get_logger(__name__)
 
 
 @dataclass
 class DiseasePrediction:
-    """Output schema for a single disease prediction.
+    """Single-image disease prediction (used by :mod:`src.disease.infer`).
 
     Attributes
     ----------
     class_index : int
-        Argmax over the 38 PlantVillage classes.
+        Argmax over the classifier's output. Maps to ``class_map.json``.
     class_name : str
         Human-readable class label.
     confidence : float
         Softmax probability of the predicted class, in ``[0, 1]``.
     logits : list[float]
-        Raw model logits (length = ``num_classes``). Useful for downstream
-        calibration / Grad-CAM.
+        Raw model logits (length = ``num_classes``). Useful for
+        downstream calibration / Grad-CAM.
     """
 
     class_index: int
@@ -44,75 +49,182 @@ class DiseasePrediction:
     logits: list[float]
 
 
+def _build_disease_classifier_module(
+    num_classes: int,
+    pretrained: bool,
+    dropout_rate: float,
+) -> "nn.Module":
+    """Construct the underlying timm + custom-head ``nn.Module``.
+
+    Kept as a free function so the lazy ``timm`` / ``torch`` imports
+    don't run at module-import time.
+    """
+    import timm  # noqa: PLC0415
+    from torch import nn  # noqa: PLC0415
+
+    backbone = timm.create_model(
+        "efficientnet_b4",
+        pretrained=pretrained,
+        num_classes=0,           # detach timm's default classifier head
+        global_pool="avg",       # GAP → flat feature vector
+    )
+    feat_dim: int = backbone.num_features
+
+    head = nn.Sequential(
+        nn.Dropout(p=dropout_rate),
+        nn.Linear(feat_dim, num_classes),
+    )
+
+    return nn.Sequential(
+        backbone,
+        head,
+    )
+
+
 class DiseaseClassifier:
-    """EfficientNet-B4 wrapper for PlantVillage disease classification.
+    """EfficientNet-B4 classifier for plant-disease leaves.
+
+    Subclasses dynamically pick up :class:`torch.nn.Module` so the
+    class statement itself doesn't import ``torch`` at module-import
+    time (keeps the rest of the package import-safe in environments
+    without torch installed, e.g. when only doing data validation).
 
     Parameters
     ----------
-    config : DiseaseConfig
-        Validated configuration. The backbone is always
-        ``efficientnet_b4`` per the locked stack.
+    num_classes : int
+        Number of output classes. 38 for PlantVillage, 27 for PlantDoc,
+        10 for Paddy Doctor — the same instance is fine-tuned across
+        stages with the head re-built per dataset.
+    pretrained : bool, default True
+        Pull ImageNet weights via timm. Always True for the locked
+        training plan; the False path exists for unit tests.
+    dropout_rate : float, default 0.3
+        Dropout probability before the final linear classifier.
 
     Notes
     -----
-    The intended implementation (Phase 5, Week 16) is::
+    The internal layout is::
 
-        import timm
-        self.model = timm.create_model(
-            config.backbone,
-            pretrained=config.pretrained,
-            num_classes=config.num_classes,
-        )
+        self._backbone        # timm efficientnet_b4 (num_classes=0)
+        self._head            # nn.Sequential(Dropout, Linear)
+        self._module          # nn.Sequential(backbone, head)
 
-    Phase 5 also adds:
-    - a per-epoch freeze schedule controlled by
-      ``config.freeze_backbone_epochs``
-    - mixed-precision training
-    - integration with :mod:`src.disease.gradcam` for explainability
+    Storing the wrapper in ``self._module`` rather than mixing it into
+    ``self`` directly avoids name collisions with our own attribute
+    set. ``__call__`` forwards to ``self._module``.
     """
 
-    def __init__(self, config: DiseaseConfig) -> None:
-        self.config = config
-        self._model: object | None = None  # Phase 5: torch.nn.Module
-        _LOGGER.debug("DiseaseClassifier initialised with config: %s", config)
+    def __init__(
+        self,
+        num_classes: int,
+        pretrained: bool = True,
+        dropout_rate: float = 0.3,
+    ) -> None:
+        from torch import nn  # noqa: PLC0415
 
-    def build(self) -> None:
-        """Instantiate the timm backbone and replace the classifier head.
+        # Make `DiseaseClassifier` itself behave like an nn.Module via
+        # delegation. We could subclass nn.Module directly but that
+        # forces a torch import at module-import time.
+        self.num_classes = int(num_classes)
+        self.pretrained = bool(pretrained)
+        self.dropout_rate = float(dropout_rate)
 
-        Raises
-        ------
-        NotImplementedError
-            Implementation deferred to Phase 5 — Week 16 (Disease Module).
-        """
-        raise NotImplementedError("Phase 5 — Week 16: instantiate timm EfficientNet-B4.")
+        self._module: nn.Module = _build_disease_classifier_module(
+            num_classes=self.num_classes,
+            pretrained=self.pretrained,
+            dropout_rate=self.dropout_rate,
+        )
+        # Convenience aliases — Sequential children in order.
+        self._backbone: nn.Module = self._module[0]
+        self._head: nn.Module = self._module[1]
+        _LOGGER.info(
+            "DiseaseClassifier built: efficientnet_b4 num_classes=%d pretrained=%s dropout=%.2f",
+            self.num_classes,
+            self.pretrained,
+            self.dropout_rate,
+        )
 
-    def predict(self, image: object) -> DiseasePrediction:
-        """Run inference on a single preprocessed image tensor.
+    # ----- nn.Module-style API ----------------------------------- #
 
-        Parameters
-        ----------
-        image : torch.Tensor
-            Tensor of shape ``(3, H, W)`` already normalised per
-            ``AugmentationConfig``.
+    def __call__(self, x: "torch.Tensor") -> "torch.Tensor":
+        return self._module(x)
+
+    def forward(self, x: "torch.Tensor") -> "torch.Tensor":
+        """Return logits of shape ``(batch, num_classes)``."""
+        return self._module(x)
+
+    def parameters(self):
+        return self._module.parameters()
+
+    def named_parameters(self):
+        return self._module.named_parameters()
+
+    def state_dict(self):
+        return self._module.state_dict()
+
+    def load_state_dict(self, state_dict, strict: bool = True):
+        return self._module.load_state_dict(state_dict, strict=strict)
+
+    def to(self, *args, **kwargs):
+        self._module = self._module.to(*args, **kwargs)
+        return self
+
+    def train(self, mode: bool = True):
+        self._module.train(mode)
+        return self
+
+    def eval(self):
+        self._module.eval()
+        return self
+
+    # ----- freeze schedule --------------------------------------- #
+
+    def freeze_backbone(self) -> int:
+        """Freeze every backbone parameter; head stays trainable.
 
         Returns
         -------
-        DiseasePrediction
-            Argmax class, probability, and full logit vector.
-
-        Raises
-        ------
-        NotImplementedError
-            Implementation deferred to Phase 5 — Week 17 (inference).
+        int
+            Number of trainable parameters remaining (head only).
         """
-        raise NotImplementedError("Phase 5 — Week 17: implement disease inference.")
+        for p in self._backbone.parameters():
+            p.requires_grad = False
+        for p in self._head.parameters():
+            p.requires_grad = True
+        trainable = sum(p.numel() for p in self._module.parameters() if p.requires_grad)
+        _LOGGER.info("Backbone frozen — trainable params: %d (head only)", trainable)
+        return trainable
 
-    def state_dict(self) -> dict[str, object]:
-        """Return a checkpointable state dict.
+    def unfreeze_backbone(self) -> int:
+        """Unfreeze every parameter. Returns the new trainable count."""
+        for p in self._module.parameters():
+            p.requires_grad = True
+        trainable = sum(p.numel() for p in self._module.parameters() if p.requires_grad)
+        _LOGGER.info("Backbone unfrozen — trainable params: %d", trainable)
+        return trainable
 
-        Raises
-        ------
-        NotImplementedError
-            Phase 5 — Week 16.
+    # ----- Phase 8 integration helpers --------------------------- #
+
+    def get_feature_extractor(self) -> "nn.Module":
+        """Return the backbone (timm model) for downstream feature use.
+
+        Phase 8 integration: the multimodal context module will hook
+        into the GAP-pooled feature vector here.
         """
-        raise NotImplementedError("Phase 5 — Week 16: implement state_dict.")
+        return self._backbone
+
+    @property
+    def head(self) -> "nn.Module":
+        """The dropout+linear classification head."""
+        return self._head
+
+    # ----- introspection / debugging ----------------------------- #
+
+    def trainable_param_count(self) -> int:
+        return sum(p.numel() for p in self._module.parameters() if p.requires_grad)
+
+    def total_param_count(self) -> int:
+        return sum(p.numel() for p in self._module.parameters())
+
+
+__all__ = ["DiseaseClassifier", "DiseasePrediction"]
