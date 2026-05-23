@@ -38,7 +38,10 @@ DATASETS_WITH_STANDARD_SPLIT = {
     "plantdoc",
     "paddy_doctor",
     "phantomfs",
-    "olid_i",
+    "sirajganj_moisture",
+    # olid_i deliberately omitted: it's multi-label and uses
+    # scripts/build_olid_artifacts.py (MultilabelStratifiedShuffleSplit)
+    # instead of the standard single-label stratified split.
 }
 
 

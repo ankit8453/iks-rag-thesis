@@ -31,6 +31,7 @@ _LOGGER = get_logger(__name__)
 
 PHANTOMFS_DEFAULT_ROOT: Path = DATA_SOIL_DIR / "phantomfs" / "raw"
 IRSID_DEFAULT_ROOT: Path = DATA_SOIL_DIR / "irsid" / "raw"
+SIRAJGANJ_DEFAULT_ROOT: Path = DATA_SOIL_DIR / "sirajganj_moisture" / "raw"
 SOIL_TYPES_DEFAULT_ROOT: Path = PHANTOMFS_DEFAULT_ROOT  # legacy alias
 
 _SPLITS_ROOT = PROJECT_ROOT / "data" / "splits"
@@ -104,6 +105,32 @@ def make_phantomfs_loaders(
     """train/val/test loaders for the Phantom-fs primary soil dataset."""
     return _build_simple_loaders(
         "phantomfs", PHANTOMFS_DEFAULT_ROOT, 224, batch_size, num_workers
+    )
+
+
+def make_sirajganj_moisture_loaders(
+    batch_size: int = 32,
+    num_workers: int = 0,
+    config: SoilConfig | None = None,
+) -> dict[str, Any]:
+    """train/val/test loaders for the Sirajganj moisture dataset [ADDED].
+
+    Supervises the soil module's ``moisture_appearance`` head per master
+    plan §14 (``dry`` / ``moderate`` / ``wet``). Underlying images live
+    at ``data/soil/sirajganj_moisture/raw/Soil_Moisture_Dataset/Before
+    Augmentation/<class>/``; the ``After Augmentation`` author-pre-
+    augmented copies are deferred (we augment ourselves at training time
+    via :mod:`src.soil.transforms`). The split JSON's ``path`` entries
+    already encode the ``Soil_Moisture_Dataset/Before Augmentation/...``
+    prefix, so the loader's raw root is the dataset's top-level
+    ``raw/`` directory.
+    """
+    return _build_simple_loaders(
+        "sirajganj_moisture",
+        SIRAJGANJ_DEFAULT_ROOT,
+        224,
+        batch_size,
+        num_workers,
     )
 
 

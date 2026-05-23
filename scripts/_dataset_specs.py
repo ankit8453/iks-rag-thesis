@@ -112,6 +112,25 @@ def _discover_irsid(raw_root: Path, exclude: set[str] | None) -> list[tuple[Path
     return items
 
 
+def _discover_sirajganj_moisture(
+    raw_root: Path, exclude: set[str] | None
+) -> list[tuple[Path, str]]:
+    """Sirajganj moisture v2: drill into ``Soil_Moisture_Dataset/Before Augmentation/<class>/*``.
+
+    The archive ships two variants: ``Before Augmentation`` (1,177
+    original captures across dry/moderate/wet) and ``After Augmentation``
+    (~11,500 author-pre-augmented copies). We use the originals only —
+    the same convention as Phantom-fs (CyAUG deferred), and because our
+    own ``src/soil/transforms.py`` handles augmentation at training time.
+    """
+    original_root = raw_root / "Soil_Moisture_Dataset" / "Before Augmentation"
+    if not original_root.is_dir():
+        raise FileNotFoundError(
+            f"Expected Sirajganj 'Before Augmentation/' under {original_root}"
+        )
+    return discover_class_folder_items(original_root, exclude_paths=exclude)
+
+
 def _discover_olid_i(raw_root: Path, exclude: set[str] | None) -> list[tuple[Path, str]]:
     """OLID I (smoke sample, Phase 4): per-folder labels.
 
@@ -173,6 +192,17 @@ DATASET_SPECS: list[DatasetSpec] = [
         image_size=224,
         discover_fn=_discover_phantomfs,
         notes="Orignal-Dataset (sic) only; CyAUG deferred to Phase 6.",
+    ),
+    DatasetSpec(
+        name="sirajganj_moisture",
+        role="soil moisture_appearance head [ADDED]",
+        raw_root=DATA_SOIL_DIR / "sirajganj_moisture" / "raw",
+        image_size=224,
+        discover_fn=_discover_sirajganj_moisture,
+        notes=(
+            "Mendeley DOI 10.17632/skcc44yvvg.2. 1,177 originals (dry/"
+            "moderate/wet); After-Augmentation copies deferred."
+        ),
     ),
     DatasetSpec(
         name="irsid",

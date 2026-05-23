@@ -14,6 +14,7 @@ from src.soil.dataset import (
     SoilTypeDataset,
     make_irsid_loaders,
     make_phantomfs_loaders,
+    make_sirajganj_moisture_loaders,
     make_soil_cross_region_loaders,
 )
 from src.soil.model import SoilClassifier, SoilPrediction
@@ -26,5 +27,6 @@ __all__ = [
     "SoilTypeDataset",
     "make_irsid_loaders",
     "make_phantomfs_loaders",
+    "make_sirajganj_moisture_loaders",
     "make_soil_cross_region_loaders",
 ]
