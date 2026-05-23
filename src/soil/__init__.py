@@ -5,7 +5,11 @@ module is forbidden from outputting NPK, pH, fertility, organic matter %,
 or any other chemical / quantitative property. Future PRs that attempt
 to add such outputs should fail review.
 
-Heads: ``soil_type``, ``texture``, ``surface``, ``moisture``, ``cover``.
+Heads (post-Phase-4 reconciliation): ``soil_type`` (Phantom-fs 7-class
+Indian deposits), ``moisture_appearance`` (Sirajganj 2025 dry/moderate/
+wet), and ``texture`` (IRSID with the §14 coarse/fine/mixed mapping).
+``surface`` and ``cover`` from the original Week-2 design were dropped
+during the soil-parameter coverage audit (supervisor sign-off received).
 """
 
 from src.soil.config import SoilConfig

@@ -40,14 +40,17 @@ _CONFIGS_DATA = PROJECT_ROOT / "configs" / "data"
 
 @dataclass
 class SoilSample:
-    """One soil image plus its multi-task labels and provenance."""
+    """One soil image plus its three visual-head labels and provenance.
+
+    Post-Phase-4 reconciliation: ``surface`` and ``cover_state`` fields
+    dropped during the soil-parameter coverage audit (supervisor sign-
+    off received).
+    """
 
     image_path: Path
     soil_type: str
-    texture: str
-    surface: str
     moisture_appearance: str
-    cover_state: str
+    texture: str
     region: str | None = None
 
 

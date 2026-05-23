@@ -1,0 +1,13 @@
+# Maps IRSID's USDA texture-triangle labels to master plan §14's
+# coarse / fine / mixed scheme. Per Soil-Parameter-Coverage-Analysis
+# document. Reviewed by Ankit + supervisor (Dr. Akshay Pandey).
+
+texture_mapping:
+  sand: coarse
+  loamy_sand: coarse
+  clay: fine
+  sandy_loam: mixed
+  loam: mixed
+
+source: IRSID (USDA texture triangle)
+target: master_plan_§14 (coarse/fine/mixed)
