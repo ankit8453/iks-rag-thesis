@@ -55,3 +55,8 @@ nbformat>=5.10
 iterative-stratification>=0.1.7  # Multi-label stratified splits for OLID I
 requests>=2.31                   # Mendeley + Zenodo + GitHub codeload downloads
 kaggle>=1.6                      # Kaggle API for PlantVillage, Paddy Doctor, OLID, etc.
+
+# Hugging Face Hub uploads (Phase 5 §C datasets + §E model checkpoints)
+huggingface_hub>=0.24
+datasets>=2.20
+tensorboard>=2.16                # Phase 5 training metrics (TensorBoard writer)
