@@ -5,6 +5,20 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 4 fix (post-Weeks 14–15) — Reconciliation with finalised scope
+
+- OLID I: switched source from Zenodo (19 archives) to Kaggle `raiaone/olid-i` (single zip) and downloaded the **full 4,749 images / 23 multi-label classes** (was smoke-sample 83/3). `_labels_for()` updated to split compound symptoms like `bottle_gourd__JAS_MIT`.
+- Sirajganj 2025 added as net-new (Mendeley DOI 10.17632/skcc44yvvg.2): 1,177 images / 3 classes (dry/moderate/wet) supervising the `moisture_appearance` head.
+- Soil module heads pinned to 3: `soil_type` + `moisture_appearance` + `texture`. Dropped `surface` and `cover` per the supervisor-signed-off soil-parameter coverage audit. `texture` survives via the IRSID → coarse/fine/mixed mapping in `configs/data/soil_texture_label_mapping.yaml`.
+- Phantom-fs 7-class verified: Alluvial / Arid / Black / Laterite / Mountain / Red / Yellow (the Phase 4 prompt's "Clay" and "Peat" do not exist upstream).
+- PlantDoc 28th class (`Tomato two spotted spider mites leaf`) found to be a **vestigial 2-image folder**, documented, not modified.
+- `requirements.txt` gained matplotlib / jupyter / nbformat / iterative-stratification / requests / kaggle.
+- `results/dataset_stats.md` (228 lines) and `notebooks/dataset_eda.ipynb` (with a real OLID 23×23 multi-label co-occurrence heatmap) regenerated and end-to-end-executed.
+- New `PHASE4_SUMMARY.md` at the repo root supersedes the previous one.
+- Total disk: 30 GB (over the 25 GB envelope because Sirajganj v2 grew to 4.49 GB vs the prompt's ~500 MB estimate).
+
+---
+
 ## Phase 4 (Weeks 14–15) — Dataset Acquisition & Preprocessing
 
 - 6 datasets acquired: PlantVillage, PlantDoc, Paddy Doctor, Phantom-fs Soil, IRSID, OLID I (smoke sample)

@@ -151,7 +151,9 @@ for spec in [
     "plantdoc",
     "paddy_doctor",
     "phantomfs",
-    "olid_i",
+    "sirajganj_moisture",
+    # olid_i handled in its own section below — multi-label structure
+    # needs a different visualisation.
 ]:
     md(f"## {spec}")
     code(
@@ -199,18 +201,46 @@ code(
 )
 
 md(
-    "## OLID I labels (smoke sample)\n"
-    "Full multi-label co-occurrence heatmap needs the Phase-11 ~14 GB "
-    "Zenodo download. For now we show the smoke-sample vocabulary."
+    "## OLID I — full dataset (4,749 images, 23 multi-label tags)\n"
+    "OLID I uses ``<crop>__<symptom>`` folder names with compound symptoms "
+    "(e.g. ``bottle_gourd__JAS_MIT`` = jassid + mite). After expansion via "
+    "``_labels_for``, each image carries 2-3 multi-hot tags (one crop + "
+    "one or more symptom tags). The heatmap below shows pairwise "
+    "co-occurrence across the train split."
 )
 code(
-    "olid_cm_path = SPLITS / 'olid_i' / 'class_map.json'\n"
-    "if olid_cm_path.is_file():\n"
-    "    olid_cm = load_class_map(olid_cm_path)\n"
-    "    for k, v in sorted(olid_cm.items(), key=lambda kv: kv[1]):\n"
-    "        print(f'  {v}: {k}')\n"
-    "else:\n"
-    "    print('No OLID class map yet — run scripts/build_splits.py first.')"
+    "import numpy as np\n"
+    "from src.integration.causation_dataset import _labels_for\n"
+    "\n"
+    "olid_train = load_split(SPLITS / 'olid_i' / 'train.json')\n"
+    "olid_cm = load_class_map(SPLITS / 'olid_i' / 'class_map.json')\n"
+    "vocab = sorted(olid_cm, key=lambda k: olid_cm[k])\n"
+    "idx = {lab: i for i, lab in enumerate(vocab)}\n"
+    "n = len(vocab)\n"
+    "co = np.zeros((n, n), dtype=int)\n"
+    "for e in olid_train:\n"
+    "    tags = [t for t in _labels_for(e.label) if t in idx]\n"
+    "    for a in tags:\n"
+    "        for b in tags:\n"
+    "            co[idx[a], idx[b]] += 1\n"
+    "\n"
+    "fig, ax = plt.subplots(figsize=(10, 8))\n"
+    "im = ax.imshow(co, cmap='viridis', aspect='auto')\n"
+    "ax.set_xticks(range(n))\n"
+    "ax.set_yticks(range(n))\n"
+    "ax.set_xticklabels(vocab, rotation=70, ha='right', fontsize=8)\n"
+    "ax.set_yticklabels(vocab, fontsize=8)\n"
+    "ax.set_title('OLID I multi-label co-occurrence (train split)')\n"
+    "plt.colorbar(im, ax=ax, label='joint count')\n"
+    "plt.tight_layout()\n"
+    "plt.show()\n"
+    "\n"
+    "# Diagonal == per-tag frequency. Print the top-5.\n"
+    "diag = [(vocab[i], int(co[i, i])) for i in range(n)]\n"
+    "diag.sort(key=lambda kv: -kv[1])\n"
+    "print('Top tag frequencies (train):')\n"
+    "for tag, freq in diag[:5]:\n"
+    "    print(f'  {tag}: {freq}')"
 )
 
 NB["cells"] = cells
