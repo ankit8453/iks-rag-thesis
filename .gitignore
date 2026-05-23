@@ -48,3 +48,8 @@ results/figures/*.pdf
 
 kaggle.json
 .kaggle/
+
+# Phase 5 smoke-test scratch / inference cache / checkpoint scratch
+_smoke_work/
+_inference/
+_checkpoints/
