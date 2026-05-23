@@ -46,3 +46,12 @@ pydantic>=2.7            # enforces SoilConfig.disallowed_outputs, configs' stri
 
 # Test runner [PDF-implied §37 reproducibility tests]
 pytest>=8.2
+
+# Notebook generation + EDA [PDF-implied §41 notebooks/]
+# (used by scripts/build_eda_notebook.py and notebooks/dataset_eda.ipynb)
+matplotlib>=3.8
+jupyter>=1.0
+nbformat>=5.10
+iterative-stratification>=0.1.7  # Multi-label stratified splits for OLID I
+requests>=2.31                   # Mendeley + Zenodo + GitHub codeload downloads
+kaggle>=1.6                      # Kaggle API for PlantVillage, Paddy Doctor, OLID, etc.
