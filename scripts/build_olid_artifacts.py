@@ -132,10 +132,23 @@ def _save_split_indices(
 ) -> None:
     """Write a split JSON for the given index subset.
 
-    The ``label`` field is the folder name (``<crop>__<symptom>``); the
-    runtime dataset class calls :func:`_labels_for` on this string to
-    re-expand into the multi-hot vector. ``label_idx`` is set to 0 as a
-    multi-label-aware placeholder (consumers must NOT use it).
+    OLID is multi-label, so the single-int ``label_idx`` field in
+    :class:`SplitEntry` cannot honestly represent the 2-3 active tags
+    per image. Convention:
+
+    - ``label`` carries the folder name (``<crop>__<symptom>``), which
+      the multi-label dataset class expands at load time via
+      :func:`src.integration.causation_dataset._labels_for`.
+    - ``label_idx`` is set to **0 as a fixed placeholder**. The value
+      is meaningless and must NOT be read as a class identity (in
+      particular, ``DM`` is index 0 in ``class_map.json`` but that
+      does not mean every row is DM).
+    - The runtime ``MultiLabelImageDataset.__getitem__`` reads only
+      ``entry.label`` and constructs the multi-hot vector against the
+      vocabulary; it never touches ``entry.label_idx``.
+
+    See PHASE4_SUMMARY.md → "OLID split JSON convention" for the
+    full rationale.
     """
     entries = []
     for i in indices:

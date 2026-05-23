@@ -112,6 +112,25 @@ bitter_gourd, bottle_gourd, cucumber, eggplant, ridge_gourd,
 snake_gourd, tomato) + 15 symptom tags (DM, EB, FB, IEM, JAS, K, LM,
 LS, MIT, Mg, N, PC, PLEI, PM, healthy).
 
+### OLID split JSON convention — `label_idx` is intentionally 0 for every row
+
+OLID is multi-label, so the per-row `label_idx: int` field in
+`data/splits/olid_i/{train,val,test}.json` cannot honestly represent
+the 2-3 active tags per image. The actual label information is
+encoded in the `label` field (e.g. `bottle_gourd__JAS_MIT`); the
+multi-label dataset class calls
+`src.integration.causation_dataset._labels_for(entry.label)` to expand
+the folder name into the per-image multi-hot vector against
+`class_map.json`. The `label_idx: 0` value in the JSON is a
+placeholder and **must not be read** as a class identity — bit 0 in
+the class map is the `DM` tag, but that does not mean every OLID
+image is DM. This convention is documented in
+`scripts/build_olid_artifacts.py` and in the docstring of
+`_save_split_indices`. Sanity check: loading the train split through
+`make_olid_loaders` and inspecting the first batch shows the multi-hot
+vectors carry the correct tag set per image (e.g.
+`ash_gourd__healthy` → bits 14 and 19, vector sum == 2).
+
 Sirajganj v2 had two variants on disk — `Before Augmentation/` (1,177
 originals, used) and `After Augmentation/` (11,457 author-pre-augmented
 copies, deferred — we augment ourselves at train time).
