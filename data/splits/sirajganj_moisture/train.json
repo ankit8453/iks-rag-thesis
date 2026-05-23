@@ -1,0 +1,4707 @@
+[
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211552.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215959.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230018.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085229.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010404.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201329.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195927.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210732.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230132.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211024.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010624.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211136.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170138.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170456.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195712.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202739.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211637.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230058.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195920.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220058.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010550.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084919.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211007.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085046.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201639.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171243.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230119.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010539.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085051.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230444.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211246.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085044.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084917.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210804.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211012.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085217.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170543.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171334.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220105.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230032.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230129.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171124.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201624.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211500.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171406.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201839.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010855.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211035.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200020.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230358.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211457.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010927.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085209.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171656.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211214.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230007.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220317 (1).JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195832.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230136.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202804.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230249.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230326.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200001.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010545.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170229.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201312.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010603.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220205.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170045.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195808.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230357.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230147.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170547.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210744.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230344.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230455.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170352.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230054.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/IMG_20250426_234911.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211722.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215714.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202508.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171308.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084842.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211233.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211630.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210955.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170213.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211232.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211355.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220200.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085259.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170302.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171705.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211152.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010727.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220317.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171248.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195738.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211505.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195618.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211149.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195621.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211555.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195734.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211240.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211000.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200002.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230407.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085102.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010833.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170354.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230544.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230548.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202112.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211200.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202316.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220002.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211221.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230237.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010620.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210948.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195948.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010610.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211050.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202226.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202457.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195945.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211251.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171317.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010626.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230514.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230400.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220310.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211053.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085314.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085334.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195725.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202122.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201040.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201704.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171251.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210841.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230313.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010431.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230340.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211624.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211401.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202306.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171122.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230336.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010733.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230201.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215815.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230106.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170149.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220148.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171037.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211216.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230235.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084846.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210829.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215902.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230300.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210935.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010439.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230334.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220356.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010651.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195855.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010536.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230305.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202037.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201735.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085231.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_125855179.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211300.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170216.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210701.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210713.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201550.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010920.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195820.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230546.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230257.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202557.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171055.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202500.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210945.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195817.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171058.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085321.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010422.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010518.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010701.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170241.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230107.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220214.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084847.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210633.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195841.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170207.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202002.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211657.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170531.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010604.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230302.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084834.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211539.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220347.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170412.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210836.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230014.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085316.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202355.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211037.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202205.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211730.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171342.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202502.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085245.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_145858003.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211548.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010552.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210640.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171718.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201621.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220304.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201827.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220022.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010612.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170238.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170527.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201830.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220139.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230436.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201946.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220421.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170348.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211200.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211140.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195642.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230112.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211713.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230103.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085105.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010433.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202403.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210819.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171311.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170553.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010847.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085134.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230134.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220340.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010735.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215819.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085137.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084811.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171115.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230349.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202604.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171324.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220211.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220252.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211009.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170551.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220151.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210941.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201926.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084836.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/IMG_20250426_2349042.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210759.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195925.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170043.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201942.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201918.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195702.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211218.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085225.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220415.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171250.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195835.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202401.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171315.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010614.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220157.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085221.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085228.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201730.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202549.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230224.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210832.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010547.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211300.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200033.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211033.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220306.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202144.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211340.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195624.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202749.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201949.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170458.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230152.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211039.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010630.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085319.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010723.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211144.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201807.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084900.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220330.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210826.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085142.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195726.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010711.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010916.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211155.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195956.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210806.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230239.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171631.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085331.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215948.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010559.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211533.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230409.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202633.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220036.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215616.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170147.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085307.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171702.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230044.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084858.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220325.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010843.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202758.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211031.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195632.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195719.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215839.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171410.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230027.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085218.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211627.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201654.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170248.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211237.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211618.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211423.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010606.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195745.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195812.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211443.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220411.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170235.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210824.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010643.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010622.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171331.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171241.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085223.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171046.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084901.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200037.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220043.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085154.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211243.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010938.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211156.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230454.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215833.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220332.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210946.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230538.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210709.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201801.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084814.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230457.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230231.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211212.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202103.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201631.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195953.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_132904845.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230035.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171246.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170545.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010704.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170136.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201955.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211253.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200011.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211251.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085323.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215822.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202703.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201615.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211208.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211605.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084754.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220227.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210722.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170359.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084910.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202729.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220052.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202722.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211047.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010840.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171405.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171354.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_132848375.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230510.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195803.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010726.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195850.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215620.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211107.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211002.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211035.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010638.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210927.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010851.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200010.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220005.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085210.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220321.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085329.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195715.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211306.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202621.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220229.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230309.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085132.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010419.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195752.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085240.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200013.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210933.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084905.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010510.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200016.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195836.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220233.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201326.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211152.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170517.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085128.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085127.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210656.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084805.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200030.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211053.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230524.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230042.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201913.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170032.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171108.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230002.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211640.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230104.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220024.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202045.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170405.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084737.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230145.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085251.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085121.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010412.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085241.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195931.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084828.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230030.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211131.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195729.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010918.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230328.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211250.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210951.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085145.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010441.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085243.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171719.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230554.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220028.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220404.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215754.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195901.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010628.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215946.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211017.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010640.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220014.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170437.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084757.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010707.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220257.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010934.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230126.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010747.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230540.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170253.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211246.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171647.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195634.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171628.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202615.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201804.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010309.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220143.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170218.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220346.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_125828632.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230121.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170231.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215953.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010906.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010909.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170108.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215956.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215711.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211413.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211043.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211725.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085222.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211545.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085114.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211003.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202755.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211450.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220249.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195918.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010501.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084743.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085328.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195716.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201322.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220259.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085208.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211045.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211734.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171031.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230550.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085311.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220237.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171306.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230254.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202148.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085057.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210735.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200029.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220033.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230552.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211511.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084914.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010436.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210728.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220331.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171641.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010326.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010902.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195909.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230116.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202153.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201819.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010319.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230311.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010914.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202208.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010417.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202454.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085256.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211000.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230138.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220045.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211044.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210753.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170251.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211102.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215950.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171106.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170345.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195638.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201823.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170415.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010900.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211410.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010743.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010336.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195848.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201910.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215856.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211513.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230048.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230525.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211128.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170514.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170222.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211646.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210801.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211737.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171020.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010845.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230332.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230351.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_125905762.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171328.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010848.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211643.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171255.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230426.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230155.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170558.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230355.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210822.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010348.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211445.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171351.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085203.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010837.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211719.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211607.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171703.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202505.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195654.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230220.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171707.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010932.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201842.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211257.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210742.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220313.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010300.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195856.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210647.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202611.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202232.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211711.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211055.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200023.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211041.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220354.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215703.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171724.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202221.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084749.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211147.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211016.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010406.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230430.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085150.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215748.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211116.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010721.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215752.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202712.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170112.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085139.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170540.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230215.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211346.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211531.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211223.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084729.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195613.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210802.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211057.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085109.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201959.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202736.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211046.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220054.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202602.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171244.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211012.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211226.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010410.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230052.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202741.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211404.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230142.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230056.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171711.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215700.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170510.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202411.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211014.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171257.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210957.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215849.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010455.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010305.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202629.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195644.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211528.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211019.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210809.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211026.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211418.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171110.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202259.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171304.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211542.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085201.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170220.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211019.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230210.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201848.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200027.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084855.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171119.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170159.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210953.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084844.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211022.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195736.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230531.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010322.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230020.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170246.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171048.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202716.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200032.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211149.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171708.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211438.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171345.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211716.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230012.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171101.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010343.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010530.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211249.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171028.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195912.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202732.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195628.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195959.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010504.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211649.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210729.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230131.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202554.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215613.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202551.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084907.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211415.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010317.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211242.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/PXL_20250426_132855923.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215830.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085313.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010619.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211448.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211154.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171019.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210637.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211254.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010528.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170428.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202533.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211133.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211357.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195859.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230330.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010912.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230114.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195819.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171643.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210733.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195711.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170504.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202417.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211110.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215538.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010739.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220408.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230506.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170157.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171340.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211728.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211203.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085244.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211257.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230139.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211113.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202449.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171654.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084916.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010445.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170555.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201308.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201643.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171658.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230037.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211225.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230404.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220344.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220308.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220343.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170434.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195721.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220009.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202809.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170300.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210843.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171053.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_225958.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171338.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170350.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211406.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084912.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220245.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170538.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211205.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230101.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211241.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171349.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230402.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010512.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195815.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202107.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220314.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211144.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085053.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211652.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084920.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211145.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220101.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220240.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220155.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010750.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010353.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010655.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202351.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202618.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010729.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230228.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202547.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211041.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220048.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230315.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171301.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171050.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230213.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211245.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220103.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211558.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170422.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171043.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170140.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211005.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230233.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201634.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210715.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211255.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220039.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/IMG_20250426_234915.jpg",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195825.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220208.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220311.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085238.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085207.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230005.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010408.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202624.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230157.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201915.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170144.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010401.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010925.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171329.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010601.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201940.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202119.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171650.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010745.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010515.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210811.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200035.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171103.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010716.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220353.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085213.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085058.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220406.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211211.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220336.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170233.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084819.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220025.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211421.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230046.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230352.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202706.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220401.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010714.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220153.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220011.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170243.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171117.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085135.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_211057.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_200005.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_202726.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085147.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201333.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230512.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171022.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170034.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_215912.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211303.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211238.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171040.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230452.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085143.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085152.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201931.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220357.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_201836.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_210938.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210703.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230337.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_195741.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210725.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_010502.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_085248.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170507.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250428_084841.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211516.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_210737.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211739.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_170104.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/moderate/20250427_230204.JPG",
+    "label": "moderate",
+    "label_idx": 1
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_220242.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/wet/20250427_211601.JPG",
+    "label": "wet",
+    "label_idx": 2
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171343.JPG",
+    "label": "dry",
+    "label_idx": 0
+  },
+  {
+    "path": "Soil_Moisture_Dataset/Before Augmentation/dry/20250428_171634.JPG",
+    "label": "dry",
+    "label_idx": 0
+  }
+]

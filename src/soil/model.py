@@ -1,12 +1,20 @@
 """Multi-task soil classifier.
 
-VISUAL ONLY. The soil module outputs ``soil_type``, ``texture``,
-``surface``, ``moisture_appearance``, and ``cover_state``. It does
-**not** predict NPK, pH, fertility, organic matter %, or any other
-chemical composition (per master reference §11 / guardrail #2).
+VISUAL ONLY. The soil module outputs ``soil_type``,
+``moisture_appearance``, and ``texture``. It does **not** predict NPK,
+pH, fertility, organic matter %, or any other chemical composition
+(per master reference §11 / guardrail #2).
 
-Backbone is EfficientNet-B0 because the soil dataset (~1,300 images) is
-much smaller than PlantVillage and a deeper backbone (B4) would overfit.
+Post-Phase-4 reconciliation (supervisor sign-off received):
+the ``surface`` and ``cover_state`` heads from the original Week-2
+design were dropped during the soil-parameter coverage audit — neither
+carried IKS-corpus retrieval value. The remaining three heads are
+supervised by Phantom-fs (7-class Indian deposits), Sirajganj 2025
+(3-class dry/moderate/wet), and IRSID with the §14 texture mapping.
+
+Backbone is EfficientNet-B0 because the soil datasets combined
+(~1,200 + ~1,200 + 16 images for the cross-region eval) are small
+relative to PlantVillage and a deeper backbone (B4) would overfit.
 """
 
 from __future__ import annotations
@@ -25,16 +33,16 @@ class SoilPrediction:
 
     Notes
     -----
-    Only visual attributes appear here. The presence of any of
+    Only the three visual heads appear here. The presence of any of
     ``npk``, ``ph``, ``fertility``, ``organic_matter`` or
     ``chemical_composition`` in this dataclass should fail code review.
+    The legacy ``surface`` and ``cover_state`` fields were dropped per
+    the post-Phase-4 soil-parameter coverage audit.
     """
 
     soil_type: str
-    texture: str
-    surface: str
     moisture_appearance: str
-    cover_state: str
+    texture: str
     per_head_confidence: dict[str, float] = field(default_factory=dict)
 
 

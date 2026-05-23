@@ -5,7 +5,7 @@
 M.Tech Thesis · IIITDM Jabalpur · Department of Computer Science & Engineering
 Supervisor: **Dr. Akshay Pandey**
 
-> **Project status:** Week 2 of 40 — Foundation infrastructure complete. See [`progress.md`](progress.md).
+> **Project status:** Phase 4 complete — datasets ready for Phase 5 (disease module training). See [`progress.md`](progress.md) and [`PHASE4_SUMMARY.md`](PHASE4_SUMMARY.md).
 
 ---
 

@@ -1,0 +1,5207 @@
+[
+  {
+    "path": "train_images/normal/105706.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/104739.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/102801.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/106729.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/101850.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/106163.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/110179.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/108837.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/102678.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/107722.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/109136.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/108644.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102590.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/102570.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/107271.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/110079.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/101596.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/106035.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/102244.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/107026.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/104360.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/downy_mildew/109144.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/101088.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/107070.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/107773.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100420.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/104106.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/102809.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100243.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/normal/107767.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/106980.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/103112.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/101124.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/101993.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/105297.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/brown_spot/109523.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/100139.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/104097.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/109696.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/104134.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/100542.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/103644.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/106492.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/normal/106581.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/110075.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/109433.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/100369.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/109338.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/103082.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/101801.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/105869.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100167.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/101253.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/102009.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/downy_mildew/102867.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/105287.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/109676.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/102571.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/107746.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/106377.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/109482.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/104281.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/103483.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/107575.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/105074.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/105959.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/105377.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/107825.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/blast/100745.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/100574.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/104940.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/103589.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/108832.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105429.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/102616.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107104.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/103849.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109261.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104135.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/110319.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101355.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/108164.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/103156.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/106415.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/108208.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/108637.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/101586.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/101903.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/107633.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/108259.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/100393.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/101797.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/106191.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/102085.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/109483.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/downy_mildew/105348.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105008.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/102899.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/104260.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/101714.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102406.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/109470.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/100120.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/107358.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/hispa/110153.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/108651.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/106653.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/108386.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/103788.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107817.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/109424.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/105840.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/103637.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/105396.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/109060.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/110342.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/normal/109288.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/106350.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/100187.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/102754.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/108391.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107114.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/105410.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104724.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/blast/105552.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/102827.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/103177.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/107791.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/103013.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/106837.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/100177.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/100313.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/109618.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/107978.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/103699.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/108373.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/109750.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/102609.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/downy_mildew/100977.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/108117.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/105613.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/109905.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/108929.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/109978.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/109535.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/105558.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/105029.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/104675.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/100469.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/101041.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/104992.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/101880.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/100735.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/108349.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/107596.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/107927.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/101200.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/102533.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/106716.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/109900.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/102292.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/103405.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/106573.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/106344.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/107089.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/100711.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/103366.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/103226.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/102960.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/103198.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/109223.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/100039.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/109164.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/103422.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/103167.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/102246.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/106111.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/103193.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/110214.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/102337.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/105868.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/102656.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/101889.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/104786.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/100962.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/108918.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108544.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/107362.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/110104.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/104651.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/107013.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/106767.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/107877.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/104180.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/108955.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/100142.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/110018.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/100451.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/107463.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/104175.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/106353.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102843.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/downy_mildew/106571.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/downy_mildew/108591.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/109221.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/108121.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/109714.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/103735.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/brown_spot/106156.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/109626.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/107526.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/100686.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/downy_mildew/110230.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/108686.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/105179.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/105330.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/106890.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/104092.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/103321.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/101326.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/102969.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101888.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/101329.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104481.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/105399.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/100894.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/102271.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/101813.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/100498.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/104526.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/102361.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/100233.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/107485.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/107577.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/100548.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/104404.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/108658.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/102773.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/brown_spot/108346.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101394.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/107015.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/100937.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/105576.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/100411.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100960.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/102599.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/101636.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/101580.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108727.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/109235.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/107881.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/104698.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/106591.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105675.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/106247.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/109568.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/102662.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/104741.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/105090.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/106039.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/100020.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/103948.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/106983.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/108730.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/tungro/104895.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/104531.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/109084.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/downy_mildew/106963.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/tungro/110228.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/106931.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/100033.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/101230.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/105251.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/105113.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/107347.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/101321.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/101405.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/106848.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/106459.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/downy_mildew/109639.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/101090.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/102642.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/downy_mildew/103247.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/100291.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/109756.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/101769.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/108571.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/104346.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/108325.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/105510.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100550.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/blast/110023.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/109038.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/100823.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/104336.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/109710.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/105352.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/103997.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/103108.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/106588.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/110021.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/101248.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/103318.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/103058.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/108754.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/106735.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/105192.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/107542.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/110134.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/101474.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/109520.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/100996.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/100456.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/100878.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/109883.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/107824.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/110037.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105306.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/104615.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101702.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/brown_spot/105585.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/107568.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/105513.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/108906.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/107757.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/100127.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/103181.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/100912.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/107122.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107474.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/108951.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108264.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/106668.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/105786.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/tungro/105206.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/106210.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/106380.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108862.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/109134.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/107434.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/106417.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/107009.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/109319.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/110151.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/106280.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/101977.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/109393.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/109466.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/106741.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/103281.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/103551.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108313.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/100211.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/100901.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/101081.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/109817.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/106397.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/105854.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/100037.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/109113.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/107017.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/106944.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/101821.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/101788.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/107574.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109794.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/dead_heart/100047.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107873.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/108045.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/108850.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/101345.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/108506.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/103249.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/106106.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/107294.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100327.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/108491.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/100143.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/103439.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/103517.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/104623.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/103878.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/103199.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/109726.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/102309.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/103958.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/107999.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/109203.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102343.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/102771.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/normal/103739.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/107630.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100235.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/103718.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/101331.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/108761.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/104172.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/107879.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/101294.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/109631.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/brown_spot/110240.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/104040.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/downy_mildew/103402.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/101923.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/110344.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/blast/105936.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/101890.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/109069.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/109884.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/103343.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/103852.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/108451.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/107929.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102026.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/105989.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/108845.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/103375.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/102029.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/102567.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/106713.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/100102.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/106322.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/103121.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/106119.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/104951.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/105227.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/106819.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/108777.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/108009.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/105071.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104462.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/103915.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/105476.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/103662.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/100867.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/107728.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/109713.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/104088.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/107707.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/109642.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/100318.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/103694.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/106912.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/108853.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/100062.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/103980.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/107091.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/108896.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/104823.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/110186.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/108648.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/106093.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/102857.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/106312.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/100587.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/104801.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/106076.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/104224.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/101083.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/102838.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102510.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/105505.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/100657.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/104540.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102654.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/103681.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/109471.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/105837.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/103987.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/106994.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/100376.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/102885.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102810.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/104311.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/102281.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100556.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107979.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/102398.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/101594.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/110026.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/110194.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/tungro/107980.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107547.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/103968.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/blast/100046.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/101902.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/107080.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/105467.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/102128.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/100295.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/106981.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/103747.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/101002.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/107120.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/102569.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104820.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/103303.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/100651.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/102187.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/102811.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108830.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/102368.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/101468.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/100842.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/106112.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/102762.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/105597.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/105995.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102196.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/105615.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/106069.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/106867.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/104862.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/104286.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/105579.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/normal/100110.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/107361.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/105804.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107692.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/108063.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/109303.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/102190.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/106385.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/107741.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/106870.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/107672.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/102622.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/106094.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/109348.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/104644.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/100356.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/105080.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/101029.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100203.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/105947.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/100273.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/108201.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/106960.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/109486.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/103365.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/102356.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/102027.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/102966.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/100441.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/109030.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/100882.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/110330.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/107488.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/107516.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105857.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/101482.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/109882.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/102705.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/106323.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/102416.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100824.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/normal/104388.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100868.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/normal/103871.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/101189.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/104639.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/103441.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/104965.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/101056.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/104436.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/105180.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/107372.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/101008.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107398.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/103581.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/104390.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/107136.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/103650.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/108415.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/brown_spot/108235.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/downy_mildew/107563.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/107830.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/101897.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/106285.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/109142.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/100909.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/101365.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/105039.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100383.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/brown_spot/102390.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109268.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/tungro/108138.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/104064.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/108547.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107218.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/109830.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/106615.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/105785.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/105528.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/107387.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/106969.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/109907.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/107525.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/109590.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/107457.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/104035.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/104307.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/100683.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/108207.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/104196.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/106574.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/109394.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/110124.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/108294.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/106138.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/107445.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/102214.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/104476.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/106457.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/109295.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/104994.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/108090.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/107424.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/109287.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/104189.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/106667.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/103172.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/105275.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/102699.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/105835.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/105089.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/102939.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/103069.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/103949.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/109146.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/101589.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/108584.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/106061.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/110115.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/104816.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/109793.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/107268.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/108007.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/104964.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104415.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/downy_mildew/106296.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/110113.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/101704.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/101272.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/109444.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/107006.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/brown_spot/104149.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/108643.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/103169.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/103406.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/blast/104825.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/102210.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/109469.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/102310.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/106429.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/104900.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/109842.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/downy_mildew/101663.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/108015.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/103990.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/106426.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/105787.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/101543.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104621.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/tungro/109737.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/105093.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/107518.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/blast/103240.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/108708.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/hispa/101185.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/107858.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102385.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/106818.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/downy_mildew/108275.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/107247.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/100993.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/106872.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/103895.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101485.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/109478.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/100168.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/110211.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/105889.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/103147.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/107842.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104622.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/tungro/105269.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/downy_mildew/102468.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/103197.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/109990.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109973.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/normal/102208.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/102117.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/100955.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/109404.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/100003.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/103976.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100251.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/102215.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/hispa/101026.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/100729.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/103484.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/106552.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/109385.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/104078.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/104425.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/109372.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/tungro/108489.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/107880.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/102286.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/104896.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/102388.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/100700.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/106233.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/109050.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/101046.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/102942.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/106595.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/101477.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/109423.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/108470.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/105051.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/109308.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/108944.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/normal/102804.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/104728.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/107860.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/brown_spot/108564.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/107942.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/107442.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/107061.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/108649.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/103500.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/106834.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/104759.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/101094.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/106287.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/108933.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/downy_mildew/107310.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/103977.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/102828.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/110320.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/109498.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/101092.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/107242.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/107632.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/100027.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/107837.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/101870.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/103939.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/101209.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/109941.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/106104.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/dead_heart/107360.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/108319.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/102815.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/102868.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108136.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/109593.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/104156.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/106493.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102293.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/104074.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/101561.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/108026.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/109457.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/107983.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/102194.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/108551.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/103941.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/106586.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/106889.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/hispa/101862.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/108634.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/110085.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/100668.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/109231.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/105718.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/103355.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/downy_mildew/106465.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/downy_mildew/107523.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/109245.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104865.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/109232.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/109390.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/107130.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/101650.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/108475.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/109919.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/102660.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/102865.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/blast/108419.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/103697.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/108575.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/109327.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/110361.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/104972.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/downy_mildew/102075.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/109583.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/102807.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/101072.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/brown_spot/105631.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100764.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/dead_heart/105895.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/105635.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/downy_mildew/106478.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104020.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/100771.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/102182.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/100913.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/100959.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100334.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/104793.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/110220.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/108061.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/109751.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/106254.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/109687.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/101667.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/109490.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/108404.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104656.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/104978.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/106317.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/108162.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/100660.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/105750.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/103520.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/110116.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/100467.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/106711.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/105806.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/108647.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/106032.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/109356.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/downy_mildew/105446.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/109418.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/107864.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/107227.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/107260.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/106853.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/normal/102381.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/102692.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/102755.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/106359.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/103799.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/109603.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/102627.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/101854.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/103027.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/109753.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/107503.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/106749.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/104594.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/101517.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/104507.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/110348.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/101732.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/brown_spot/109636.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/100999.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/106851.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/104813.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/108339.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/104919.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/109001.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/110369.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/106663.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/106458.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104159.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/103790.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/104618.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/101998.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/109097.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/102729.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/109845.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/106778.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/104889.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/102447.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/102606.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109191.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/107710.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/105920.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/105341.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/103812.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/101332.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/109916.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/dead_heart/106481.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/102089.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/normal/106366.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/102937.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/105674.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/109537.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/105212.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/106297.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/100919.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/109991.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/104081.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/108312.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/110203.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/104066.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/110193.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/104616.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/100759.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/110400.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/106747.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/101058.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/100087.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/104129.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/105095.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/101796.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/105509.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/104191.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/107339.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/101172.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/108068.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/100577.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/109334.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/109772.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/downy_mildew/108021.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/108298.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/105584.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/101917.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/102560.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/109855.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/106709.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/tungro/105562.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/108193.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/blast/101498.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/103429.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/100105.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/dead_heart/109381.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/101824.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/102054.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/110136.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/107472.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/dead_heart/107129.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/110223.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/101428.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/blast/104374.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/105422.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/tungro/100941.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/101887.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/104491.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/107035.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/105072.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/hispa/110271.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/normal/100210.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/101570.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/109092.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/106447.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/107426.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/107691.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/100822.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/105950.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/102481.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/107668.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/110224.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/downy_mildew/100226.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/103150.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/tungro/105769.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/normal/102637.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/brown_spot/101014.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/105483.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/102791.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/102482.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/106043.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/100244.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/103689.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/104396.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/normal/102721.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/109922.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/107932.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/108387.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/hispa/107935.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/109031.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/106310.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/103859.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/blast/106940.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/106536.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/101668.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/normal/104083.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/107138.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/103379.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/102283.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/100198.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/bacterial_panicle_blight/100068.jpg",
+    "label": "bacterial_panicle_blight",
+    "label_idx": 2
+  },
+  {
+    "path": "train_images/hispa/103861.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/106252.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/105164.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/hispa/102098.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/downy_mildew/101781.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/blast/101604.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/normal/102948.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/tungro/100333.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/tungro/106803.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/dead_heart/106712.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/104478.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/106880.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_blight/104108.jpg",
+    "label": "bacterial_leaf_blight",
+    "label_idx": 0
+  },
+  {
+    "path": "train_images/hispa/100799.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/tungro/110324.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/blast/100231.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/102546.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/105952.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/blast/106326.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/102837.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/brown_spot/102658.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/103463.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/105758.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/104391.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/blast/109464.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/106706.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/109274.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/normal/105933.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/dead_heart/108559.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/tungro/102778.jpg",
+    "label": "tungro",
+    "label_idx": 9
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/105603.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/hispa/108805.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/dead_heart/104210.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/dead_heart/102277.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/101828.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/105418.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/blast/108531.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/downy_mildew/101914.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/downy_mildew/105953.jpg",
+    "label": "downy_mildew",
+    "label_idx": 6
+  },
+  {
+    "path": "train_images/dead_heart/104455.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/hispa/103017.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/107038.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/bacterial_leaf_streak/107828.jpg",
+    "label": "bacterial_leaf_streak",
+    "label_idx": 1
+  },
+  {
+    "path": "train_images/normal/101348.jpg",
+    "label": "normal",
+    "label_idx": 8
+  },
+  {
+    "path": "train_images/hispa/105838.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/110317.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/dead_heart/110405.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  },
+  {
+    "path": "train_images/brown_spot/106660.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/103386.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/hispa/107922.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/blast/101465.jpg",
+    "label": "blast",
+    "label_idx": 3
+  },
+  {
+    "path": "train_images/brown_spot/108587.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/hispa/100085.jpg",
+    "label": "hispa",
+    "label_idx": 7
+  },
+  {
+    "path": "train_images/brown_spot/105207.jpg",
+    "label": "brown_spot",
+    "label_idx": 4
+  },
+  {
+    "path": "train_images/dead_heart/105961.jpg",
+    "label": "dead_heart",
+    "label_idx": 5
+  }
+]

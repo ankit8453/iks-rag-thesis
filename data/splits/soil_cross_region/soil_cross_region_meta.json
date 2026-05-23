@@ -1,0 +1,25 @@
+{
+  "harmonisation_note": "Phantom-fs labels are deposit names (Alluvial / Arid / Black / Laterite / Mountain / Red / Yellow); IRSID labels are texture names (Clay / Sand / Silt). These are different label spaces and must NOT be merged. Phase 6 evaluation reports two numbers: same-distribution accuracy on Phantom-fs val, and a transfer-learning style stress test on IRSID test.",
+  "train_source": "phantomfs",
+  "val_source": "phantomfs",
+  "test_source": "irsid",
+  "train_class_map": {
+    "Alluvial_Soil": 0,
+    "Arid_Soil": 1,
+    "Black_Soil": 2,
+    "Laterite_Soil": 3,
+    "Mountain_Soil": 4,
+    "Red_Soil": 5,
+    "Yellow_Soil": 6
+  },
+  "test_class_map": {
+    "Clay": 0,
+    "Loam": 1,
+    "Loamy sand": 2,
+    "Sand": 3,
+    "Sandy Loam": 4
+  },
+  "train_size": 1070,
+  "val_size": 119,
+  "test_size": 16
+}

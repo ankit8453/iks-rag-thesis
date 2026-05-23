@@ -1,0 +1,82 @@
+[
+  {
+    "path": "irsid/Sample1.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample2.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample3.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample4.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample5.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample6.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample7.jpg",
+    "label": "Clay",
+    "label_idx": 0
+  },
+  {
+    "path": "irsid/Sample8.jpg",
+    "label": "Sand",
+    "label_idx": 3
+  },
+  {
+    "path": "irsid/Sample9.jpg",
+    "label": "Sand",
+    "label_idx": 3
+  },
+  {
+    "path": "irsid/Sample10.jpg",
+    "label": "Sand",
+    "label_idx": 3
+  },
+  {
+    "path": "irsid/Sample11.jpg",
+    "label": "Sand",
+    "label_idx": 3
+  },
+  {
+    "path": "irsid/Sample12.jpg",
+    "label": "Sand",
+    "label_idx": 3
+  },
+  {
+    "path": "irsid/Sample13.jpg",
+    "label": "Loamy sand",
+    "label_idx": 2
+  },
+  {
+    "path": "irsid/Sample14.jpg",
+    "label": "Sandy Loam",
+    "label_idx": 4
+  },
+  {
+    "path": "irsid/Sample15.jpg",
+    "label": "Loam",
+    "label_idx": 1
+  },
+  {
+    "path": "irsid/Sample16.jpg",
+    "label": "Loamy sand",
+    "label_idx": 2
+  }
+]

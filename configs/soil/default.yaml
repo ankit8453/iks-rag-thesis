@@ -10,12 +10,13 @@ epochs: 40
 seed: 42
 pretrained: true
 
+# Post-Phase-4 reconciliation (supervisor sign-off received):
+# surface and cover dropped during the soil-parameter coverage audit.
+# moisture renamed to moisture_appearance to match master plan §14.
 multi_task_heads:
   - soil_type
+  - moisture_appearance
   - texture
-  - surface
-  - moisture
-  - cover
 
 # Hard list of attributes the model is forbidden to predict.
 # Adding to this list is fine; removing entries requires a supervisor sign-off.
@@ -25,5 +26,18 @@ disallowed_outputs:
   - fertility
   - organic_matter
   - chemical_composition
+
+# Phantom-fs Indian deposit labels (the soil_type head's 7 classes).
+# Verified against the upstream Phantom-fs/Soil-Classification-Dataset
+# repo and the Sheth et al. 2025 paper. The Phase 4 prompt's mention
+# of "Clay" and "Peat" was incorrect.
+valid_soil_types:
+  - Alluvial_Soil
+  - Arid_Soil
+  - Black_Soil
+  - Laterite_Soil
+  - Mountain_Soil
+  - Red_Soil
+  - Yellow_Soil
 
 cross_region_validation: true
