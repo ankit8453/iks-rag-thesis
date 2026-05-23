@@ -1,32 +1,36 @@
-"""Download the OLID I dataset (Bangladesh rice leaves, multi-label).
+"""Download the OLID I dataset (Bangladesh rice & vegetable leaves).
 
-Source: Zenodo record 8105154, DOI ``10.5281/zenodo.8105154``.
-Role: causation evaluation (C5) [ADDED — supports post-plan C5
-contribution]. The Zenodo record turns out to be much larger than the
-prompt's "~4.7k images" estimate: 19 per-crop zip files totalling
-~14 GB.
+Source (primary): Kaggle ``raiaone/olid-i`` — single archive, ~14 GB,
+4,749 images across 57 multi-label classes. Hosted by the same authors
+as the Zenodo record below; the Kaggle packaging is one zip instead of
+nineteen, which is materially easier to fetch reliably.
 
-Phase 4 deferred full OLID I download. C5 evaluation in Phase 11 will
-set ``OLID_FULL_DOWNLOAD = True`` and re-run this script.
+Original paper: Orka et al. (2023), "OLID I: An Open Leaf Image Dataset
+for Plant Stress Recognition", *Frontiers in Plant Science* (doi:
+10.3389/fpls.2023.1251888).
 
-Defaults:
-- ``OLID_FULL_DOWNLOAD = False`` → downloads a single crop archive
-  (smoke sample) plus the dataset's class-distribution spreadsheet. The
-  smoke sample is enough to validate the multi-label dataset class
-  pipeline; it is **not** sufficient for the C5 evaluation in Phase 11.
-- ``OLID_FULL_DOWNLOAD = True`` → enumerates the Zenodo record's files
-  via the public API and downloads every archive. Allow ~30–60 minutes
-  and ~14 GB of disk.
+Role: causation evaluation (C5). The full set is required for the C5
+contribution to be evaluable; Phase 4 originally used an 83-image
+smoke sample from one crop which was insufficient.
 
-Smoke-sample policy: tomato is the most label-diverse crop, but
-``tomato__part_1.zip`` is 1.39 GB which exceeds the 500 MB threshold
-the supervisor set for the sample. Fall back to
-``bottle_gourd__part_1.zip`` (~186 MB) instead.
+Target: ``data/causation/olid_i/raw/``.
 
-Target: ``data/causation/olid_i/raw/``. Note: ``data/causation/`` is
-[ADDED] — not in master reference §41 because C5 was post-plan.
+Per master reference §14, the system does NOT infer causation from
+images. The OLID multi-label tags here serve as GROUND TRUTH for the
+Phase 11 C5 evaluation, not as model targets for the Phase 5 vision
+modules.
 
-Idempotent.
+# FALLBACK (Zenodo, 19 archives) — kept for reference in case Kaggle
+# hosting becomes unavailable:
+#   ZENODO_RECORD = "8105154"
+#   ZENODO_API_URL = f"https://zenodo.org/api/records/{ZENODO_RECORD}"
+#   FALLBACK_FILES = SMOKE_SAMPLE_FILES or [all 19 keys from the API]
+# (See git log entry "fix(Phase 4 §A): Paddy Doctor competition slug
+#  + OLID I smoke sample" for the Zenodo-based implementation.)
+
+Idempotent: skip download if ``raw/`` already contains a sentinel
+indicating the full dataset (≥4,000 images recursively + the
+``class_distribution.xlsx`` metadata file).
 """
 
 from __future__ import annotations
@@ -38,98 +42,75 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts._download_utils import (  # noqa: E402
     ensure_raw_dir,
-    http_download_with_retry,
     is_directory_populated,
-    sha256sum,
-    unzip_into,
+    kaggle_download,
 )
 from src.utils.logging_setup import get_logger  # noqa: E402
 from src.utils.paths import DATA_DIR  # noqa: E402
 
 _LOGGER = get_logger(__name__)
 
-ZENODO_RECORD = "8105154"
-ZENODO_API_URL = f"https://zenodo.org/api/records/{ZENODO_RECORD}"
+KAGGLE_SLUG = "raiaone/olid-i"
 
-# Toggle to True in Phase 11 to fetch the full ~14 GB dataset.
-OLID_FULL_DOWNLOAD: bool = False
-
-# Smoke-sample components: a metadata spreadsheet + one crop archive.
-SMOKE_SAMPLE_FILES: tuple[str, ...] = (
-    "class_distribution.xlsx",
-    "bottle_gourd__part_1.zip",
-)
+# Toggle in Phase 11 if/when a smoke sample is needed again; default
+# is now the full download per the post-Phase-4 reconciliation.
+OLID_FULL_DOWNLOAD: bool = True
 
 CAUSATION_DIR = DATA_DIR / "causation"
 RAW_DIR: Path = CAUSATION_DIR / "olid_i" / "raw"
 
-
-def _zenodo_file_listing() -> list[dict[str, object]]:
-    """Return the Zenodo record's file listing (key, size, content URL)."""
-    import requests  # noqa: PLC0415
-
-    resp = requests.get(ZENODO_API_URL, timeout=60)
-    resp.raise_for_status()
-    return resp.json().get("files", [])
+# Sentinel: a populated full OLID has both the class-distribution
+# spreadsheet and well over 4,000 images. The Phase-4 smoke sample only
+# had 83 images, so the threshold also discriminates against it.
+_SENTINEL_FILE = "class_distribution.xlsx"
+_MIN_IMAGES_FOR_FULL = 4000
 
 
-def _download_one(filename: str, file_url: str, target: Path) -> Path:
-    target_path = target / filename
-    if target_path.exists() and target_path.stat().st_size > 0:
-        _LOGGER.info("%s already present, skipping.", filename)
-        return target_path
-    http_download_with_retry(file_url, target_path)
-    _LOGGER.info("%s SHA-256: %s", filename, sha256sum(target_path))
-    return target_path
+def _looks_like_full_dataset(raw_root: Path) -> bool:
+    if not raw_root.is_dir():
+        return False
+    # Look for the spreadsheet anywhere under raw_root.
+    if not any(p.name == _SENTINEL_FILE for p in raw_root.rglob(_SENTINEL_FILE)):
+        return False
+    image_count = 0
+    image_exts = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
+    for p in raw_root.rglob("*"):
+        if p.is_file() and p.suffix.lower() in image_exts:
+            image_count += 1
+            if image_count >= _MIN_IMAGES_FOR_FULL:
+                return True
+    return False
 
 
 def main() -> int:
     ensure_raw_dir(RAW_DIR)
-    if is_directory_populated(RAW_DIR):
-        _LOGGER.info("OLID I already present at %s — skipping.", RAW_DIR)
+    if _looks_like_full_dataset(RAW_DIR):
+        _LOGGER.info(
+            "OLID I full dataset already present at %s — skipping.", RAW_DIR
+        )
         return 0
 
-    listing = _zenodo_file_listing()
-    by_key = {entry["key"]: entry for entry in listing}
-
-    if OLID_FULL_DOWNLOAD:
-        wanted = list(by_key.keys())
-        _LOGGER.info(
-            "OLID_FULL_DOWNLOAD=True — fetching all %d files (~14 GB).",
-            len(wanted),
+    if not OLID_FULL_DOWNLOAD:
+        _LOGGER.warning(
+            "OLID_FULL_DOWNLOAD=False but smoke-sample path has been removed "
+            "in the Phase-4 fix. Set OLID_FULL_DOWNLOAD=True to proceed."
         )
-    else:
-        # Verify the smoke-sample files actually exist in the record.
-        missing = [name for name in SMOKE_SAMPLE_FILES if name not in by_key]
-        if missing:
-            _LOGGER.error(
-                "Smoke-sample files missing from Zenodo record: %s. "
-                "Refusing to download a wrong subset.",
-                missing,
-            )
-            return 1
-        wanted = list(SMOKE_SAMPLE_FILES)
-        _LOGGER.info(
-            "OLID_FULL_DOWNLOAD=False — smoke sample only (%d files). "
-            "Set OLID_FULL_DOWNLOAD=True in Phase 11 to pull the full "
-            "dataset.",
-            len(wanted),
-        )
+        return 1
 
-    downloaded_zips: list[Path] = []
-    for name in wanted:
-        entry = by_key[name]
-        file_url = entry["links"]["self"]  # type: ignore[index]
-        path = _download_one(name, str(file_url), RAW_DIR)
-        if path.suffix.lower() == ".zip":
-            downloaded_zips.append(path)
+    # Clear any leftover .gitkeep / partial smoke files before the
+    # Kaggle archive is unzipped.
+    for child in RAW_DIR.iterdir():
+        if child.name == ".gitkeep":
+            continue
+        # Be conservative — only remove obviously-smoke leftovers.
+        if child.name in {"class_distribution.xlsx"}:
+            child.unlink()
+        # Smoke-sample folders like bottle_gourd__DM etc. — leave them
+        # to be overwritten by the full archive's contents; Kaggle unzip
+        # will silently merge.
 
-    for zip_path in downloaded_zips:
-        unzip_into(zip_path, RAW_DIR)
-        # Keep the original archive — useful for re-verification.
-
-    _LOGGER.info("OLID I (%s) ready at %s",
-                 "full" if OLID_FULL_DOWNLOAD else "smoke sample", RAW_DIR)
+    kaggle_download(KAGGLE_SLUG, RAW_DIR)
+    _LOGGER.info("OLID I (full Kaggle archive) download complete.")
     return 0
 
 

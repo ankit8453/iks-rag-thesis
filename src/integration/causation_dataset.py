@@ -36,14 +36,41 @@ _CONFIGS_DATA = PROJECT_ROOT / "configs" / "data"
 
 
 def _labels_for(entry_label: str) -> list[str]:
-    """Decompose a single folder label into one or more class names.
+    """Decompose an OLID I class-folder name into its multi-label tags.
 
-    Phase 4 smoke sample: folder names like ``bottle_gourd__DM`` /
-    ``bottle_gourd__healthy``. We treat the whole string as one label
-    (the multi-label expansion happens in Phase 11 when the full Zenodo
-    download arrives and we map crop+symptom pairs to individual tags).
+    OLID I folder names use ``<crop>__<symptom>`` (e.g.
+    ``bottle_gourd__DM``). Several folders carry **compound symptoms**
+    where multiple co-occurring tags are joined with a single
+    underscore (e.g. ``bottle_gourd__JAS_MIT`` = Jassid + Mite,
+    ``ash_gourd__N_K`` = Nitrogen + Potassium deficiency,
+    ``bitter_gourd__K_Mg`` = Potassium + Magnesium deficiency).
+
+    Each of those constituent tags must light up its own bit in the
+    multi-hot vector, otherwise the C5 evaluation can't separate the
+    co-occurring conditions. We split:
+
+    1. on ``__`` first to peel crop from the symptom block, and
+    2. on ``_`` second to split a compound symptom block into individual
+       tags.
+
+    Examples
+    --------
+    >>> _labels_for("bottle_gourd__DM")
+    ['bottle_gourd', 'DM']
+    >>> _labels_for("bottle_gourd__JAS_MIT")
+    ['bottle_gourd', 'JAS', 'MIT']
+    >>> _labels_for("ash_gourd__N_K")
+    ['ash_gourd', 'N', 'K']
+    >>> _labels_for("tomato__healthy")
+    ['tomato', 'healthy']
+    >>> _labels_for("Alluvial_Soil")  # non-OLID fallback — unchanged
+    ['Alluvial_Soil']
     """
-    return [entry_label]
+    if "__" not in entry_label:
+        return [entry_label]
+    crop, symptoms = entry_label.split("__", 1)
+    # ``symptoms`` may itself carry compound tags joined by a single ``_``.
+    return [crop, *symptoms.split("_")]
 
 
 class MultiLabelImageDataset:

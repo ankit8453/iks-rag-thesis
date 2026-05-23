@@ -113,7 +113,41 @@ def kaggle_download(
     _LOGGER.info("Kaggle download: %s -> %s", slug, target_dir)
     api = KaggleApi()
     api.authenticate()
-    api.dataset_download_files(slug, path=str(target_dir), unzip=unzip, quiet=False)
+
+    # Outer retry loop: Kaggle's internal retries can exhaust on large
+    # (~14 GB) datasets when transient DNS / chunked-encoding errors
+    # accumulate. Wrap with three full-archive retries before giving up.
+    max_attempts = 3
+    last_exc: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            api.dataset_download_files(
+                slug, path=str(target_dir), unzip=unzip, quiet=False
+            )
+            return
+        except Exception as exc:  # noqa: BLE001
+            last_exc = exc
+            # Wipe partial zip(s) so the next attempt re-downloads cleanly
+            # (Kaggle SDK does not reliably resume partial archives).
+            for partial in target_dir.glob("*.zip"):
+                _LOGGER.warning(
+                    "kaggle_download attempt %d/%d failed (%s); "
+                    "discarding partial %s and retrying.",
+                    attempt,
+                    max_attempts,
+                    type(exc).__name__,
+                    partial.name,
+                )
+                try:
+                    partial.unlink()
+                except OSError:
+                    pass
+            if attempt < max_attempts:
+                sleep_for = 30 * attempt
+                _LOGGER.info("Sleeping %ds before next attempt.", sleep_for)
+                time.sleep(sleep_for)
+    assert last_exc is not None
+    raise last_exc
 
 
 def git_clone(repo_url: str, target_dir: Path) -> None:
