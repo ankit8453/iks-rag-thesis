@@ -32,8 +32,16 @@ corpus/vector_db/*
 !corpus/vector_db/.gitkeep
 # cleaned/ and chunks/ are intentionally tracked once produced
 
-# Models (per §41 — gitignored)
-models/*
+# Models
+# Phase 5+ trained checkpoints under models/disease/ ARE tracked via
+# Git LFS (.pt files) and plain Git (small JSON metric files). Anything
+# else under models/ (ad-hoc TensorBoard runs, inference caches,
+# partial downloads) stays ignored.
+models/*.tmp
+models/disease/**/*.pt.tmp
+models/runs/
+# Keep the original placeholder so an empty models/ dir is preserved
+# when nothing has been pulled yet.
 !models/.gitkeep
 
 # Results
