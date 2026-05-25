@@ -1,0 +1,15 @@
+# texture head — IRSID Kaggle mirror + VIT latha-soil release, merged
+# and USDA-collapsed to 3 master-plan-§14 classes.
+# Source HF Hub repo: ankit-iiitdmj/iks-soil-texture-irsid-vit (private).
+source: ankit-iiitdmj/iks-soil-texture-irsid-vit
+num_classes: 3
+classes:
+  0: coarse
+  1: fine
+  2: mixed
+# The per-source raw-class → coarse/fine/mixed lookup lives in
+# ``configs/data/soil_texture_label_mapping.yaml`` (IRSID block:
+# ``texture_mapping``; VIT block: ``vit_texture``). At training time the
+# parquet rows carry the already-collapsed ``label_idx`` (0/1/2) plus a
+# ``source`` column (``irsid`` or ``vit``) for ablation.
+collapse_source: configs/data/soil_texture_label_mapping.yaml

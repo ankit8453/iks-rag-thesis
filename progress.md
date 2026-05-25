@@ -5,6 +5,59 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 training notebook ready (B0 edition)
+
+Notebook `notebooks/phase6_soil_training.ipynb` generated via `scripts/build_phase6_notebook.py`. Joint multi-task training on **EfficientNet-B0 at 224×224** per master plan §22 with 3 task heads: `soil_type` (7 classes), `moisture` (3 classes), `texture` (3 classes). Each head is `nn.Sequential(Dropout(0.3), Linear(1280, n_classes))`; total params 4,024,201 (4.0M backbone + 16,653 across the three heads — the headline "~5.3M B0 params" you see in the timm docs is for the original 1000-class ImageNet classifier, which we drop via `num_classes=0`).
+
+Training code in `src/soil/` mirrors `src/disease/`:
+
+- `src/soil/model.py` — `SoilMultiTaskClassifier` (timm B0 + 3 heads + `freeze_backbone()` / `unfreeze_backbone()`).
+- `src/soil/train.py` — `TASK_WEIGHTS`, `compute_multitask_loss` (NaN-guarded ignore_index=-1), `train_one_epoch`, `evaluate_per_task`, `SoilCheckpointManager`, `auto_batch_size` (returns 64/32/16 by VRAM).
+- `src/soil/transforms.py` — `build_soil_train_aug` (RandomResizedCrop + HFlip + Rotate ±15 + mild ColorJitter + Normalize) and `build_soil_eval_aug` (Resize 256 → CenterCrop 224).
+- `src/soil/__init__.py` — exports the full Phase 6 API alongside the existing Phase 4 helpers.
+
+Per-sample loss masking: each batch sample supervises exactly one head; the other two receive `-1` and are ignored by `F.cross_entropy(ignore_index=-1)`. When **all** samples in a batch carry `-1` for a head, cross-entropy normally returns NaN; the helper substitutes a graph-consistent zero so backward still produces a zero gradient on that head without poisoning the total loss.
+
+12-cell notebook covers: setup → HF auth → GPU + auto-batch → load 3 HF datasets → transforms + ConcatDataset train loader + 3 per-task val/test loaders → model build → optimizer + scheduler + scaler + `SoilCheckpointManager` with resume → 30-epoch loop (5 frozen + 25 full unfrozen, per-task losses + per-task val metrics logged per epoch, latest + best checkpoints pushed to `ankit-iiitdmj/iks-soil-multitask` HF Hub repo) → held-out test-set evaluation (mirrors Phase 5 fix, separate `eval_metrics_test.json` file).
+
+Expected wall-time on Colab T4: 6–12 h total. Resume-aware so 1–2 sessions work. HF Hub model repo created on first Cell 9 run from Colab (not in this prompt session).
+
+Tests: `pytest tests/soil/` → 16 passed (3 new: `test_model.py`, `test_loss_masking.py`, `test_train_eval_smoke.py` — covering construction, forward shapes, freeze toggle, loss NaN-guard, end-to-end train+eval CPU smoke).
+
+---
+
+## Phase 6 prep: soil data uploaded to HF Hub
+
+Three private dataset repos created on Hugging Face Hub:
+
+- `ankit-iiitdmj/iks-soil-phantomfs` (soil_type, 7 classes, 1,188 images) — 6 parquet shards, 397 MB
+- `ankit-iiitdmj/iks-soil-sirajganj-moisture` (moisture_appearance, 3 classes, 1,177 images) — 3 shards, 188 MB
+- `ankit-iiitdmj/iks-soil-texture-irsid-vit` (texture, 3 USDA-collapsed classes, 279 images: 16 IRSID + 263 VIT) — 3 shards, 27 MB
+
+Splits: stratified 80/10/10, seed=42 (`sklearn.train_test_split`). Phantom-fs train=951/val=119/test=119, Sirajganj train=941/val=118/test=118, Texture train=223/val=28/test=28. Each parquet row carries the image (HF `Image()` column), `label_idx`, `class_name`, and a `source` column ('phantomfs' / 'sirajganj' / 'irsid' / 'vit') for ablation.
+
+Sirajganj and texture were pre-resized to max-dim 768 (JPEG q=90) before encoding — full-res phone photos pushed sirajganj's single parquet shard to ~450 MB which reliably crashed the LFS upload mid-transfer across three attempts. Phantom-fs stayed at native resolution because its first upload (full-res) had already succeeded by the time the resize policy was added; training-time pipeline crops to 224×224 either way.
+
+Combined channel norm stats (`configs/data/soil_norm.yaml`) computed over the union of 2,114 train images at 224×224: `mean=[0.535, 0.459, 0.400]`, `std=[0.216, 0.200, 0.210]`.
+
+Multi-task training will use per-sample loss masking — each row supervises exactly one head; the other two get `-1` (ignored by `CrossEntropyLoss`). Helper `src.soil.dataset.build_multitask_labels()` produces the `{soil_type, moisture_appearance, texture}` dict per sample. Class index configs at `configs/data/soil_{soil_type,moisture,texture}_classes.yaml`.
+
+Tests: `pytest tests/data/test_soil_hf_datasets.py` → 12 passed.
+
+---
+
+## VIT texture dataset integration (Phase 5/6 boundary)
+
+Added latha-soil (Reddy & Gopinath, Nature Sci. Rep. 2025, doi:10.1038/s41598-025-17384-5) as a supplementary texture-axis dataset alongside the IRSID Kaggle mirror. Local-only — no Hugging Face Hub push in this session (deferred to Phase 6 prep). Paper claims 4,000 images; the public GitHub release at `https://github.com/phd-latha/latha-soil` (commit `14a1fe2`) contains **263 images across 7 classes**: see `data/soil/vit_texture/INTEGRATION_AUDIT.json` for the full breakdown.
+
+Class counts after canonicalisation: clayey_soils 40, loamy_sand_soil 40, loamy_soil 39, sandy_clay_soil 33, sandy_loam 36, sandy_soil 40, silt_soil 35. 0 files routed to `_review/`; 0 PIL-rejected.
+
+Both datasets are kept on disk as separate directories (`data/soil/vit_texture/` and `data/soil/irsid/`); Phase 6 training code will combine them via PyTorch `ConcatDataset`, not by filesystem merging. The new `vit_texture:` section in `configs/data/soil_texture_label_mapping.yaml` maps each class to coarse / fine / mixed using the same USDA-soil-triangle logic as the existing IRSID block.
+
+Decision: integrate as-is; email VIT authors in parallel asking whether the full 4,000-image release is hosted elsewhere.
+
+---
+
 ## Phase 4 fix (post-Weeks 14–15) — Reconciliation with finalised scope
 
 - OLID I: switched source from Zenodo (19 archives) to Kaggle `raiaone/olid-i` (single zip) and downloaded the **full 4,749 images / 23 multi-label classes** (was smoke-sample 83/3). `_labels_for()` updated to split compound symptoms like `bottle_gourd__JAS_MIT`.

@@ -1,0 +1,23 @@
+# soil_type head — Phantom-fs Indian deposit types (7 classes).
+# Verified against the upstream Phantom-fs/Soil-Classification-Dataset
+# repo and the Sheth et al. 2025 paper (Engineering Applications of AI).
+# Source HF Hub repo: ankit-iiitdmj/iks-soil-phantomfs (private).
+source: ankit-iiitdmj/iks-soil-phantomfs
+num_classes: 7
+classes:
+  0: Alluvial
+  1: Arid
+  2: Black
+  3: Laterite
+  4: Mountain
+  5: Red
+  6: Yellow
+# Map from on-disk subfolder names to canonical class names above.
+original_folder_mapping:
+  Alluvial_Soil: Alluvial
+  Arid_Soil: Arid
+  Black_Soil: Black
+  Laterite_Soil: Laterite
+  Mountain_Soil: Mountain
+  Red_Soil: Red
+  Yellow_Soil: Yellow
