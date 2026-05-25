@@ -1,15 +1,15 @@
-"""Albumentations pipelines for the soil module.
+"""Albumentations pipelines for the soil module (Phase 6 §B).
 
-Soil augmentation is **heavier** than disease augmentation because:
+Phase 6 train pipeline matches the spec in
+``PHASE6_PROMPT2_COLAB_NOTEBOOK.md``: a deliberately modest set of
+augmentations. The combined soil corpus (~2,600 images across three
+heterogeneous sources) gets enough natural variance from the per-source
+photo conditions; heavy synthetic augmentation hurt accuracy in
+earlier Phase 4 cross-region experiments.
 
-- The Phantom-fs dataset has ~1,200 training images across 7 classes,
-  vs PlantVillage's ~43,000 across 38 classes. EfficientNet-B0 (or
-  any modern CNN) overfits on the small set without strong regularisation.
-- Soil textures look broadly similar across rotations and flips —
-  horizontal and vertical flips both add training signal without
-  changing class identity.
-- Random erasing / CoarseDropout simulates partial occlusion which is
-  common in field-collected soil photographs (tools, vegetation cover).
+The eval pipeline upscales to 256 then center-crops to 224, mirroring
+the Phase 5 disease eval pattern (resize-then-crop preserves a small
+border margin around the subject).
 """
 
 from __future__ import annotations
@@ -25,27 +25,18 @@ def build_soil_train_aug(
     mean: tuple[float, float, float],
     std: tuple[float, float, float],
 ) -> "Compose":
-    """Heavier train-time pipeline for the small soil dataset."""
+    """Train-time augmentation pipeline for Phase 6 soil training."""
     import albumentations as A  # noqa: PLC0415
     from albumentations.pytorch import ToTensorV2  # noqa: PLC0415
 
     return A.Compose(
         [
             A.RandomResizedCrop(
-                size=(image_size, image_size), scale=(0.7, 1.0), ratio=(0.85, 1.15)
+                size=(image_size, image_size), scale=(0.8, 1.0),
             ),
             A.HorizontalFlip(p=0.5),
-            A.VerticalFlip(p=0.5),
-            A.RandomRotate90(p=0.5),
-            A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2, hue=0.05, p=0.5),
-            A.RandomBrightnessContrast(brightness_limit=0.25, contrast_limit=0.25, p=0.4),
-            A.GaussianBlur(blur_limit=(3, 5), p=0.2),
-            A.CoarseDropout(
-                num_holes_range=(1, 3),
-                hole_height_range=(16, 32),
-                hole_width_range=(16, 32),
-                p=0.3,
-            ),
+            A.Rotate(limit=15, p=0.5),
+            A.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, p=0.5),
             A.Normalize(mean=mean, std=std),
             ToTensorV2(),
         ]
@@ -57,13 +48,13 @@ def build_soil_eval_aug(
     mean: tuple[float, float, float],
     std: tuple[float, float, float],
 ) -> "Compose":
-    """Deterministic eval pipeline: resize + center crop."""
+    """Deterministic eval pipeline: resize to 256, center-crop to ``image_size``."""
     import albumentations as A  # noqa: PLC0415
     from albumentations.pytorch import ToTensorV2  # noqa: PLC0415
 
     return A.Compose(
         [
-            A.Resize(image_size + 32, image_size + 32),
+            A.Resize(256, 256),
             A.CenterCrop(image_size, image_size),
             A.Normalize(mean=mean, std=std),
             ToTensorV2(),

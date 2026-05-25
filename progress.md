@@ -5,6 +5,27 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 training notebook ready (B0 edition)
+
+Notebook `notebooks/phase6_soil_training.ipynb` generated via `scripts/build_phase6_notebook.py`. Joint multi-task training on **EfficientNet-B0 at 224×224** per master plan §22 with 3 task heads: `soil_type` (7 classes), `moisture` (3 classes), `texture` (3 classes). Each head is `nn.Sequential(Dropout(0.3), Linear(1280, n_classes))`; total params 4,024,201 (4.0M backbone + 16,653 across the three heads — the headline "~5.3M B0 params" you see in the timm docs is for the original 1000-class ImageNet classifier, which we drop via `num_classes=0`).
+
+Training code in `src/soil/` mirrors `src/disease/`:
+
+- `src/soil/model.py` — `SoilMultiTaskClassifier` (timm B0 + 3 heads + `freeze_backbone()` / `unfreeze_backbone()`).
+- `src/soil/train.py` — `TASK_WEIGHTS`, `compute_multitask_loss` (NaN-guarded ignore_index=-1), `train_one_epoch`, `evaluate_per_task`, `SoilCheckpointManager`, `auto_batch_size` (returns 64/32/16 by VRAM).
+- `src/soil/transforms.py` — `build_soil_train_aug` (RandomResizedCrop + HFlip + Rotate ±15 + mild ColorJitter + Normalize) and `build_soil_eval_aug` (Resize 256 → CenterCrop 224).
+- `src/soil/__init__.py` — exports the full Phase 6 API alongside the existing Phase 4 helpers.
+
+Per-sample loss masking: each batch sample supervises exactly one head; the other two receive `-1` and are ignored by `F.cross_entropy(ignore_index=-1)`. When **all** samples in a batch carry `-1` for a head, cross-entropy normally returns NaN; the helper substitutes a graph-consistent zero so backward still produces a zero gradient on that head without poisoning the total loss.
+
+12-cell notebook covers: setup → HF auth → GPU + auto-batch → load 3 HF datasets → transforms + ConcatDataset train loader + 3 per-task val/test loaders → model build → optimizer + scheduler + scaler + `SoilCheckpointManager` with resume → 30-epoch loop (5 frozen + 25 full unfrozen, per-task losses + per-task val metrics logged per epoch, latest + best checkpoints pushed to `ankit-iiitdmj/iks-soil-multitask` HF Hub repo) → held-out test-set evaluation (mirrors Phase 5 fix, separate `eval_metrics_test.json` file).
+
+Expected wall-time on Colab T4: 6–12 h total. Resume-aware so 1–2 sessions work. HF Hub model repo created on first Cell 9 run from Colab (not in this prompt session).
+
+Tests: `pytest tests/soil/` → 16 passed (3 new: `test_model.py`, `test_loss_masking.py`, `test_train_eval_smoke.py` — covering construction, forward shapes, freeze toggle, loss NaN-guard, end-to-end train+eval CPU smoke).
+
+---
+
 ## Phase 6 prep: soil data uploaded to HF Hub
 
 Three private dataset repos created on Hugging Face Hub:
