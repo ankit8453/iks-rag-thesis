@@ -239,12 +239,58 @@ class _PrefixedCrossRegionDataset(JSONIndexedImageDataset):
         return arr, entry.label_idx
 
 
+def build_multitask_labels(
+    head: str,
+    label_idx: int,
+    *,
+    head_order: tuple[str, ...] = ("soil_type", "moisture_appearance", "texture"),
+    ignore_index: int = -1,
+) -> dict[str, int]:
+    """Expand a single-head label into the multi-task label dict.
+
+    Phase 6's joint model has three heads but each training sample is
+    only supervised for ONE of them. The DataLoader fills the other two
+    with ``ignore_index`` (default ``-1``) so the loss for those heads
+    is masked at training time.
+
+    Parameters
+    ----------
+    head
+        Which head this sample supervises. Must be in ``head_order``.
+    label_idx
+        Head-local class index for ``head``.
+    head_order
+        Iteration order of heads in the output dict.
+    ignore_index
+        Sentinel for "not supervised for this head" — should match the
+        ``ignore_index`` configured on the training loss (default -1,
+        which matches ``torch.nn.CrossEntropyLoss``'s default).
+
+    Returns
+    -------
+    dict[str, int]
+        ``{<head_name>: <label_idx or ignore_index>, ...}`` in
+        ``head_order`` order.
+
+    Raises
+    ------
+    ValueError
+        If ``head`` is not in ``head_order``.
+    """
+    if head not in head_order:
+        raise ValueError(
+            f"Unknown head {head!r}. Expected one of {head_order}."
+        )
+    return {h: (int(label_idx) if h == head else ignore_index) for h in head_order}
+
+
 __all__ = [
     "IRSID_DEFAULT_ROOT",
     "PHANTOMFS_DEFAULT_ROOT",
     "SOIL_TYPES_DEFAULT_ROOT",
     "SoilSample",
     "SoilTypeDataset",
+    "build_multitask_labels",
     "make_irsid_loaders",
     "make_phantomfs_loaders",
     "make_soil_cross_region_loaders",

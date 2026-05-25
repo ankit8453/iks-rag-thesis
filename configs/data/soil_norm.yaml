@@ -1,0 +1,17 @@
+# Channel norm stats for soil module training input.
+# Computed from the union of TRAIN splits across the three
+# Phase 6 HF Hub dataset repos. Image resize: 224x224.
+# Re-run via ``python scripts/compute_soil_norm_stats.py`` after
+# the dataset repos are rebuilt.
+mean:
+- 0.534532
+- 0.459212
+- 0.399999
+std:
+- 0.216268
+- 0.199672
+- 0.209751
+n_images: 2114
+image_size: 224
+source: union of train splits of ankit-iiitdmj/iks-soil-phantomfs, ankit-iiitdmj/iks-soil-sirajganj-moisture,
+  ankit-iiitdmj/iks-soil-texture-irsid-vit

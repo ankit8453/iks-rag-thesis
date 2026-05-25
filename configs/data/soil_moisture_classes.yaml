@@ -1,0 +1,16 @@
+# moisture_appearance head — Sirajganj 2025 visual moisture dataset
+# (Mendeley DOI 10.17632/skcc44yvvg.2). 3 classes.
+# Source HF Hub repo: ankit-iiitdmj/iks-soil-sirajganj-moisture (private).
+source: ankit-iiitdmj/iks-soil-sirajganj-moisture
+num_classes: 3
+classes:
+  0: wet
+  1: moist
+  2: dry
+# Map from on-disk subfolder names to canonical class names above.
+# Upstream Sirajganj uses lower-case ``dry``/``moderate``/``wet``; we
+# rename ``moderate`` → ``moist`` to match master plan §14 terminology.
+original_folder_mapping:
+  wet: wet
+  moderate: moist
+  dry: dry

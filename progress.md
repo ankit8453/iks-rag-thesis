@@ -5,6 +5,26 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 prep: soil data uploaded to HF Hub
+
+Three private dataset repos created on Hugging Face Hub:
+
+- `ankit-iiitdmj/iks-soil-phantomfs` (soil_type, 7 classes, 1,188 images) — 6 parquet shards, 397 MB
+- `ankit-iiitdmj/iks-soil-sirajganj-moisture` (moisture_appearance, 3 classes, 1,177 images) — 3 shards, 188 MB
+- `ankit-iiitdmj/iks-soil-texture-irsid-vit` (texture, 3 USDA-collapsed classes, 279 images: 16 IRSID + 263 VIT) — 3 shards, 27 MB
+
+Splits: stratified 80/10/10, seed=42 (`sklearn.train_test_split`). Phantom-fs train=951/val=119/test=119, Sirajganj train=941/val=118/test=118, Texture train=223/val=28/test=28. Each parquet row carries the image (HF `Image()` column), `label_idx`, `class_name`, and a `source` column ('phantomfs' / 'sirajganj' / 'irsid' / 'vit') for ablation.
+
+Sirajganj and texture were pre-resized to max-dim 768 (JPEG q=90) before encoding — full-res phone photos pushed sirajganj's single parquet shard to ~450 MB which reliably crashed the LFS upload mid-transfer across three attempts. Phantom-fs stayed at native resolution because its first upload (full-res) had already succeeded by the time the resize policy was added; training-time pipeline crops to 224×224 either way.
+
+Combined channel norm stats (`configs/data/soil_norm.yaml`) computed over the union of 2,114 train images at 224×224: `mean=[0.535, 0.459, 0.400]`, `std=[0.216, 0.200, 0.210]`.
+
+Multi-task training will use per-sample loss masking — each row supervises exactly one head; the other two get `-1` (ignored by `CrossEntropyLoss`). Helper `src.soil.dataset.build_multitask_labels()` produces the `{soil_type, moisture_appearance, texture}` dict per sample. Class index configs at `configs/data/soil_{soil_type,moisture,texture}_classes.yaml`.
+
+Tests: `pytest tests/data/test_soil_hf_datasets.py` → 12 passed.
+
+---
+
 ## VIT texture dataset integration (Phase 5/6 boundary)
 
 Added latha-soil (Reddy & Gopinath, Nature Sci. Rep. 2025, doi:10.1038/s41598-025-17384-5) as a supplementary texture-axis dataset alongside the IRSID Kaggle mirror. Local-only — no Hugging Face Hub push in this session (deferred to Phase 6 prep). Paper claims 4,000 images; the public GitHub release at `https://github.com/phd-latha/latha-soil` (commit `14a1fe2`) contains **263 images across 7 classes**: see `data/soil/vit_texture/INTEGRATION_AUDIT.json` for the full breakdown.

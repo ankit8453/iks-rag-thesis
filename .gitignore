@@ -68,6 +68,9 @@ _smoke_work/
 _inference/
 _checkpoints/
 
+# Phase 6 soil-prep scratch (local parquet shards before HF upload)
+_phase6_prep/
+
 # One-off zip archives dropped at repo root for manual integrations
 # (e.g. latha-soil-main.zip used by scripts/integrate_latha_soil.py)
 /*.zip
