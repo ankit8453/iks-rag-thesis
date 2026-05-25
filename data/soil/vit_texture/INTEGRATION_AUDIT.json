@@ -1,0 +1,29 @@
+{
+  "source_url": "https://github.com/phd-latha/latha-soil",
+  "source_commit_sha": "14a1fe2b381fb8ed7e9672a9d139b2172fad4b3d",
+  "source_note": "Cloned from GitHub at integration time.",
+  "integration_date": "2026-05-25",
+  "classes_file_present": true,
+  "canonical_classes": [
+    "clayey_soils",
+    "loamy_sand_soil",
+    "loamy_soil",
+    "sandy_clay_soil",
+    "sandy_loam",
+    "sandy_soil",
+    "silt_soil"
+  ],
+  "class_counts": {
+    "clayey_soils": 40,
+    "loamy_sand_soil": 40,
+    "loamy_soil": 39,
+    "sandy_clay_soil": 33,
+    "sandy_loam": 36,
+    "sandy_soil": 40,
+    "silt_soil": 35
+  },
+  "files_total_seen": 263,
+  "files_placed": 263,
+  "files_to_review": [],
+  "files_pil_failed": []
+}

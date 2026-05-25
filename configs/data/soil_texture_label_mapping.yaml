@@ -1,7 +1,10 @@
-# Maps IRSID's USDA texture-triangle labels to master plan §14's
+# Maps source-dataset texture labels to master plan §14's
 # coarse / fine / mixed scheme. Per Soil-Parameter-Coverage-Analysis
 # document. Reviewed by Ankit + supervisor (Dr. Akshay Pandey).
 
+# IRSID Kaggle mirror — USDA texture triangle (5 classes).
+# Kept as a flat ``texture_mapping:`` block for backwards-compat with
+# any Phase 4/5 code that already reads this file.
 texture_mapping:
   sand: coarse
   loamy_sand: coarse
@@ -11,3 +14,23 @@ texture_mapping:
 
 source: IRSID (USDA texture triangle)
 target: master_plan_§14 (coarse/fine/mixed)
+
+# VIT Vellore latha-soil release (Reddy & Gopinath, Nature Sci. Rep.
+# 2025, doi:10.1038/s41598-025-17384-5). 7 classes, integrated locally
+# via ``scripts/integrate_latha_soil.py``.
+#   Source:     https://github.com/phd-latha/latha-soil
+#   Audit log:  data/soil/vit_texture/INTEGRATION_AUDIT.json
+#   Integration date: 2026-05-25
+# Coarse/fine/mixed assignment follows the same USDA-soil-triangle logic
+# used for IRSID:
+#   - clay (clayey_soils), silt soil       -> fine
+#   - sand-only, loamy sand                -> coarse
+#   - loam, sandy loam, sandy clay         -> mixed
+vit_texture:
+  clayey_soils: fine
+  loamy_sand_soil: coarse
+  loamy_soil: mixed
+  sandy_clay_soil: mixed
+  sandy_loam: mixed
+  sandy_soil: coarse
+  silt_soil: fine

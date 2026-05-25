@@ -24,6 +24,12 @@ data/causation/*
 !data/soil/.gitkeep
 !data/causation/.gitkeep
 # data/splits/ is intentionally tracked — small JSON split files
+# data/soil/vit_texture/INTEGRATION_AUDIT.json is intentionally tracked —
+# tiny provenance manifest written by scripts/integrate_latha_soil.py.
+# Images themselves stay ignored (regenerable from the upstream repo).
+!data/soil/vit_texture/
+data/soil/vit_texture/*
+!data/soil/vit_texture/INTEGRATION_AUDIT.json
 
 # Corpus working artifacts (raw OCR and embeddings are large)
 corpus/raw/*
@@ -61,3 +67,7 @@ kaggle.json
 _smoke_work/
 _inference/
 _checkpoints/
+
+# One-off zip archives dropped at repo root for manual integrations
+# (e.g. latha-soil-main.zip used by scripts/integrate_latha_soil.py)
+/*.zip
