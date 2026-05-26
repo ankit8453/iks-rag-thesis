@@ -5,6 +5,26 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 V2 prep: augmentation-boosted retraining notebook ready
+
+Notebook `notebooks/phase6_soil_training_v2.ipynb` generated (13 cells, built via `scripts/build_phase6_v2_notebook.py`). Goal: push the texture head from V1's **67.86% test top-1 / 0.670 macro F1** toward the 75–82% range without changing the locked EfficientNet-B0 backbone or 224×224 input size. soil_type (V1 89.08% / 0.818) and moisture (V1 88.98% / 0.890) may shift ±1–2 points because the backbone is shared — that's expected.
+
+V2 adds:
+
+- **Strong augmentation** (`src/soil/transforms_v2.py`): wider-scale RandomResizedCrop (0.7–1.0), VerticalFlip, Rotate ±30°, ShiftScaleRotate, GridDistortion/ElasticTransform (one-of, p=0.3), stronger ColorJitter, GaussianBlur/GaussNoise (one-of), CoarseDropout. Re-written against albumentations 2.x's new signatures (`RandomResizedCrop(size=...)`, `CoarseDropout(num_holes_range=...)`, `GaussNoise(std_range=...)`) with equivalent magnitudes to the spec's albumentations 1.x example.
+- **Mixup + CutMix at batch level** (`src/soil/mixup.py`): `maybe_apply_mix(p=0.3, mixup_alpha=0.2, cutmix_alpha=1.0)` selects 50/50 between Mixup and CutMix when triggered. `mixed_loss()` blends per-head losses across the two label dicts.
+- **Label smoothing 0.1** on cross-entropy in `compute_multitask_loss_smoothed` (`src/soil/train_v2.py`). Same `ignore_index=-1` NaN guard as V1.
+- **Test-Time Augmentation** in Cell 12: `build_tta_views()` returns 5 deterministic albumentations Composes (original, HFlip, VFlip, Rot90, Rot270). `evaluate_per_task_tta()` averages logits across views before argmax.
+- **40 epochs total** (V1 was 30) — heavier augmentation slows convergence. Warmup stays at 5 frozen-backbone epochs.
+
+V1 source files are **untouched** — `src/soil/{transforms,train,model,dataset,__init__}.py` and `notebooks/phase6_soil_training.ipynb` are unchanged so the paper's ablation can compare V1 vs V2 with the exact V1 model on `ankit-iiitdmj/iks-soil-multitask`. V2 pushes to **`ankit-iiitdmj/iks-soil-multitask-v2`** (new private repo, created on first Cell 9 run from Colab — not from this prompt session).
+
+Tests: `pytest tests/soil/test_mixup.py tests/soil/test_transforms_v2.py tests/soil/test_train_v2_smoke.py -q` → 13 passed. Covers Mixup/CutMix shapes + lam range, `maybe_apply_mix` p=0 / p=1 branches, `mixed_loss` blend math, TTA returns 5 distinct views, strong-aug is stochastic, label-smoothed loss + `train_one_epoch_v2` CPU smoke through Mixup path.
+
+Expected Colab T4 wall-time: ~8–15 hours total (1–2 sessions), up from V1's 6–12 due to the extra 10 epochs and the small per-step overhead of the Mixup/CutMix collation. Resume-aware via HF Hub checkpoints just like V1.
+
+---
+
 ## Phase 6 training notebook ready (B0 edition)
 
 Notebook `notebooks/phase6_soil_training.ipynb` generated via `scripts/build_phase6_notebook.py`. Joint multi-task training on **EfficientNet-B0 at 224×224** per master plan §22 with 3 task heads: `soil_type` (7 classes), `moisture` (3 classes), `texture` (3 classes). Each head is `nn.Sequential(Dropout(0.3), Linear(1280, n_classes))`; total params 4,024,201 (4.0M backbone + 16,653 across the three heads — the headline "~5.3M B0 params" you see in the timm docs is for the original 1000-class ImageNet classifier, which we drop via `num_classes=0`).
