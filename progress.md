@@ -5,6 +5,28 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 V3 prep: sequential transfer learning experiment
+
+Notebook `notebooks/phase6_soil_training_v3.ipynb` generated (14 cells, built via `scripts/build_phase6_v3_notebook.py`). 3-stage sequential transfer learning:
+
+- **Stage A** — Phantom-fs only (15 epochs, soil_type head; 5 frozen + 10 unfrozen)
+- **Stage B** — + Sirajganj moisture (15 epochs, soil_type + moisture heads; all unfrozen)
+- **Stage C** — full multi-task (20 epochs, all 3 heads; all unfrozen) → final V3 model
+
+Hypothesis: a backbone warmed on Indian soil_type then moisture is more soil-aware than ImageNet pretraining alone, lifting the texture head. Expected texture gain +2–5 points. **This is an experiment** — if V3 doesn't clearly beat V2 it gets shelved as a documented negative result and V2 ships.
+
+V3 reuses V1/V2 building blocks unchanged — `src/soil/train_v3.py` only composes them into the staged schedule (`SoilCheckpointManagerV3`, `build_stage_loader`, `train_stage_a/b/c` thin wrappers over V2's `train_one_epoch_v2`). Per-stage loss masking is **data-driven**: Stage A loads only Phantom-fs, so moisture/texture labels are all `-1` and their heads get zero gradient via V2's `ignore_index=-1` NaN guard; Stage B adds Sirajganj (texture still `-1`); Stage C adds texture. A fresh CosineAnnealingLR is created per stage (`T_max` = that stage's epoch count). All stages use V2's strong augmentation + Mixup/CutMix (p=0.3) + label smoothing 0.1; TTA (5 views) is used for the final test eval only.
+
+V1 and V2 source files + notebooks are **untouched** (verified via git status). V3 pushes to NEW repo `ankit-iiitdmj/iks-soil-multitask-v3` (created on first Cell 8 run from Colab, not from this prompt session). V1 (`iks-soil-multitask`) and V2 (`iks-soil-multitask-v2`) repos stay intact for the paper's ablation.
+
+V2 baseline (TTA) to beat: soil_type 89.92% / 0.851, moisture 95.76% / 0.958, texture 67.86% / 0.678. **Success criteria** (Cell 13 auto-checks + prints "SHIP V3" / "REVERT TO V2"): texture top-1 up ≥3 pts AND neither soil_type nor moisture drops >2 pts.
+
+Tests: `pytest tests/soil/test_train_v3_smoke.py -q` → 5 passed (one-epoch smoke of each stage + A→B→C history chaining + V3 repo-id check). Full `tests/soil/` → 34 passed.
+
+Expected Colab T4 wall-time: ~15–20 hours total across the 3 stages.
+
+---
+
 ## Phase 6 V2 prep: augmentation-boosted retraining notebook ready
 
 Notebook `notebooks/phase6_soil_training_v2.ipynb` generated (13 cells, built via `scripts/build_phase6_v2_notebook.py`). Goal: push the texture head from V1's **67.86% test top-1 / 0.670 macro F1** toward the 75–82% range without changing the locked EfficientNet-B0 backbone or 224×224 input size. soil_type (V1 89.08% / 0.818) and moisture (V1 88.98% / 0.890) may shift ±1–2 points because the backbone is shared — that's expected.
