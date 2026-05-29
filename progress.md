@@ -5,6 +5,41 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 6 V3-tiling: patch-based texture expansion (single-stage, V2 recipe)
+
+**NOTE:** the earlier 3-stage sequential-transfer V3 (`PHASE6_V3_SEQUENTIAL_TRANSFER_PROMPT.md`) was run on Colab and **catastrophically collapsed** all three heads to ~20% val accuracy. That multi-stage / curriculum / per-stage-head-freezing pattern is ABANDONED. V3-tiling takes a fundamentally different, safer approach: the V2 training recipe is reused **byte-for-byte**, single-stage; the only thing that changes is the texture training data (source images are tiled into a grid of patches, with image-level split integrity to prevent leakage).
+
+### Part 1 — tiled texture dataset (executed in this session)
+
+`src/soil/tiling.py` adds `tile_image(img, grid)`, `check_patch_resolution(images, grid)`, and `build_tiled_split(items, grid)`. Patches are 224×224 LANCZOS resamples of the per-image grid cells; every patch carries its source image's label **and** a unique `source_id` so callers can assert no source image's patches cross train/val/test boundaries.
+
+`scripts/build_tiled_texture_dataset.py` loads `ankit-iiitdmj/iks-soil-texture-irsid-vit` (the V1 prep dataset), assigns each source image a `source_id` of the form `f"{split}_{idx:04d}"` (split prefix guarantees disjointness by construction), tiles every split independently, runs an explicit `_assert_split_disjointness` check, and pushes to the new private repo `ankit-iiitdmj/iks-soil-texture-tiled` using the proven `Dataset.push_to_hub` streaming pattern from `feedback_hf_dataset_uploads.md`. Resolution guard fires when the median patch is below 120 px pre-resize and aborts with `exit 2` unless `--force` is passed.
+
+**Run result (this session):** the resolution guard fired at the prompt's default `grid=4` — median source min-dim was 101 px (median image ~506×407), implying a 2.2× upscale to 224. Per the prompt's working style ("stop and ask if the resolution guard fires"), Ankit was asked and chose **grid=3**. The build then finished in 38 s and pushed **2,511 patches** (train 2007 / val 252 / test 252, from 223 / 28 / 28 source images respectively) across 3 parquet shards (~43 MB total private dataset). Audit JSON written to `data/soil/tiled_texture_audit.json`. Disjointness assertion passed.
+
+### Part 2 — V3-tiling training stack (notebook + thin wrapper)
+
+`src/soil/train_v3_tiling.py` is a thin wrapper that re-exports V2's training functions unchanged plus two new pieces:
+
+- `SoilCheckpointManagerV3Tiling` — subclass of V2's manager pinned to the new model repo `ankit-iiitdmj/iks-soil-multitask-v3-tiling` (created on first Cell 8 run from Colab; not from this prompt session).
+- `health_check(val_metrics, threshold=0.40)` — raises `RuntimeError` if any head's val top-1 falls below 40%. Called after the FIRST epoch's val pass in the notebook's Cell 9 so a collapse aborts in minutes, not after 10+ hours.
+
+`notebooks/phase6_soil_training_v3_tiling.ipynb` (13 cells) is identical to the V2 notebook except: Cell 6 swaps the texture dataset to `iks-soil-texture-tiled`, Cell 9 calls `health_check` after epoch 1, Cell 12 prints a V2-vs-V3-tiling table + automatic SHIP/KEEP verdict and reports BOTH patch-level and **image-level (majority vote over a source image's patches)** texture metrics. Backbone, optimizer, scheduler, augmentation, Mixup/CutMix, label smoothing, epoch count = byte-for-byte the V2 recipe.
+
+### Untouched
+
+V1 (`iks-soil-multitask`) and V2 (`iks-soil-multitask-v2`) model repos, original `iks-soil-texture-irsid-vit` dataset repo, and every V1/V2 source file or notebook are **unchanged in git status and on HF Hub**.
+
+### Tests
+
+`pytest tests/soil/test_tiling.py tests/soil/test_train_v3_tiling_smoke.py -q` → 17 passed. Covers patch counts/shapes, grid validation, resolution-guard warning + safe path, `build_tiled_split` label/source_id propagation, the **two leakage tests** (disjoint by construction + regression that detects bad construction), `health_check` boundary cases at three thresholds, and a one-step train smoke through V2's loop. Full `tests/soil/` → 51 passed.
+
+**Ship criteria** (Cell 12 evaluates and prints "SHIP V3-TILING" / "KEEP V2"): texture top-1 strictly improves AND neither soil_type nor moisture drops more than 2 pts from V2's TTA test baseline (soil_type 89.92% / 0.851, moisture 95.76% / 0.958, texture 67.86% / 0.678). If V3-tiling doesn't clear the bar, V2 remains production and V3-tiling is preserved as a documented negative result for the paper's ablation table.
+
+Expected Colab T4 wall-time: ~6–12 hours (same as V2). Epoch-1 health check makes the cost of a failure ~30 minutes, not 10+ hours.
+
+---
+
 ## Phase 6 V3 prep: sequential transfer learning experiment
 
 Notebook `notebooks/phase6_soil_training_v3.ipynb` generated (14 cells, built via `scripts/build_phase6_v3_notebook.py`). 3-stage sequential transfer learning:

@@ -30,6 +30,11 @@ data/causation/*
 !data/soil/vit_texture/
 data/soil/vit_texture/*
 !data/soil/vit_texture/INTEGRATION_AUDIT.json
+# data/soil/tiled_texture_audit.json is intentionally tracked — tiny
+# provenance manifest written by scripts/build_tiled_texture_dataset.py
+# (records grid, per-split counts, and source_id -> split mapping so the
+# leakage guarantee is auditable). Patches themselves live only on HF Hub.
+!data/soil/tiled_texture_audit.json
 
 # Corpus working artifacts (raw OCR and embeddings are large)
 corpus/raw/*
