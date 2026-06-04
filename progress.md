@@ -5,6 +5,49 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 3: IKS corpus pipeline + 2 books ingested (Vrikshayurveda + Brihat Samhita 12 chapters)
+
+Phase 3 (IKS corpus, master plan §15) was deferred while Phases 5–6 (vision modules) ran first. This entry covers building the OCR → clean → chapter-split → chunk → embed → ChromaDB pipeline and ingesting the **2 books currently in hand**. The remaining 4 books drop in later via one YAML entry each — no code change needed.
+
+**Books processed:**
+
+| Book | Pages OCR'd | Scope | Chapters located | Chunks | Embedded |
+|---|---:|---|---|---:|---:|
+| Vrikshayurveda (Surapala, tr. Nalini Sadhale, AAHF 1996) | 101 | full | – | 78 | 78 |
+| Brihat Samhita Part 1 (Varahamihira, tr. M. Ramakrishna Bhat, MLBD) | 593 | chapters 21–29, 40, 54, 55 | **12/12 ✓** | 207 | 207 |
+
+**Total**: 285 vectors in ChromaDB `iks_corpus` collection. The 12 wanted Brihat chapters were all located by English-heading scan, immune to the ~8–45 page-offset drift between PDF and printed pages.
+
+**Pipeline (`src/rag/corpus/`):**
+
+- `ocr.py` — pdf2image + pytesseract at 300 dpi (`--oem 1 --psm 6 lang=eng`), per-page cache at `corpus/raw/<book_id>/page_NNNN.txt` so re-runs skip done pages. Windows Tesseract + Poppler binaries auto-discovered via env vars, common install paths, and a glob over `C:\poppler-*\Library\bin`.
+- `cleaning.py` — drops Devanagari lines (U+0900–U+097F majority), running headers/footers, standalone page numbers, and OCR noise (<3 alpha chars); de-hyphenates line-break splits; collapses whitespace.
+- `chapter_split.py` — `locate_chapters` scans cleaned page text for both the English chapter title AND the Roman-numeral marker (XXI, XXIV, LV, …); returns a `{chap_num: ChapterSpan}` dict in document order, half-open `[start, end)` page spans. Missing chapters log a WARN and are omitted, never crash.
+- `chunking.py` — verse-first then paragraph-pack, 200–500 tokens, never split mid-sentence; verse markers like `"1.", "2."` detected per paragraph. `chunk_id = sha1(book_id|chapter|verse|first40chars)` so re-runs upsert idempotently.
+- `embed.py` — `BAAI/bge-large-en-v1.5` (1024-dim) via sentence-transformers; upsert into ChromaDB `PersistentClient` at `corpus/vector_db/`, collection `iks_corpus`.
+- `build_corpus.py` — orchestrator entry point: `python -m src.rag.corpus.build_corpus` reads `configs/corpus/books.yaml`, processes every `status: ready` book end-to-end, writes per-book JSONL + a build-wide `_manifest.json`.
+- `query_smoke.py` — 3 hard-coded retrieval test queries; **two-subprocess design** to dodge a Windows-specific torch+grpc DLL conflict (`chromadb` and `sentence_transformers` cannot coexist in the same Python process here without segfaulting). Subprocess A embeds the queries, subprocess B opens Chroma and queries — the encoder process segfaults at teardown (`0xC0000005`) AFTER writing its JSON; the orchestrator treats "file exists" as the real success signal.
+
+**Config (`configs/corpus/books.yaml`):** all 6 books listed; 2 `status: ready`, 4 `status: pending`. Each entry carries `scope: full` or `scope: chapters` (with a `chapters:` list and a `chapter_titles:` dict for the English-heading scan). Adding the remaining 4 books later is one YAML entry each.
+
+**Tests (`tests/rag/`):** 21 new — 8 cleaning, 6 chunking, 7 chapter_split (incl. the critical page-offset-invariance test). Full `pytest tests/rag/ -q` → **29 passed** (8 pre-existing tests also still green).
+
+**Retrieval smoke** (`python -m src.rag.corpus.query_smoke`): all 3 test queries return the right sources at top-3:
+
+| Query | Top-1 source | Expected |
+|---|---|---|
+| "how to treat a diseased tree" | Vrikshayurveda v.160.3 | Vrikshayurveda / Brihat ch.55 ✓ |
+| "signs that predict rainfall" | Brihat Samhita ch.28 (Signs of Immediate Rain) | Brihat ch.21–28 ✓ |
+| "how to find underground water" | Brihat Samhita ch.54 (Exploration of Water Springs) | Brihat ch.54 ✓ |
+
+**Wall time:** ~115 min total across two sessions (the build was interrupted ~halfway through by a power cut; the per-page OCR cache + idempotent sha1 chunk_ids made the resume cheap — Vrik OCR's 101 pages re-loaded from cache instantly, then Brihat OCR'd from scratch in ~40 min and 207-chunk embedding on CPU took ~75 min).
+
+**Gitignored / not committed:** `data/corpus_pdfs/` (copyrighted PDFs), `corpus/raw/` (OCR cache), `corpus/vector_db/` (binary Chroma store). All regenerable from `configs/corpus/books.yaml` + `python -m src.rag.corpus.build_corpus`.
+
+**Pending books** (placeholders in `books.yaml`, no PDFs yet): Krishi Parashara, Upavanavinoda, Kashyapiyakrishisukti, TBD-sixth. Each becomes a code-free addition.
+
+---
+
 ## Phase 6 V3-tiling: patch-based texture expansion (single-stage, V2 recipe)
 
 **NOTE:** the earlier 3-stage sequential-transfer V3 (`PHASE6_V3_SEQUENTIAL_TRANSFER_PROMPT.md`) was run on Colab and **catastrophically collapsed** all three heads to ~20% val accuracy. That multi-stage / curriculum / per-stage-head-freezing pattern is ABANDONED. V3-tiling takes a fundamentally different, safer approach: the V2 training recipe is reused **byte-for-byte**, single-stage; the only thing that changes is the texture training data (source images are tiled into a grid of patches, with image-level split integrity to prevent leakage).
