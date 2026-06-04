@@ -1,0 +1,66 @@
+# Phase 3 IKS corpus — book registry. Pipeline reads ONLY entries with
+# ``status: ready``. Adding a new book = adding an entry here; no code
+# change required. Master plan §15.
+#
+# Two books are in hand and processed now; the remaining four sit as
+# pending placeholders so the config keeps the planned 6-text shape.
+
+books:
+  - id: vrikshayurveda
+    title: Vrikshayurveda
+    author: Surapala
+    translator: Nalini Sadhale
+    edition: "Asian Agri-History Foundation, 1996"
+    original_language: Sanskrit
+    pdf: data/corpus_pdfs/Vriksha_Ayurveda_of_Surapala_Nalini_Sadhale_1996.pdf
+    status: ready
+    # ``full`` => OCR every page; chapter detection falls back to
+    # numbered sections / sequential blocks.
+    scope: full
+    default_topic_tags: [plant_care, horticulture, kunapajala, pest_control]
+
+  - id: brihat_samhita
+    title: Brihat Samhita
+    author: Varahamihira
+    translator: M. Ramakrishna Bhat
+    edition: "Motilal Banarsidass (MLBD), Part 1"
+    original_language: Sanskrit
+    pdf: data/corpus_pdfs/Brihat_Samhita_with_English_Translation_Ramakrishna_Bhatt_M__Part_1_MLBD.pdf
+    status: ready
+    # ``chapters`` => OCR every page but only KEEP / chunk the chapters
+    # listed under ``chapters:``. Chapters are located by English
+    # heading text (also matches Roman-numeral forms), so the
+    # PDF-page <-> printed-page offset drift in this book (~8 near
+    # the front, ~45 near the end) is harmless.
+    scope: chapters
+    chapters: [21, 22, 23, 24, 25, 26, 27, 28, 29, 40, 54, 55]
+    chapter_titles:
+      21: "Pregnancy of Clouds"
+      22: "Retention of Embryo"
+      23: "Rainfall"
+      24: "Conjunction with Rohini"
+      25: "Conjunction with Svati"
+      26: "Conjunction with Asadha"
+      27: "Wind Circle"
+      28: "Signs of Immediate Rain"
+      29: "Prognostics from Flowers and Creepers"
+      40: "Growth of Crops"
+      54: "Exploration of Water Springs"
+      55: "Treatment of Trees"
+    default_topic_tags: [rainfall, weather_prediction, water_divination, crops, tree_treatment]
+
+  # Pending placeholders — drop a PDF in, fill the metadata, flip status
+  # to ``ready`` (with optional ``chapters`` + ``chapter_titles``), then
+  # re-run ``python -m src.rag.corpus.build_corpus``. No code change.
+  - id: krishi_parashara
+    title: Krishi Parashara
+    status: pending
+  - id: upavanavinoda
+    title: Upavanavinoda
+    status: pending
+  - id: kashyapiyakrishisukti
+    title: Kashyapiyakrishisukti
+    status: pending
+  - id: text_six_tbd
+    title: "TBD (sixth text)"
+    status: pending

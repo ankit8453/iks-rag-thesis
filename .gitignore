@@ -79,3 +79,9 @@ _phase6_prep/
 # One-off zip archives dropped at repo root for manual integrations
 # (e.g. latha-soil-main.zip used by scripts/integrate_latha_soil.py)
 /*.zip
+
+# Phase 3 IKS corpus — copyrighted PDFs live locally only. The
+# pipeline's deterministic outputs (chunks JSONL + manifest) stay
+# tracked; the OCR cache (corpus/raw/*) and ChromaDB store
+# (corpus/vector_db/*) are already gitignored above.
+data/corpus_pdfs/
