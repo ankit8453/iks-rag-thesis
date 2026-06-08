@@ -51,6 +51,8 @@ TARGET_REPO = f"{EXPECTED_HF_USERNAME}/iks-corpus-chunks"
 BOOK_FILES: dict[str, str] = {
     "vrikshayurveda": "vrikshayurveda.jsonl",
     "brihat_samhita": "brihat_samhita.jsonl",
+    "krishi_parashara": "krishi_parashara.jsonl",
+    "upavanavinoda": "upavanavinoda.jsonl",
 }
 
 REQUIRED_FIELDS: tuple[str, ...] = (
@@ -160,15 +162,22 @@ def _dataset_card(total: int, per_book: dict[str, int]) -> str:
         "Indian Knowledge Systems (IKS) classical-text corpus chunks for the "
         "Phase 7 grounded-RAG pipeline. Chunks are 200–500-token verse / passage "
         "units extracted by the Phase 3 pipeline at "
-        "`src/rag/corpus/build_corpus.py` from scanned PDFs of two classical "
-        "Sanskrit texts in English translation.\n\n"
+        "`src/rag/corpus/build_corpus.py` from scanned PDFs of four classical "
+        "Sanskrit treatises in English translation: **Vrikshayurveda** "
+        "(Surapala, tr. Sadhale, AAHF 1996), **Brihat Samhita Part 1** "
+        "(Varahamihira, tr. Bhat, MLBD; 12 selected chapters), **Krishi "
+        "Parashara** (tr. Majumdar & Banerji, Bibliotheca Indica 1960), and "
+        "**Upavanavinoda** (Sarngadhara, tr. Majumdar, IRI Indian Positive "
+        "Sciences). OCR was performed with Gemini 3.5 Flash (Phase 3b.2) for "
+        "higher fidelity than Tesseract.\n\n"
         "**Private** — chunks contain copyrighted translation text (AAHF / MLBD "
-        "editions); master plan §38 forbids redistributing them via the public "
-        "GitHub repo. They live here so Colab notebooks can rebuild ChromaDB "
-        "in-session without depending on the laptop's local store.\n\n"
+        "/ Bibliotheca Indica / IRI editions); master plan §38 forbids "
+        "redistributing them via the public GitHub repo. They live here so "
+        "Colab notebooks can rebuild ChromaDB in-session without depending on "
+        "the laptop's local store.\n\n"
         f"## Counts\n\n- total: {total}\n{per_book_md}\n\n"
         "## Columns\n\n"
-        "- `book_id` — `vrikshayurveda` / `brihat_samhita` (extensible)\n"
+        "- `book_id` — `vrikshayurveda` / `brihat_samhita` / `krishi_parashara` / `upavanavinoda` (extensible)\n"
         "- `chunk_id` — deterministic sha1 of (book|chapter|verse|first40chars)\n"
         "- `source_text` — canonical book title\n"
         "- `edition` — translation edition (e.g. \"Asian Agri-History Foundation, 1996\")\n"

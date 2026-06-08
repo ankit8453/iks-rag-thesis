@@ -64,6 +64,8 @@ results/figures/*.pdf
 
 # Local environment
 .env
+.env.gemini
+.env.*
 
 kaggle.json
 .kaggle/
@@ -75,6 +77,13 @@ _checkpoints/
 
 # Phase 6 soil-prep scratch (local parquet shards before HF upload)
 _phase6_prep/
+
+# Phase 3.1 Gemini-OCR test scratch (rendered page images + Gemini transcripts)
+
+# Phase 3b: externally-OCR'd cleaned text. The text itself is copyrighted
+# translation content (master plan §38) — only the README is tracked.
+corpus/ocr_external/*
+!corpus/ocr_external/README.md
 
 # One-off zip archives dropped at repo root for manual integrations
 # (e.g. latha-soil-main.zip used by scripts/integrate_latha_soil.py)

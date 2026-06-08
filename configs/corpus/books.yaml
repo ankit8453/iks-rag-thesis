@@ -1,9 +1,12 @@
-# Phase 3 IKS corpus — book registry. Pipeline reads ONLY entries with
-# ``status: ready``. Adding a new book = adding an entry here; no code
-# change required. Master plan §15.
+# Phase 3 IKS corpus — book registry. Pipeline reads entries with
+# ``status: ready`` (local Tesseract OCR) and ``status: ready_external``
+# (text-source supplied by external OCR, e.g. Gemini). Adding a new book
+# = adding an entry here; no code change required. Master plan §15.
 #
-# Two books are in hand and processed now; the remaining four sit as
-# pending placeholders so the config keeps the planned 6-text shape.
+# Two books processed by Phase 3 (Tesseract); two more (Krishi Parashara,
+# Upavanavinoda) registered for external Gemini OCR via Phase 3b — they
+# come online when their ``text_source`` markdown file lands in
+# ``corpus/ocr_external/``.
 
 books:
   - id: vrikshayurveda
@@ -49,15 +52,46 @@ books:
       55: "Treatment of Trees"
     default_topic_tags: [rainfall, weather_prediction, water_divination, crops, tree_treatment]
 
-  # Pending placeholders — drop a PDF in, fill the metadata, flip status
-  # to ``ready`` (with optional ``chapters`` + ``chapter_titles``), then
-  # re-run ``python -m src.rag.corpus.build_corpus``. No code change.
+  # Phase 3b: registered for external Gemini OCR. The pipeline skips
+  # these books with a clear log line until their ``text_source``
+  # markdown file lands in ``corpus/ocr_external/``. PDF page ranges
+  # below were verified manually to bracket the English-translation
+  # block only; treat as ±1 page and refine at ingest if needed.
   - id: krishi_parashara
     title: Krishi Parashara
-    status: pending
+    author: Parashara
+    translator: Girija Prasanna Majumdar & Sures Chandra Banerji
+    edition: "Bibliotheca Indica, Work No. 285, 1960"
+    original_language: Sanskrit
+    pdf: data/corpus_pdfs/KrishiParasara-GirijaPrasannaMajumdarScBanerji1960bis.pdf
+    status: ready_external
+    ocr_method: gemini_external
+    scope: pages
+    page_range: [94, 119]
+    text_source: corpus/ocr_external/krishi_parashara.md
+    exclude_note: "English translation only = PDF p.94-119. Skip: roman intro 1-28, Devanagari text 29-93, Sanskrit notes+glossary 120-160."
+    note: "Majumdar edition; verse numbering follows Majumdar, not AAHF. Translation is a contiguous English block."
+    default_topic_tags: [rainfall, sowing, seed_preservation, cattle, agricultural_calendar, omens]
+
   - id: upavanavinoda
     title: Upavanavinoda
-    status: pending
+    author: Sarngadhara
+    translator: Girija Prasanna Majumdar
+    edition: "Indian Research Institute, Indian Positive Sciences Series No. 1"
+    original_language: Sanskrit
+    pdf: data/corpus_pdfs/2015.282467.Upavana-Vinoda.pdf
+    status: ready_external
+    ocr_method: gemini_external
+    scope: pages
+    page_range: [77, 96]
+    text_source: corpus/ocr_external/upavanavinoda.md
+    exclude_note: "English translation only = PDF p.77-96 (divider 'THE TRANSLATION' at p.75). Skip: front matter 1-9, modern essay 'Science of Arbori-Horticulture' 10-73, Sanskrit appendix 97-134."
+    note: "Arbori-horticulture text. Majumdar edition; verse numbering follows Majumdar, not AAHF. Translation is a contiguous English block."
+    default_topic_tags: [arboriculture, tree_planting, grafting, plant_protection, soil_preparation, watering]
+
+  # Pending placeholders — drop a PDF in, fill the metadata, flip status
+  # to ``ready`` (or ``ready_external`` for Gemini-OCR'd books) and
+  # re-run ``python -m src.rag.corpus.build_corpus``. No code change.
   - id: kashyapiyakrishisukti
     title: Kashyapiyakrishisukti
     status: pending

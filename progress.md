@@ -5,6 +5,30 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 3b: register Krishi Parashara + Upavanavinoda for external Gemini OCR
+
+Phase 3 shipped 2 books (Vrikshayurveda + Brihat Samhita, 285 chunks) via local Tesseract OCR. Phase 7's first end-to-end queries surfaced a recurring failure mode — Tesseract's Devanagari-confused output occasionally derailed the grounded generator even when retrieval scores were excellent (rainfall query, etc.). Phase 3b registers two new books for a higher-quality OCR path (Gemini 3.5 Flash) **without** running any OCR or changing the chunker / metadata schema.
+
+**What changed (config + one loader branch — no OCR in this commit):**
+
+- `configs/corpus/books.yaml` — two previously-pending entries replaced with full `status: ready_external` registrations. Each carries `ocr_method: gemini_external`, `scope: pages`, a verified `page_range`, and a `text_source` path under `corpus/ocr_external/`:
+  - **Krishi Parashara** (Majumdar & Banerji 1960, Bibliotheca Indica) — PDF pages 94–119 (English translation block).
+  - **Upavanavinoda** (Sarngadhara, tr. Majumdar, IRI Indian Positive Sciences No. 1) — PDF pages 77–96 (English translation block).
+- `src/rag/corpus/build_corpus.py` — added `_chunks_for_external_book(book)` and a branch in the main loop that runs *instead of* Tesseract for any `ocr_method: gemini_external` book. When `text_source` is absent the loader logs `"<id>: awaiting Gemini OCR at <path>, skipping."` and continues — never errors. When present, it light-cleans + chunks + embeds exactly like the Phase 3 path; chunker + metadata schema unchanged. `READY_STATES = {"ready", "ready_external"}` keeps the existing 285 chunks untouched on re-runs.
+- `corpus/ocr_external/` — new directory with a tracked `README.md` documenting the contract (one `.md` per book, English-only, verse-numbered). `.gitignore` excludes `*.md` here (master plan §38 — copyrighted translation text never enters the public repo); the chunks travel via the private `ankit-iiitdmj/iks-corpus-chunks` HF dataset.
+- `tests/rag/test_books_config.py` — 5 new tests guarding the registry shape, the Phase 3b contract on both new entries, and the missing-text-source skip path (returns `None` with an "awaiting" log, no exception). All pass.
+
+**What's NOT in this commit (intentional):**
+
+- No Gemini API calls — the actual re-OCR + transcript-cleaning + `<id>.md` writes happen in a separate Phase 3b.2 step (cost-gated; ~$0.0007/page × ~46 pages ≈ $0.03).
+- No new chunks in ChromaDB — both new books are skipped today.
+- No re-run of the full `build_corpus` pipeline (the existing 285 chunks are scheduled to be replaced once Gemini OCR lands; running the pipeline now would just re-embed about-to-be-discarded vectors. The pytest IS the proof that the skip path works).
+- `kashyapiyakrishisukti` + `text_six_tbd` remain `status: pending` placeholders.
+
+**Why this design:** the pipeline stays config-driven (master plan §15 — adding a book is one YAML entry, not a code change). External-OCR books and local-OCR books coexist transparently — the loader branches purely on `ocr_method`, everything downstream (clean → chunk → metadata-tag → embed → ChromaDB) is identical. Phase 7's grounded-generator code does not need to know how a chunk was OCR'd.
+
+---
+
 ## Phase 7: grounded RAG pipeline (hybrid retrieval + Llama-3.1-8B), Colab + private chunk dataset
 
 Phase 7 (master plan §17) wires the Phase 3 corpus into a complete grounded-advisor pipeline: hybrid retrieval (dense BGE + sparse BM25 + cross-encoder rerank with RRF fusion) → Llama-3.1-8B-Instruct 4-bit generator under a strict §17 grounded-advisor system prompt → source-cited answer plus the retrieved chunks shown for transparency.
