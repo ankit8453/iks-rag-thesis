@@ -84,6 +84,68 @@ def _chunks_for_full_book(book: dict, cleaned_pages: list[str]) -> list[Chunk]:
     return chunk_chapter(full_text, meta)
 
 
+def _chunks_for_external_book(book: dict) -> list[Chunk] | None:
+    """Phase 3b: chunk a book whose text was OCR'd externally (e.g. Gemini).
+
+    Reads the cleaned English-translation text from ``book['text_source']``
+    (one markdown file per book, kept under ``corpus/ocr_external/`` and
+    gitignored because it contains copyrighted translation text). If the
+    file is not present yet, returns ``None`` so the caller logs a clear
+    "awaiting Gemini OCR" message and skips the book WITHOUT raising —
+    that's the contract for ``status: ready_external``.
+
+    ``scope: pages`` with a ``page_range: [start, end]`` is documentation
+    of which PDF page range the external OCR run was scoped to; the
+    markdown itself is assumed to already be the trimmed English-only
+    block, so no further slicing happens here.
+    """
+    text_source_str = book.get("text_source")
+    if not text_source_str:
+        _LOGGER.warning(
+            "%s: ocr_method=gemini_external but text_source missing in books.yaml; skipping.",
+            book["id"],
+        )
+        return None
+
+    text_source = PROJECT_ROOT / text_source_str
+    if not text_source.is_file():
+        _LOGGER.warning(
+            "%s: awaiting Gemini OCR at %s, skipping book.",
+            book["id"], text_source_str,
+        )
+        return None
+
+    full_text = text_source.read_text(encoding="utf-8")
+    if not full_text.strip():
+        _LOGGER.warning(
+            "%s: text_source %s is empty, skipping book.",
+            book["id"], text_source_str,
+        )
+        return None
+
+    page_range = book.get("page_range") or []
+    if len(page_range) == 2:
+        chapter_label = f"pages_{page_range[0]}_{page_range[1]}"
+    else:
+        chapter_label = "external"
+
+    meta = {
+        "book_id": book["id"],
+        "source_text": book["title"],
+        "edition": book.get("edition", ""),
+        "chapter": chapter_label,
+        "original_language": book.get("original_language", "Sanskrit"),
+        "translator": book.get("translator", ""),
+        "topic_tags": list(book.get("default_topic_tags", [])),
+        "metadata_extras": {
+            "ocr_method": book.get("ocr_method"),
+            "text_source": text_source_str,
+            "page_range": page_range,
+        },
+    }
+    return chunk_chapter(full_text, meta)
+
+
 def _chunks_for_scoped_book(book: dict, cleaned_pages: list[str]) -> tuple[list[Chunk], dict[int, int]]:
     """Chunk a ``scope: chapters`` book.
 
@@ -158,10 +220,17 @@ def build_corpus() -> dict[str, Any]:
     """Run the full Phase 3 pipeline on every ``status: ready`` book."""
     cfg = _load_books_config()
     books = cfg.get("books", [])
-    ready_books = [b for b in books if b.get("status") == "ready"]
-    pending_books = [b for b in books if b.get("status") != "ready"]
+    # ``ready`` = local Tesseract OCR; ``ready_external`` = Phase 3b
+    # external OCR (e.g. Gemini), text supplied as a markdown file at
+    # ``book['text_source']``.
+    READY_STATES = {"ready", "ready_external"}
+    ready_books = [b for b in books if b.get("status") in READY_STATES]
+    pending_books = [b for b in books if b.get("status") not in READY_STATES]
     if not ready_books:
-        _LOGGER.warning("build_corpus: no books with status: ready in %s", BOOKS_YAML_PATH)
+        _LOGGER.warning(
+            "build_corpus: no books with status in %s in %s",
+            sorted(READY_STATES), BOOKS_YAML_PATH,
+        )
         return {}
 
     summary_rows: list[dict[str, Any]] = []
@@ -171,16 +240,50 @@ def build_corpus() -> dict[str, Any]:
         book_id = book["id"]
         _LOGGER.info("=" * 70)
         _LOGGER.info("Processing %s ...", book_id)
+
+        chapters_found: dict[int, int] = {}
+
+        # ---- Phase 3b branch: external OCR (e.g. Gemini) -----------
+        if book.get("ocr_method") == "gemini_external":
+            chunks = _chunks_for_external_book(book)
+            if chunks is None:
+                # Already logged a clear "awaiting Gemini OCR" line.
+                summary_rows.append({
+                    "book_id": book_id,
+                    "pages_ocr": 0,
+                    "scope": book.get("scope", "external"),
+                    "chapters_wanted": None,
+                    "chapters_found": None,
+                    "chapters_missing": None,
+                    "chunks": 0,
+                    "chunks_embedded": 0,
+                    "chunks_jsonl": None,
+                    "skipped": "awaiting external OCR",
+                })
+                continue
+            jsonl_path = _write_chunks_jsonl(book_id, chunks)
+            n_embedded = embed_chunks(chunks)
+            total_chunks_embedded += n_embedded
+            summary_rows.append({
+                "book_id": book_id,
+                "pages_ocr": 0,
+                "scope": book.get("scope", "external"),
+                "chapters_wanted": None,
+                "chapters_found": None,
+                "chapters_missing": None,
+                "chunks": len(chunks),
+                "chunks_embedded": n_embedded,
+                "chunks_jsonl": str(jsonl_path.relative_to(PROJECT_ROOT)),
+            })
+            continue
+
+        # ---- Tesseract OCR branch (Phase 3, unchanged) -------------
         pdf_path = _resolve_pdf_path(book["pdf"])
-
         cleaned_pages = _ocr_and_clean(book_id, pdf_path)
-
-        chapters_found: dict[int, int]
         if book.get("scope") == "chapters":
             chunks, chapters_found = _chunks_for_scoped_book(book, cleaned_pages)
         else:
             chunks = _chunks_for_full_book(book, cleaned_pages)
-            chapters_found = {}
 
         jsonl_path = _write_chunks_jsonl(book_id, chunks)
         n_embedded = embed_chunks(chunks)
@@ -222,6 +325,8 @@ def build_corpus() -> dict[str, Any]:
         )
         if row.get("chapters_missing"):
             print(f"  WARN: chapters not found: {row['chapters_missing']}")
+        if row.get("skipped"):
+            print(f"  SKIP: {row['skipped']}")
     print("-" * 80)
     print(f"Total chunks embedded: {total_chunks_embedded}")
     print(f"ChromaDB collection 'iks_corpus' now holds {collection_count()} vectors")
