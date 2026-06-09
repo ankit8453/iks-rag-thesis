@@ -293,9 +293,11 @@ PLANTDOC_TARGETS = {
     ),
 }
 PHANTOMFS_TARGETS = {
-    "alluvial_soil": ("Alluvial_Soil", "Alluvial_Soil/1.jpg"),
-    "black_soil":   ("Black_Soil",   "Black_Soil/1.jpg"),
-    "red_soil":     ("Red_Soil",     "Red_Soil/1.jpg"),
+    # HF dataset's class_name column drops the "_Soil" suffix; the
+    # local raw folder keeps it. Both are listed per target.
+    "alluvial_soil": ("Alluvial", "Alluvial_Soil/1.jpg"),
+    "black_soil":   ("Black",   "Black_Soil/1.jpg"),
+    "red_soil":     ("Red",     "Red_Soil/1.jpg"),
 }
 
 
@@ -591,6 +593,20 @@ for sample in DEMO_SAMPLES:
 
 print()
 print(f"All figures saved under {DEFAULT_OUT_ROOT.relative_to(REPO_PATH)}")
+print()
+
+# Inline preview so the supervisor doesn't have to dig into the Colab
+# file browser. ``save_explanation`` already closed the matplotlib
+# figures, so we re-load the PNGs from disk via IPython.display.
+from IPython.display import Image as IPImage
+from IPython.display import display
+
+for v_path, r_path in saved_paths:
+    print(f"=== {v_path.parent.name} ===")
+    print("  vision panel:")
+    display(IPImage(filename=str(v_path)))
+    print("  retrieval panel:")
+    display(IPImage(filename=str(r_path)))
 """
 )
 

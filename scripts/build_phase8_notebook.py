@@ -375,19 +375,19 @@ LEAF_POTATO = _resolve_demo_image(
 
 SOIL_ALLUVIAL = _resolve_demo_image(
     kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
-    label_col="class_name", label_value="Alluvial_Soil",
+    label_col="class_name", label_value="Alluvial",
     local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Alluvial_Soil/1.jpg",
     scratch_key="alluvial",
 )
 SOIL_BLACK = _resolve_demo_image(
     kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
-    label_col="class_name", label_value="Black_Soil",
+    label_col="class_name", label_value="Black",
     local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Black_Soil/1.jpg",
     scratch_key="black",
 )
 SOIL_RED = _resolve_demo_image(
     kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
-    label_col="class_name", label_value="Red_Soil",
+    label_col="class_name", label_value="Red",
     local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Red_Soil/1.jpg",
     scratch_key="red",
 )

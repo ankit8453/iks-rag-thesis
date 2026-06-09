@@ -269,8 +269,16 @@ def _run_gradcam(
     heatmap = grayscale_cam[0]  # (H, W) float32 in [0, 1]
 
     overlay = show_cam_on_image(rgb_float, heatmap, use_rgb=True)
-    # show_cam_on_image returns float64 in [0, 1]; convert to uint8.
-    overlay_rgb = (overlay * 255.0).clip(0, 255).astype(np.uint8)
+    # ``show_cam_on_image`` returned float64 in [0, 1] in older
+    # pytorch_grad_cam, but ≥ 1.5 returns uint8 in [0, 255] directly.
+    # The old "always multiply by 255" path saturates the uint8 output
+    # to white and the heatmap becomes invisible. Detect and handle
+    # both.
+    overlay = np.asarray(overlay)
+    if overlay.dtype == np.uint8:
+        overlay_rgb = overlay
+    else:
+        overlay_rgb = (overlay.astype(np.float32) * 255.0).clip(0, 255).astype(np.uint8)
     return heatmap.astype(np.float32), overlay_rgb
 
 
