@@ -259,52 +259,141 @@ code(
 # Phase 9 reuses the same three real images and refuses to proceed if
 # any path is missing — a Grad-CAM over a wrong-disease placeholder
 # is a misleading figure.
+#
+# Two source paths:
+#   - LOCAL  : repo's data/plant_disease/ and data/soil/ trees (the
+#              laptop has them; they're gitignored so Colab does NOT).
+#   - HF Hub : private datasets ankit-iiitdmj/iks-plantdoc and
+#              ankit-iiitdmj/iks-soil-phantomfs. Same images, served
+#              from Parquet. The cell auto-detects which to use.
 from pathlib import Path
 
 from PIL import Image
 
 from src.integration import CausalPathway
 
-PLANTDOC_ROOT = Path(REPO_PATH) / "data" / "plant_disease" / "plantdoc" / "raw"
-PHANTOMFS_ROOT = Path(REPO_PATH) / "data" / "soil" / "phantomfs" / "raw" / "Orignal-Dataset"
+PLANTDOC_LOCAL_ROOT = Path(REPO_PATH) / "data" / "plant_disease" / "plantdoc" / "raw"
+PHANTOMFS_LOCAL_ROOT = Path(REPO_PATH) / "data" / "soil" / "phantomfs" / "raw" / "Orignal-Dataset"
+DEMO_SCRATCH = Path(REPO_PATH) / "_phase9_demo"
+DEMO_SCRATCH.mkdir(exist_ok=True)
 
+# Target (label, local-fallback-file, dataset-source) tuples per sample.
+PLANTDOC_TARGETS = {
+    "tomato_leaf": (
+        "Tomato leaf late blight",
+        "Tomato leaf late blight/image.jpg",
+    ),
+    "corn_leaf": (
+        "Corn rust leaf",
+        "Corn rust leaf/Corn-southern-rust-advanced-F1b-8-7-15.jpg",
+    ),
+    "potato_leaf": (
+        "Potato leaf early blight",
+        "Potato leaf early blight/fac66s01a.jpg",
+    ),
+}
+PHANTOMFS_TARGETS = {
+    "alluvial_soil": ("Alluvial_Soil", "Alluvial_Soil/1.jpg"),
+    "black_soil":   ("Black_Soil",   "Black_Soil/1.jpg"),
+    "red_soil":     ("Red_Soil",     "Red_Soil/1.jpg"),
+}
+
+
+def _resolve_local(root: Path, rel: str) -> Path | None:
+    \"\"\"Return the local copy if present and non-empty, else None.\"\"\"
+    p = root / rel
+    if p.is_file() and p.stat().st_size > 0:
+        return p
+    return None
+
+
+def _fetch_from_hf(
+    dataset_id: str, split: str, label_col: str, label_value: str,
+    out_path: Path,
+) -> Path:
+    \"\"\"Download the first sample with matching label and save as JPG.
+
+    Cached after first run via the HF datasets library — subsequent
+    re-runs reuse the cached parquet, no re-download.\"\"\"
+    from datasets import load_dataset
+
+    if out_path.is_file() and out_path.stat().st_size > 0:
+        return out_path
+    ds = load_dataset(dataset_id, split=split)
+    for sample in ds:
+        if sample.get(label_col) == label_value:
+            sample["image"].convert("RGB").save(out_path, format="JPEG")
+            return out_path
+    raise RuntimeError(
+        f"No sample with {label_col}={label_value!r} found in "
+        f"{dataset_id}:{split}."
+    )
+
+
+def _resolve_plantdoc(name: str) -> Path:
+    label, rel = PLANTDOC_TARGETS[name]
+    local = _resolve_local(PLANTDOC_LOCAL_ROOT, rel)
+    if local is not None:
+        return local
+    out = DEMO_SCRATCH / f"plantdoc__{name}.jpg"
+    return _fetch_from_hf(
+        "ankit-iiitdmj/iks-plantdoc", "test", "label", label, out,
+    )
+
+
+def _resolve_phantomfs(name: str) -> Path:
+    label, rel = PHANTOMFS_TARGETS[name]
+    local = _resolve_local(PHANTOMFS_LOCAL_ROOT, rel)
+    if local is not None:
+        return local
+    out = DEMO_SCRATCH / f"phantomfs__{name}.jpg"
+    return _fetch_from_hf(
+        "ankit-iiitdmj/iks-soil-phantomfs", "train", "class_name", label, out,
+    )
+
+
+print("=== Resolving demo image sources (local repo → HF Hub fallback) ===")
 DEMO_SAMPLES = [
     {
         "name": "tomato_alluvial_soil_driven",
-        "leaf_path": PLANTDOC_ROOT / "Tomato leaf late blight" / "image.jpg",
-        "soil_path": PHANTOMFS_ROOT / "Alluvial_Soil" / "1.jpg",
+        "leaf_path": _resolve_plantdoc("tomato_leaf"),
+        "soil_path": _resolve_phantomfs("alluvial_soil"),
         "crop": "tomato",
         "pathway": CausalPathway.SOIL_DRIVEN,
     },
     {
         "name": "corn_black_pest_vector",
-        "leaf_path": PLANTDOC_ROOT / "Corn rust leaf" / "Corn-southern-rust-advanced-F1b-8-7-15.jpg",
-        "soil_path": PHANTOMFS_ROOT / "Black_Soil" / "1.jpg",
+        "leaf_path": _resolve_plantdoc("corn_leaf"),
+        "soil_path": _resolve_phantomfs("black_soil"),
         "crop": "corn",
         "pathway": CausalPathway.PEST_VECTOR,
     },
     {
         "name": "potato_red_unknown",
-        "leaf_path": PLANTDOC_ROOT / "Potato leaf early blight" / "fac66s01a.jpg",
-        "soil_path": PHANTOMFS_ROOT / "Red_Soil" / "1.jpg",
+        "leaf_path": _resolve_plantdoc("potato_leaf"),
+        "soil_path": _resolve_phantomfs("red_soil"),
         "crop": "potato",
         "pathway": CausalPathway.UNKNOWN,
     },
 ]
 
+print()
 print("=== Demo sample sources + predicted disease names ===")
 sample_disease_names = []
 for s in DEMO_SAMPLES:
     for kind in ("leaf_path", "soil_path"):
         p = Path(s[kind])
-        assert p.is_file(), f"Demo image missing: {p}  (Phase 9 refuses to render Grad-CAM over a stand-in)"
+        assert p.is_file(), (
+            f"Demo image missing: {p}  "
+            f"(Phase 9 refuses to render Grad-CAM over a stand-in)"
+        )
         assert p.stat().st_size > 0, f"Demo image is empty: {p}"
     # Predict per-sample so the supervisor can see distinct labels.
     pred = disease_engine.predict(Image.open(s["leaf_path"])).prediction
     sample_disease_names.append(pred.class_name)
     print(f"- {s['name']}")
-    print(f"    leaf src     : {Path(s['leaf_path']).relative_to(PLANTDOC_ROOT.parents[2])}")
-    print(f"    soil src     : {Path(s['soil_path']).relative_to(PHANTOMFS_ROOT.parents[2])}")
+    print(f"    leaf src     : {s['leaf_path']}")
+    print(f"    soil src     : {s['soil_path']}")
     print(f"    crop         : {s['crop']}")
     print(f"    pred disease : {pred.class_name}  (idx={pred.class_index}  conf={pred.confidence:.3f})")
 
