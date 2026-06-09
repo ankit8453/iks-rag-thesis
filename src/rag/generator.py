@@ -314,6 +314,58 @@ class GroundedGenerator:
         completion = self._tokenizer.decode(completion_tokens, skip_special_tokens=True)
         return self.postprocess(completion, retrieved_chunks)
 
+    def complete(
+        self,
+        prompt: str,
+        *,
+        max_new_tokens: int | None = None,
+    ) -> str:
+        """Run the loaded LM on a plain prompt and return decoded text.
+
+        Phase 8 Strategy B (LLM-mediated query rewrite) needs a raw
+        prompt → text path that bypasses the §17 grounding wrapper —
+        it is *reformulating a retrieval query*, not answering a
+        grounded question, so the system prompt + retrieved-passages
+        block from :meth:`generate` would actively poison the output.
+
+        Determinism mirrors :meth:`generate`: same seed, same
+        temperature, same sampling toggle (off when ``temperature == 0``).
+        """
+        import torch  # noqa: PLC0415
+
+        self._ensure_loaded()
+        torch.manual_seed(self.seed)
+        max_new = int(max_new_tokens or min(256, self.max_new_tokens))
+
+        # Use the tokenizer's chat-template if available so the model
+        # sees the prompt in its native instruction-tuned format. Falls
+        # back to a plain raw string for tests that monkeypatch the
+        # tokenizer.
+        rendered: str
+        if self._tokenizer is None:
+            rendered = prompt
+        else:
+            try:
+                rendered = self._tokenizer.apply_chat_template(
+                    [{"role": "user", "content": prompt}],
+                    tokenize=False,
+                    add_generation_prompt=True,
+                )
+            except Exception:  # noqa: BLE001
+                rendered = prompt
+
+        inputs = self._tokenizer(rendered, return_tensors="pt").to(self._model.device)
+        with torch.no_grad():
+            out = self._model.generate(
+                **inputs,
+                max_new_tokens=max_new,
+                temperature=self.temperature,
+                do_sample=self.temperature > 0.0,
+                pad_token_id=(self._tokenizer.eos_token_id or 0),
+            )
+        completion_tokens = out[0][inputs["input_ids"].shape[1]:]
+        return self._tokenizer.decode(completion_tokens, skip_special_tokens=True)
+
     def postprocess(
         self,
         raw_completion: str,

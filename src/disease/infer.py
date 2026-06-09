@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING, Any
 
 from src.disease.model import DiseaseClassifier, DiseasePrediction
 from src.utils.logging_setup import get_logger
+from src.utils.paths import PROJECT_ROOT
 
 if TYPE_CHECKING:
     import numpy as np  # noqa: F401
@@ -21,6 +22,61 @@ if TYPE_CHECKING:
     from PIL import Image as PILImage  # noqa: F401
 
 _LOGGER = get_logger(__name__)
+
+# Heuristic mapping: HF model repo ID substring ↔ local class_map.json
+# path. The class_map.json files were authored by Phase 4 split-builder
+# scripts and ship with the repo, so they are reliably available in
+# Colab once the repo is cloned. Add a new entry here when a new dataset
+# becomes the source for a disease checkpoint.
+_DATASET_CLASS_MAPS: tuple[tuple[str, str], ...] = (
+    ("plantdoc", "data/splits/plantdoc/class_map.json"),
+    ("plantvillage", "data/splits/plantvillage/class_map.json"),
+    ("paddy_doctor", "data/splits/paddy_doctor/class_map.json"),
+    ("paddy", "data/splits/paddy_doctor/class_map.json"),
+)
+
+
+def _load_class_names_for_source(
+    model_source: str, num_classes: int,
+) -> list[str] | None:
+    """Best-effort class-name resolution for a Phase 5 disease checkpoint.
+
+    Tries (in order):
+
+    1. Match the HF repo ID (or local path) against
+       :data:`_DATASET_CLASS_MAPS` substrings — e.g. ``plantdoc`` in
+       ``ankit-iiitdmj/iks-disease-plantdoc`` maps to
+       ``data/splits/plantdoc/class_map.json``. The returned list is the
+       set of label strings in index order (sorted by the integer index).
+    2. Reject the candidate if the file's class count doesn't match
+       the checkpoint's ``num_classes`` (silent mismatch would be
+       worse than the ``class_N`` fallback).
+
+    Returns ``None`` when nothing matches — caller is expected to
+    fall back to ``class_<i>`` placeholders **and log a warning**.
+    """
+    import json  # noqa: PLC0415
+
+    src_lower = model_source.lower()
+    for needle, rel_path in _DATASET_CLASS_MAPS:
+        if needle in src_lower:
+            candidate = PROJECT_ROOT / rel_path
+            if not candidate.is_file():
+                continue
+            with candidate.open("r", encoding="utf-8") as fh:
+                cm = json.load(fh)
+            # Invert {label: idx} → list ordered by idx.
+            names_by_idx = sorted(cm.items(), key=lambda kv: int(kv[1]))
+            if len(names_by_idx) != num_classes:
+                _LOGGER.warning(
+                    "Class-map at %s has %d entries but checkpoint has %d classes; "
+                    "skipping this mapping.",
+                    candidate.relative_to(PROJECT_ROOT),
+                    len(names_by_idx), num_classes,
+                )
+                continue
+            return [str(name) for name, _ in names_by_idx]
+    return None
 
 
 @dataclass
@@ -130,7 +186,22 @@ class DiseaseInferenceEngine:
         state, num_classes = _load_checkpoint_from_source(model_source, self._work_dir)
         self.num_classes = num_classes
         if class_names is None:
-            class_names = [f"class_{i}" for i in range(num_classes)]
+            resolved = _load_class_names_for_source(model_source, num_classes)
+            if resolved is not None:
+                class_names = resolved
+                _LOGGER.info(
+                    "Loaded %d class names for %s from local class_map.json.",
+                    len(class_names), model_source,
+                )
+            else:
+                _LOGGER.warning(
+                    "Could not resolve class names for %s — falling back to "
+                    "'class_<i>' placeholders. Phase 8 query construction "
+                    "WILL leak indices instead of disease names if this "
+                    "engine is used downstream.",
+                    model_source,
+                )
+                class_names = [f"class_{i}" for i in range(num_classes)]
         if len(class_names) != num_classes:
             raise ValueError(
                 f"class_names has {len(class_names)} entries but the "

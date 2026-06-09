@@ -187,11 +187,24 @@ from src.soil.infer import SoilInferenceEngine
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Disease model — Phase 5 final stage (EfficientNet-B4 @ 380x380).
+# ``class_names`` is not passed explicitly: the engine auto-resolves
+# them from ``data/splits/plantdoc/class_map.json`` (Phase 5's
+# canonical mapping). Before this fix the engine fell back to
+# ``"class_0"`` placeholders and Strategy A's query read "Organic
+# treatment for class 0 affecting rice ...", carrying ZERO disease
+# information into retrieval.
 disease_engine = DiseaseInferenceEngine(
     model_source="ankit-iiitdmj/iks-disease-plantdoc",
     device=DEVICE,
 )
 print(f"Disease engine: {disease_engine.num_classes} classes on {disease_engine.device}")
+print(f"  first 5 names : {disease_engine.class_names[:5]}")
+print(f"  last 3 names  : {disease_engine.class_names[-3:]}")
+assert not any(n.startswith("class_") and n[6:].isdigit() for n in disease_engine.class_names), (
+    "Disease engine class names still look like 'class_<i>' placeholders. "
+    "Check data/splits/plantdoc/class_map.json — Phase 8 query construction "
+    "will be meaningless without real labels."
+)
 
 # Soil model — Phase 6 v2/v3-tiling multi-task (EfficientNet-B0 @ 224x224).
 soil_engine = SoilInferenceEngine(
