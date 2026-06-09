@@ -301,71 +301,108 @@ print("RAGPipeline ready.")
 
 # ----------------------------- Cell 7 — demo inputs -------------------------
 code(
-    """# Cell 7 — Demo inputs: (leaf, soil, crop, optional causal pathway).
-# In the live demo replace these with real images via the upload widget
-# at the bottom of the cell. For a deterministic walkthrough we ship a
-# small in-corpus set (Pillow ImageDraw stand-ins — quick to run, no
-# external downloads). Each row also carries a causal pathway so C5 is
-# exercised on at least one sample (decision #2 in the Phase 8 prompt).
+    """# Cell 7 — Demo inputs: real PlantDoc test-set leaves + Phantom-fs
+# soil images (NOT Pillow stand-ins, which made the disease model
+# predict the same prior class for every sample). Three distinct
+# (crop, disease, soil) tuples so Strategy A / B / C have something
+# meaningfully different to compare across samples.
+#
+# Crop labels are chosen so they MATCH the disease label's crop (the
+# disease engine is trained on PlantDoc, which has 27 classes spanning
+# Apple, Bell pepper, Blueberry, Cherry, Corn, Peach, Potato,
+# Raspberry, Soyabean, Squash, Strawberry, Tomato, grape — NO rice,
+# NO mango, so we pick from inside that vocabulary). Each sample
+# also carries a CausalPathway so C5 is exercised across all three
+# branches (soil_driven / pest_vector / unknown).
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image
 
 from src.integration import CausalPathway
 
-DEMO_DIR = Path("./_phase8_demo")
-DEMO_DIR.mkdir(exist_ok=True)
+# Repo-root data paths. Cell 2 cloned the repo into REPO_PATH, so
+# these resolve to /content/iks-rag-thesis/data/... in Colab.
+PLANTDOC_ROOT = Path(REPO_PATH) / "data" / "plant_disease" / "plantdoc" / "raw"
+PHANTOMFS_ROOT = Path(REPO_PATH) / "data" / "soil" / "phantomfs" / "raw" / "Orignal-Dataset"
 
+# Picked from data/splits/plantdoc/test.json. The image files ship
+# inside the repo so this is fully deterministic in Colab; no extra
+# downloads.
+LEAF_TOMATO = PLANTDOC_ROOT / "Tomato leaf late blight" / "image.jpg"
+LEAF_CORN = PLANTDOC_ROOT / "Corn rust leaf" / "Corn-southern-rust-advanced-F1b-8-7-15.jpg"
+LEAF_POTATO = PLANTDOC_ROOT / "Potato leaf early blight" / "fac66s01a.jpg"
 
-def _stub_image(path: Path, colour: tuple[int, int, int], label: str) -> Path:
-    img = Image.new("RGB", (380, 380), colour)
-    ImageDraw.Draw(img).text((10, 10), label, fill=(255, 255, 255))
-    img.save(path)
-    return path
-
-
-# Pillow stand-ins. The qualitative read is about how the same
-# multimodal context flows through three strategies; the picture
-# pixels themselves are NOT what we are evaluating here.
-LEAF1 = _stub_image(DEMO_DIR / "leaf_rice.png", (60, 120, 60), "rice leaf demo")
-SOIL1 = _stub_image(DEMO_DIR / "soil_alluvial.png", (90, 70, 50), "alluvial soil demo")
-LEAF2 = _stub_image(DEMO_DIR / "leaf_tomato.png", (80, 140, 80), "tomato leaf demo")
-SOIL2 = _stub_image(DEMO_DIR / "soil_black.png", (40, 35, 35), "black soil demo")
-LEAF3 = _stub_image(DEMO_DIR / "leaf_mango.png", (50, 100, 50), "mango leaf demo")
-SOIL3 = _stub_image(DEMO_DIR / "soil_red.png", (140, 70, 40), "red soil demo")
+# Phantom-fs Original-Dataset class folders — 1.jpg present for every
+# soil type. Different soil types per sample so the soil_type label
+# in Strategy A's query actually varies.
+SOIL_ALLUVIAL = PHANTOMFS_ROOT / "Alluvial_Soil" / "1.jpg"
+SOIL_BLACK = PHANTOMFS_ROOT / "Black_Soil" / "1.jpg"
+SOIL_RED = PHANTOMFS_ROOT / "Red_Soil" / "1.jpg"
 
 DEMO_SAMPLES = [
     {
-        "name": "rice / alluvial / soil_driven",
-        "leaf": LEAF1, "soil": SOIL1,
-        "crop": "rice",
-        "pathway": CausalPathway.SOIL_DRIVEN,        # C5 exercised here
-        "notes": "Recent paddy stand was waterlogged for several days.",
-    },
-    {
-        "name": "tomato / black / pest_vector",
-        "leaf": LEAF2, "soil": SOIL2,
+        "name": "tomato / alluvial / soil_driven",
+        "leaf_path": LEAF_TOMATO, "soil_path": SOIL_ALLUVIAL,
         "crop": "tomato",
-        "pathway": CausalPathway.PEST_VECTOR,        # C5 again, different branch
-        "notes": "Whitefly population observed last week.",
+        "pathway": CausalPathway.SOIL_DRIVEN,        # C5 SOIL branch
+        "notes": "Recent stand has been waterlogged.",
     },
     {
-        "name": "mango / red / unknown",
-        "leaf": LEAF3, "soil": SOIL3,
-        "crop": "mango",
+        "name": "corn / black / pest_vector",
+        "leaf_path": LEAF_CORN, "soil_path": SOIL_BLACK,
+        "crop": "corn",
+        "pathway": CausalPathway.PEST_VECTOR,        # C5 PEST branch
+        "notes": "Insects observed on adjacent rows.",
+    },
+    {
+        "name": "potato / red / unknown",
+        "leaf_path": LEAF_POTATO, "soil_path": SOIL_RED,
+        "crop": "potato",
         "pathway": CausalPathway.UNKNOWN,            # No bias — control
         "notes": None,
     },
 ]
 
+# Verify every image exists and is non-empty. A missing file would
+# silently corrupt the comparison; better to fail loudly here than to
+# debug a "why is every disease the same" surprise later.
+print(f"Demo samples ready: {len(DEMO_SAMPLES)}")
+for s in DEMO_SAMPLES:
+    for kind in ("leaf_path", "soil_path"):
+        p = Path(s[kind])
+        assert p.is_file(), f"Demo image missing: {p}"
+        assert p.stat().st_size > 0, f"Demo image is empty: {p}"
+    leaf_rel = Path(s["leaf_path"]).relative_to(PLANTDOC_ROOT.parents[2])
+    soil_rel = Path(s["soil_path"]).relative_to(PHANTOMFS_ROOT.parents[2])
+    print(f"  - {s['name']}  pathway={s['pathway'].value}")
+    print(f"      leaf : {leaf_rel}")
+    print(f"      soil : {soil_rel}")
+
 # Optional upload widget (skipped on `Run all` in the deterministic
-# walkthrough; uncomment in the live demo).
+# walkthrough; uncomment to run a real farmer-uploaded image in the
+# live demo).
 # from google.colab import files
 # uploaded = files.upload()
 
-print(f"Demo samples ready: {len(DEMO_SAMPLES)}")
-for s in DEMO_SAMPLES:
-    print(f"  - {s['name']}  pathway={s['pathway'].value}")
+# Sanity: run the disease engine ONCE on the tomato leaf and print
+# the raw argmax index AND the mapped class name together, so the
+# index→name mapping is independently verifiable from the cell
+# output (not just trusted to be correct).
+import torch  # for the with_gradcam=False branch's no_grad
+
+probe_leaf = Image.open(DEMO_SAMPLES[0]["leaf_path"])
+probe_result = disease_engine.predict(probe_leaf)
+probe_idx = probe_result.prediction.class_index
+probe_name = disease_engine.class_names[probe_idx]
+print()
+print("=== sanity check: disease engine idx→name on sample-0 leaf ===")
+print(f"  argmax index : {probe_idx}")
+print(f"  mapped name  : {probe_name}")
+print(f"  prediction   : {probe_result.prediction.class_name}  conf={probe_result.prediction.confidence:.3f}")
+assert probe_result.prediction.class_name == probe_name, (
+    f"Index→name mapping inconsistent: prediction says "
+    f"{probe_result.prediction.class_name!r} but class_names[{probe_idx}] is {probe_name!r}"
+)
 """
 )
 
@@ -381,8 +418,8 @@ from src.integration import build_multimodal_context
 contexts = []
 for sample in DEMO_SAMPLES:
     ctx = build_multimodal_context(
-        leaf_image=Image.open(sample["leaf"]),
-        soil_image=Image.open(sample["soil"]),
+        leaf_image=Image.open(sample["leaf_path"]),
+        soil_image=Image.open(sample["soil_path"]),
         crop_type=sample["crop"],
         causal_pathway=sample["pathway"],
         causal_notes=sample["notes"],
@@ -393,7 +430,10 @@ for sample in DEMO_SAMPLES:
     contexts.append(ctx)
     print("=" * 78)
     print(f"SAMPLE: {sample['name']}")
-    print(f"  disease : {ctx.disease_pred.class_name} (conf={ctx.disease_pred.confidence:.2f})")
+    print(f"  leaf src: {sample['leaf_path']}")
+    print(f"  soil src: {sample['soil_path']}")
+    print(f"  disease : {ctx.disease_pred.class_name}  "
+          f"(idx={ctx.disease_pred.class_index}  conf={ctx.disease_pred.confidence:.2f})")
     print(f"  soil    : type={ctx.soil_pred.soil_type}  "
           f"moisture={ctx.soil_pred.moisture_appearance}  "
           f"texture={ctx.soil_pred.texture}")
@@ -404,7 +444,20 @@ for sample in DEMO_SAMPLES:
         f"  embeds  : disease={ctx.disease_emb.shape}  "
         f"soil={ctx.soil_emb.shape}"
     )
-print(f"\\nBuilt {len(contexts)} contexts.")
+
+# Honesty check: the three disease predictions should NOT all be the
+# same class — that would mean every sample is feeding the engine the
+# same image (the bug we just fixed) or the engine is collapsing for
+# some reason. Fail loudly here, not at Cell 12 where it would just
+# look like Strategy A under-performs.
+disease_labels = [c.disease_pred.class_name for c in contexts]
+assert len(set(disease_labels)) >= 2, (
+    "All three demo samples predicted the same disease class "
+    f"({disease_labels[0]!r}); the A/B/C comparison would be meaningless. "
+    "Check that DEMO_SAMPLES['leaf_path'] points to distinct real PlantDoc "
+    "test images."
+)
+print(f"\\nBuilt {len(contexts)} contexts with distinct disease labels: {disease_labels}")
 """
 )
 

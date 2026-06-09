@@ -199,10 +199,19 @@ class MultimodalEmbeddingStrategy:
                 n_results=1,
                 include=["embeddings"],
             )
-            embs = hit.get("embeddings") or []
-            if not embs or not embs[0]:
+            # ChromaDB returns embeddings as numpy arrays (or list[numpy
+            # arrays]). Bare-truthiness checks like ``if not embs`` raise
+            # ValueError("truth value of an array with more than one
+            # element is ambiguous") on those — use None / len() instead.
+            embs = hit.get("embeddings")
+            if embs is None or len(embs) == 0:
                 continue
-            top1 = np.asarray(embs[0][0], dtype=np.float32)
+            row = embs[0]
+            if row is None or len(row) == 0:
+                continue
+            top1 = np.asarray(row[0], dtype=np.float32)
+            if top1.size == 0:
+                continue
             inputs.append(x)
             targets.append(top1)
 
@@ -268,10 +277,20 @@ class MultimodalEmbeddingStrategy:
             n_results=k,
             include=["documents", "metadatas", "distances"],
         )
-        chunk_ids = (results.get("ids") or [[]])[0]
-        texts = (results.get("documents") or [[]])[0]
-        metas = (results.get("metadatas") or [[]])[0]
-        dists = (results.get("distances") or [[]])[0]
+
+        def _row0(key: str) -> list:
+            """Pull row 0 of a ChromaDB ``query`` result list-of-lists
+            without using bare truthiness — which would fail if any
+            value were a numpy array."""
+            val = results.get(key)
+            if val is None or len(val) == 0:
+                return []
+            return list(val[0]) if val[0] is not None else []
+
+        chunk_ids = _row0("ids")
+        texts = _row0("documents")
+        metas = _row0("metadatas")
+        dists = _row0("distances")
         out: list[dict[str, Any]] = []
         for cid, txt, meta, dist in zip(chunk_ids, texts, metas, dists, strict=False):
             # bge cosine distance in [0, 2]; convert to similarity in [-1, 1].

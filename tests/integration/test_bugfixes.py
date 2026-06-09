@@ -245,3 +245,88 @@ def test_strategy_b_clear_error_when_llm_has_no_usable_method() -> None:
     strat = LLMMediatedStrategy(LLMMediatedStrategyConfig())
     with pytest.raises(TypeError, match="no usable"):
         strat.build_query(_stub_context(), _Nothing())
+
+
+# --------------------------------------------------------------------- #
+# Bug 3 (Strategy C numpy-array truthiness on Chroma results)
+# --------------------------------------------------------------------- #
+
+
+def test_strategy_c_train_handles_numpy_array_embeddings() -> None:
+    """Bug 3: ChromaDB returns embeddings as numpy arrays, and the
+    original code used ``if not embs or not embs[0]`` to check
+    non-empty — both raise ``ValueError("truth value of an array with
+    more than one element is ambiguous")`` on a numpy array. The fix
+    uses None/len() checks, never bare truthiness.
+
+    This stub returns embeddings as np.ndarray inside list[ndarray] —
+    exactly what real ChromaDB returns when ``include=["embeddings"]``."""
+    import numpy as np
+
+    from src.integration.config import MultimodalEmbeddingStrategyConfig
+    from src.integration.strategy_multimodal_embedding import (
+        CORPUS_EMBEDDING_DIM,
+        DISEASE_FEAT_DIM,
+        MultimodalEmbeddingStrategy,
+        SOIL_FEAT_DIM,
+    )
+
+    class _StubEmbedder:
+        def encode(self, texts, **kw):
+            # Return a normalised vector that looks like bge-large output.
+            arr = np.ones((len(texts), CORPUS_EMBEDDING_DIM), dtype=np.float32)
+            return arr / np.linalg.norm(arr, axis=1, keepdims=True)
+
+    class _ArrayReturningCollection:
+        """Returns embeddings as np.ndarray inside the result list — the
+        exact shape ChromaDB ``query(include=["embeddings"])`` returns."""
+
+        def query(self, **kw):
+            top_emb = np.full(CORPUS_EMBEDDING_DIM, 0.5, dtype=np.float32)
+            return {
+                "embeddings": [[top_emb]],     # list-of-list of ndarray
+                "ids": [["chunk_0"]],
+                "documents": [["sample text"]],
+                "metadatas": [[{"source_text": "Vrikshayurveda"}]],
+                "distances": [[0.1]],
+            }
+
+    # Stub MultimodalContext with the embeddings Strategy C needs.
+    ctx = MultimodalContext(
+        disease_pred=type(
+            "D", (), {"class_name": "Apple Scab Leaf", "confidence": 0.9, "class_index": 0}
+        )(),
+        soil_pred=type(
+            "S", (), {"soil_type": "Alluvial_Soil", "moisture_appearance": "moist", "texture": "fine"}
+        )(),
+        crop_type="apple",
+        causal_context=CausalContext(pathway=CausalPathway.UNKNOWN),
+        disease_emb=np.zeros(DISEASE_FEAT_DIM, dtype=np.float32),
+        soil_emb=np.zeros(SOIL_FEAT_DIM, dtype=np.float32),
+    )
+
+    strat = MultimodalEmbeddingStrategy(MultimodalEmbeddingStrategyConfig())
+    embedder = _StubEmbedder()
+    collection = _ArrayReturningCollection()
+
+    # Pre-fix this raised ValueError("truth value of an array..."). The
+    # post-fix path must complete without error and return a usable
+    # projector + result.
+    projector, report = strat.train_weak_projection(
+        samples=[ctx],
+        embedder=embedder,
+        template_query_fn=lambda _c: "stub query",
+        chroma_collection=collection,
+        epochs=2,
+        lr=1e-3,
+        device="cpu",
+    )
+    assert report.n_samples == 1
+    assert report.epochs == 2
+
+    # Same retrieval path must also tolerate numpy-array-bearing
+    # results — exercise retrieve_via_embedding() too.
+    hits = strat.retrieve_via_embedding(ctx, projector, collection, embedder, k=1)
+    assert len(hits) == 1
+    assert hits[0]["chunk_id"] == "chunk_0"
+    assert hits[0]["metadata"]["source_text"] == "Vrikshayurveda"
