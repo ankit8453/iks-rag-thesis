@@ -5,6 +5,74 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 8: multimodal integration (template + LLM-mediated query, embedding ablation) + C5 causal hook
+
+Phase 8 is the core-novelty wiring for **contribution C2** (joint disease + soil context module with three ablated query-construction strategies) and **contribution C5** (cause-conditional retrieval — pathway user-supplied, never image-derived). Built `src/integration/` end-to-end, the 13-cell Colab notebook `notebooks/phase8_multimodal_integration.ipynb`, and 22 unit tests. Reuses Phase 5 disease + Phase 6 soil + Phase 7 RAG code by import; corpus + models are read-only here. All paths under `src.utils.paths`; logging via `src.utils.logging_setup`. Decision matrix locked: existing class-based API kept (`MultimodalContext`, `CausalPathway` enum, `TemplateStrategy.build_query()` etc.); vestigial OLID causation-dataset + transforms code dropped (~280 LOC + 2 tests removed); Cell 6 asserts the post-Phase-3b.2 corpus snapshot (`206 chunks across 4 books` with explicit per-book counts) instead of the prompt's outdated `>285` check.
+
+### Mechanism — three strategies on the same multimodal context
+
+- **Strategy A — Template (`strategy_template.py`).** Deterministic plain-text render: `"Organic treatment for {disease} affecting {crop} grown in {soil_type} soil that appears {moisture} with {texture} texture[, <pathway clause>]."`. The `UNKNOWN` causal pathway deliberately yields **no** clause so the default is bias-free. Helper `_humanise_label` strips dataset noise (`___`, trailing `_Soil`) so queries don't read like CSV headers.
+- **Strategy B — LLM-mediated (`strategy_llm_mediated.py`).** Reuses Phase 7's already-loaded Llama-3.1-8B (no second model load) to rewrite the structured context into ONE retrieval query that bridges modern vision labels (`Tomato___Leaf_Mold`, `Alluvial_Soil`) to descriptive / classical-text vocabulary (`scorched leaves with whitish lesions`, `fertile riverine soil`). Prompt rules baked in: must NOT propose a treatment, must stay within the structured context, must reflect the causal pathway only when not `UNKNOWN`. Temperature 0.2 + fixed seed → reproducible. The generator-agnostic `_invoke_llm` tries `.generate / .complete / __call__` so the strategy survives a future swap to Llama-3.2-3B or any other LLM exposing one of those methods.
+- **Strategy C — Multimodal embedding projection (`strategy_multimodal_embedding.py`, honest ablation).** Concatenates penultimate B4 disease feature (1792-d) + B0 soil feature (1280-d) + bge-large crop-name embedding (1024-d), trains a single `MultimodalProjector` linear layer (4096 → 1024) on WEAK pairs — per-sample target is the bge-embedding of Strategy A's top-1 retrieved chunk. No manual relevance labels. Trained for 80 epochs MSE in the notebook (~10s). Retrieval is cosine similarity against the same ChromaDB collection Phase 7 uses. The module docstring explicitly frames C as *"the ablation that demonstrates *why* text queries win for a text corpus, not a competitor to A/B"*. The modality gap (visual embeddings live on a different manifold from bge text embeddings) is too wide for one linear layer trained on a handful of weak pairs to close; B ≥ A > C is the expected qualitative outcome.
+
+### C5 causal hook — wired through all three strategies
+
+`CausalPathway` enum (4 values: `SOIL_DRIVEN / PEST_VECTOR / CONTAGION / UNKNOWN`, default `UNKNOWN`) and the frozen `CausalContext(pathway, notes)` dataclass are user-input ONLY — the system never infers cause from images. Threading:
+
+- Strategy A appends a deterministic pathway clause: `SOIL_DRIVEN → "with emphasis on soil restoration, nourishment, and root health"`, `PEST_VECTOR → "...pest deterrence..."`, `CONTAGION → "...preventing the spread..."`, `UNKNOWN → ""`. The empty clause for `UNKNOWN` is locked by `test_template_no_causal_clause_when_unknown`.
+- Strategy B injects the pathway into the rewrite prompt via `_PATHWAY_HINTS` so the LLM can shape the query around it. `UNKNOWN` falls through as *"not specified"* so no cause is forced.
+- Strategy C does not consume the pathway directly (the C-ablation is about the visual modality), but the same MultimodalContext threads through, so a future cause-conditional embedding can be slotted in without touching `compare.py`.
+
+### Builder + side-by-side runner
+
+- `build_multimodal_context(leaf_image, soil_image, crop_type, causal_pathway=UNKNOWN, ...)` orchestrates Phase 5 disease + Phase 6 soil inference into a populated `MultimodalContext`, including the penultimate visual embeddings needed by Strategy C. Accepts pre-built inference engines (the notebook builds them once and reuses) or constructs them on demand from HF repo IDs. Capture-embeddings is on by default — cheap, same forward pass.
+- `compare.run_all_strategies(ctx, rag_pipeline, projector=None, ...)` is the public side-by-side driver. Strategy C is silently skipped when `projector` / `chroma_collection` / `embedder` aren't all supplied (so unit tests can exercise A + B without GPU). Returns `dict[strategy_name, StrategyResult]` with `query`, `retrieved_chunk_ids`, `retrieved_sources`, optional `answer`, optional `citations` — fields tuned so the notebook's comparison cell can pretty-print without further unpacking.
+- `compare.qualitative_compare(results_per_sample, relevant_book_ids=None)` is the QUALITATIVE read for the supervisor demo — counts `on_topic_count` = how many of the k retrieved chunks come from a plausibly-relevant IKS book (defaults to all 4). Explicit on rigorous evaluation: *"the rigorous RAGAS context_precision/recall read happens in Phase 11"*.
+
+### Phase 6 soil-inference plumbing finished as part of Phase 8
+
+The Phase 8 prompt assumed Phase 6 single-image inference existed, but `src/soil/infer.py:predict_image()` was still stubbed with `NotImplementedError("Phase 6 — Week 19")`. Built it as part of Phase 8: `SoilInferenceEngine` loads `SoilMultiTaskClassifier` from HF (`ankit-iiitdmj/iks-soil-multitask-v2`), preprocesses to 224×224 with ImageNet stats, runs the 3 visual heads (soil_type 7-class / moisture 3-class / texture 3-class), and returns `SoilPrediction` + optional 1280-d backbone embedding. Same pattern as `DiseaseInferenceEngine`. Also extended `DiseaseInferenceEngine` with `predict_with_embedding()` returning the 1792-d penultimate B4 feature. Both extensions are additive — no existing API touched.
+
+### Tests — 22 / 22 passing, no GPU, no network
+
+`tests/integration/test_smoke.py` (8) covers import surface + `CausalPathway` enum invariance + `MultimodalProjector` shape + docstring guard against scope creep. `test_template.py` (10) is the Strategy-A behavioural matrix: every structured field appears in the rendered query, dataset-noise stripped, deterministic, causal-pathway clause matrix (parametrised over 4 pathway values), empty-crop edge case. `test_compare_smoke.py` (7) uses a stub `RAGPipeline` + stub LLM + stub retriever + stub `DiseasePrediction` / `SoilPrediction` (NO model load) to exercise `run_all_strategies` shape, C5 threading into Strategy A, Strategy B's reuse of `pipeline.generator`, the `relevant_book_ids` filter in `qualitative_compare`, and the explicit error when the pipeline has no generator. `pytest tests/integration/ -q` runs in <2 s.
+
+### Phase 11 deferrals (documented in Cell 13 of the notebook)
+
+- **No RAGAS context_precision / context_recall scoring.** That requires the expert-curated gold-query set Dr Pandey is putting together; will be Phase 11.
+- **No formal causal-conditioning ablation.** C5 is wired + demoed on one sample; the formal "with vs without causal clause" sweep is Phase 11.
+- **No trained multimodal embedding space.** A CLIP-style contrastive projector on image / classical-text pairs is out of scope for the thesis; Phase 8 ships the honest linear-layer ablation to show *why* B/A beat C, not to compete with them.
+
+### Notebook structure — 13 cells per Phase 8 prompt §C
+
+1. Markdown — goal (C2 + C5), research-backed scope (A/B main, C ablation), the modern→classical bridge problem.
+2. Setup — clone repo + pip install (Phase 7 deps + timm + pillow).
+3. HF auth (private chunks + gated Llama + Phase 5/6 weights).
+4. GPU check + nvidia-smi.
+5. Load disease (B4) + soil (B0 multi-task) engines from HF Hub.
+6. Load Phase 7 RAG pipeline; **assert chunk count == 206 with 4-book breakdown** (the Phase-3b.2 snapshot).
+7. Demo inputs — 3 Pillow stand-in samples covering 3 causal pathways (`SOIL_DRIVEN`, `PEST_VECTOR`, `UNKNOWN` control). Optional upload widget commented out for the deterministic run.
+8. `build_multimodal_context` per sample — print structured outputs + embedding shapes.
+9. Strategy A — templated query + retrieved sources + grounded answer.
+10. Strategy B — LLM-bridged query + retrieved sources + grounded answer; **explicitly prints A's query alongside B's** so the vocabulary bridge is visible.
+11. Strategy C — train weak projector + retrieve top-k; print final loss + per-sample top-5.
+12. Side-by-side comparison — `qualitative_compare` flat table + per-sample strategy ranking by on-topic count.
+13. Markdown — findings, scope notes (no RAGAS, no causal sweep, no trained embedding space), and what comes in Phase 9 / 10 / 11.
+
+### Why no Colab run was attempted in this session
+
+The Phase 8 prompt locks "Colab run ~30–45 min" as a separate step. The notebook is wired but unexecuted — the Colab run is gated on the Phase 7 re-run that's still pending (the supervisor demo flows from "show Phase 7 Tesseract → Phase 7 Gemini → Phase 8 multimodal" in order). Running Phase 8 first would burn Colab compute on a notebook the supervisor walkthrough won't reach for a day or two yet.
+
+### Phase 8 end checks (all green)
+
+- `python -c "from src.integration.compare import run_all_strategies; from src.integration.context import build_multimodal_context; print('ok')"` → `ok` (import without model load).
+- `python -c "import nbformat; print(len(nbformat.read('notebooks/phase8_multimodal_integration.ipynb',as_version=4).cells))"` → `13`.
+- `pytest tests/integration/ -q` → `22 passed in 1.70s`.
+- `git status` — `src/integration/*`, `src/soil/infer.py`, `src/disease/infer.py`, `notebooks/phase8_multimodal_integration.ipynb`, `tests/integration/*`, `scripts/build_phase8_notebook.py`, `progress.md` staged. NO chunk text / vector_db / PDFs / weights.
+- Single local commit titled `"Phase 8: multimodal integration (template + LLM-mediated query, embedding ablation) + C5 causal hook"`. **No git push.**
+
+---
+
 ## Phase 3b: register Krishi Parashara + Upavanavinoda for external Gemini OCR
 
 Phase 3 shipped 2 books (Vrikshayurveda + Brihat Samhita, 285 chunks) via local Tesseract OCR. Phase 7's first end-to-end queries surfaced a recurring failure mode — Tesseract's Devanagari-confused output occasionally derailed the grounded generator even when retrieval scores were excellent (rainfall query, etc.). Phase 3b registers two new books for a higher-quality OCR path (Gemini 3.5 Flash) **without** running any OCR or changing the chunker / metadata schema.
