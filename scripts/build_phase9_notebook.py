@@ -293,9 +293,11 @@ PLANTDOC_TARGETS = {
     ),
 }
 PHANTOMFS_TARGETS = {
-    "alluvial_soil": ("Alluvial_Soil", "Alluvial_Soil/1.jpg"),
-    "black_soil":   ("Black_Soil",   "Black_Soil/1.jpg"),
-    "red_soil":     ("Red_Soil",     "Red_Soil/1.jpg"),
+    # HF dataset's class_name column drops the "_Soil" suffix; the
+    # local raw folder keeps it. Both are listed per target.
+    "alluvial_soil": ("Alluvial", "Alluvial_Soil/1.jpg"),
+    "black_soil":   ("Black",   "Black_Soil/1.jpg"),
+    "red_soil":     ("Red",     "Red_Soil/1.jpg"),
 }
 
 
