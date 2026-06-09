@@ -221,6 +221,51 @@ class DiseaseInferenceEngine:
 
         return InferenceResult(prediction=pred, top_k=top_k_list, gradcam_overlay=overlay)
 
+    # ------------------------------------------------------------- #
+
+    def predict_with_embedding(self, image: Any) -> tuple[InferenceResult, "np.ndarray"]:
+        """Same as :meth:`predict` but also returns the penultimate B4 feature.
+
+        Phase 8 multimodal integration uses the GAP-pooled backbone
+        feature (1792-dim on B4) as one half of the visual-feature fusion
+        for the embedding-projection ablation strategy.
+
+        Returns
+        -------
+        (InferenceResult, np.ndarray)
+            Standard result plus a 1-D float32 numpy array of shape
+            ``(backbone.num_features,)``.
+        """
+        import numpy as np  # noqa: PLC0415
+        import torch  # noqa: PLC0415
+        from torch.nn import functional as F  # noqa: PLC0415
+
+        tensor = self._to_tensor(image)
+        backbone = self.model.get_feature_extractor()
+        with torch.no_grad():
+            features = backbone(tensor)            # (1, feat_dim) GAP-pooled
+            logits = self.model.head(features)
+            probs = F.softmax(logits, dim=1).squeeze(0)
+        top1_idx = int(probs.argmax().item())
+        top1_prob = float(probs[top1_idx].item())
+        k = min(5, self.num_classes)
+        top_probs, top_idx = probs.topk(k)
+        top_k_list = [
+            (self.class_names[int(i)], float(p))
+            for i, p in zip(top_idx.tolist(), top_probs.tolist(), strict=True)
+        ]
+        from src.disease.model import DiseasePrediction  # noqa: PLC0415
+
+        pred = DiseasePrediction(
+            class_index=top1_idx,
+            class_name=self.class_names[top1_idx],
+            confidence=top1_prob,
+            logits=[float(x) for x in logits.squeeze(0).tolist()],
+        )
+        result = InferenceResult(prediction=pred, top_k=top_k_list, gradcam_overlay=None)
+        embedding = features.squeeze(0).cpu().numpy().astype(np.float32)
+        return result, embedding
+
 
 __all__ = [
     "DiseaseInferenceEngine",
