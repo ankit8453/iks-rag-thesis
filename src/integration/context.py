@@ -10,11 +10,18 @@ causal pathway from images — ``causal_context`` is user-supplied.
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from src.integration.causation import CausalContext, CausalPathway
+
+# Disease-engine fallback labels look like ``class_0`` / ``class_12`` —
+# they are NEVER acceptable in downstream query construction. The
+# assertion guard below catches any leak so we never silently retrieve
+# against an index-only query again.
+_INDEX_LABEL_RE = re.compile(r"^class_\d+$", re.IGNORECASE)
 
 if TYPE_CHECKING:
     from src.disease.model import DiseasePrediction
@@ -151,6 +158,23 @@ def build_multimodal_context(
     soil_result = soil_engine.predict(soil_image, with_embedding=capture_embeddings)
     soil_pred = soil_result.prediction
     soil_emb = soil_result.embedding
+
+    # Guard against the Bug-1 regression: if the disease engine fell
+    # back to ``class_<i>`` placeholders (because no class_map.json
+    # could be resolved), the rendered Strategy-A / Strategy-B query
+    # would carry "class 0" instead of a real disease name and the
+    # whole multimodal comparison would be uninterpretable. Refuse to
+    # return a poisoned context — fail loudly here, the notebook fixes
+    # it by passing ``class_names=`` explicitly to the engine instead.
+    if _INDEX_LABEL_RE.match(disease_pred.class_name or ""):
+        raise ValueError(
+            f"Disease engine emitted placeholder label "
+            f"{disease_pred.class_name!r} instead of a real class name. "
+            "This means the engine could not resolve a class_map.json. "
+            "Pass class_names=[...] when constructing DiseaseInferenceEngine, "
+            "or ensure the relevant data/splits/<dataset>/class_map.json "
+            "is present in the repo so build_visual_context can auto-load it."
+        )
 
     return MultimodalContext(
         disease_pred=disease_pred,

@@ -146,20 +146,32 @@ class LLMMediatedStrategy:
 
         Tries (in order):
 
-        - ``llm.generate(prompt)`` — common interface
-        - ``llm.complete(prompt)``
-        - ``llm.__call__(prompt)``
+        - ``llm.complete(prompt)`` — preferred. Phase 7's
+          :class:`~src.rag.generator.GroundedGenerator` exposes this
+          method specifically for Phase 8 Strategy B; it runs the
+          tokenizer + model on a *plain* prompt with NO §17 grounding
+          wrapper (which would otherwise inject system instructions
+          for grounded advisory generation and poison the rewrite).
+        - ``llm.generate(prompt)`` — fallback for plain HF / OpenAI
+          style generators that take a string and return a string.
+          Skipped automatically if the call raises ``TypeError`` (e.g.
+          GroundedGenerator's ``generate(query, retrieved_chunks)``
+          signature mismatch).
+        - ``llm.__call__(prompt)`` — last resort.
 
-        Returns the response as a string. Each method is expected to
-        return either a ``str`` or an object with a ``.text`` attribute.
+        Each method is expected to return either a ``str`` or an object
+        with a ``.text`` attribute.
         """
-        for attr in ("generate", "complete", "__call__"):
+        for attr in ("complete", "generate", "__call__"):
             fn = getattr(llm, attr, None)
             if fn is None:
                 continue
             try:
                 out = fn(prompt)
             except TypeError:
+                # Wrong signature (e.g. GroundedGenerator.generate
+                # wants (query, retrieved_chunks)). Skip and try the
+                # next interface.
                 continue
             if isinstance(out, str):
                 return out
@@ -168,8 +180,9 @@ class LLMMediatedStrategy:
                 return text
             return str(out)
         raise TypeError(
-            "LLM object has no .generate / .complete / __call__ method; "
-            "cannot run Strategy B."
+            "LLM object has no usable .complete / .generate / __call__ "
+            "method; cannot run Strategy B. Pass a generator that exposes "
+            ".complete(prompt: str) -> str."
         )
 
 
