@@ -5,6 +5,63 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 9: explainability layer (Grad-CAM disease+3 soil heads, retrieved-chunk highlighting)
+
+Phase 9 (master plan §18) delivers the honest-interpretability surfaces the paper relies on in §35: *where* each vision model looked (Grad-CAM heatmaps) and *why* each chunk was retrieved (per-chunk matched-term overlay + similarity score panel). Built `src/explain/` end-to-end, 12-cell Colab notebook `notebooks/phase9_explainability.ipynb`, 17 unit tests. Reuses Phase 5 disease + Phase 6 soil + Phase 7 RAG + Phase 8 integration by import; models + corpus stay read-only.
+
+### Vision Grad-CAM — disease + 3 soil heads
+
+- `src/explain/gradcam.py:find_target_layer` locates the timm EfficientNet Grad-CAM target by attribute walk: prefers `backbone.conv_head` (final 1×1 expansion conv before GAP — highest-resolution class-discriminative heatmap), falls back to `backbone.blocks[-1]` with a logged WARNING so any drop in heatmap resolution is auditable. Raises `AttributeError` on a degenerate backbone (no `.conv_head`, empty `.blocks`).
+- `disease_gradcam(image_path, engine) -> GradCAMResult` runs the full-precision B4 backbone with gradients enabled (NOT inside `torch.no_grad`), preprocesses at 380×380 with ImageNet stats (matching `DiseaseInferenceEngine`'s pipeline), uses the engine's argmax prediction as the Grad-CAM target, and returns the overlay (uint8 H×W×3), raw heatmap (float32 H×W in [0,1]), the human-readable label via `engine.class_names`, the confidence, AND the raw argmax index — so the label-mapping is per-call auditable (defends against a regression of the Phase 8 placeholder-label bug).
+- `SoilHeadWrapper(soil_model, head)` is the real novelty for the multi-task soil model. `SoilMultiTaskClassifier.forward` returns `dict[head_name, tensor]`; pytorch-grad-cam's `ClassifierOutputTarget` requires a single-tensor forward, so the wrapper builds an `nn.Module` that runs `model.backbone(x)` then ONLY the chosen head's linear layer. Validates the head name against the locked `SOIL_HEADS = ("soil_type", "moisture", "texture")` tuple at construction.
+- `soil_gradcam(image_path, soil_engine, head) -> GradCAMResult` orchestrates it: preprocesses at 224×224 (matching the Phase 6 training pipeline), reads the per-head predicted label from `soil_engine.predict(...)` so the explanation targets the same label the rest of the pipeline saw, wraps + runs the CAM, and returns the same `GradCAMResult` shape as the disease version. Confidence is read from `SoilPrediction.per_head_confidence` so the caption matches Cell 9's per-head readout exactly.
+- All Grad-CAM runs force `eval()` mode (no dropout / batchnorm perturbation) and explicitly enable gradients. Both vision models are FULL-PRECISION on disk (only Llama is 4-bit) so gradients flow without bitsandbytes detangling — captured in the gradcam module docstring as a Phase 9 invariant.
+
+### Retrieved-chunk highlighting — lexical, audit-grade
+
+- `src/explain/chunk_highlight.py:tokenize(text) -> set[str]` lower-cases, strips punctuation via a tight `[A-Za-z]+` regex, drops a locked English stopword set (template-noise words like `for / in / treatment / organic` plus soil noise-words `soil / type`), drops length-≤2 tokens, and applies a crude regular-plural normaliser (strip trailing `s` on len>3 words that don't end in `ss`) so `trees ↔ tree` matches. Irregular plurals (`leaves ↔ leaf`, `branches ↔ branch`) are deliberately NOT normalised — the chunk highlighter is "thin and transparent", not an NLP stack.
+- `explain_chunks(query, retrieved_chunks) -> list[ExplainedChunk]` builds one row per hit with `rank`, `score`, `chunk_id`, `source_text / chapter / verse_or_section`, `matched_terms = sorted(query_tokens ∩ chunk_tokens)`, and `text_with_markers` — the chunk text with every matched term wrapped in `**…**` Markdown markers. The wrapper expands each matched token to also catch its regular plural form (so `leaf` in the query wraps `leafs` in the chunk; case-insensitive). Accepts both `RetrievedChunk`-style attribute access AND plain dicts (Strategy C's dict format from Phase 8).
+- Why query↔chunk instead of answer↔chunk: aligning chunks to the LLM's *answer* sentences mixes two failure modes (bad retrieval vs bad generation) into one explanation signal. Aligning to the query isolates retrieval, which is what §18 actually wants explained. The generation-side faithfulness audit comes via RAGAS in Phase 11.
+
+### Visualisation — matplotlib only
+
+- `src/explain/visualize.py:render_vision_panel(sample_name, leaf_rgb, disease_cam, soil_rgb, soil_cams)` composes a 2-row figure: row 1 is original-leaf + disease-CAM (cols 0–1, rest hidden), row 2 is original-soil + 3 soil-head CAMs (all 4 cols). Each CAM tile is captioned with `<label> (<conf>)`.
+- `render_retrieval_panel(sample_name, query, explained_chunks)` is a 2-column figure: left a horizontal bar chart of the top-k similarity scores (rank 1 at top, descending), right a monospace text listing of `#rank source ch.X v.Y` + `matched: <terms>` + a 240-char wrapped snippet of `text_with_markers`. The query is printed at the top of the listing so reviewers can read query and chunk side-by-side.
+- `save_explanation(sample_name, vision_fig, retrieval_fig, out_dir=None)` writes both figures as 140-dpi PNGs under `results/explainability/<safe_sample_name>/` and closes the figures (notebook memory hygiene). Default root is `results/explainability/` — committed because `.png` files there are paper-reference figures, not raw data.
+- Matplotlib-only so the same code surfaces inline in the Colab notebook AND inside the Phase 10 Streamlit UI's `st.pyplot` — no code duplication.
+
+### Tests — 17 / 17 passing, no GPU, no network
+
+- `tests/explain/test_smoke.py` (3) — every public symbol carries a non-empty docstring; `SOIL_HEADS` stays locked to the three Phase 6 heads; the legacy `compute_gradcam` / `highlight_chunks` back-compat shims still callable so older callers don't break.
+- `tests/explain/test_chunk_highlight.py` (8) — `tokenize` lower-cases + drops punctuation, drops every word in the locked stopword set, regular-plural normalisation works for `trees ↔ tree` and refuses to over-normalise `grass` (ss-terminating); `explain_chunks` returns `matched_terms = query ∩ chunk` per row, wraps each matched term with `**…**` markers preserving original case, handles a no-overlap chunk cleanly (matched_terms == [], text_with_markers identical to raw text), accepts both `RetrievedChunk` attribute access AND plain dicts (the Strategy C return shape from Phase 8), assigns 1-based ranks in input order.
+- `tests/explain/test_gradcam_targetlayer.py` (6) — `find_target_layer` prefers `.conv_head`, falls back to `.blocks[-1]` with a logged WARNING, raises `AttributeError` on a backbone with neither attribute or with an empty `.blocks` list; `SoilHeadWrapper` rejects an unknown head name and accepts each of the three locked Phase 6 head names. Uses tiny stub objects standing in for a timm EfficientNet — no torch needed for these tests (the actual `nn.Module` construction is exercised in the Colab notebook).
+- `pytest tests/explain/ -q` runs in <0.1 s.
+
+### Notebook — 12 cells per Phase 9 prompt §C
+
+1. Markdown — goal (§18), what Grad-CAM + chunk highlighting show, paper relevance, deferred scope (no pointing-game, no answer-grounded highlighting, no sentence-level alignment inside the answer — all Phase 11).
+2. Setup — clone + pip install (Phase 7/8 deps + `grad-cam>=1.5` + `matplotlib>=3.7`).
+3. HF auth (private chunks + gated Llama + Phase 5/6 weights).
+4. GPU check.
+5. Load disease (B4) + soil (B0 multi-task) engines; assert disease class names are not `class_<i>` placeholders (defends against Phase 8 bug 1 regression).
+6. Phase 7 RAG pipeline (corpus 206 chunks across 4 books, per-book counts asserted; HybridRetriever; Llama-3.1-8B 4-bit).
+7. Demo inputs — three REAL distinct PlantDoc test images (`Tomato leaf late blight`, `Corn rust leaf`, `Potato leaf early blight`) + Phantom-fs soil images (Alluvial, Black, Red). Asserts every path exists, predicts per-sample, asserts the three disease labels are distinct — refuses to proceed otherwise (Grad-CAM over a wrong-disease placeholder is a misleading figure).
+8. `disease_gradcam` per sample, with original + heatmap side-by-side, captioned with `<label> (idx=<i>, conf=<f>)`.
+9. `soil_gradcam` × 3 heads per sample — prints the per-head label/idx/conf table, then a 4-tile row per sample (original + 3 head heatmaps).
+10. Strategy A query construction via `build_multimodal_context` → `TemplateStrategy.build_query` → top-5 retrieval → `explain_chunks`. Prints per-sample `QUERY`, then per-chunk `#rank score source ch.X v.Y` + `matched: <terms>`.
+11. `render_vision_panel` + `render_retrieval_panel` + `save_explanation` per sample. Saves to `results/explainability/<sample>/{vision_panel,retrieval_panel}.png`. Prints saved paths.
+12. Markdown — how to read the saved panels (disease CAM should focus lesion; the three soil-head CAMs should attend different regions; bar chart should be monotone descending; chunks with `(no overlap)` are pure dense-retrieval hits, not a bug), scope deferrals, Phase 10 / 11 handoff.
+
+### Phase 9 end checks (all green)
+
+- `python -c "from src.explain.gradcam import disease_gradcam, soil_gradcam, SoilHeadWrapper; from src.explain.chunk_highlight import explain_chunks; print('ok')"` → `ok` (no model load).
+- `python -c "import nbformat; print(len(nbformat.read('notebooks/phase9_explainability.ipynb',as_version=4).cells))"` → `12`.
+- `pytest tests/explain/ -q` → `17 passed in 0.06s`.
+- `git status` — `src/explain/*`, `notebooks/phase9_explainability.ipynb`, `tests/explain/*`, `results/explainability/.gitkeep`, `scripts/build_phase9_notebook.py`, `progress.md` staged. NO chunk text / vector_db / PDFs / weights.
+- Single local commit titled `"Phase 9: explainability layer (Grad-CAM disease+3 soil heads, retrieved-chunk highlighting)"`. **No git push.**
+
+---
+
 ## Phase 8: multimodal integration (template + LLM-mediated query, embedding ablation) + C5 causal hook
 
 Phase 8 is the core-novelty wiring for **contribution C2** (joint disease + soil context module with three ablated query-construction strategies) and **contribution C5** (cause-conditional retrieval — pathway user-supplied, never image-derived). Built `src/integration/` end-to-end, the 13-cell Colab notebook `notebooks/phase8_multimodal_integration.ipynb`, and 22 unit tests. Reuses Phase 5 disease + Phase 6 soil + Phase 7 RAG code by import; corpus + models are read-only here. All paths under `src.utils.paths`; logging via `src.utils.logging_setup`. Decision matrix locked: existing class-based API kept (`MultimodalContext`, `CausalPathway` enum, `TemplateStrategy.build_query()` etc.); vestigial OLID causation-dataset + transforms code dropped (~280 LOC + 2 tests removed); Cell 6 asserts the post-Phase-3b.2 corpus snapshot (`206 chunks across 4 books` with explicit per-book counts) instead of the prompt's outdated `>285` check.
