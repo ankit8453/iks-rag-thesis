@@ -320,24 +320,77 @@ from PIL import Image
 
 from src.integration import CausalPathway
 
-# Repo-root data paths. Cell 2 cloned the repo into REPO_PATH, so
-# these resolve to /content/iks-rag-thesis/data/... in Colab.
-PLANTDOC_ROOT = Path(REPO_PATH) / "data" / "plant_disease" / "plantdoc" / "raw"
-PHANTOMFS_ROOT = Path(REPO_PATH) / "data" / "soil" / "phantomfs" / "raw" / "Orignal-Dataset"
+# Two source paths: laptop has the images locally; Colab needs them
+# pulled from the private HF Hub datasets. The cell auto-detects which
+# to use per image so the notebook runs unchanged on both.
+PLANTDOC_LOCAL_ROOT = Path(REPO_PATH) / "data" / "plant_disease" / "plantdoc" / "raw"
+PHANTOMFS_LOCAL_ROOT = Path(REPO_PATH) / "data" / "soil" / "phantomfs" / "raw" / "Orignal-Dataset"
+DEMO_SCRATCH = Path(REPO_PATH) / "_phase8_demo"
+DEMO_SCRATCH.mkdir(exist_ok=True)
 
-# Picked from data/splits/plantdoc/test.json. The image files ship
-# inside the repo so this is fully deterministic in Colab; no extra
-# downloads.
-LEAF_TOMATO = PLANTDOC_ROOT / "Tomato leaf late blight" / "image.jpg"
-LEAF_CORN = PLANTDOC_ROOT / "Corn rust leaf" / "Corn-southern-rust-advanced-F1b-8-7-15.jpg"
-LEAF_POTATO = PLANTDOC_ROOT / "Potato leaf early blight" / "fac66s01a.jpg"
 
-# Phantom-fs Original-Dataset class folders — 1.jpg present for every
-# soil type. Different soil types per sample so the soil_type label
-# in Strategy A's query actually varies.
-SOIL_ALLUVIAL = PHANTOMFS_ROOT / "Alluvial_Soil" / "1.jpg"
-SOIL_BLACK = PHANTOMFS_ROOT / "Black_Soil" / "1.jpg"
-SOIL_RED = PHANTOMFS_ROOT / "Red_Soil" / "1.jpg"
+def _resolve_demo_image(
+    *, kind: str, dataset_id: str, split: str, label_col: str, label_value: str,
+    local_root: Path, local_rel: str, scratch_key: str,
+) -> Path:
+    \"\"\"Try local repo first; fall back to HF dataset → JPEG on disk.\"\"\"
+    p = local_root / local_rel
+    if p.is_file() and p.stat().st_size > 0:
+        return p
+    cached = DEMO_SCRATCH / f"{kind}__{scratch_key}.jpg"
+    if cached.is_file() and cached.stat().st_size > 0:
+        return cached
+    from datasets import load_dataset
+    ds = load_dataset(dataset_id, split=split)
+    for sample in ds:
+        if sample.get(label_col) == label_value:
+            sample["image"].convert("RGB").save(cached, format="JPEG")
+            return cached
+    raise RuntimeError(
+        f"No sample with {label_col}={label_value!r} in {dataset_id}:{split}."
+    )
+
+
+LEAF_TOMATO = _resolve_demo_image(
+    kind="plantdoc", dataset_id="ankit-iiitdmj/iks-plantdoc", split="test",
+    label_col="label", label_value="Tomato leaf late blight",
+    local_root=PLANTDOC_LOCAL_ROOT,
+    local_rel="Tomato leaf late blight/image.jpg",
+    scratch_key="tomato",
+)
+LEAF_CORN = _resolve_demo_image(
+    kind="plantdoc", dataset_id="ankit-iiitdmj/iks-plantdoc", split="test",
+    label_col="label", label_value="Corn rust leaf",
+    local_root=PLANTDOC_LOCAL_ROOT,
+    local_rel="Corn rust leaf/Corn-southern-rust-advanced-F1b-8-7-15.jpg",
+    scratch_key="corn",
+)
+LEAF_POTATO = _resolve_demo_image(
+    kind="plantdoc", dataset_id="ankit-iiitdmj/iks-plantdoc", split="test",
+    label_col="label", label_value="Potato leaf early blight",
+    local_root=PLANTDOC_LOCAL_ROOT,
+    local_rel="Potato leaf early blight/fac66s01a.jpg",
+    scratch_key="potato",
+)
+
+SOIL_ALLUVIAL = _resolve_demo_image(
+    kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
+    label_col="class_name", label_value="Alluvial_Soil",
+    local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Alluvial_Soil/1.jpg",
+    scratch_key="alluvial",
+)
+SOIL_BLACK = _resolve_demo_image(
+    kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
+    label_col="class_name", label_value="Black_Soil",
+    local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Black_Soil/1.jpg",
+    scratch_key="black",
+)
+SOIL_RED = _resolve_demo_image(
+    kind="phantomfs", dataset_id="ankit-iiitdmj/iks-soil-phantomfs", split="train",
+    label_col="class_name", label_value="Red_Soil",
+    local_root=PHANTOMFS_LOCAL_ROOT, local_rel="Red_Soil/1.jpg",
+    scratch_key="red",
+)
 
 DEMO_SAMPLES = [
     {
@@ -372,11 +425,9 @@ for s in DEMO_SAMPLES:
         p = Path(s[kind])
         assert p.is_file(), f"Demo image missing: {p}"
         assert p.stat().st_size > 0, f"Demo image is empty: {p}"
-    leaf_rel = Path(s["leaf_path"]).relative_to(PLANTDOC_ROOT.parents[2])
-    soil_rel = Path(s["soil_path"]).relative_to(PHANTOMFS_ROOT.parents[2])
     print(f"  - {s['name']}  pathway={s['pathway'].value}")
-    print(f"      leaf : {leaf_rel}")
-    print(f"      soil : {soil_rel}")
+    print(f"      leaf : {s['leaf_path']}")
+    print(f"      soil : {s['soil_path']}")
 
 # Optional upload widget (skipped on `Run all` in the deterministic
 # walkthrough; uncomment to run a real farmer-uploaded image in the
