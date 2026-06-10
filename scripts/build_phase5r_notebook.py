@@ -1,7 +1,11 @@
 """Generate ``notebooks/phase5r_retrain.ipynb`` (Phase 5-R Part 2).
 
-12 cells per the prompt's locked structure. Same builder pattern as
-``build_phase7_notebook.py`` etc.
+12 cells, HF-first end-to-end (same pattern as the original Phase 5
+trainer): no local file paths, every dataset pulled from HuggingFace,
+every checkpoint saved AND resumed via the HF model namespace
+``ankit-iiitdmj/iks-disease-r-*``. A free-Colab session timeout
+mid-stage is harmless — re-running the same cell pulls
+``checkpoint_latest.pt`` from HF and resumes from the saved epoch.
 """
 
 from __future__ import annotations
@@ -33,7 +37,7 @@ def code(text: str) -> None:
 
 # ----------------------------- Cell 1 — title md ---------------------------
 md(
-    """# Phase 5-R Part 2 — Background-randomization retrain + no-leaf reject + Grad-CAM verdict
+    """# Phase 5-R Part 2 — Background-randomization retrain (HF-first, resumable)
 
 Phase 9 Grad-CAM revealed that the original Phase-5 disease cascade
 attends to **image corners / backgrounds / watermarks** rather than the
@@ -41,48 +45,49 @@ leaf — only 3 of 256 PlantDoc test images had the CAM peak inside the
 central 60 % box. Phase 5-R retrains the cascade with **randomized
 backgrounds** so the background can no longer act as a label cue.
 
-## What changes (Phase 5-R)
+## Same plumbing as the original Phase 5
+
+This notebook follows the exact same Colab-friendly pattern as
+`notebooks/phase5_disease_training.ipynb`:
+
+- Every dataset is pulled from HuggingFace via `load_dataset(...)` —
+  **NO local file paths**, so a fresh Colab runtime works.
+- Every checkpoint is saved to **HF Hub** through `CheckpointManager`
+  → push `checkpoint_latest.pt` + `checkpoint_best.pt` after every
+  epoch.
+- Resume is automatic: a free-Colab session timeout mid-stage is
+  harmless — re-running the same cell pulls `checkpoint_latest.pt`
+  from HF and continues from the saved epoch.
+
+## What's different from Phase 5
 
 - **PlantVillage stage** — train on leaves segmented out (Part 1
   classical pipeline) and composited onto **random soil / urban
   backgrounds** each epoch. Same architecture, same hyperparameters,
-  same seed — *only* the input pipeline changes.
+  same seed.
 - **Paddy Doctor stage** — train as-is. Part 1 verdict: paddy is
   full-canopy field photos with no meaningful foreground/background
-  split, so randomization would be meaningless.
-- **PlantDoc stage** — same randomization (Part 1 rembg pipeline)
-  PLUS a **28th `no_leaf` reject class** drawn from Dr. Pandey's
-  `Background_without_leaves` folder. This makes the model refuse to
-  classify a non-leaf input, which feeds the Phase 10 Streamlit UI
-  guardrail.
+  split.
+- **PlantDoc stage** — same randomization PLUS a **28th `no_leaf`
+  reject class** drawn from Pandey's `Background_without_leaves`
+  (laptop only) OR the soil backgrounds (Colab fallback).
 
-## Keep or revert
-
-This is a **controlled experiment**. The decision rule (encoded in
-`src.disease.gradcam_audit.keep_or_revert`):
+## Keep / revert rule
 
 | Outcome | Decision |
 |---|---|
-| Central-attention rate up by **≥ 5 pp** AND test top-1 accuracy not down by **> 3 pp** | **KEEP** the new model; re-run Phase 9 with it. |
-| Otherwise | **REVERT** to the old model; document the bias as a Phase-11 follow-up. |
+| Central-attention rate up by ≥ 5 pp AND test top-1 not down by > 3 pp | **KEEP** the new model; re-run Phase 9 with it. |
+| Otherwise | **REVERT**; document the bias as a Phase-11 follow-up. |
 
 Old (`iks-disease-*`) and new (`iks-disease-r-*`) checkpoints live in
-separate namespaces so revert is trivial.
-
-## Hard rules (master plan §16)
-
-- Local commits only — never `git push`.
-- Do NOT merge Dr. Pandey's leaf classes (his dataset is a confirmed
-  PlantVillage re-pack per `docs/pandey_dataset_inspection.md`).
-  Only his `Background_without_leaves` folder enters this pipeline.
-- Reuse Phase 5-R Part 1 code (`src/disease/segment.py`,
-  `src/disease/backgrounds.py`) — don't rewrite the segmenters here.
+separate HF namespaces so revert is trivial (just keep using the old
+one).
 """
 )
 
 # ----------------------------- Cell 2 — setup ------------------------------
 code(
-    f"""# Cell 2 — clone repo + install dependencies + HF auth + GPU check
+    f"""# Cell 2 — clone repo + install deps + HF login + GPU check.
 import os
 import subprocess
 import sys
@@ -97,7 +102,6 @@ else:
 os.chdir(REPO_PATH)
 sys.path.insert(0, REPO_PATH)
 
-# Phase 5-R adds rembg + onnxruntime on top of Phase 5/7 deps.
 DEPS = [
     "timm>=1.0",
     "albumentations>=1.4",
@@ -111,49 +115,48 @@ DEPS = [
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", *DEPS], check=True)
 print("Dependencies installed.")
 
-# HF auth — needed to pull the existing iks-* datasets + the OLD
-# baseline model.
 from huggingface_hub import HfApi, login
 login()
-print(f"HF user: {{HfApi().whoami().get('name')}}")
+me = HfApi().whoami()
+print(f"HF user: {{me.get('name')}}  role={{me.get('auth',{{}}).get('accessToken',{{}}).get('role')}}")
+assert me.get("name") == "ankit-iiitdmj", (
+    "HF token must belong to ankit-iiitdmj — Phase 5-R writes new "
+    "checkpoints to ankit-iiitdmj/iks-disease-r-*."
+)
 
-# GPU check — T4 is enough for B4@380; sub-15-min epochs typical.
 import torch
 print(f"torch: {{torch.__version__}}  cuda: {{torch.cuda.is_available()}}")
 if torch.cuda.is_available():
     print(f"device: {{torch.cuda.get_device_name(0)}}")
 else:
-    print("WARNING: no GPU. The cascade will be infeasibly slow on CPU.")
+    print("WARNING: no GPU. The cascade is infeasibly slow on CPU.")
 """
 )
 
 # ----------------------------- Cell 3 — bg pool ----------------------------
 code(
-    """# Cell 3 — Build the random-background pool + show 8 samples.
-# Same pool used by Part 1 QC: Phantom-fs soils + Sirajganj moisture
-# variants + Dr. Pandey's Background_without_leaves urban photos.
-from pathlib import Path
+    """# Cell 3 — Background pool. On the laptop the local soil trees +
+# Pandey folder are walked directly. On Colab the local trees are
+# absent; build_background_pool() then transparently downloads from
+# the published HF soil datasets and caches under data/_bg_cache/.
+import random
 
 import matplotlib.pyplot as plt
 from PIL import Image
 
 from src.disease.backgrounds import (
-    DEFAULT_BACKGROUND_ROOTS,
-    build_background_pool,
-    pool_size_by_source,
+    build_background_pool, pool_size_by_source,
 )
 
-# Cap each source at 1k for the cell — full pool is built fresh at training time.
-pool = build_background_pool(max_per_source=1000)
+pool = build_background_pool()  # uses HF fallback when local roots missing
 sizes = pool_size_by_source(pool)
 print("Background pool sizes per source:")
 for src, n in sizes.items():
     print(f"  {src:<24} {n}")
 print(f"  TOTAL                   {len(pool)}")
-assert len(pool) > 0, "Empty background pool — check the configured roots."
+assert len(pool) > 0, "Empty background pool — check HF auth + dataset access."
 
-# 8-image preview (3 phantomfs, 3 sirajganj, 2 pandey if available).
-import random
+# 8-image preview so we can SEE what the trainer will composite onto.
 rng = random.Random(42)
 preview = rng.sample(pool, min(8, len(pool)))
 fig, axes = plt.subplots(2, 4, figsize=(16, 8))
@@ -168,342 +171,334 @@ plt.tight_layout(); plt.show()
 
 # ----------------------------- Cell 4 — segment + cache --------------------
 code(
-    """# Cell 4 — Segment + cache masks for PlantVillage (classical) +
-# PlantDoc (rembg). Paddy Doctor is NOT segmented (Part 1 verdict).
-# Idempotent: a second run skips cached masks.
-from pathlib import Path
+    """# Cell 4 — Segment + cache masks for the randomized stages.
+# PlantVillage uses the classical pipeline; PlantDoc uses rembg/U2Net.
+# Paddy Doctor is NOT cached (Part 1 verdict: train as-is).
+#
+# Idempotent: a re-run hits the cache for any row already processed.
+# Resumable: a Colab session timeout mid-segmentation leaves the
+# already-cached masks intact; re-run picks up where it left off.
+from src.disease.segment_cache import (
+    build_mask_cache_from_hf, load_flagged_set,
+)
 
-from src.disease.segment_cache import build_mask_cache
-from src.utils.data_splits import load_split
-from src.utils.paths import PROJECT_ROOT, DATA_PLANT_DISEASE_DIR
-
-SPLITS_ROOT = PROJECT_ROOT / "data" / "splits"
-
-
-def _build_image_iter(splits_dir, raw_root):
-    \"\"\"Concatenate train + val + test relpaths so the cache covers every
-    image the trainer might draw at any stage.\"\"\"
-    out = []
-    seen = set()
-    for split in ("train", "val", "test"):
-        entries = load_split(splits_dir / f"{split}.json")
-        for e in entries:
-            rel = str(e.path).replace("\\\\", "/")
-            if rel in seen:
-                continue
-            seen.add(rel)
-            out.append((rel, raw_root / e.path))
-    return out
-
-
-# PlantVillage — classical HSV+Otsu+GrabCut
-pv_root = DATA_PLANT_DISEASE_DIR / "plantvillage" / "raw" / "plantvillage dataset" / "color"
-pv_iter = _build_image_iter(SPLITS_ROOT / "plantvillage", pv_root)
-print(f"PlantVillage images to segment: {len(pv_iter)}")
-pv_stats = build_mask_cache("plantvillage", "lab", pv_iter, log_every=500)
-
-# PlantDoc — rembg (U2Net). First call downloads ~170 MB.
-pd_root = DATA_PLANT_DISEASE_DIR / "plantdoc" / "raw"
-pd_iter = _build_image_iter(SPLITS_ROOT / "plantdoc", pd_root)
-print(f"PlantDoc images to segment: {len(pd_iter)}")
-pd_stats = build_mask_cache("plantdoc", "field", pd_iter, log_every=50)
+print("=== PlantVillage (classical) ===")
+for split in ("train", "val", "test"):
+    stats = build_mask_cache_from_hf(
+        dataset_repo="ankit-iiitdmj/iks-plantvillage",
+        dataset_id="plantvillage",
+        split=split, style="lab", log_every=500,
+    )
+    print(f"  {split:<6} total={stats.total:>5} new={stats.newly_segmented:>5}"
+          f" flagged={stats.flagged:>4} ({stats.flagged_fraction:>5.1%})"
+          f" failures={stats.failures}")
 
 print()
-print("=== Segmentation summary ===")
-for stats in (pv_stats, pd_stats):
-    print(
-        f"  {stats.dataset:<14} total={stats.total:>5}  "
-        f"new={stats.newly_segmented:>5}  flagged={stats.flagged:>4} "
-        f"({stats.flagged_fraction:>5.1%})  failures={stats.failures}"
+print("=== PlantDoc (rembg / U2Net) ===")
+for split in ("train", "val", "test"):
+    stats = build_mask_cache_from_hf(
+        dataset_repo="ankit-iiitdmj/iks-plantdoc",
+        dataset_id="plantdoc",
+        split=split, style="field", log_every=50,
     )
-assert pv_stats.flagged_fraction < 0.10, (
-    f"PlantVillage flagged fraction {pv_stats.flagged_fraction:.1%} is high — "
-    "review the segmentation before training."
-)
-assert pd_stats.flagged_fraction < 0.20, (
-    f"PlantDoc flagged fraction {pd_stats.flagged_fraction:.1%} is high — "
-    "review the segmentation before training."
-)
+    print(f"  {split:<6} total={stats.total:>5} new={stats.newly_segmented:>5}"
+          f" flagged={stats.flagged:>4} ({stats.flagged_fraction:>5.1%})"
+          f" failures={stats.failures}")
+
+print()
+print(f"Flagged keys persisted across splits:"
+      f" plantvillage={len(load_flagged_set('plantvillage'))},"
+      f" plantdoc={len(load_flagged_set('plantdoc'))}")
 """
 )
 
-# ----------------------------- Cell 5 — sanity composites -----------------
+# ----------------------------- Cell 5 — sanity composites ------------------
 code(
-    """# Cell 5 — Sanity: render 6 on-the-fly composites so we can confirm
-# the training inputs look right (leaves cleanly cut, bg looks like soil).
+    """# Cell 5 — Sanity: render 6 on-the-fly composites from the actual
+# randomized dataset wrapper. If anything looks off (mask misses the
+# leaf, bg pattern bleeding through where the leaf should be opaque,
+# etc.) STOP and re-segment before letting Stage 1 run.
 import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
+from datasets import load_dataset
 
-from src.disease.backgrounds import composite_leaf_on_bg
-from src.disease.randomized_dataset import build_samples_from_split
-from src.disease.segment_cache import mask_path_for
-from src.utils.paths import PROJECT_ROOT, DATA_PLANT_DISEASE_DIR
+from src.disease.randomized_dataset import HFRandomizedDiseaseDataset
 
 rng = random.Random(123)
 
-# Pick 3 PlantVillage + 3 PlantDoc samples whose masks were NOT flagged.
-def _sample_unflagged(splits_dir, raw_root, dataset_id, n):
-    samples = build_samples_from_split(
-        splits_dir / "train.json", raw_root, mode="randomize",
+def _preview(dataset_repo, dataset_id, n_rows=3):
+    hf_train = load_dataset(dataset_repo, split="train")
+    ds = HFRandomizedDiseaseDataset(
+        hf_split=hf_train, dataset_id=dataset_id, split="train",
+        mode="randomize", bg_pool=pool, transform=None, no_leaf_rows=[],
+        seed=123,
     )
-    rng.shuffle(samples)
+    ds.set_epoch(0)
     out = []
-    for s in samples:
-        mp = mask_path_for(dataset_id, s.rel_path)
-        if mp.is_file():
-            out.append(s)
-            if len(out) >= n:
-                break
+    indices = rng.sample(range(len(hf_train)), n_rows)
+    for idx in indices:
+        composed_arr, label = ds[idx]
+        out.append((idx, label, composed_arr))
     return out
 
-pv_samples = _sample_unflagged(
-    PROJECT_ROOT / "data" / "splits" / "plantvillage",
-    DATA_PLANT_DISEASE_DIR / "plantvillage" / "raw" / "plantvillage dataset" / "color",
-    "plantvillage", 3,
-)
-pd_samples = _sample_unflagged(
-    PROJECT_ROOT / "data" / "splits" / "plantdoc",
-    DATA_PLANT_DISEASE_DIR / "plantdoc" / "raw",
-    "plantdoc", 3,
-)
+previews = _preview("ankit-iiitdmj/iks-plantvillage", "plantvillage") + \\
+           _preview("ankit-iiitdmj/iks-plantdoc",     "plantdoc")
 
-fig, axes = plt.subplots(6, 3, figsize=(12, 18))
-for i, s in enumerate(pv_samples + pd_samples):
-    dataset = "plantvillage" if i < 3 else "plantdoc"
-    img = Image.open(s.abs_path).convert("RGB")
-    mask = Image.open(mask_path_for(dataset, s.rel_path)).convert("L")
-    bg = rng.choice(pool)
-    comp = composite_leaf_on_bg(img, mask, bg.path, out_size=img.size, rng=rng)
-    axes[i, 0].imshow(img); axes[i, 0].set_title(f"{dataset}: original", fontsize=9); axes[i, 0].axis("off")
-    axes[i, 1].imshow(mask, cmap="gray"); axes[i, 1].set_title("cached mask", fontsize=9); axes[i, 1].axis("off")
-    axes[i, 2].imshow(comp); axes[i, 2].set_title(f"composite on {bg.source}", fontsize=9); axes[i, 2].axis("off")
+fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+for i, (idx, label, arr) in enumerate(previews):
+    ax = axes[i // 3, i % 3]
+    ax.imshow(arr); ax.set_title(f"idx={idx} label={label}", fontsize=10); ax.axis("off")
 plt.tight_layout(); plt.show()
 """
 )
 
-# ----------------------------- Cell 6 — stage 1 (PlantVillage) -------------
+# ----------------------------- Cell 6 — Stage 1 (PlantVillage) -------------
 code(
     """# Cell 6 — Stage 1: pretrain B4 on randomized PlantVillage (38 classes).
-# Same architecture / hyperparameters / seed as the original Phase 5
-# trainer. The ONLY difference is the input pipeline (randomized vs raw).
+# Saves to ankit-iiitdmj/iks-disease-r-plantvillage every epoch. If
+# this cell is interrupted (Colab timeout), re-running it pulls
+# checkpoint_latest.pt and resumes from the saved epoch.
 import torch
 
 from src.disease.config import DiseaseConfig
 from src.disease.train_cascade_r import train_one_stage_r
 
-config = DiseaseConfig()      # default seed=42, B4@380, AdamW
+config = DiseaseConfig()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-result_pv = train_one_stage_r("pretrain_r", config=config, device=device,
-                              initial_state_dict=None)
-print(f"Stage 1 done: best_val_acc={result_pv.best_val_acc:.4f}")
-print(f"Checkpoint:   {result_pv.final_ckpt}")
+result_pv = train_one_stage_r(
+    "pretrain_r", config=config, device=device,
+    initial_state_dict=None, resume_from_hub=True,
+)
+print(f"\\nStage 1 done: best_val_acc={result_pv.best_val_acc:.4f}")
+print(f"Checkpoints on HF: {result_pv.model_repo}")
 """
 )
 
-# ----------------------------- Cell 7 — stage 2 (Paddy) -------------------
+# ----------------------------- Cell 7 — Stage 2 (Paddy) -------------------
 code(
-    """# Cell 7 — Stage 2: finetune on Paddy Doctor as-is (no segmentation,
-# no randomization). Warm-starts from Stage 1's best checkpoint via
-# strict=False so the 38-class head can be replaced by a 10-class one.
+    """# Cell 7 — Stage 2: finetune on Paddy Doctor as-is (no randomization).
+# Warm-starts from Stage 1's best on HF; saves to
+# ankit-iiitdmj/iks-disease-r-paddy-doctor.
 import torch
 
-prior_state = torch.load(result_pv.final_ckpt, map_location="cpu", weights_only=False)
+from huggingface_hub import hf_hub_download
+
+local = hf_hub_download(
+    repo_id="ankit-iiitdmj/iks-disease-r-plantvillage",
+    filename="checkpoint_best.pt",
+    repo_type="model",
+)
+prior_state = torch.load(local, map_location="cpu", weights_only=False)
 prior_state = prior_state.get("model_state", prior_state)
 
 result_paddy = train_one_stage_r(
     "finetune_paddy_r", config=config, device=device,
-    initial_state_dict=prior_state,
+    initial_state_dict=prior_state, resume_from_hub=True,
 )
-print(f"Stage 2 done: best_val_acc={result_paddy.best_val_acc:.4f}")
-print(f"Checkpoint:   {result_paddy.final_ckpt}")
+print(f"\\nStage 2 done: best_val_acc={result_paddy.best_val_acc:.4f}")
+print(f"Checkpoints on HF: {result_paddy.model_repo}")
 """
 )
 
-# ----------------------------- Cell 8 — stage 3 (PlantDoc + no_leaf) ------
+# ----------------------------- Cell 8 — Stage 3 (PlantDoc + no_leaf) -------
 code(
-    """# Cell 8 — Stage 3: finetune on randomized PlantDoc + the no_leaf
-# reject class (28 classes total). Warm-starts from Stage 2.
+    """# Cell 8 — Stage 3: finetune on randomized PlantDoc + 28th no_leaf
+# class. Warm-starts from Stage 2; saves to
+# ankit-iiitdmj/iks-disease-r-plantdoc.
 import torch
 
-prior_state = torch.load(result_paddy.final_ckpt, map_location="cpu", weights_only=False)
+from huggingface_hub import hf_hub_download
+
+local = hf_hub_download(
+    repo_id="ankit-iiitdmj/iks-disease-r-paddy-doctor",
+    filename="checkpoint_best.pt",
+    repo_type="model",
+)
+prior_state = torch.load(local, map_location="cpu", weights_only=False)
 prior_state = prior_state.get("model_state", prior_state)
 
 result_pd = train_one_stage_r(
     "finetune_plantdoc_r", config=config, device=device,
-    initial_state_dict=prior_state,
+    initial_state_dict=prior_state, resume_from_hub=True,
 )
-print(f"Stage 3 done: best_val_acc={result_pd.best_val_acc:.4f}")
-print(f"Checkpoint:   {result_pd.final_ckpt}")
+print(f"\\nStage 3 done: best_val_acc={result_pd.best_val_acc:.4f}")
+print(f"Checkpoints on HF: {result_pd.model_repo}")
 """
 )
 
 # ----------------------------- Cell 9 — RAW test eval ---------------------
 code(
-    """# Cell 9 — Evaluate the new model on RAW (un-composited) original
-# test splits — directly comparable to the original Phase 5 numbers.
-# Also reports the no_leaf reject head's precision/recall.
+    """# Cell 9 — Evaluate the NEW cascade on RAW (un-composited) test
+# splits — directly comparable to the original Phase 5 numbers.
+# Also reports the no_leaf reject precision / recall at the
+# PlantDoc stage.
 import torch
 
+from datasets import load_dataset
+
 from src.disease.infer import DiseaseInferenceEngine
-from src.disease.train_cascade_r import (
-    CHECKPOINT_ROOT_R, build_loaders_for_stage,
-)
-from src.utils.data_splits import load_class_map
-from src.utils.paths import PROJECT_ROOT
+from src.disease.train_cascade_r import STAGE_INFO_R
+from src.disease.transforms import build_disease_eval_aug
 
-PV_NS = CHECKPOINT_ROOT_R / "iks-disease-r-plantvillage" / "checkpoint_best.pt"
-PADDY_NS = CHECKPOINT_ROOT_R / "iks-disease-r-paddy-doctor" / "checkpoint_best.pt"
-PD_NS = CHECKPOINT_ROOT_R / "iks-disease-r-plantdoc" / "checkpoint_best.pt"
+mean = (0.485, 0.456, 0.406); std = (0.229, 0.224, 0.225)
+eval_aug = build_disease_eval_aug(380, mean, std)
 
 
-def _eval_stage(stage_name, ckpt_path, class_map_path):
-    cm = load_class_map(class_map_path) if class_map_path.is_file() else None
-    class_names = [k for k, _ in sorted(cm.items(), key=lambda kv: kv[1])] if cm else None
-    eng = DiseaseInferenceEngine(
-        model_source=str(ckpt_path),
+def _eval_stage(stage_name):
+    info = STAGE_INFO_R[stage_name]
+    repo = info["model_repo"]
+    print(f"--- {stage_name}  ({repo}) ---")
+    engine = DiseaseInferenceEngine(
+        model_source=repo,
         device="cuda" if torch.cuda.is_available() else "cpu",
-        class_names=class_names,
     )
-    _, _, test_loader, _ = build_loaders_for_stage(
-        stage_name, batch_size=16, num_workers=2, seed=42,
-    )
+    hf_test = load_dataset(info["dataset_repo"], split="test")
     n_total = n_correct = 0
-    per_class_tp = {}; per_class_pp = {}; per_class_pred_total = {}
-    no_leaf_idx = None
-    if class_names and "no_leaf" in class_names:
-        no_leaf_idx = class_names.index("no_leaf")
-    for images, labels in test_loader:
-        images = images.to(eng.device)
+    import numpy as np
+    no_leaf_idx = info["num_classes"] - 1 if info.get("add_no_leaf") else None
+    tp = pp_gt = pp_pred = 0
+    for row in hf_test:
+        arr = np.asarray(row["image"].convert("RGB"))
+        tensor = eval_aug(image=arr)["image"].unsqueeze(0).to(engine.device)
         with torch.no_grad():
-            logits = eng.model(images)
-        preds = logits.argmax(dim=1).cpu().tolist()
-        for p, y in zip(preds, labels.tolist()):
-            n_total += 1
-            if p == y: n_correct += 1
-            per_class_pp[y] = per_class_pp.get(y, 0) + 1
-            per_class_pred_total[p] = per_class_pred_total.get(p, 0) + 1
-            if p == y:
-                per_class_tp[y] = per_class_tp.get(y, 0) + 1
+            logits = engine.model(tensor)
+        pred = int(logits.argmax(dim=1).item())
+        n_total += 1
+        if pred == int(row["label_idx"]):
+            n_correct += 1
+        if no_leaf_idx is not None:
+            if int(row["label_idx"]) == no_leaf_idx:
+                pp_gt += 1
+                if pred == no_leaf_idx:
+                    tp += 1
+            if pred == no_leaf_idx:
+                pp_pred += 1
     acc = n_correct / max(1, n_total)
-    print(f"  {stage_name:<22} top-1 acc = {acc:.4f}   n={n_total}")
+    print(f"  top-1 acc = {acc:.4f}  n={n_total}")
     if no_leaf_idx is not None:
-        tp = per_class_tp.get(no_leaf_idx, 0)
-        pp = per_class_pp.get(no_leaf_idx, 0)
-        ppt = per_class_pred_total.get(no_leaf_idx, 0)
-        prec = tp / max(1, ppt)
-        rec = tp / max(1, pp)
-        print(f"    no_leaf reject class: precision={prec:.3f}  recall={rec:.3f}  "
-              f"(support: {pp} GT, {ppt} predicted)")
+        prec = tp / max(1, pp_pred); rec = tp / max(1, pp_gt)
+        print(f"  no_leaf: precision={prec:.3f}  recall={rec:.3f}"
+              f"  (GT={pp_gt}, predicted={pp_pred})")
     return acc
 
-print("=== NEW model evaluation on RAW test splits ===")
-acc_pv = _eval_stage("pretrain_r", PV_NS,
-                     PROJECT_ROOT / "data" / "splits" / "plantvillage" / "class_map.json")
-acc_paddy = _eval_stage("finetune_paddy_r", PADDY_NS,
-                     PROJECT_ROOT / "data" / "splits" / "paddy_doctor" / "class_map.json")
-acc_pd = _eval_stage("finetune_plantdoc_r", PD_NS,
-                     PROJECT_ROOT / "data" / "splits" / "plantdoc" / "class_map.json")
+acc_pv = _eval_stage("pretrain_r")
+acc_paddy = _eval_stage("finetune_paddy_r")
+acc_pd = _eval_stage("finetune_plantdoc_r")
 """
 )
 
 # ----------------------------- Cell 10 — Grad-CAM audit -------------------
 code(
     """# Cell 10 — Grad-CAM central-attention audit, OLD vs NEW, on the
-# SAME PlantDoc test images. This is the headline number the keep/revert
-# decision rule reads. ~5-7 min on T4.
+# same PlantDoc test images. This is the headline metric for the
+# keep/revert decision. ~5-7 min on T4.
+import json
+from pathlib import Path
+
+import torch
+
 from src.disease.gradcam_audit import (
+    DEFAULT_OLD_REPO,
     keep_or_revert, print_comparison, run_old_vs_new,
 )
+from src.disease.infer import DiseaseInferenceEngine
 
-old_summary, new_summary = run_old_vs_new(device="cuda" if torch.cuda.is_available() else "cpu")
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# Build the NEW engine from the HF model repo we just pushed to.
+new_engine = DiseaseInferenceEngine(
+    model_source="ankit-iiitdmj/iks-disease-r-plantdoc",
+    device=device,
+)
+# OLD engine is the existing Phase-5 model on HF.
+old_engine = DiseaseInferenceEngine(
+    model_source=DEFAULT_OLD_REPO, device=device,
+)
+
+old_summary, new_summary = run_old_vs_new(
+    old_engine=old_engine, new_engine=new_engine, device=device,
+)
 print_comparison(old_summary, new_summary)
-
 verdict = keep_or_revert(old_summary, new_summary)
 print()
 print(f"VERDICT: {verdict}")
 
-# Persist the audit to docs/ so future re-runs can compare against today.
-import json
-from pathlib import Path
-audit_path = Path("docs/phase5r_audit.json")
-audit_path.parent.mkdir(exist_ok=True)
-audit_path.write_text(json.dumps({
-    "old": old_summary.to_json(),
-    "new": new_summary.to_json(),
-    "verdict": verdict,
-}, indent=2), encoding="utf-8")
-print(f"Audit JSON saved to {audit_path}")
+Path("docs").mkdir(exist_ok=True)
+Path("docs/phase5r_audit.json").write_text(
+    json.dumps(
+        {"old": old_summary.to_json(),
+         "new": new_summary.to_json(),
+         "verdict": verdict},
+        indent=2,
+    ),
+    encoding="utf-8",
+)
+print("Audit JSON saved to docs/phase5r_audit.json")
 """
 )
 
 # ----------------------------- Cell 11 — verdict md -----------------------
 md(
-    """## VERDICT — keep or revert (read the table above)
+    """## VERDICT — keep or revert (read the table from Cell 10)
 
-| Metric | Old (Phase 5) | New (Phase 5-R) | Delta | Threshold |
+| Metric | OLD (Phase 5) | NEW (Phase 5-R) | Delta | Threshold |
 |---|---:|---:|---:|---|
-| Central-attention rate (CAM peak in central 60% box) | filled in by Cell 10 | filled in by Cell 10 | filled in | **gain >= +5 pp** |
-| Top-1 accuracy on RAW PlantDoc test | filled in by Cell 10 | filled in by Cell 10 | filled in | **drop <= 3 pp** |
+| Central-attention rate (CAM peak in central 60 % box) | filled by Cell 10 | filled by Cell 10 | filled by Cell 10 | gain ≥ +5 pp |
+| Top-1 accuracy on RAW PlantDoc test | filled by Cell 10 | filled by Cell 10 | filled by Cell 10 | drop ≤ 3 pp |
 
-The decision rule (`src.disease.gradcam_audit.keep_or_revert`):
+`src.disease.gradcam_audit.keep_or_revert(old, new)` encodes the rule
+above and printed the decision in Cell 10.
 
-- **KEEP** the new model iff *both* thresholds are met. Push the new
-  checkpoint to `ankit-iiitdmj/iks-disease-r-plantdoc`, re-run the
-  Phase 9 notebook with it for honest lesion-focused figures, and the
-  `no_leaf` reject class wires into the Phase 10 Streamlit UI guardrail
-  ("we don't think this is a leaf — please retry with a leaf image").
-- **REVERT** otherwise. The old `iks-disease-*` checkpoints are
-  untouched (separate namespace) so revert is just "ignore the new
-  ones". Document the unchanged shortcut bias as a Phase-11
-  RAGAS / pointing-game follow-up.
+- **KEEP**: both thresholds met. Re-run `notebooks/phase9_explainability.ipynb`
+  with `disease_engine` pointing at `ankit-iiitdmj/iks-disease-r-plantdoc`
+  to refresh the figures, and wire the no_leaf reject head into the
+  Phase 10 Streamlit UI guardrail.
+- **REVERT**: keep using `ankit-iiitdmj/iks-disease-plantdoc`; document
+  the unchanged bias as a Phase-11 RAGAS / pointing-game follow-up.
+  The old checkpoints are untouched (separate namespace) so revert is
+  literally "ignore the new ones".
 
 A null result (bias unchanged or accuracy regressed) is a **valid,
-documentable finding** — not a failure. The point of the experiment
-is to *measure* the effect, not to force a win.
+documentable finding** — the point of the experiment is to *measure*
+the effect, not to force a win.
 """
 )
 
 # ----------------------------- Cell 12 — next steps md --------------------
 md(
-    """## What comes next (whichever way the verdict lands)
+    """## What comes next
 
 ### If KEEP
 
-1. Push the three new checkpoints (`iks-disease-r-*`) to HF. The old
-   ones stay live until Phase 9 confirms the new ones produce better
-   figures.
+1. Tag a release on the three `ankit-iiitdmj/iks-disease-r-*` repos
+   so future loads pin to today's checkpoint.
 2. Re-run `notebooks/phase9_explainability.ipynb` after swapping
-   `disease_engine` to load from the new `iks-disease-r-plantdoc` repo.
-   The Cell 7 image-picker (`scripts/find_phase9_demo_images.py`)
-   should now find more central-attention samples — expect the
-   "qualified" count to rise from 3 / 256.
+   `disease_engine = DiseaseInferenceEngine(model_source="ankit-iiitdmj/iks-disease-r-plantdoc", ...)`.
+   Cell 7's image-picker (`scripts/find_phase9_demo_images.py`) should
+   now find more central-attention samples — expect the "qualified"
+   count to rise from 3 / 256.
 3. Wire the `no_leaf` reject head into Phase 10's Streamlit UI:
-   `if pred_class_name == "no_leaf"` -> show "we don't think this is
-   a leaf, please upload a leaf photo".
+   `if pred_class_name == "no_leaf": st.warning("We don't think this
+   is a leaf — please upload a leaf photo.")`.
 
 ### If REVERT
 
-1. Keep using `iks-disease-plantdoc`. The Phase 9 panels stay as-is.
-2. Add a Phase-11 follow-up: train with stronger leaf segmentation +
-   pointing-game evaluation. Possibly try SAM for paddy too, and
-   re-attempt randomization there.
-3. Document the unchanged shortcut bias in the thesis as an honest
-   limitation — Grad-CAM-revealed PlantDoc data bias, not a failure
-   of the pipeline.
+1. Keep `ankit-iiitdmj/iks-disease-plantdoc` as-is. The Phase 9 panels
+   stay; the bias is now an honest Phase-11 limitation.
+2. Add a Phase-11 follow-up: train with stronger leaf segmentation
+   (maybe SAM for paddy too) and quantitative pointing-game
+   evaluation. Document the bias openly in the thesis.
 
 ### In either case
 
-- The Phase 5-R Part 1 segmentation pipeline (`src/disease/segment.py`,
-  `src/disease/backgrounds.py`) stays — it's useful for Phase 10's
-  "upload a leaf" preview pane.
-- The `no_leaf` reject class concept feeds the Phase 10 UI guardrail
-  even if we revert to the old classifier (use a small confidence
-  threshold as a proxy).
-- Phase 11's RAGAS / pointing-game evaluation is unchanged either way.
+- The Phase 5-R Part 1 segmentation pipeline stays — useful for the
+  Phase 10 "upload a leaf" preview pane.
+- The `no_leaf` reject concept feeds the UI guardrail either way
+  (use a low-confidence threshold as a proxy if we revert).
+- Phase 11's RAGAS / pointing-game evaluation is unchanged.
 """
 )
 
