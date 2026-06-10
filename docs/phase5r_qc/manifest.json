@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "background_pool": {
+    "total": 600,
+    "per_source": {
+      "phantomfs": 200,
+      "sirajganj": 200,
+      "pandey_background": 200
+    }
+  },
+  "datasets": {
+    "plantvillage": {
+      "verdict": "clean",
+      "flag_pct": 0.0,
+      "n": 10,
+      "method": "classical"
+    },
+    "paddy": {
+      "verdict": "poor",
+      "flag_pct": 0.8,
+      "n": 10,
+      "method": "classical"
+    },
+    "plantdoc": {
+      "verdict": "clean",
+      "flag_pct": 0.0,
+      "n": 10,
+      "method": "rembg_u2net"
+    }
+  }
+}
