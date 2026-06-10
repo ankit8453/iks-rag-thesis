@@ -5,6 +5,58 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 5-R Part 2: background-randomization retrain + no-leaf reject + Grad-CAM audit
+
+Phase 5-R Part 1 (commit b8269c1) shipped the segmentation + composite + QC pipeline; per-dataset verdicts: PlantVillage classical ✓, PlantDoc rembg ✓, Paddy Doctor train as-is (full-canopy field photos, no fg/bg split worth randomising). Phase 9 Grad-CAM identified the real problem the retrain has to fix: only 3 of 256 PlantDoc test images had the disease-classifier's CAM peak inside the central 60% box — the model attends to corners / backgrounds / watermarks instead of the leaf. Part 2 builds the cascade trainer that decorrelates background from class by compositing leaves onto a random soil / urban background each epoch, plus an audit that says **keep or revert** based on whether the central-attention rate actually improves.
+
+### What the code does (read top-to-bottom)
+
+- `src/disease/segment_cache.py` — idempotent batch-segmenter + mask cache. Writes `data/plant_disease/_masks/<dataset>/<relpath>.png` once via the Part 1 `segment()` router (PlantVillage classical, PlantDoc rembg). Persists a per-dataset `_segmentation_log.json` recording the `flagged_rel_paths` (foreground < 5% or > 95%); the trainer reads that list at startup via `load_flagged_set()` so flagged rows fall back to raw at train time and a single mis-segmentation never poisons a batch. Paddy Doctor is deliberately NOT cached (no randomisation planned).
+- `src/disease/randomized_dataset.py` — `RandomizedDiseaseDataset` is a `torch.utils.data.Dataset`-compatible wrapper with three per-sample modes: `"randomize"` (load image + cached mask + random bg from `build_background_pool()`, composite via Part 1's `composite_leaf_on_bg`), `"raw"` (Paddy path, pass-through), and `"no_leaf"` (Pandey `Background_without_leaves` rows + bare-soil hold-out, raw, label = 27). Per-epoch seed via `set_epoch(epoch)` so the same `(epoch, idx)` reproduces the same composite — necessary for the OLD-vs-NEW Grad-CAM comparison to be apples-to-apples. `build_samples_from_split`, `build_no_leaf_samples`, `load_class_map_with_no_leaf` (extends the 27-class PlantDoc map by appending `no_leaf` at index 27, existing ids do NOT shift) are the helpers the trainer calls.
+- `src/disease/train_cascade_r.py` — `STAGE_INFO_R` table mirrors the original `STAGE_INFO` but adds a `mode` field per stage and points all checkpoints at a NEW namespace `models/disease_r/iks-disease-r-{plantvillage,paddy-doctor,plantdoc}/` so the old `iks-disease-*` models are untouched and revert is trivial. `build_loaders_for_stage` constructs train/val with the requested mode (val carries no-leaf rows at the PlantDoc stage; test is ALWAYS raw so the top-1 number is directly comparable to the original Phase 5's 71%). `train_one_stage_r` reuses the original `train_one_stage` core (same hyperparams, same seed, same CheckpointManager), warm-starts from the prior stage via `strict=False` (so the 38→10→28 head change doesn't break the load). `run_cascade` runs all three stages sequentially.
+- `src/disease/gradcam_audit.py` — re-runs the Phase 9 central-60% test on the full PlantDoc test split for both engines. `audit_engine(name, engine)` walks every test row, runs `disease_gradcam`, takes the CAM peak position, tallies the central-attention rate + top-1 accuracy. `run_old_vs_new()` does both (falls back gracefully if the new checkpoint is missing). `keep_or_revert(old, new)` applies the locked rule: **central-attention gain ≥ +5 pp AND top-1 drop ≤ 3 pp ⇒ keep; otherwise revert**.
+
+### Decisions locked from Part 1 (no re-litigation in Part 2)
+
+- Paddy Doctor: **NO randomisation, train as-is.** Part 1's `paddy_qc.png` showed the classical pipeline can't split foreground from a full-canopy paddy stand, and rembg fragmented the rice plant in side experiments. The cascade trainer routes paddy through `mode="raw"`.
+- Dr. Pandey's dataset: **only the `Background_without_leaves` folder is used.** The other 35 leaf classes are a confirmed PlantVillage re-pack (`docs/pandey_dataset_inspection.md`); merging them would re-amplify the very shortcut bias we're trying to break.
+- Same architecture / hyperparameters / seed / test splits as the original Phase 5. Every difference between OLD and NEW must be attributable to the randomisation, not a config drift.
+
+### Tests — 11 new + 31 prior = 42 passing in 62 s
+
+- `tests/disease/test_segment_cache.py` — `mask_path_for` is stable + OS-independent; a flagged segmentation result still writes its mask to disk AND lands in the log's `flagged_rel_paths` (so `load_flagged_set()` returns it); the cache is idempotent (a re-run hits zero new segmentations); `load_flagged_set()` on a never-cached dataset returns the empty set. No GPU, no network — `segment()` is monkeypatched.
+- `tests/disease/test_randomized_dataset.py` — `mode="raw"` returns the image unchanged (Paddy path), `mode="no_leaf"` carries the reject label (27), `mode="randomize"` actually composites (bg colour is visible in the output AND leaf colour is visible — neither solid), a row in `flagged_rel_paths` falls back to raw even when a mask file exists (no_leaf-style raw image even though the bg pool was bright white), per-epoch seeding is reproducible (same `(epoch, idx)` → identical pixel arrays; different epoch → different array), `build_no_leaf_samples` produces reject-labelled rows, `load_class_map_with_no_leaf` appends idx 27 without shifting existing class ids.
+- The previous 31 disease tests (model + train + transforms + smoke + ...) all still pass — Phase 5-R is fully additive.
+
+### Notebook — `notebooks/phase5r_retrain.ipynb` (12 cells per the prompt)
+
+1. Markdown — experiment framing + locked keep-or-revert rule.
+2. Clone + pip install (Phase 5/7 deps + rembg + onnxruntime + matplotlib) + HF login + GPU check.
+3. Build background pool; show 8-image preview across phantomfs / sirajganj / pandey.
+4. Batch-segment PlantVillage (classical) + PlantDoc (rembg); print % flagged per dataset; refuse to continue if PV > 10% flagged or PD > 20% (segmentation drift halts training).
+5. Sanity: render 6 on-the-fly composites (3 PV + 3 PD) to confirm training inputs look right.
+6. Stage 1 — pretrain B4 on randomised PlantVillage (38 classes).
+7. Stage 2 — finetune on Paddy Doctor as-is (10 classes), warm-started from Stage 1.
+8. Stage 3 — finetune on randomised PlantDoc + no_leaf (28 classes), warm-started from Stage 2.
+9. Evaluate on RAW test splits — top-1 + no_leaf precision/recall — directly comparable to the original Phase 5's 71%.
+10. Grad-CAM audit — central-attention rate OLD vs NEW on the SAME PlantDoc test images; persist `docs/phase5r_audit.json`.
+11. Markdown — verdict table (filled by Cell 10) + keep/revert.
+12. Markdown — next steps for either decision (push checkpoints + re-run Phase 9 / wire `no_leaf` into Phase 10 UI guardrail, OR document the bias as a Phase-11 follow-up).
+
+### Cascade resource shape
+
+T4 / Colab. Stage 1 (~43 k PV images × 30 epochs of randomised compositing) is the bottleneck — expect ~5 hr; Stage 2 (8.3 k paddy as-is) ~1.5 hr; Stage 3 (2 k PlantDoc + ~1 k no_leaf) ~1 hr; Grad-CAM audit on 256 PlantDoc test images ~7 min. The prompt budgets 5–9 hr over 1–2 sessions; the cascade is split across `train_one_stage_r` calls so a Colab session-timeout can resume from the warm-started checkpoint with no logic change.
+
+### Phase 5-R Part 2 end checks (all green)
+
+- `python -c "from src.disease.segment_cache import build_mask_cache; from src.disease.randomized_dataset import RandomizedDiseaseDataset; from src.disease.train_cascade_r import run_cascade; from src.disease.gradcam_audit import run_old_vs_new; print('ok')"` → `ok` (no model load).
+- `python -c "import nbformat; print(len(nbformat.read('notebooks/phase5r_retrain.ipynb',as_version=4).cells))"` → `12`.
+- `pytest tests/disease/ -q` → `42 passed in 61s` (31 prior + 11 new).
+- `git status` — `src/disease/{segment_cache.py, randomized_dataset.py, train_cascade_r.py, gradcam_audit.py}`, `tests/disease/{test_segment_cache.py, test_randomized_dataset.py}`, `scripts/build_phase5r_notebook.py`, `notebooks/phase5r_retrain.ipynb`, `progress.md` staged. NO masks, NO weights, NO image data, NO push.
+- Single local commit titled `"Phase 5-R Part 2: background-randomization retrain + no-leaf reject + Grad-CAM audit"`. **No git push.**
+
+---
+
 ## Phase 9: explainability layer (Grad-CAM disease+3 soil heads, retrieved-chunk highlighting)
 
 Phase 9 (master plan §18) delivers the honest-interpretability surfaces the paper relies on in §35: *where* each vision model looked (Grad-CAM heatmaps) and *why* each chunk was retrieved (per-chunk matched-term overlay + similarity score panel). Built `src/explain/` end-to-end, 12-cell Colab notebook `notebooks/phase9_explainability.ipynb`, 17 unit tests. Reuses Phase 5 disease + Phase 6 soil + Phase 7 RAG + Phase 8 integration by import; models + corpus stay read-only.

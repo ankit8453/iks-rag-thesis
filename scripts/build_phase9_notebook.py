@@ -278,18 +278,24 @@ DEMO_SCRATCH = Path(REPO_PATH) / "_phase9_demo"
 DEMO_SCRATCH.mkdir(exist_ok=True)
 
 # Target (label, local-fallback-file, dataset-source) tuples per sample.
+# Picked by scripts/find_phase9_demo_images.py: top-conf samples where
+# the model is correct AND the Grad-CAM peak lands in the central 60%
+# of the image. Only 3 of 256 test images passed all three filters
+# (model attention is mostly cornery on PlantDoc -- a known shortcut
+# bias). Healthy classes (Peach leaf, grape leaf) dominate the
+# qualified set; Corn rust leaf is the one diseased qualifier.
 PLANTDOC_TARGETS = {
-    "tomato_leaf": (
-        "Tomato leaf late blight",
-        "Tomato leaf late blight/image.jpg",
+    "peach_leaf": (
+        "Peach leaf",
+        "Peach leaf/peach-leaf-isolated-white-background-39426456.jpg",
     ),
-    "corn_leaf": (
+    "grape_leaf": (
+        "grape leaf",
+        "grape leaf/young-fresh-grape-leaf-picture-id183867740_k=6&m=183867740&s=612x612&w=0&h=Q8_s3Yw7p_VKQjda-mZPl9rN4lDmpVjjbMUk95HtVFk=.jpg",
+    ),
+    "corn_rust_leaf": (
         "Corn rust leaf",
-        "Corn rust leaf/Corn-southern-rust-advanced-F1b-8-7-15.jpg",
-    ),
-    "potato_leaf": (
-        "Potato leaf early blight",
-        "Potato leaf early blight/fac66s01a.jpg",
+        "Corn rust leaf/Southern%20corn%20rust.ashx_w=600.jpg",
     ),
 }
 PHANTOMFS_TARGETS = {
@@ -357,24 +363,24 @@ def _resolve_phantomfs(name: str) -> Path:
 print("=== Resolving demo image sources (local repo → HF Hub fallback) ===")
 DEMO_SAMPLES = [
     {
-        "name": "tomato_alluvial_soil_driven",
-        "leaf_path": _resolve_plantdoc("tomato_leaf"),
+        "name": "peach_alluvial_soil_driven",
+        "leaf_path": _resolve_plantdoc("peach_leaf"),
         "soil_path": _resolve_phantomfs("alluvial_soil"),
-        "crop": "tomato",
+        "crop": "peach",
         "pathway": CausalPathway.SOIL_DRIVEN,
     },
     {
-        "name": "corn_black_pest_vector",
-        "leaf_path": _resolve_plantdoc("corn_leaf"),
+        "name": "grape_black_pest_vector",
+        "leaf_path": _resolve_plantdoc("grape_leaf"),
         "soil_path": _resolve_phantomfs("black_soil"),
-        "crop": "corn",
+        "crop": "grape",
         "pathway": CausalPathway.PEST_VECTOR,
     },
     {
-        "name": "potato_red_unknown",
-        "leaf_path": _resolve_plantdoc("potato_leaf"),
+        "name": "corn_red_unknown",
+        "leaf_path": _resolve_plantdoc("corn_rust_leaf"),
         "soil_path": _resolve_phantomfs("red_soil"),
-        "crop": "potato",
+        "crop": "corn",
         "pathway": CausalPathway.UNKNOWN,
     },
 ]
