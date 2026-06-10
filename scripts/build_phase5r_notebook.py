@@ -171,23 +171,36 @@ plt.tight_layout(); plt.show()
 
 # ----------------------------- Cell 4 — segment + cache --------------------
 code(
-    """# Cell 4 — Segment + cache masks for the randomized stages.
-# PlantVillage uses the classical pipeline; PlantDoc uses rembg/U2Net.
-# Paddy Doctor is NOT cached (Part 1 verdict: train as-is).
+    """# Cell 4 — Segment + cache masks (with HF Hub backup so a Colab
+# session-timeout doesn't wipe progress).
 #
-# Idempotent: a re-run hits the cache for any row already processed.
-# Resumable: a Colab session timeout mid-segmentation leaves the
-# already-cached masks intact; re-run picks up where it left off.
+# build_mask_cache_from_hf does THREE things by default:
+#   1. At start: pulls any existing mask tarball from
+#      ``ankit-iiitdmj/iks-disease-r-mask-cache`` and extracts it under
+#      data/plant_disease/_masks/ — so a fresh Colab account resumes
+#      from where the previous session stopped.
+#   2. While running: tar+pushes the cache to HF every 5,000 newly
+#      segmented rows. A crash between pushes only loses at most that
+#      many rows of work.
+#   3. End of each split: a final push so the next run sees the
+#      complete split.
+#
+# To bypass HF backup (laptop dev): pass ``hf_backup_repo=None``.
 from src.disease.segment_cache import (
-    build_mask_cache_from_hf, load_flagged_set,
+    DEFAULT_MASK_BACKUP_REPO,
+    build_mask_cache_from_hf,
+    load_flagged_set,
 )
+print(f"Mask backup HF repo: {DEFAULT_MASK_BACKUP_REPO}")
 
+print()
 print("=== PlantVillage (classical) ===")
 for split in ("train", "val", "test"):
     stats = build_mask_cache_from_hf(
         dataset_repo="ankit-iiitdmj/iks-plantvillage",
         dataset_id="plantvillage",
         split=split, style="lab", log_every=500,
+        hf_push_every_n_rows=5000,
     )
     print(f"  {split:<6} total={stats.total:>5} new={stats.newly_segmented:>5}"
           f" flagged={stats.flagged:>4} ({stats.flagged_fraction:>5.1%})"
@@ -200,6 +213,7 @@ for split in ("train", "val", "test"):
         dataset_repo="ankit-iiitdmj/iks-plantdoc",
         dataset_id="plantdoc",
         split=split, style="field", log_every=50,
+        hf_push_every_n_rows=500,   # PD is small, push more often
     )
     print(f"  {split:<6} total={stats.total:>5} new={stats.newly_segmented:>5}"
           f" flagged={stats.flagged:>4} ({stats.flagged_fraction:>5.1%})"

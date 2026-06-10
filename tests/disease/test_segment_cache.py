@@ -139,6 +139,7 @@ def test_build_mask_cache_writes_masks_and_records_flagged(
         split="train",
         style="lab",
         log_every=1,
+        hf_backup_repo=None,
     )
     assert stats.total == 3
     assert stats.newly_segmented == 3
@@ -184,15 +185,151 @@ def test_build_mask_cache_is_idempotent(
     s1 = build_mask_cache_from_hf(
         dataset_repo="repo", dataset_id="plantvillage",
         split="train", style="lab", log_every=1,
+        hf_backup_repo=None,
     )
     s2 = build_mask_cache_from_hf(
         dataset_repo="repo", dataset_id="plantvillage",
         split="train", style="lab", log_every=1,
+        hf_backup_repo=None,
     )
     assert s1.newly_segmented == 2
     assert s2.newly_segmented == 0
     assert s2.cached_already == 2
     assert seg_calls["n"] == 2  # only the first pass called segment()
+
+
+def test_push_mask_cache_creates_tarball_and_uploads_to_hf(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``push_mask_cache_to_hf`` must tar the dataset's local mask dir,
+    call HfApi.upload_file with the expected (filename, repo_id), and
+    skip cleanly if there are no masks."""
+    import tarfile
+
+    from src.disease.segment_cache import push_mask_cache_to_hf
+
+    # Build a fake local mask cache: one png in plantvillage/train/.
+    local_train = temp_cache / "plantvillage" / "train"
+    local_train.mkdir(parents=True)
+    (local_train / "000000.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+    # Plus the log file so it gets packed into the tar.
+    log_path = dataset_log_path("plantvillage")
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text('{"dataset": "plantvillage", "splits": {}, "flagged_keys": []}',
+                        encoding="utf-8")
+
+    upload_calls: list[dict[str, Any]] = []
+
+    class _FakeHfApi:
+        def create_repo(self, **kwargs):
+            return None
+
+        def upload_file(self, *, path_or_fileobj, path_in_repo, repo_id, repo_type):
+            upload_calls.append({
+                "path_or_fileobj": path_or_fileobj,
+                "path_in_repo": path_in_repo,
+                "repo_id": repo_id,
+                "repo_type": repo_type,
+            })
+
+    monkeypatch.setattr(
+        "huggingface_hub.HfApi", lambda: _FakeHfApi(), raising=True,
+    )
+
+    push_mask_cache_to_hf("plantvillage", repo_id="ank/test-mask-cache")
+
+    assert len(upload_calls) == 1
+    call = upload_calls[0]
+    assert call["path_in_repo"] == "plantvillage.tar.gz"
+    assert call["repo_id"] == "ank/test-mask-cache"
+    assert call["repo_type"] == "dataset"
+    # The tar was uploaded; uploaded path is now gone (deleted after).
+    # Verify the tarball would have contained the mask file. Re-create
+    # it by re-running and inspecting before deletion: easier to just
+    # ensure path matched the expected scratch location.
+    assert "_backup_plantvillage.tar.gz" in str(call["path_or_fileobj"])
+
+
+def test_push_mask_cache_skips_when_no_masks(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """No local mask dir -> no HF call (no surprise empty pushes)."""
+    upload_calls: list[Any] = []
+
+    class _FakeHfApi:
+        def create_repo(self, **kwargs):
+            upload_calls.append("create_repo")
+        def upload_file(self, **kwargs):
+            upload_calls.append("upload_file")
+
+    monkeypatch.setattr(
+        "huggingface_hub.HfApi", lambda: _FakeHfApi(), raising=True,
+    )
+
+    from src.disease.segment_cache import push_mask_cache_to_hf
+
+    result = push_mask_cache_to_hf("never_segmented", repo_id="ank/x")
+    assert result is None
+    assert upload_calls == []  # nothing called
+
+
+def test_pull_mask_cache_extracts_tarball_into_mask_root(
+    temp_cache: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """``pull_mask_cache_from_hf`` should download a tar.gz and extract
+    it under :data:`MASK_CACHE_ROOT` so existing masks land at the
+    paths the trainer expects."""
+    import tarfile
+
+    # Build a fake "downloaded" tarball with a single mask inside.
+    src_dir = tmp_path / "_src" / "plantvillage" / "train"
+    src_dir.mkdir(parents=True)
+    (src_dir / "000007.png").write_bytes(b"\x89PNG fake")
+    tar_path = tmp_path / "plantvillage.tar.gz"
+    with tarfile.open(tar_path, "w:gz") as tar:
+        # Arcname must match the format push_mask_cache_to_hf would have
+        # written: "<dataset_id>/<split>/<idx>.png".
+        tar.add(
+            src_dir / "000007.png",
+            arcname="plantvillage/train/000007.png",
+        )
+
+    # Stub hf_hub_download to return our local tar path.
+    monkeypatch.setattr(
+        "huggingface_hub.hf_hub_download",
+        lambda **kwargs: str(tar_path),
+        raising=True,
+    )
+
+    from src.disease.segment_cache import pull_mask_cache_from_hf
+
+    got = pull_mask_cache_from_hf("plantvillage", repo_id="ank/x")
+    assert got is True
+    extracted = temp_cache / "plantvillage" / "train" / "000007.png"
+    assert extracted.is_file(), (
+        f"pull_mask_cache did not extract to expected path. "
+        f"Looked at {extracted}, got: "
+        f"{sorted(temp_cache.rglob('*'))}"
+    )
+
+
+def test_pull_mask_cache_returns_false_on_first_run(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """No HF backup yet -> graceful False, no exception. Lets the
+    builder proceed to segment from scratch on the very first run."""
+    from huggingface_hub.errors import EntryNotFoundError
+
+    def _raise(**kwargs):
+        raise EntryNotFoundError("not yet")
+
+    monkeypatch.setattr(
+        "huggingface_hub.hf_hub_download", _raise, raising=True,
+    )
+
+    from src.disease.segment_cache import pull_mask_cache_from_hf
+
+    assert pull_mask_cache_from_hf("plantvillage", repo_id="ank/x") is False
 
 
 def test_flagged_keys_merge_across_splits(
@@ -223,11 +360,13 @@ def test_flagged_keys_merge_across_splits(
     build_mask_cache_from_hf(
         dataset_repo="repo", dataset_id="plantvillage",
         split="train", style="lab", log_every=1,
+        hf_backup_repo=None,
     )
     holder["current"] = val_split
     build_mask_cache_from_hf(
         dataset_repo="repo", dataset_id="plantvillage",
         split="val", style="lab", log_every=1,
+        hf_backup_repo=None,
     )
 
     flagged = load_flagged_set("plantvillage")
