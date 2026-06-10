@@ -1,26 +1,31 @@
-"""Dataset wrappers for the Phase 5-R background-randomization retrain.
+"""HF-row-indexed dataset wrappers for the Phase 5-R retrain.
 
-Three modes, picked per-dataset:
+The original Phase 5 trainer pulls images straight from the published
+HF datasets — ``load_dataset("ankit-iiitdmj/iks-plantvillage")`` etc. —
+so the trainer works on a fresh Colab runtime with no local data.
+Phase 5-R has to follow the same pattern so it can resume after a
+free-Colab session timeout and produce its checkpoints to HF.
 
-- ``"randomize"`` (PlantVillage, PlantDoc) — load image + cached mask +
-  a random background from the pool, composite on-the-fly, return the
-  composited image. Background is re-rolled every ``__getitem__`` call
-  so a single image sees many backgrounds across epochs and the model
-  can't latch onto the background as a label cue.
-- ``"raw"`` (Paddy Doctor) — pass through the original image untouched.
-  Phase 5-R Part 1 found Paddy is full-canopy field photos with no
-  meaningful foreground/background split, so no randomization is
-  applied. The class label is preserved.
-- ``"no_leaf"`` (Pandey ``Background_without_leaves`` slice +
-  bare-soil hold-out) — return the raw background image with the
-  reject-class label. Powers the PlantDoc-stage no-leaf reject head.
+This module wraps an HF split + the mask cache built by
+:mod:`src.disease.segment_cache` and the background pool from
+:mod:`src.disease.backgrounds`, and emits ``(image_tensor, label_idx)``
+tuples just like the original trainer's ``_HFImageDataset``. Three
+modes (chosen at construction):
 
-The trainer wraps one of these per stage and treats them as a single
-``torch.utils.data.Dataset`` from then on.
+- ``"randomize"`` — PlantVillage, PlantDoc. Loads ``hf_split[idx]["image"]``,
+  the cached mask at ``mask_path_for(dataset_id, split, idx)``, and a
+  random :class:`BackgroundEntry` from the pool; composites on the fly.
+  If the row was flagged at cache time OR the mask file is missing,
+  the row falls back to the raw HF image — a single bad mask never
+  blocks a training step.
+- ``"raw"`` — Paddy Doctor. Passes the HF image through untouched.
+- ``"no_leaf"`` — drawn from a list of (PIL_image, label_idx) tuples
+  built from the background pool; powers the PlantDoc-stage 28th
+  reject class.
 
-Deterministic per-epoch seeding so a re-run on the same epoch produces
-the same composites for the same images — important for reproducible
-Grad-CAM comparisons later.
+Per-epoch seeded RNG so the same ``(epoch, idx)`` pair reproduces the
+same composite — apples-to-apples Grad-CAM comparison between the old
+and new checkpoints.
 """
 
 from __future__ import annotations
@@ -32,11 +37,9 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from src.disease.backgrounds import (
     BackgroundEntry,
-    build_background_pool,
     composite_leaf_on_bg,
 )
-from src.disease.segment_cache import load_flagged_set, mask_path_for
-from src.utils.data_splits import load_class_map, load_split
+from src.disease.segment_cache import is_flagged, mask_path_for
 from src.utils.logging_setup import get_logger
 
 if TYPE_CHECKING:
@@ -49,25 +52,16 @@ Mode = Literal["randomize", "raw", "no_leaf"]
 
 
 @dataclass
-class SampleSpec:
-    """One row in the dataset.
+class NoLeafRow:
+    """One row of the ``no_leaf`` reject class.
 
-    Attributes
-    ----------
-    rel_path : str
-        Path under ``raw_root`` (POSIX-style for cache-key stability).
-    abs_path : Path
-        Absolute path to the image on disk.
-    label_idx : int
-        Integer class id this sample carries.
-    mode : Mode
-        How to load the sample — see module docstring.
+    Backed by an on-disk JPEG (from the background pool's cache) — the
+    dataset opens it lazily so a large no-leaf pool doesn't blow up
+    memory.
     """
 
-    rel_path: str
     abs_path: Path
     label_idx: int
-    mode: Mode
 
 
 # --------------------------------------------------------------------- #
@@ -75,51 +69,67 @@ class SampleSpec:
 # --------------------------------------------------------------------- #
 
 
-class RandomizedDiseaseDataset:
-    """``torch.utils.data.Dataset``-compatible random-bg compositor.
+class HFRandomizedDiseaseDataset:
+    """torch.utils.data.Dataset-compatible HF wrapper with on-the-fly
+    background randomization.
 
     Parameters
     ----------
-    samples
-        Pre-built list of :class:`SampleSpec`. Builders below take
-        care of constructing it for each cascade stage.
+    hf_split
+        A loaded HF dataset split (already :func:`load_dataset` ed by
+        the caller). Yields rows with ``"image"`` and ``"label_idx"``.
     dataset_id
-        Used only to read the cached mask via
-        :func:`~src.disease.segment_cache.mask_path_for`. Pass the same
-        identifier the cache was built with (``"plantvillage"`` /
-        ``"plantdoc"``).
+        Local identifier used to find cached masks — must match what
+        was passed to :func:`~src.disease.segment_cache.build_mask_cache_from_hf`.
+    split
+        ``"train"`` / ``"val"`` / ``"test"``. Lets the wrapper find the
+        right mask subdirectory and the flagged set.
+    mode
+        Per-row treatment — see module docstring.
     bg_pool
-        List of :class:`BackgroundEntry`. The "randomize" mode samples
-        from it; "raw" and "no_leaf" ignore it.
+        :class:`BackgroundEntry` list. Only used in ``"randomize"`` mode.
     transform
-        Optional albumentations pipeline. Applied AFTER compositing /
-        pass-through so the augmentation operates on the final RGB the
-        model will see.
+        Optional albumentations pipeline. Applied AFTER compositing or
+        pass-through so the augmentation operates on the final RGB.
+    no_leaf_rows
+        Rows for the ``"no_leaf"`` mode. Appended to the HF rows so
+        ``__len__`` is ``len(hf_split) + len(no_leaf_rows)``. Indices
+        ``< len(hf_split)`` are HF rows; indices ``>=`` are no-leaf
+        rows. Ignored unless ``mode == "no_leaf"`` OR
+        ``mode == "randomize"`` (PlantDoc stage adds no-leaf to the
+        train split that way).
     seed
-        Base seed for the per-epoch RNG. Combined with the current epoch
-        (see :meth:`set_epoch`) for reproducibility.
-    flagged_rel_paths
-        Pre-loaded set of rel_paths whose mask failed the 5–95 % guard
-        at cache time — those rows fall back to raw at train time.
+        Base seed for the per-epoch RNG.
     """
 
     def __init__(
         self,
-        samples: list[SampleSpec],
+        hf_split: Any,
         *,
         dataset_id: str,
-        bg_pool: list[BackgroundEntry],
+        split: str,
+        mode: Mode,
+        bg_pool: list[BackgroundEntry] | None = None,
         transform: Any | None = None,
+        no_leaf_rows: list[NoLeafRow] | None = None,
         seed: int = 42,
-        flagged_rel_paths: set[str] | None = None,
     ) -> None:
-        self.samples = samples
+        self.hf_split = hf_split
         self.dataset_id = dataset_id
-        self.bg_pool = bg_pool
+        self.split = split
+        self.mode: Mode = mode
+        self.bg_pool = list(bg_pool or [])
         self.transform = transform
+        self.no_leaf_rows = list(no_leaf_rows or [])
         self.seed = int(seed)
-        self.flagged_rel_paths = flagged_rel_paths or set()
         self._epoch = 0
+
+        # Pre-load the flagged set once so __getitem__ is fast.
+        if mode == "randomize":
+            from src.disease.segment_cache import load_flagged_set  # noqa: PLC0415
+            self._flagged_set = load_flagged_set(dataset_id)
+        else:
+            self._flagged_set = set()
 
     # ----- epoch-aware RNG ------------------------------------------ #
 
@@ -128,185 +138,131 @@ class RandomizedDiseaseDataset:
         self._epoch = int(epoch)
 
     def _rng_for(self, idx: int) -> random.Random:
-        # Index-aware so workers can shard cleanly; epoch-aware so each
-        # epoch sees a different background per image.
         return random.Random((self.seed * 1_000_003) + (self._epoch * 7919) + idx)
 
-    # ----- core load + composite ------------------------------------ #
+    # ----- length + indexing --------------------------------------- #
 
     def __len__(self) -> int:
-        return len(self.samples)
+        return len(self.hf_split) + len(self.no_leaf_rows)
 
     def __getitem__(self, idx: int) -> tuple[Any, int]:
         import numpy as np  # noqa: PLC0415
         from PIL import Image as PILImage  # noqa: PLC0415
 
-        spec = self.samples[idx]
-        with PILImage.open(spec.abs_path) as src:
-            src = src.convert("RGB")
+        n_hf = len(self.hf_split)
+        if idx >= n_hf:
+            # ---------- no_leaf row (raw, reject label) ----------
+            entry = self.no_leaf_rows[idx - n_hf]
+            with PILImage.open(entry.abs_path) as src:
+                arr = np.asarray(src.convert("RGB"))
+            if self.transform is not None:
+                arr = self.transform(image=arr)["image"]
+            return arr, int(entry.label_idx)
 
-            # ---------- mode dispatch ----------
-            if spec.mode == "raw" or spec.mode == "no_leaf":
-                arr = np.asarray(src)
-            elif spec.mode == "randomize":
-                # If this row was flagged at cache time OR mask file
-                # missing, fall back to raw — never block a train step.
-                use_raw = spec.rel_path in self.flagged_rel_paths
-                mask_p = mask_path_for(self.dataset_id, spec.rel_path)
-                if not mask_p.is_file():
-                    use_raw = True
-                if use_raw or not self.bg_pool:
-                    arr = np.asarray(src)
-                else:
-                    with PILImage.open(mask_p) as m:
-                        mask = m.convert("L")
-                    rng = self._rng_for(idx)
-                    bg_entry = rng.choice(self.bg_pool)
-                    composed = composite_leaf_on_bg(
-                        src, mask, bg_entry.path,
-                        out_size=src.size, rng=rng,
-                    )
-                    arr = np.asarray(composed)
+        # ---------- HF row ----------
+        row = self.hf_split[idx]
+        pil = row["image"].convert("RGB")
+        label = int(row["label_idx"])
+
+        if self.mode == "raw":
+            arr = np.asarray(pil)
+        elif self.mode == "randomize":
+            # Flagged or missing mask → fall back to raw, never crash.
+            key = f"{self.split}/{int(idx):06d}"
+            use_raw = key in self._flagged_set
+            mask_p = mask_path_for(self.dataset_id, self.split, idx)
+            if not mask_p.is_file():
+                use_raw = True
+            if use_raw or not self.bg_pool:
+                arr = np.asarray(pil)
             else:
-                raise ValueError(f"unknown sample mode: {spec.mode!r}")
+                with PILImage.open(mask_p) as m:
+                    mask = m.convert("L")
+                rng = self._rng_for(idx)
+                bg_entry = rng.choice(self.bg_pool)
+                composed = composite_leaf_on_bg(
+                    pil, mask, bg_entry.path,
+                    out_size=pil.size, rng=rng,
+                )
+                arr = np.asarray(composed)
+        else:
+            raise ValueError(f"unknown HF dataset mode: {self.mode!r}")
 
         if self.transform is not None:
             arr = self.transform(image=arr)["image"]
-        return arr, int(spec.label_idx)
+        return arr, label
 
 
 # --------------------------------------------------------------------- #
-# Per-stage sample builders
+# no_leaf row builder
 # --------------------------------------------------------------------- #
 
 
-def build_samples_from_split(
-    split_path: Path,
-    raw_root: Path,
-    *,
-    mode: Mode,
-    label_offset: int = 0,
-) -> list[SampleSpec]:
-    """Read a Phase 4 split JSON and produce :class:`SampleSpec` rows."""
-    entries = load_split(split_path)
-    out: list[SampleSpec] = []
-    for entry in entries:
-        rel = str(entry.path).replace("\\", "/")
-        abs_p = (raw_root / entry.path)
-        out.append(SampleSpec(
-            rel_path=rel, abs_path=abs_p,
-            label_idx=int(entry.label_idx) + int(label_offset),
-            mode=mode,
-        ))
-    return out
-
-
-def build_no_leaf_samples(
-    sources: list[Path],
+def build_no_leaf_rows(
+    bg_pool: list[BackgroundEntry],
     label_idx: int,
     *,
-    max_per_source: int | None = None,
-) -> list[SampleSpec]:
-    """Walk one or more directories of "not a leaf" backgrounds and
-    return raw samples with the reject label.
+    sources: tuple[str, ...] = ("pandey_background",),
+    max_n: int | None = None,
+) -> list[NoLeafRow]:
+    """Convert a slice of the background pool into ``NoLeafRow``s.
 
-    Used by the PlantDoc stage to bring in the 28th class.
+    Default behaviour: pick only ``pandey_background`` entries (the
+    only true "not a leaf" source — phantomfs / sirajganj are real soil
+    that the model legitimately needs to know about). On Colab where
+    Pandey isn't available, the caller can pass ``sources=("phantomfs",
+    "sirajganj")`` to bootstrap a smaller no-leaf class from soil
+    images that genuinely don't contain a leaf either.
     """
-    img_exts = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff", ".webp"}
-    out: list[SampleSpec] = []
-    for root in sources:
-        root = Path(root)
-        if not root.is_dir():
-            _LOGGER.warning("no_leaf source missing: %s", root)
+    rows: list[NoLeafRow] = []
+    for entry in bg_pool:
+        if entry.source not in sources:
             continue
-        found = 0
-        for p in sorted(root.rglob("*")):
-            if p.is_file() and p.suffix.lower() in img_exts:
-                rel = str(p.relative_to(root)).replace("\\", "/")
-                out.append(SampleSpec(
-                    rel_path=f"no_leaf/{root.name}/{rel}",
-                    abs_path=p,
-                    label_idx=int(label_idx),
-                    mode="no_leaf",
-                ))
-                found += 1
-                if max_per_source is not None and found >= max_per_source:
-                    break
-        _LOGGER.info("no_leaf source %s contributed %d sample(s).", root.name, found)
-    return out
+        rows.append(NoLeafRow(abs_path=entry.path, label_idx=int(label_idx)))
+        if max_n is not None and len(rows) >= max_n:
+            break
+    _LOGGER.info(
+        "Built %d no_leaf rows from sources=%s",
+        len(rows), sources,
+    )
+    return rows
 
 
 # --------------------------------------------------------------------- #
-# Convenience: build a randomized dataset from a Phase 4 split
+# Convenience: load HF split + wrap
 # --------------------------------------------------------------------- #
 
 
-def make_randomized_dataset(
+def load_hf_randomized(
     *,
-    split_path: Path,
-    raw_root: Path,
+    dataset_repo: str,
     dataset_id: str,
+    split: str,
+    mode: Mode,
     transform: Any | None,
-    seed: int = 42,
-    mode: Mode = "randomize",
-    extra_samples: list[SampleSpec] | None = None,
     bg_pool: list[BackgroundEntry] | None = None,
-) -> RandomizedDiseaseDataset:
+    no_leaf_rows: list[NoLeafRow] | None = None,
+    seed: int = 42,
+) -> HFRandomizedDiseaseDataset:
     """One-call helper used by the cascade trainer.
 
-    - Builds samples from the split JSON in the requested ``mode``.
-    - Optionally appends ``extra_samples`` (e.g. no-leaf rows at the
-      PlantDoc stage).
-    - Constructs (or accepts) the background pool.
-    - Loads the flagged-rel-paths set so flagged rows fall back to raw.
+    Pulls the HF split via :func:`datasets.load_dataset`, then wraps
+    it as an :class:`HFRandomizedDiseaseDataset`.
     """
-    samples = build_samples_from_split(
-        split_path=split_path, raw_root=raw_root, mode=mode,
+    from datasets import load_dataset  # noqa: PLC0415
+
+    hf = load_dataset(dataset_repo, split=split)
+    return HFRandomizedDiseaseDataset(
+        hf_split=hf, dataset_id=dataset_id, split=split, mode=mode,
+        bg_pool=bg_pool, transform=transform,
+        no_leaf_rows=no_leaf_rows, seed=seed,
     )
-    if extra_samples:
-        samples = samples + list(extra_samples)
-    pool = bg_pool if bg_pool is not None else build_background_pool()
-    flagged = load_flagged_set(dataset_id) if mode == "randomize" else set()
-    return RandomizedDiseaseDataset(
-        samples=samples,
-        dataset_id=dataset_id,
-        bg_pool=pool,
-        transform=transform,
-        seed=seed,
-        flagged_rel_paths=flagged,
-    )
-
-
-# --------------------------------------------------------------------- #
-# Class-map utility
-# --------------------------------------------------------------------- #
-
-
-def load_class_map_with_no_leaf(
-    class_map_path: Path,
-    no_leaf_label: str = "no_leaf",
-) -> tuple[dict[str, int], int]:
-    """Load a ``class_map.json`` and append the no-leaf reject class.
-
-    Returns ``(extended_class_map, no_leaf_idx)``. The no-leaf class is
-    appended at index ``max(existing) + 1`` so existing label ids do
-    NOT shift — the cascade transfer is safe.
-    """
-    base = load_class_map(class_map_path)
-    if no_leaf_label in base:
-        return dict(base), int(base[no_leaf_label])
-    next_idx = max(base.values()) + 1
-    extended = dict(base)
-    extended[no_leaf_label] = int(next_idx)
-    return extended, int(next_idx)
 
 
 __all__ = [
+    "HFRandomizedDiseaseDataset",
     "Mode",
-    "RandomizedDiseaseDataset",
-    "SampleSpec",
-    "build_no_leaf_samples",
-    "build_samples_from_split",
-    "load_class_map_with_no_leaf",
-    "make_randomized_dataset",
+    "NoLeafRow",
+    "build_no_leaf_rows",
+    "load_hf_randomized",
 ]

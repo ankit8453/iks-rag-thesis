@@ -1,17 +1,20 @@
-"""Phase 5-R Part 2 — segment_cache regressions.
+"""Phase 5-R Part 2 — segment_cache regressions (HF-row keyed).
 
-Pure-Python checks against the on-disk mask cache contract. No GPU,
-no network, no model load — every external call is monkeypatched.
+Pure-Python checks against the on-disk mask cache contract. No GPU, no
+network, no model load — the HF dataset and the Part-1 ``segment()``
+function are both monkeypatched.
 
-Locks the two invariants the training loop relies on:
+Locks the four invariants the trainer relies on:
 
-1. ``mask_path_for`` produces a stable, OS-independent rel-path-to-PNG
-   mapping under :data:`MASK_CACHE_ROOT`.
-2. When :func:`build_mask_cache` sees a "flagged" segmentation result
-   (mask covers < 5 % or > 95 % of the image), the mask is still
-   written to disk **and** the rel_path lands in the log's
-   ``flagged_rel_paths`` field — :func:`load_flagged_set` returns it so
-   the randomized dataset can fall back to raw at train time.
+1. :func:`mask_path_for` is stable + OS-independent and keys by
+   ``(dataset_id, split, row_idx)``.
+2. :func:`build_mask_cache_from_hf` writes a mask for every newly
+   processed row AND records the ``"<split>/<row_idx:06d>"`` key of
+   any flagged row in the persistent log.
+3. A re-run hits the cache (idempotent): zero new segmentations, the
+   ``segment()`` call count does not grow.
+4. The persistent log merges flagged keys across splits — caching
+   "val" after "train" must NOT drop the train flags.
 """
 
 from __future__ import annotations
@@ -24,11 +27,46 @@ import pytest
 
 from src.disease.segment_cache import (
     MASK_CACHE_ROOT,
-    build_mask_cache,
+    build_mask_cache_from_hf,
     dataset_log_path,
+    is_flagged,
     load_flagged_set,
     mask_path_for,
 )
+
+
+# --------------------------------------------------------------------- #
+# Fixtures
+# --------------------------------------------------------------------- #
+
+
+class _FakeHFSplit:
+    """A tiny stand-in for an HF ``Dataset`` split.
+
+    Supports ``len()`` and ``__getitem__`` with the same shape the
+    cache builder reads: ``row["image"]`` (PIL) and ``row["label_idx"]``
+    (int).
+    """
+
+    def __init__(self, images: list, label_idxs: list[int]) -> None:
+        self.images = images
+        self.label_idxs = label_idxs
+
+    def __len__(self) -> int:
+        return len(self.images)
+
+    def __getitem__(self, idx: int) -> dict[str, Any]:
+        return {"image": self.images[idx], "label_idx": self.label_idxs[idx]}
+
+
+def _build_fake_split(n: int = 3):
+    from PIL import Image
+
+    images = [
+        Image.new("RGB", (16, 16), (i * 60, 80, 80))
+        for i in range(n)
+    ]
+    return _FakeHFSplit(images=images, label_idxs=list(range(n)))
 
 
 @pytest.fixture()
@@ -42,119 +80,158 @@ def temp_cache(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     return fake_root
 
 
-def test_mask_path_for_is_stable_and_swaps_extension(tmp_path: Path) -> None:
-    """``mask_path_for`` must produce a deterministic per-rel-path PNG
-    path under :data:`MASK_CACHE_ROOT`, regardless of original extension."""
-    paths = [
-        ("plantvillage", "Apple___Apple_scab/image.JPG"),
-        ("plantdoc",     "Tomato leaf late blight/image.jpg"),
-        ("plantdoc",     "Corn rust leaf/Corn-southern-rust.ashx.jpg"),
-    ]
-    for ds, rel in paths:
-        out = mask_path_for(ds, rel)
-        # under the configured cache root, with dataset subdir, with .png suffix
-        assert out.suffix == ".png"
-        assert out.parts[-2] == Path(rel).parent.name or (
-            Path(rel).parent.name in out.as_posix()
-        )
-        assert ds in out.as_posix()
+# --------------------------------------------------------------------- #
+# Tests
+# --------------------------------------------------------------------- #
 
 
-def test_build_mask_cache_writes_flagged_mask_and_logs_path(
-    temp_cache: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+def test_mask_path_for_is_split_keyed(temp_cache: Path) -> None:
+    """``mask_path_for`` must put masks under
+    ``<MASK_CACHE_ROOT>/<dataset>/<split>/<06d>.png``."""
+    p = mask_path_for("plantvillage", "train", 42)
+    assert p.suffix == ".png"
+    assert p.name == "000042.png"
+    assert p.parent.name == "train"
+    assert p.parent.parent.name == "plantvillage"
+    # Mask root really IS the patched one.
+    assert p.is_relative_to(temp_cache)
+
+
+def test_build_mask_cache_writes_masks_and_records_flagged(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """A flagged mask must be:
-
-    1. Written to disk (the trainer's fallback path checks
-       ``mask_path.is_file()`` — a missing file would also trigger raw,
-       but we want the flagged information to survive into the log).
-    2. Recorded under ``flagged_rel_paths`` so
-       :func:`load_flagged_set` returns the row.
-    """
-    # Fake a tiny RGB image on disk so the segmenter has something to open.
-    img_dir = tmp_path / "raw_imgs" / "Foo"
-    img_dir.mkdir(parents=True)
-    img_path = img_dir / "x.jpg"
-    from PIL import Image
-
-    Image.new("RGB", (16, 16), (0, 100, 0)).save(img_path)
-
-    # Build a stub SegmentResult: all-foreground (fg = 100 %) → flagged.
-    class _StubResult:
-        def __init__(self) -> None:
-            self.mask = np.full((16, 16), 255, dtype=np.uint8)
-            self.foreground_fraction = 1.0
-            self.flagged_as_failure = True
-            self.method = "classical"
-
-    monkeypatch.setattr(
-        "src.disease.segment_cache.segment",
-        lambda image_path, style: _StubResult(),
-    )
-
-    stats = build_mask_cache(
-        dataset="plantvillage",
-        style="lab",
-        image_iter=[("Foo/x.jpg", img_path)],
-        log_every=1,
-    )
-
-    # Mask file is on disk (under the redirected MASK_CACHE_ROOT)
-    out = mask_path_for("plantvillage", "Foo/x.jpg")
-    assert out.is_file(), f"expected mask file at {out}"
-
-    # Cache stats agree
-    assert stats.total == 1
-    assert stats.newly_segmented == 1
-    assert stats.flagged == 1
-    assert stats.flagged_fraction == 1.0
-
-    # Log carries the rel_path
-    log = dataset_log_path("plantvillage")
-    assert log.is_file()
-    flagged_set = load_flagged_set("plantvillage")
-    assert "Foo/x.jpg" in flagged_set
-
-
-def test_build_mask_cache_is_idempotent(
-    temp_cache: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Re-running the cache build over the same input must NOT
-    re-segment — the trainer might re-launch many times."""
-    img_dir = tmp_path / "raw_imgs" / "Bar"
-    img_dir.mkdir(parents=True)
-    img_path = img_dir / "y.jpg"
-    from PIL import Image
-
-    Image.new("RGB", (16, 16), (0, 200, 0)).save(img_path)
-
-    seg_calls = {"n": 0}
+    """Row 1 is flagged (full-image mask); its key must land in the log."""
+    fake_split = _build_fake_split(n=3)
 
     class _OkResult:
         mask = np.full((16, 16), 255, dtype=np.uint8)
-        foreground_fraction = 0.5
+        foreground_fraction = 0.4
         flagged_as_failure = False
         method = "classical"
 
-    def _fake_segment(image_path: Any, style: str) -> _OkResult:
+    class _FlaggedResult:
+        mask = np.full((16, 16), 255, dtype=np.uint8)
+        foreground_fraction = 1.0
+        flagged_as_failure = True
+        method = "classical"
+
+    # row 0 OK, row 1 flagged, row 2 OK
+    seq = [_OkResult(), _FlaggedResult(), _OkResult()]
+    call_count = {"n": 0}
+
+    def fake_segment(image, style):
+        i = call_count["n"]
+        call_count["n"] += 1
+        return seq[i]
+
+    monkeypatch.setattr("src.disease.segment_cache.segment", fake_segment)
+    # Redirect HF load_dataset to return our fake split. The closure
+    # captures fake_split via default arg to avoid the trap where the
+    # lambda kwarg ``split`` shadows the outer name.
+    def _fake_load(repo, split=None, _fs=fake_split):
+        return _fs
+
+    monkeypatch.setattr("datasets.load_dataset", _fake_load)
+
+    stats = build_mask_cache_from_hf(
+        dataset_repo="ankit-iiitdmj/iks-plantvillage",
+        dataset_id="plantvillage",
+        split="train",
+        style="lab",
+        log_every=1,
+    )
+    assert stats.total == 3
+    assert stats.newly_segmented == 3
+    assert stats.flagged == 1
+    assert stats.failures == 0
+
+    # All three mask files exist on disk.
+    for i in range(3):
+        assert mask_path_for("plantvillage", "train", i).is_file()
+
+    # Log records the flagged key.
+    flagged = load_flagged_set("plantvillage")
+    assert "train/000001" in flagged
+    assert is_flagged("plantvillage", "train", 1)
+    assert not is_flagged("plantvillage", "train", 0)
+
+
+def test_build_mask_cache_is_idempotent(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Running the cache build twice must not re-segment."""
+    fake_split = _build_fake_split(n=2)
+
+    class _OkResult:
+        mask = np.full((16, 16), 255, dtype=np.uint8)
+        foreground_fraction = 0.4
+        flagged_as_failure = False
+        method = "classical"
+
+    seg_calls = {"n": 0}
+
+    def fake_segment(image, style):
         seg_calls["n"] += 1
         return _OkResult()
 
-    monkeypatch.setattr("src.disease.segment_cache.segment", _fake_segment)
+    monkeypatch.setattr("src.disease.segment_cache.segment", fake_segment)
 
-    iter_input = [("Bar/y.jpg", img_path)]
-    s1 = build_mask_cache("plantvillage", "lab", iter_input, log_every=1)
-    s2 = build_mask_cache("plantvillage", "lab", iter_input, log_every=1)
+    def _fake_load(repo, split=None, _fs=fake_split):
+        return _fs
 
-    assert s1.newly_segmented == 1
-    # Second call must hit the cache, NOT re-segment.
+    monkeypatch.setattr("datasets.load_dataset", _fake_load)
+
+    s1 = build_mask_cache_from_hf(
+        dataset_repo="repo", dataset_id="plantvillage",
+        split="train", style="lab", log_every=1,
+    )
+    s2 = build_mask_cache_from_hf(
+        dataset_repo="repo", dataset_id="plantvillage",
+        split="train", style="lab", log_every=1,
+    )
+    assert s1.newly_segmented == 2
     assert s2.newly_segmented == 0
-    assert s2.cached_already == 1
-    assert seg_calls["n"] == 1  # only the first run called segment()
+    assert s2.cached_already == 2
+    assert seg_calls["n"] == 2  # only the first pass called segment()
 
 
-def test_load_flagged_set_returns_empty_when_no_log(
-    temp_cache: Path,
+def test_flagged_keys_merge_across_splits(
+    temp_cache: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """A dataset that has never been cached → no log → empty set."""
-    assert load_flagged_set("never_cached") == set()
+    """Caching ``val`` after ``train`` must NOT erase train's flagged
+    keys — the union persists."""
+
+    class _Flag:
+        mask = np.full((16, 16), 255, dtype=np.uint8)
+        foreground_fraction = 1.0
+        flagged_as_failure = True
+        method = "classical"
+
+    monkeypatch.setattr(
+        "src.disease.segment_cache.segment", lambda image, style: _Flag(),
+    )
+
+    train_split = _build_fake_split(n=2)
+    val_split = _build_fake_split(n=2)
+    holder = {"current": train_split}
+
+    def _fake_load(repo, split=None, _h=holder):
+        return _h["current"]
+
+    monkeypatch.setattr("datasets.load_dataset", _fake_load)
+
+    build_mask_cache_from_hf(
+        dataset_repo="repo", dataset_id="plantvillage",
+        split="train", style="lab", log_every=1,
+    )
+    holder["current"] = val_split
+    build_mask_cache_from_hf(
+        dataset_repo="repo", dataset_id="plantvillage",
+        split="val", style="lab", log_every=1,
+    )
+
+    flagged = load_flagged_set("plantvillage")
+    assert "train/000000" in flagged
+    assert "train/000001" in flagged
+    assert "val/000000" in flagged
+    assert "val/000001" in flagged

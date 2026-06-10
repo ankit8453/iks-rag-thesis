@@ -5,6 +5,66 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 5-R Part 2 (HF-first rewrite): background-randomization retrain + HF Hub resume + Grad-CAM audit
+
+The first commit of Part 2 (`f6c310c`) was wrong. It wired the new cascade trainer through **local file paths** (Phase 4 split JSONs + `data/plant_disease/.../raw/...`), which works on the laptop but cannot work on a fresh Colab runtime where the dataset folders are gitignored — exactly the runtime we need for the cascade. The actual existing Phase-5 trainer (the one that produced the 71%-top-1 model) pulls from HuggingFace datasets directly via `_build_loaders_from_hf` and pushes checkpoints to HF Hub via `CheckpointManager` so a free-Colab session timeout is harmless. Phase 5-R Part 2 has to follow that exact pattern. This second pass rewrites every module to match.
+
+### How the rewrite mirrors the original Phase 5 trainer
+
+- **No local file paths anywhere.** `STAGE_INFO_R` carries an HF `dataset_repo` per stage (`ankit-iiitdmj/iks-plantvillage` / `iks-paddy-doctor` / `iks-plantdoc`) plus an HF `model_repo` (`ankit-iiitdmj/iks-disease-r-{plantvillage,paddy-doctor,plantdoc}`). `_build_loaders_r` calls `load_dataset(repo)` exactly like the original `_build_loaders_from_hf`, wraps each split in `HFRandomizedDiseaseDataset` with the stage's mode, and returns torch DataLoaders. No `raw_root`, no `splits_dir`, no `Path` reads.
+- **Checkpoints save AND resume via HF Hub.** Uses the original `src.disease.train.CheckpointManager(hub_repo_id, work_dir)` unchanged. After every epoch the manager pushes `checkpoint_latest.pt` to the new HF model namespace; if val acc improves it also pushes `checkpoint_best.pt`. `train_one_stage_r` calls `ckpt_manager.try_load_latest()` at startup — if HF has a `checkpoint_latest.pt` for this stage's repo, it loads the model + optimizer state + epoch counter and resumes mid-cascade. Free-Colab session timeouts mid-stage are now harmless: re-running the same cell picks up where it left off.
+- **Same architecture, same hyperparameters, same seed, same loss, same scheduler.** `train_one_stage_r` builds the model the same way (`DiseaseClassifier(num_classes, pretrained=initial is None, dropout_rate)`) and then delegates the actual epoch loop to the existing `src.disease.train.train_one_stage` — no parallel training code paths, no drift. Every difference between the OLD and NEW checkpoints is attributable to the input pipeline, not a config delta.
+
+### What's randomized vs raw vs no_leaf
+
+- **PlantVillage stage (`pretrain_r`)** — `mode="randomize"`. Each HF row's PIL image is composited onto a random background using the cached mask at `data/plant_disease/_masks/plantvillage/train/<row_idx>.png`. If the row was flagged at cache time OR its mask file is missing, the row falls back to the raw HF image — a bad mask never blocks a training step.
+- **Paddy Doctor stage (`finetune_paddy_r`)** — `mode="raw"`. Part 1 verdict locked: paddy is full-canopy field photos with no meaningful foreground/background split, so randomization is meaningless. The HF row is passed through unchanged.
+- **PlantDoc stage (`finetune_plantdoc_r`)** — `mode="randomize"` for the 27 PlantDoc classes PLUS a 28th `no_leaf` reject class drawn from Pandey's `Background_without_leaves` (when the laptop runs it) or the soil background pool (Colab fallback — still genuinely non-leaf images). `build_no_leaf_rows(bg_pool, label_idx, sources)` picks a source-filtered slice; the trainer splits 80/20 train/val so val carries the reject class for monitoring. The TEST split deliberately does NOT include no_leaf rows so top-1 stays directly comparable to the original 71%.
+
+### How masks are keyed to HF rows
+
+The original Phase 4 split JSONs use a filesystem `rel_path` per sample; HF datasets index by integer row id. The rewrite keys masks by `(dataset_id, split, row_idx)` so:
+
+- Cache layout: `data/plant_disease/_masks/<dataset_id>/<split>/<row_idx:06d>.png`.
+- `is_flagged(dataset_id, split, row_idx)` reads the persistent log keyed by the string `"<split>/<row_idx:06d>"`. The log's `flagged_keys` field is a *union* across splits — caching `val` after `train` does not erase `train`'s flagged keys (covered by `test_flagged_keys_merge_across_splits`).
+- The `HFRandomizedDiseaseDataset` caches `load_flagged_set(dataset_id)` once at `__init__` so `__getitem__` is just a set lookup.
+
+### Background pool — HF fallback when local roots missing
+
+The Phantom-fs and Sirajganj local raw/ trees are gitignored, so Colab has neither. `build_background_pool()` now falls back to the published HF soil datasets `ankit-iiitdmj/iks-soil-phantomfs` and `ankit-iiitdmj/iks-soil-sirajganj-moisture` when the local roots are absent: it downloads up to 500 rows per source, caches them as JPEGs under `data/_bg_cache/<source>/`, and walks that directory the same way it'd walk the local raw/ tree. Pandey's `Background_without_leaves` is laptop-only (no HF repo, his dataset is a confirmed PlantVillage re-pack so we deliberately never push it); on Colab the pool is Phantom-fs + Sirajganj only, which is plenty for training.
+
+### Tests — 34 / 34 pass
+
+`tests/disease/{test_segment_cache.py, test_randomized_dataset.py}` rewritten to match the HF-row shape; the rest of the disease test suite (model + transforms + infer + gradcam + smoke + dataset) is untouched and still passes.
+
+- `test_segment_cache.py` (4) — `mask_path_for` is split-keyed and OS-stable; `build_mask_cache_from_hf` writes a mask AND records the `"<split>/<row_idx:06d>"` key on a flagged row; a second run hits zero new segmentations (idempotent); the persistent log MERGES flagged keys across splits (covered explicitly). All HF + segment calls are monkeypatched — no GPU, no network.
+- `test_randomized_dataset.py` (6) — `mode="raw"` returns the HF image unchanged; no_leaf rows append AFTER HF rows and carry the reject label even when the HF row has its own label; `mode="randomize"` composites when a mask is cached at the expected path; a row whose key is in the flagged set falls back to raw even when the mask file exists; per-epoch seeded RNG reproduces the same `(epoch, idx)` pixel array; `build_no_leaf_rows` filters by source so the trainer can choose Pandey-only vs soil-fallback. Stub HF split, stub mask cache, stub bg pool — no GPU, no network.
+
+### Notebook — `notebooks/phase5r_retrain.ipynb` (12 cells, fully Colab-friendly)
+
+1. Markdown — experiment framing + keep/revert rule + the resume-from-HF-on-timeout point.
+2. Clone + install (Phase 5/7 deps + rembg + onnxruntime) + HF login + GPU check; asserts the token belongs to `ankit-iiitdmj` (the new model namespace's owner).
+3. Build background pool — local first, HF fallback automatic; 8-image preview.
+4. Segment + cache masks for PlantVillage + PlantDoc, all three splits each (idempotent, resumable after a timeout).
+5. Sanity preview — actually instantiate the `HFRandomizedDiseaseDataset` wrapper, pull 6 rows through it, render them. If anything looks off (mask misses the leaf, bg pattern bleeding through where the leaf should be opaque) the reviewer is supposed to STOP here.
+6. Stage 1 — `train_one_stage_r("pretrain_r", ..., resume_from_hub=True)`. Pushes to `ankit-iiitdmj/iks-disease-r-plantvillage`; re-running the cell after a timeout resumes from `checkpoint_latest.pt`.
+7. Stage 2 — pulls Stage 1's `checkpoint_best.pt` from HF as the warm-start, runs `finetune_paddy_r`. Same resume contract.
+8. Stage 3 — pulls Stage 2's best, runs `finetune_plantdoc_r` with the no_leaf rows and 28-class head. Same resume contract.
+9. Evaluate on RAW test splits via HF — top-1 per stage, no_leaf precision/recall at the PlantDoc stage. Directly comparable to the original Phase 5 numbers.
+10. Grad-CAM audit OLD vs NEW (both engines loaded from HF), prints the comparison table, saves `docs/phase5r_audit.json`.
+11. Markdown verdict template (filled by Cell 10's print + the audit JSON).
+12. Markdown next-steps for either keep or revert.
+
+### Phase 5-R Part 2 end checks (all green)
+
+- `python -c "from src.disease.segment_cache import build_mask_cache_from_hf; from src.disease.randomized_dataset import HFRandomizedDiseaseDataset; from src.disease.train_cascade_r import run_cascade; print('ok')"` → `ok` (no model load).
+- `python -c "import nbformat; print(len(nbformat.read('notebooks/phase5r_retrain.ipynb',as_version=4).cells))"` → `12`.
+- `pytest tests/disease/ -q` (excluding the heavy training-loop test that needs a GPU) → `34 passed`.
+- New HF model namespace `ankit-iiitdmj/iks-disease-r-*` reserved at first push; OLD `ankit-iiitdmj/iks-disease-*` UNTOUCHED so revert is trivial.
+- Single local commit. **No git push.**
+
+---
+
 ## Phase 5-R Part 2: background-randomization retrain + no-leaf reject + Grad-CAM audit
 
 Phase 5-R Part 1 (commit b8269c1) shipped the segmentation + composite + QC pipeline; per-dataset verdicts: PlantVillage classical ✓, PlantDoc rembg ✓, Paddy Doctor train as-is (full-canopy field photos, no fg/bg split worth randomising). Phase 9 Grad-CAM identified the real problem the retrain has to fix: only 3 of 256 PlantDoc test images had the disease-classifier's CAM peak inside the central 60% box — the model attends to corners / backgrounds / watermarks instead of the leaf. Part 2 builds the cascade trainer that decorrelates background from class by compositing leaves onto a random soil / urban background each epoch, plus an audit that says **keep or revert** based on whether the central-attention rate actually improves.
