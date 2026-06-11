@@ -289,10 +289,44 @@ def train_one_stage_r(
         dropout_rate=getattr(config, "dropout_rate", 0.3),
     )
     if initial_state_dict is not None:
+        # ``strict=False`` only ignores missing / extra keys — it still
+        # raises on SIZE MISMATCHES. When the cascade transitions
+        # PV (38 classes) -> Paddy (10) -> PlantDoc (28), the
+        # classifier-head weight shapes differ and the raw load_state_dict
+        # crashes. Filter incompatible-shape keys out so the backbone
+        # weights still transfer cleanly and the head re-inits from
+        # the ImageNet-pretrained initialization left in the model.
+        current_state = model.state_dict()
+        compatible: dict[str, Any] = {}
+        dropped: list[str] = []
+        for key, tensor in initial_state_dict.items():
+            target = current_state.get(key)
+            if target is None:
+                dropped.append(key)
+                continue
+            try:
+                target_shape = tuple(target.shape)
+                source_shape = tuple(tensor.shape)
+            except AttributeError:
+                dropped.append(key)
+                continue
+            if target_shape == source_shape:
+                compatible[key] = tensor
+            else:
+                dropped.append(key)
         _LOGGER.info(
-            "[%s] warm-starting from prior stage (strict=False).", stage_name,
+            "[%s] warm-starting from prior stage: %d compatible keys, "
+            "%d dropped (likely the classifier head: %s).",
+            stage_name, len(compatible), len(dropped),
+            sorted(dropped)[:3],
         )
-        model.load_state_dict(initial_state_dict, strict=False)
+        missing, unexpected = model.load_state_dict(compatible, strict=False)
+        if missing:
+            _LOGGER.info(
+                "[%s] %d weight(s) will train from their fresh init "
+                "(no compatible value in prior stage).",
+                stage_name, len(missing),
+            )
 
     ckpt_manager = CheckpointManager(
         hub_repo_id=model_repo,
