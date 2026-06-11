@@ -46,7 +46,37 @@ StageNameR = Literal["pretrain_r", "finetune_paddy_r", "finetune_plantdoc_r"]
 # Per-stage routing. ``dataset_repo`` = HF dataset, ``model_repo`` = HF
 # checkpoint namespace (NEW — leaves old ``iks-disease-*`` untouched).
 # ``mode`` chooses the randomization treatment for that stage.
-STAGE_INFO_R: dict[str, dict[str, Any]] = {
+# --------------------------------------------------------------------- #
+# Inject the _r stage shapes into the original STAGE_INFO dict so the
+# reused ``train_one_stage`` can look up ``num_classes`` and
+# ``epochs_field`` for them. The original Phase 5 trainer only knows
+# about "pretrain" / "finetune_paddy" / "finetune_plantdoc"; without
+# this registration call, ``STAGE_INFO[stage_name]`` raises KeyError
+# the moment a randomized stage starts training. Done at module-import
+# time so it's harmless if the user imports anything from this module.
+# --------------------------------------------------------------------- #
+
+
+def _register_stage_info_r_with_original_trainer() -> None:
+    """Add the ``*_r`` keys to :data:`src.disease.train.STAGE_INFO`."""
+    from src.disease.train import STAGE_INFO as _ORIG_STAGE_INFO  # noqa: PLC0415
+
+    for stage_name, info in _STAGE_INFO_R_TABLE.items():
+        # Only inject the fields ``train_one_stage`` actually reads.
+        _ORIG_STAGE_INFO.setdefault(stage_name, {
+            "num_classes": info["num_classes"],
+            "epochs_field": info["epochs_field"],
+        })
+        # If the _r key was registered previously but pointed at a stale
+        # value (e.g. someone hot-reloaded this module), refresh the
+        # fields the trainer actually reads.
+        _ORIG_STAGE_INFO[stage_name].update({
+            "num_classes": info["num_classes"],
+            "epochs_field": info["epochs_field"],
+        })
+
+
+_STAGE_INFO_R_TABLE: dict[str, dict[str, Any]] = {
     "pretrain_r": {
         "dataset_repo": "ankit-iiitdmj/iks-plantvillage",
         "dataset_id": "plantvillage",
@@ -77,6 +107,13 @@ STAGE_INFO_R: dict[str, dict[str, Any]] = {
         "add_no_leaf": True,
     },
 }
+
+# Public, post-registration alias used everywhere else in this module.
+STAGE_INFO_R: dict[str, dict[str, Any]] = _STAGE_INFO_R_TABLE
+
+# Register on import so the original ``train_one_stage`` works the
+# first time it's called with a ``*_r`` stage name.
+_register_stage_info_r_with_original_trainer()
 
 
 @dataclass
