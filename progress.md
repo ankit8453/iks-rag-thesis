@@ -5,6 +5,36 @@ This document tracks weekly progress on the IKS Agricultural Advisory System the
 
 ---
 
+## Phase 10 — Full-system Streamlit UI (Colab + localtunnel)
+
+Single live entry point wiring Phases 5 (disease) + 6 (soil) + 7 (RAG) + 8 (integration) + 9 (explainability) into one interactive demo. Streamlit runs in the Colab session on port 8501, exposed via localtunnel; the user uploads a leaf photo + soil photo, picks crop + suspected cause, and gets predictions + four Grad-CAM heatmaps + a §17-grounded recommendation with cited IKS chunks.
+
+**Disease model behind a config switch.** Today the UI uses the original 27-class Phase 5 model (`ankit-iiitdmj/iks-disease-plantdoc`, 72.3% top-1, the published-SOTA-frontier checkpoint with clean class names from `data/splits/plantdoc/class_map.json`). Phase 5-R ships in parallel as a diagnostic study (Grad-CAM shortcut finding + background-randomization ablation that improved central-attention 1.2→5.9% but cost −5.5% top-1). Adopting it later is a two-line change in `app/config.py`: flip `DISEASE_MODEL_REPO` to `iks-disease-r-plantdoc` and `HAS_NO_LEAF_CLASS` to `True`. `test_disease_switch_documented_and_consistent` locks the two together so the switch can't drift.
+
+**No-leaf guardrail — two implementations behind one signature.** With the R model (`HAS_NO_LEAF_CLASS=True`) the guardrail trusts the model's native `no_leaf` class. With the old model the guardrail falls back to `src.disease.segment.segment(style="field")` (rembg/U2Net) and rejects uploads whose leaf-foreground fraction falls outside [8%, 92%]. `app/guardrail.py::is_leaf` returns `(ok, reason)`; the Streamlit handler surfaces `reason` only when the upload is rejected. Five guardrail tests cover both paths with stubbed engines + stubbed `segment`.
+
+**T4 memory plan to avoid the Phase 8 OOM.** Llama-3.1-8B 4-bit on GPU (~5.5 GB), disease B4 + soil B0 on GPU (~0.5 GB combined), bge-large embedder + bge reranker **on CPU** (~2 GB they'd otherwise eat on GPU), ChromaDB in RAM (~50 MB). Net GPU footprint ~6 GB — comfortable under the T4's 16 GB envelope. `app/loaders.py::report_vram` prints the actual usage right after `load_all` so a regression is visible. The OOM path in `streamlit_app.py` empties the cache and retries generation at `max_new_tokens=256` rather than surfacing a raw traceback.
+
+**Strategy B is the default; A available as a sidebar ablation toggle.** Phase 8 retrieval scored B (LLM-mediated rewrite via Llama `.complete()`) at 0.59-0.96 vs A (deterministic template) at 0.01-0.04, so B is the default. The sidebar lets the user flip to A for a side-by-side comparison without restarting. If B raises (rare; happens on a Llama load fault), the handler logs a warning and silently falls back to A so the user still gets an answer.
+
+**Model load is one-shot per session.** Every loader in `app/loaders.py` is `@st.cache_resource`-decorated when Streamlit is the host process; in unit tests the decorator becomes a no-op so the same functions are directly callable. `EngineBundle` returns disease + soil + RAG + the shared Llama generator together so Strategy B re-uses the pipeline's already-loaded Llama instead of paying a second load.
+
+**Deliverables (this commit):**
+
+- `app/__init__.py`, `app/config.py`, `app/loaders.py`, `app/guardrail.py`, `app/streamlit_app.py` — the package.
+- `notebooks/phase10_launch_ui.ipynb` — 5-cell launcher: pip install, repo clone (with `GIT_LFS_SKIP_SMUDGE=1`), HF auth, GPU check, start streamlit + localtunnel, print the public URL + the tunnel password.
+- `tests/app/__init__.py`, `tests/app/test_config.py`, `tests/app/test_guardrail.py` — 13/13 pass with no GPU / no network.
+
+**End checks (all passing):**
+
+- `python -c "from app import config, guardrail, loaders"` clean.
+- `python -m pytest tests/app/ -q` → 13/13 passed (6.4 s).
+- `ast.parse(open('app/streamlit_app.py').read())` clean (full Streamlit run is on Colab — see launch notebook).
+- Notebook JSON validates (12 cells).
+- Local commit, no push.
+
+---
+
 ## Phase 5-R Part 2 (HF-first rewrite): background-randomization retrain + HF Hub resume + Grad-CAM audit
 
 The first commit of Part 2 (`f6c310c`) was wrong. It wired the new cascade trainer through **local file paths** (Phase 4 split JSONs + `data/plant_disease/.../raw/...`), which works on the laptop but cannot work on a fresh Colab runtime where the dataset folders are gitignored — exactly the runtime we need for the cascade. The actual existing Phase-5 trainer (the one that produced the 71%-top-1 model) pulls from HuggingFace datasets directly via `_build_loaders_from_hf` and pushes checkpoints to HF Hub via `CheckpointManager` so a free-Colab session timeout is harmless. Phase 5-R Part 2 has to follow that exact pattern. This second pass rewrites every module to match.
