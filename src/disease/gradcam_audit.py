@@ -132,33 +132,73 @@ def audit_engine(
     engine: DiseaseInferenceEngine,
     *,
     log_every: int = 25,
+    dataset_repo: str = "ankit-iiitdmj/iks-plantdoc",
+    split: str = "test",
 ) -> AuditSummary:
-    """Run Grad-CAM over the PlantDoc test set with ``engine`` and tally."""
-    samples = load_split(PLANTDOC_TEST_SPLIT)
+    """Run Grad-CAM over the PlantDoc test set with ``engine`` and tally.
+
+    Pulls the test images from the HF dataset (``dataset_repo``) so
+    the audit works on a fresh Colab runtime where the local raw/
+    tree doesn't exist. Previously walked ``data/plant_disease/plantdoc/raw/``
+    via the Phase-4 split JSON, which always returned zero hits on Colab
+    (each path's ``is_file()`` was False and the loop's `continue` ran
+    every iteration — silently producing ``n_total=0``).
+
+    Labels are compared by integer ``label_idx`` rather than string
+    ``label`` so the comparison survives the NEW model's 28-class
+    head (27 PlantDoc + 1 no_leaf reject); the first 27 indices align
+    with the OLD model's 27-class head.
+    """
+    from datasets import load_dataset  # noqa: PLC0415
+
+    _LOGGER.info(
+        "[%s] pulling %s split=%s from HF for audit ...",
+        engine_name, dataset_repo, split,
+    )
+    hf_split = load_dataset(dataset_repo, split=split)
+    total = len(hf_split)
+
+    # Per-engine: best-effort name→idx map so we can match the engine's
+    # string ``pred_label`` against the ground-truth integer label_idx.
+    name_to_idx: dict[str, int] = {}
+    for name in getattr(engine, "class_names", []) or []:
+        if name not in name_to_idx:
+            name_to_idx[name] = len(name_to_idx)
+
     rows: list[CAMRowResult] = []
-    for i, entry in enumerate(samples, start=1):
-        abs_p = PLANTDOC_RAW_ROOT / entry.path
-        if not abs_p.is_file():
-            continue
+    for i in range(total):
+        row = hf_split[i]
         try:
-            cam = disease_gradcam(abs_p, engine)
+            pil = row["image"].convert("RGB")
         except Exception as exc:  # noqa: BLE001
-            _LOGGER.warning("CAM failed for %s: %s", entry.path, exc)
+            _LOGGER.warning("HF row %d: image decode failed: %s", i, exc)
+            continue
+        gt_idx = int(row["label_idx"])
+        gt_label = str(row.get("label", f"class_{gt_idx}"))
+        try:
+            cam = disease_gradcam(pil, engine)
+        except Exception as exc:  # noqa: BLE001
+            _LOGGER.warning("[%s] CAM failed on row %d: %s", engine_name, i, exc)
             continue
         y, x = _peak_position(cam.heatmap)
         central = _is_central(y, x)
-        correct = (cam.pred_label == entry.label)
+        # Compare by integer index: engine's argmax pred_index vs HF
+        # row's label_idx. This is robust to (a) the new 28-class head
+        # appending no_leaf at idx 27 and (b) class_<i> fallback labels.
+        correct = (int(cam.pred_index) == gt_idx)
         rows.append(CAMRowResult(
-            rel_path=str(entry.path).replace("\\", "/"),
-            label=entry.label, pred_label=cam.pred_label,
-            pred_conf=float(cam.pred_conf), peak_y=y, peak_x=x,
+            rel_path=str(i),
+            label=gt_label,
+            pred_label=cam.pred_label,
+            pred_conf=float(cam.pred_conf),
+            peak_y=y, peak_x=x,
             central=central, correct=correct,
         ))
-        if i % log_every == 0:
+        if (i + 1) % log_every == 0:
             n_central = sum(1 for r in rows if r.central)
             _LOGGER.info(
                 "[%s] %d/%d done — central so far: %d (%.0f%%)",
-                engine_name, i, len(samples), n_central,
+                engine_name, i + 1, total, n_central,
                 100 * n_central / max(1, len(rows)),
             )
 
