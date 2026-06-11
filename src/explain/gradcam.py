@@ -209,9 +209,13 @@ class GradCAMResult:
 
 
 def _preprocess_for_gradcam(
-    image_path: Path | str, image_size: int,
+    image_path: Path | str | Any, image_size: int,
 ) -> tuple[Any, Any, Any]:
     """Open an image and return (tensor, rgb_uint8, rgb_float).
+
+    Accepts EITHER a filesystem path (str / Path) OR an already-loaded
+    :class:`PIL.Image.Image` so the Phase 5-R Grad-CAM audit can pass
+    HF-row PIL images straight in (no temp file round-trip).
 
     - ``tensor``    : ``(1, 3, H, W)`` ImageNet-normalised, requires grad.
     - ``rgb_uint8`` : H×W×3 uint8 RGB array — what the overlay sits on.
@@ -222,7 +226,10 @@ def _preprocess_for_gradcam(
     import torch  # noqa: PLC0415
     from PIL import Image as PILImage  # noqa: PLC0415
 
-    pil_img = PILImage.open(str(image_path)).convert("RGB")
+    if isinstance(image_path, PILImage.Image):
+        pil_img = image_path.convert("RGB")
+    else:
+        pil_img = PILImage.open(str(image_path)).convert("RGB")
     pil_img = pil_img.resize((image_size, image_size), PILImage.Resampling.BILINEAR)
     rgb_uint8 = np.asarray(pil_img, dtype=np.uint8)
     rgb_float = rgb_uint8.astype(np.float32) / 255.0
@@ -288,7 +295,7 @@ def _run_gradcam(
 
 
 def disease_gradcam(
-    image_path: Path | str,
+    image_path: Path | str | Any,
     engine: "DiseaseInferenceEngine",
 ) -> GradCAMResult:
     """Run Grad-CAM on the disease classifier for one image.
@@ -461,9 +468,15 @@ def compute_gradcam(  # noqa: D401
     return out
 
 
-def _open_for_engine(image_path: Path | str) -> Any:
-    """Return a PIL.Image so the engines can run their own preprocessing."""
+def _open_for_engine(image_path: Path | str | Any) -> Any:
+    """Return a PIL.Image so the engines can run their own preprocessing.
+
+    Accepts EITHER a filesystem path OR an already-loaded
+    :class:`PIL.Image.Image` (Phase 5-R audit case)."""
     from PIL import Image as PILImage  # noqa: PLC0415
+
+    if isinstance(image_path, PILImage.Image):
+        return image_path.convert("RGB") if image_path.mode != "RGB" else image_path
 
     return PILImage.open(str(image_path)).convert("RGB")
 

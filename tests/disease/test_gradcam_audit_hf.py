@@ -102,3 +102,24 @@ def test_audit_engine_pulls_from_hf_and_returns_non_zero_total(
     # don't match; rows 3+4 (0, 1) — row 3 matches. So 2/5 correct.
     assert summary.n_correct == 2
     assert summary.accuracy_top1 == pytest.approx(0.4, abs=1e-6)
+
+
+def test_disease_gradcam_preprocess_accepts_pil_input() -> None:
+    """``disease_gradcam``'s preprocess helper used to crash when given
+    a PIL.Image because it ran ``PILImage.open(str(pil_obj))``, which
+    stringifies to ``<PIL.Image.Image image mode=RGB size=...>`` and
+    then FileNotFoundError. The Phase 5-R audit drives this path.
+
+    Locks the contract: passing a PIL.Image straight in produces the
+    same shape of (tensor, rgb_uint8, rgb_float) as passing a path."""
+    from PIL import Image
+
+    from src.explain.gradcam import _preprocess_for_gradcam
+
+    pil = Image.new("RGB", (320, 240), (10, 200, 30))
+    tensor, uint8, fl = _preprocess_for_gradcam(pil, image_size=64)
+    assert tensor.shape == (1, 3, 64, 64), (
+        f"tensor shape unexpected: got {tuple(tensor.shape)}"
+    )
+    assert uint8.shape == (64, 64, 3)
+    assert fl.shape == (64, 64, 3)
