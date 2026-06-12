@@ -13,6 +13,16 @@ it boots streamlit on a port and exposes it via localtunnel.
 
 from __future__ import annotations
 
+# Streamlit prepends THIS file's directory (app/) to sys.path, which
+# shadows the top-level ``app`` package and makes ``from app import
+# config`` fail with ModuleNotFoundError. Inject the repo root BEFORE
+# any ``from app import ...`` line so the package resolves correctly.
+import sys as _sys
+from pathlib import Path as _Path
+_REPO_ROOT = _Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in _sys.path:
+    _sys.path.insert(0, str(_REPO_ROOT))
+
 import io
 import traceback
 from typing import Any
