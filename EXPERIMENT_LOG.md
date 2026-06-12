@@ -265,7 +265,7 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 - The 72.3% is **background-driven** (rigorously shown via stage-wise Grad-CAM: stages 1–2 healthy, stage 3 breaks).
 - Retraining on GT-crops would give ~70% with honest attention — same accuracy, better interpretability.
 
-**Decision options:** (A) lock 72% + make the diagnosis the contribution; (B) retrain on GT-crops for honest attention figures (~70%); (C) TTA+ensemble for a marginal ~74–75%. _Awaiting choice._
+**Decision (2026-06-12, Ankit):** the goal is to FIX the damaged model (it looks at background, fails even on clean PlantVillage images), NOT to chase accuracy above 72%. A *correct* model at ~70% beats a *broken* one at 72%. → **Retrain on cropped (leaf-only) images (C-PD).** Built `src/disease/train_crop.py` (cropped-dataset builders, warm-start from PlantVillage backbone; reuses `train_one_stage`) + `notebooks/phase5_crop_retrain_plantdoc.ipynb` (proves the damage on clean PlantVillage images, retrains on crops, tests acc + Grad-CAM). 10 crop tests pass. Pushes to NEW repo `iks-disease-plantdoc-crop`. **Result: ⏳ pending Colab run.**
 
 **Thesis framing:** the contribution is the **IKS-grounded advisory system + the rigorous disease-bias diagnosis** (3 documented failed fixes + the published-ceiling analysis), NOT a record-breaking classifier.
 
