@@ -241,7 +241,9 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 2. **Deploy** — pretrained YOLOv8 leaf detector → crop highest-confidence box → classify. Gap to oracle = detector-quality story.
 3. Report: uncropped 72% / YOLO-crop X% / GT-oracle Y%.
 
-**Result.** _⏳ Pending build + run._
+**Built (2026-06-12):** `src/disease/detect_crop.py` (VOC parse + crop + class-name match; 7 tests pass), `notebooks/phase5_detect_crop_plantdoc.ipynb`. **Test-only — no retraining**: uses the existing OLD model, clones the PlantDoc detection repo for GT boxes, loads pretrained YOLOv8 (`foduucom/...`), prints the no-crop / YOLO-crop / GT-oracle table + previews + Grad-CAM on crops.
+
+**Result.** _⏳ Pending Colab run._
 
 ---
 
