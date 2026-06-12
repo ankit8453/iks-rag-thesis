@@ -217,7 +217,14 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 - LP-FT accuracy **up** (toward ~77%) AND heatmap **on the leaf** → ✅ this is the fix; build the paper on it.
 - Otherwise → **Step 2: detect-then-crop**.
 
-**Result.** _⏳ Pending — fill in accuracy delta (LP-FT vs OLD) + Grad-CAM verdict when the run finishes._
+**Result (2026-06-12). ❌ FAILED.** LP-FT (pure linear probe, frozen Paddy backbone) scored **61%** on PlantDoc test vs OLD full-FT **72%** — an **11-point DROP**. Grad-CAM showed **no attention improvement** (still leaf+background mix, some images still corner-biased). ~25 min training.
+
+**Why it failed:**
+1. **Froze the wrong backbone** — the Paddy-stage backbone is rice-specialized (narrowed to 10 rice classes); a frozen rice-tuned backbone + linear head can't represent PlantDoc's 27 multi-crop classes. That capacity ceiling explains most of the drop.
+2. **A frozen backbone + linear head cannot change *where* the model looks** — attention is set by the backbone, so the heatmap could never move (and didn't).
+3. Technical note: full "LP-FT" is 2-phase (probe THEN low-LR fine-tune); we did only the probe. But phase 2 would re-introduce full-FT feature distortion on the same rice-narrow backbone — not worth it.
+
+**Decision:** record as negative result (§7.4). Move to **Step 2 — detect-then-crop** (strongest evidence; PlantDoc ~30%→70.5% historically from cropping). Both LP-FT and background randomization failed for the same reason: they don't remove the clutter. Cropping does.
 
 ---
 
@@ -240,6 +247,12 @@ A thesis is stronger for documenting what *didn't* work and why.
 - **Ship criterion:** texture top-1 up AND soil_type/moisture not down >2pp vs V2.
 - **Result:** _V2 remained production (texture stayed ~67.9%); V3-tiling preserved as an ablation. Confirm the exact Colab number and record here._
 - **Takeaway:** texture (67.9%) is a genuinely hard head — a real open problem, candidate for future work, not a quick win.
+
+### 7.4 Disease LP-FT (linear probe, frozen Paddy backbone) — FAILED
+- **Idea:** freeze the healthy Paddy backbone, train only a fresh 27-class PlantDoc head (preserve good features per Kumar et al.).
+- **Result (2026-06-12):** 61% vs OLD 72% — an 11pp DROP. No Grad-CAM improvement.
+- **Why:** (a) Paddy backbone is rice-specialized — wrong features for PlantDoc's multi-crop diversity; (b) a frozen backbone + linear head can't change attention.
+- **Verdict:** negative result. Confirms (with the cross-test) that **feature-preservation tricks don't fix clutter — you must remove it (cropping).** → Step 2.
 
 ---
 
