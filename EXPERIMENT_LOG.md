@@ -228,6 +228,23 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 
 ---
 
+## 6b. Step 2: Detect-then-crop (decided 2026-06-12, after LP-FT failed)
+
+**Research verdict (deep review):**
+- **PlantDoc ships ground-truth bounding boxes** (~9,216 boxes, VOC XML, `github.com/pratikkayal/PlantDoc-Object-Detection-Dataset`).
+- **The "cropped PlantDoc 70.5%" is an ORACLE** — built from ground-truth boxes (uncropped 29.7% → GT-crop 70.5%), NOT an automatic detector. No published paper hits 70.5% end-to-end. Report our automatic number honestly against this ceiling.
+- **rembg/SAM are the wrong tools.** rembg = salient-object seg (grabs wrong/merged region on multi-leaf clutter; maintainer confirms you can't target an object). SAM needs a detector in front anyway. **YOLO is the class-aware localizer that wins.**
+- **Pretrained YOLO exists, no training needed:** `foduucom/plant-leaf-detection-and-classification` (YOLOv8s, mAP@0.5 0.946, downloadable `best.pt`).
+
+**Plan (one notebook, full ablation):**
+1. **Prove** — crop PlantDoc test by GT boxes, run OLD B4, measure. Isolates "does cropping help" from detector quality. Headline result, ~70% ceiling.
+2. **Deploy** — pretrained YOLOv8 leaf detector → crop highest-confidence box → classify. Gap to oracle = detector-quality story.
+3. Report: uncropped 72% / YOLO-crop X% / GT-oracle Y%.
+
+**Result.** _⏳ Pending build + run._
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
