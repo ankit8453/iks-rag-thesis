@@ -243,7 +243,31 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 
 **Built (2026-06-12):** `src/disease/detect_crop.py` (VOC parse + crop + class-name match; 7 tests pass), `notebooks/phase5_detect_crop_plantdoc.ipynb`. **Test-only — no retraining**: uses the existing OLD model, clones the PlantDoc detection repo for GT boxes, loads pretrained YOLOv8 (`foduucom/...`), prints the no-crop / YOLO-crop / GT-oracle table + previews + Grad-CAM on crops.
 
-**Result.** _⏳ Pending Colab run._
+**Result (2026-06-12). ❌ FAILED (inference-time cropping).**
+- Detection-repo test set gave a fake **91.9%** → **data leakage** (those images were in the classifier's training set). Discarded.
+- On the honest held-out HF test split (256 imgs): **no-crop 72.3%** (confirms baseline), **YOLO-crop 58.2%** — cropping makes it **14pp WORSE**.
+- **Why:** the model leans on background; cropping removes that crutch and exposes its true (lower) leaf-only ability. Inference-time cropping on a background-trained model can't fix it.
+- **The only way cropping helps = retrain on cropped images** (C-PD style, train+test on crops) → ~70%, i.e. SAME accuracy as now but honest leaf attention.
+
+---
+
+## 6c. Disease model — FINAL POSITION (2026-06-12)
+
+**Three fixes tried, all failed for the same reason** — none retrains the model to look at leaves:
+| Fix | Held-out result |
+|---|---|
+| Background randomization (R) | worse everywhere |
+| LP-FT (freeze backbone) | 61% (−11pp) |
+| Inference-time YOLO crop | 58.2% (−14pp) |
+
+**Established facts:**
+- Honest PlantDoc accuracy = **72.3%**, at the **published frontier (~74–78%)**. No method reliably beats it.
+- The 72.3% is **background-driven** (rigorously shown via stage-wise Grad-CAM: stages 1–2 healthy, stage 3 breaks).
+- Retraining on GT-crops would give ~70% with honest attention — same accuracy, better interpretability.
+
+**Decision (2026-06-12, Ankit):** the goal is to FIX the damaged model (it looks at background, fails even on clean PlantVillage images), NOT to chase accuracy above 72%. A *correct* model at ~70% beats a *broken* one at 72%. → **Retrain on cropped (leaf-only) images (C-PD).** Built `src/disease/train_crop.py` (cropped-dataset builders, warm-start from PlantVillage backbone; reuses `train_one_stage`) + `notebooks/phase5_crop_retrain_plantdoc.ipynb` (proves the damage on clean PlantVillage images, retrains on crops, tests acc + Grad-CAM). 10 crop tests pass. Pushes to NEW repo `iks-disease-plantdoc-crop`. **Result: ⏳ pending Colab run.**
+
+**Thesis framing:** the contribution is the **IKS-grounded advisory system + the rigorous disease-bias diagnosis** (3 documented failed fixes + the published-ceiling analysis), NOT a record-breaking classifier.
 
 ---
 
@@ -271,7 +295,13 @@ A thesis is stronger for documenting what *didn't* work and why.
 - **Idea:** freeze the healthy Paddy backbone, train only a fresh 27-class PlantDoc head (preserve good features per Kumar et al.).
 - **Result (2026-06-12):** 61% vs OLD 72% — an 11pp DROP. No Grad-CAM improvement.
 - **Why:** (a) Paddy backbone is rice-specialized — wrong features for PlantDoc's multi-crop diversity; (b) a frozen backbone + linear head can't change attention.
-- **Verdict:** negative result. Confirms (with the cross-test) that **feature-preservation tricks don't fix clutter — you must remove it (cropping).** → Step 2.
+- **Verdict:** negative result. Confirms (with the cross-test) that **feature-preservation tricks don't fix clutter.** → Step 2.
+
+### 7.5 Disease detect-then-crop (inference-time) — FAILED
+- **Idea:** crop the leaf (YOLO / GT box) before classifying, no retraining.
+- **Result (2026-06-12):** held-out no-crop 72.3% → YOLO-crop **58.2%** (−14pp). (A leaky detection-set run showed a fake 91.9% — discarded.)
+- **Why:** the model depends on background; cropping it away removes the crutch and exposes its true lower leaf-only ability. Inference cropping can't fix a background-trained model.
+- **Verdict:** third failed fix. Cropping only helps if you RETRAIN on crops (~70%, same accuracy, honest attention). Confirms 72% is the PlantDoc ceiling for this model.
 
 ---
 
