@@ -82,24 +82,97 @@ Three model families, wired by the integration layer:
 
 ---
 
-## 4. Phase-by-Phase Journey (condensed)
+## 4. Phase-by-Phase Journey (complete)
+
+Quick index, then full detail per phase. Engineering minutiae: `progress.md`.
 
 | Phase | What | Outcome |
 |---|---|---|
-| 1 | Project setup, repo scaffolding | ✅ |
-| 3 | IKS corpus pipeline + Vrikshayurveda + Brihat Samhita ingested | ✅ corpus in ChromaDB |
-| 3b | Register Krishi Parashara + Upavanavinoda for Gemini OCR | ✅ |
-| 4 | Dataset acquisition + preprocessing (disease + soil) | ✅ |
-| 5 | Disease cascade training (B4, 3 stages) | ✅ trained; PlantDoc 72.3% |
-| 5-R | Background-randomization retrain + no-leaf reject + Grad-CAM audit | ⚠️ **failed as a fix** (see §7.1) — kept as negative-result ablation |
-| 6 | Soil multi-task training (B0); V2 aug; V3-tiling experiment | ✅ v2 production |
-| 7 | Grounded RAG pipeline (hybrid retrieval + Llama-3.1-8B) | ✅ |
-| 8 | Multimodal integration (Strategy A/B/C + C5 causal hook) | ✅ Strategy B wins |
-| 9 | Explainability (Grad-CAM disease + 3 soil heads, chunk highlighting) | ✅ — **surfaced the background-bias finding** |
+| Week 1 | Project setup, repo scaffolding | ✅ |
+| Week 2 | PDF-alignment cleanup (match thesis spec §41) | ✅ |
+| 4 | Dataset acquisition + preprocessing (6 datasets) | ✅ |
+| 4-fix | Reconcile datasets with finalised scope | ✅ |
+| 5 | Disease cascade training (B4, 3 stages) | ✅ PlantDoc ~71–72% |
+| 5-R | Background-randomization retrain + no-leaf + Grad-CAM audit | ⚠️ **FAILED as a fix** (§7.1) |
+| 6-prep | Soil data → HF Hub (3 repos) + VIT texture integration | ✅ |
+| 6-V1 | Soil multi-task B0 (baseline) | ✅ texture 67.86% |
+| 6-V2 | Strong aug + Mixup/CutMix + label smoothing + TTA | ✅ **PRODUCTION** |
+| 6-V3-seq | 3-stage sequential transfer learning | ❌ **collapsed to ~20%** (§7.2) |
+| 6-V3-tiling | Patch-based texture expansion | ⚠️ experiment (§7.3) |
+| 3 | IKS corpus pipeline + 2 books (Vrik + Brihat) | ✅ 285 chunks |
+| 3b | Register Krishi Parashara + Upavanavinoda (Gemini OCR) | ✅ |
+| 3b.2 | Gemini re-OCR → final corpus | ✅ 206 chunks / 4 books |
+| 7 | Grounded RAG (hybrid retrieval + Llama-3.1-8B) | ✅ |
+| 8 | Multimodal integration (Strategy A/B/C + C5) | ✅ **B wins** |
+| 9 | Explainability (Grad-CAM + chunk highlighting) | ✅ surfaced bias |
 | 10 | Full-system Streamlit UI (Colab + tunnel) | ✅ live demo |
-| **Disease fix** | **Step-wise diagnosis + LP-FT** (in progress) | 🔬 running 2026-06-12 |
+| Disease fix | Step-wise diagnosis + LP-FT | 🔬 running |
 
-Full engineering detail for each phase: see `progress.md`.
+### Week 1 — Project setup
+Repo on GitHub; full folder structure; `requirements.txt` + `environment.yml` (conda env `iks-agri`); configs for disease/soil/rag; `src/` module skeletons; Streamlit skeleton; seed=42 global. No blockers.
+
+### Week 2 — PDF-alignment cleanup
+Aligned the repo to the thesis spec (§41): fixed paper/thesis nesting, added `references.bib`, `BACKUP.md`, journal templates, environment-check notebook. Rewrote `requirements.txt`/`environment.yml` to track §22 exactly. Tests still green.
+
+### Phase 4 — Dataset acquisition & preprocessing
+6 datasets acquired: PlantVillage, PlantDoc, Paddy Doctor, Phantom-fs Soil, IRSID, OLID I. Generated 5 stratified 80/10/10 splits + 1 cross-region soil split. Per-dataset norm stats. Dataset classes (`JSONIndexedImageDataset`, `MultiLabelImageDataset`). **Validation: 0 corrupt files across 185,735 images.**
+
+**Phase 4 fix** (reconcile with finalised scope):
+- OLID I: full **4,749 images / 23 multi-label classes** (Kaggle source).
+- Sirajganj 2025 added: **1,177 images / 3 classes** (dry/moderate/wet) → moisture head.
+- Soil heads pinned to **3**: soil_type + moisture_appearance + texture (dropped surface + cover per supervisor).
+- Phantom-fs verified 7-class: Alluvial/Arid/Black/Laterite/Mountain/Red/Yellow.
+
+### Phase 5 — Disease cascade training (EfficientNet-B4)
+3-stage transfer cascade, 380×380, mixed precision, HF-Hub checkpoints (resume-after-timeout). PlantVillage (38) → Paddy Doctor (10) → PlantDoc (27). Original PlantDoc top-1 **~71–72%**. This is the model the whole disease-diagnosis work (§5) later dissected. Repos `iks-disease-{plantvillage,paddy-doctor,plantdoc}`.
+
+### Phase 5-R — Background-randomization retrain ⚠️ FAILED (see §7.1)
+Hypothesis: composite leaves onto random backgrounds each epoch so background can't be a label cue; add a `no_leaf` reject class (28th). Built segmentation+mask-cache + randomized dataset + cascade-R trainer + Grad-CAM audit (keep/revert rule: central-attn +5pp AND top-1 drop ≤3pp). **Result: failed the bar** — see §7.1. Repos `iks-disease-r-*`.
+
+### Phase 6 — Soil multi-task classifier (EfficientNet-B0, 224×224, 3 heads)
+
+**6-prep — data to HF Hub.** 3 private repos: `iks-soil-phantomfs` (soil_type, 7-class, 1,188 img), `iks-soil-sirajganj-moisture` (moisture, 3-class, 1,177 img), `iks-soil-texture-irsid-vit` (texture, 3 USDA-collapsed classes, 279 img = 16 IRSID + 263 VIT). Per-sample loss masking (each row supervises one head; others `-1`, ignored). Also integrated the latha-soil/VIT texture dataset (263 images, 7 classes).
+
+**6-V1 — baseline.** B0 + 3 heads (`nn.Sequential(Dropout, Linear)` each), 30 epochs (5 frozen + 25 unfrozen), per-task loss masking with NaN-guard. Results (test):
+- soil_type **89.08%** / 0.818 F1
+- moisture **88.98%** / 0.890 F1
+- texture **67.86%** / 0.670 F1 ← weak head
+
+**6-V2 — augmentation boost → PRODUCTION.** Added strong aug (wider RandomResizedCrop, rotate ±30, GridDistortion/Elastic, stronger ColorJitter, CoarseDropout), **Mixup + CutMix** (p=0.3), **label smoothing 0.1**, **TTA** (5 views), 40 epochs. Goal: lift texture toward 75–82%. Results (TTA test):
+- soil_type **89.92%** / 0.851
+- moisture **95.76%** / 0.958 (big jump from V1)
+- texture **67.86%** / 0.678 (texture did NOT improve — still the weak head)
+- **Shipped as production** (`iks-soil-multitask-v2`) — moisture gain + no regression on the others. Texture remains the open soil problem.
+
+**6-V3-sequential — 3-stage transfer ❌ COLLAPSED (see §7.2).** Hypothesis: warm the backbone on soil_type then moisture before full multi-task → more soil-aware → lift texture. On Colab it **catastrophically collapsed all 3 heads to ~20% val**. Abandoned; documented negative result.
+
+**6-V3-tiling — patch-based texture expansion ⚠️ (see §7.3).** Safer retry: reuse V2 recipe byte-for-byte, only change texture data — tile source images into a 3×3 grid (2,511 patches, leakage-safe by source_id). Health-check aborts if any head <40% after epoch 1. Ship criterion: texture up AND soil_type/moisture not down >2pp. _Outcome: V2 remained production unless it cleared the bar — confirm final number from the Colab run._
+
+### Phase 3 — IKS corpus pipeline + 2 books
+OCR → clean → chapter-split → chunk → embed → ChromaDB. Ingested **Vrikshayurveda (78 chunks)** + **Brihat Samhita 12 chapters (207 chunks)** = **285 vectors** in `iks_corpus`. Pipeline (`src/rag/corpus/`): Tesseract OCR with per-page cache, Devanagari-line drop cleaning, English-heading chapter location (page-offset-invariant), verse-first chunking with sha1 idempotent chunk_ids, bge-large-en-v1.5 embeddings. Retrieval smoke: all 3 test queries returned correct sources at top-3. 29 tests pass.
+
+### Phase 3b / 3b.2 — add 2 more books via Gemini OCR
+Tesseract's Devanagari-confused output was derailing the generator on some queries. Registered **Krishi Parashara** + **Upavanavinoda** for higher-quality Gemini OCR (config + one loader branch; cost-gated ~$0.03). After 3b.2 re-OCR, the live corpus is **206 chunks across 4 books** (the number asserted by Phase 8/9/10).
+
+### Phase 7 — Grounded RAG pipeline
+Hybrid retrieval: **dense (bge-large) + sparse (BM25Okapi) → Reciprocal-Rank-Fusion (k=60) → cross-encoder rerank (bge-reranker-base)**, all toggleable. **Llama-3.1-8B-Instruct 4-bit** (nf4 + double-quant) generator under the locked §17 grounded-advisor prompt (answer only from passages, cite `[Source Text, ch.X, v.Y]`, refuse if insufficient). Chunks transported via private `iks-corpus-chunks` HF dataset (§38-compliant — no copyrighted text in the public repo). Runs single-process on Colab/Linux (Windows has a chromadb+torch DLL conflict). 41 tests pass.
+
+### Phase 8 — Multimodal integration (C2 + C5)
+Three query-construction strategies on one `MultimodalContext`:
+- **A — Template** (deterministic fill-in).
+- **B — LLM-mediated** (Llama rewrites vision labels → classical vocabulary). **WINNER.**
+- **C — Multimodal embedding projection** (honest ablation showing the modality gap; B≥A>C as expected).
+- **C5 causal hook**: user-supplied pathway (soil_driven/pest_vector/contagion/unknown), never inferred from images, threaded through A and B.
+- Also finished Phase 6 soil single-image inference (`SoilInferenceEngine`) here. 22 tests pass.
+- **Retrieval result: Strategy B 0.59–0.96 vs A 0.01–0.04.**
+
+### Phase 9 — Explainability
+Grad-CAM for disease + 3 soil heads (`SoilHeadWrapper` forwards one head's logits so `ClassifierOutputTarget` works on the multi-task model). Retrieved-chunk term highlighting (query↔chunk lexical overlap, audit-grade). Matplotlib panels reused in notebook + Streamlit. **This phase surfaced the disease background-bias finding** (only 3/256 PlantDoc test images had central CAM). 17 tests pass.
+
+### Phase 10 — Full-system Streamlit UI
+Live demo: upload leaf+soil → predictions + 4 Grad-CAM heatmaps → Strategy-B query → grounded cited answer → highlighted chunks. Colab + cloudflared tunnel (localtunnel dropped Streamlit's JS chunks). Disease model behind a config switch; no-leaf guardrail (native R class OR segmentation fallback). T4 memory plan: embedder+reranker on CPU. 13 app tests pass.
+
+### Disease fix (active) — see §5, §6.
 
 ---
 
@@ -157,8 +230,16 @@ A thesis is stronger for documenting what *didn't* work and why.
 - **Result:** central-attention rate 1.2% → 5.9% (marginal), but accuracy DROPPED everywhere: PlantVillage 99.8→90.7, PlantDoc 72.3→66.8.
 - **Verdict:** net negative. Background randomization cost accuracy for almost no attention gain. **Consistent with the literature.** Keep as a documented ablation; do not build on the R model.
 
-### 7.2 Soil V3-tiling — (status from Phase 6; verify)
-- Patch-based texture expansion to push the weak texture head past V2's 67.86%. Ship criterion: texture up ≥3pp AND soil_type/moisture not down >2pp. If it didn't clear the bar, V2 stays production and V3-tiling is a documented negative result. _(Confirm final outcome from progress.md / notebook.)_
+### 7.2 Soil V3-sequential transfer — FAILED (catastrophic collapse)
+- **Idea:** warm the B0 backbone on soil_type, then moisture, then full multi-task — hoping a "soil-aware" backbone lifts the weak texture head.
+- **Result:** all three heads **collapsed to ~20% val accuracy** on Colab. The multi-stage / curriculum / per-stage head-freezing pattern destabilized training.
+- **Verdict:** abandoned. Documented negative result. Led directly to the safer V3-tiling design (reuse V2 recipe unchanged, only change data).
+
+### 7.3 Soil V3-tiling — texture head did not clearly improve
+- **Idea:** tile texture source images into a 3×3 patch grid (2,511 leakage-safe patches) to give the weak texture head more training signal, reusing the V2 recipe byte-for-byte.
+- **Ship criterion:** texture top-1 up AND soil_type/moisture not down >2pp vs V2.
+- **Result:** _V2 remained production (texture stayed ~67.9%); V3-tiling preserved as an ablation. Confirm the exact Colab number and record here._
+- **Takeaway:** texture (67.9%) is a genuinely hard head — a real open problem, candidate for future work, not a quick win.
 
 ---
 
