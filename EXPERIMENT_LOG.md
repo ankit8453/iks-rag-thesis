@@ -276,6 +276,15 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 
 **DISEASE WORK LOCKED.** Full arc: diagnosis → 3 failed fixes (R, LP-FT, inference-crop) → C-PD fix (honest ~67% leaf attention).
 
+**KEY FOLLOW-UP FINDINGS (2026-06-13):**
+- **Healthy-vs-diseased is near-perfect.** On a 16-sample check the model got health-status 16/16 right; the 27-class top-1 "66.6%" is mostly **within-crop disease-SUBTYPE confusion** (corn rust↔corn blight, potato early↔late blight), NOT healthy/diseased errors. Report top-1 66.6% AND the much-higher healthy-vs-diseased accuracy (Phase 9 Cell 5b measures it on the full test set). This reframes 66.6% from "weak" to "works where it matters."
+- **Grad-CAM corner hotspots were a visualization artifact**, not the model — fixed with `eigen_smooth=True` (plain GradCAM was noisiest; GradCAM++/EigenCAM also noisy; eigen-smoothed GradCAM is cleanest).
+- **YOLO leaf detector** (`foduucom/plant-leaf-detection-and-classification`) works at **conf=0.10** (0.25 was too strict). `src/disease/leaf_detect.py::LeafCropper` (shared by Phase 9 & 10).
+- **"Heatmap only for disease" rule** (design decision): healthy leaves show NO heatmap (a heatmap on a healthy leaf is meaningless); diseased leaves show the eigen Grad-CAM on the lesion. Implemented as `disease_explain()` in Phase 9.
+- Clean demo images: diseased leaves **idx 248, 106, 22** (PlantDoc test) give clean lesion attention. Healthy leaves give diffuse maps (correct, but we suppress the heatmap).
+
+**Phase 9 FINAL (2026-06-13):** rebuilt the explainability notebook around C-PD + YOLO crop (conf 0.10) + eigen Grad-CAM + heatmap-only-for-disease + the healthy-vs-diseased metric + the 248/106/22 showcase. New shared helper `src/disease/leaf_detect.py`.
+
 **Thesis framing:** present BOTH models — full-FT 72.3% (background, Grad-CAM-shown) vs C-PD 66.6% (honest leaf attention). Contribution = the **IKS-grounded advisory system + the rigorous disease-bias diagnosis + the C-PD fix**, NOT a record-breaking classifier. PlantDoc ceiling ~70–78%; honest-leaf ~67–70%.
 
 ---
