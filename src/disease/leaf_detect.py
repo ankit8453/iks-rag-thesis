@@ -24,8 +24,10 @@ _LOGGER = get_logger(__name__)
 DEFAULT_YOLO_REPO: str = "foduucom/plant-leaf-detection-and-classification"
 
 #: Detection confidence floor. Below this we treat the image as "no leaf
-#: found" and fall back to the full image rather than crop noise.
-DEFAULT_CONF: float = 0.25
+#: found" and fall back to the full image rather than crop noise. 0.10
+#: reliably detects on PlantDoc / stock / field images with the
+#: ``foduucom`` weights; 0.25 was too strict and missed many leaves.
+DEFAULT_CONF: float = 0.10
 
 
 class LeafCropper:
