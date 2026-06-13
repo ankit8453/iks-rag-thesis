@@ -265,9 +265,18 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 - The 72.3% is **background-driven** (rigorously shown via stage-wise Grad-CAM: stages 1–2 healthy, stage 3 breaks).
 - Retraining on GT-crops would give ~70% with honest attention — same accuracy, better interpretability.
 
-**Decision (2026-06-12, Ankit):** the goal is to FIX the damaged model (it looks at background, fails even on clean PlantVillage images), NOT to chase accuracy above 72%. A *correct* model at ~70% beats a *broken* one at 72%. → **Retrain on cropped (leaf-only) images (C-PD).** Built `src/disease/train_crop.py` (cropped-dataset builders, warm-start from PlantVillage backbone; reuses `train_one_stage`) + `notebooks/phase5_crop_retrain_plantdoc.ipynb` (proves the damage on clean PlantVillage images, retrains on crops, tests acc + Grad-CAM). 10 crop tests pass. Pushes to NEW repo `iks-disease-plantdoc-crop`. **Result: ⏳ pending Colab run.**
+**Decision (2026-06-12, Ankit):** the goal is to FIX the damaged model (it looks at background, fails even on clean PlantVillage images), NOT to chase accuracy above 72%. A *correct* model at ~70% beats a *broken* one at 72%. → **Retrain on cropped (leaf-only) images (C-PD).** Built `src/disease/train_crop.py` (cropped-dataset builders, warm-start from PlantVillage backbone; reuses `train_one_stage`) + `notebooks/phase5_crop_retrain_plantdoc.ipynb`. Pushes to NEW repo `iks-disease-plantdoc-crop`.
 
-**Thesis framing:** the contribution is the **IKS-grounded advisory system + the rigorous disease-bias diagnosis** (3 documented failed fixes + the published-ceiling analysis), NOT a record-breaking classifier.
+**RESULT (2026-06-13). ✅ FIX WORKS (the honest tradeoff).**
+- Held-out leaf-crop test (452 crops): **66.6% top-1, 0.652 macro-F1** — matches the PlantDoc paper's C-PD (70.5%) ballpark.
+- Grad-CAM: **attention moved onto the leaf** (clear on several images; partial on busy multi-leaf scenes).
+- Cell 3 confirmed the damage first: OLD model lights up background/edges even on CLEAN PlantVillage leaves.
+- Honest-vs-cheating: OLD 72.3% via **background** ❌ vs NEW 66.6% via **leaf** ✅.
+- Caveats: 66.6% (crops) vs 72.3% (full images) are different test sets/inputs — not directly comparable; deployment = crop-first then classify; the Cell-3/5 Grad-CAM is on full images (OOD for the crop-model).
+
+**DISEASE WORK LOCKED.** Full arc: diagnosis → 3 failed fixes (R, LP-FT, inference-crop) → C-PD fix (honest ~67% leaf attention).
+
+**Thesis framing:** present BOTH models — full-FT 72.3% (background, Grad-CAM-shown) vs C-PD 66.6% (honest leaf attention). Contribution = the **IKS-grounded advisory system + the rigorous disease-bias diagnosis + the C-PD fix**, NOT a record-breaking classifier. PlantDoc ceiling ~70–78%; honest-leaf ~67–70%.
 
 ---
 
