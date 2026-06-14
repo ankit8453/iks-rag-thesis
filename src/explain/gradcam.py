@@ -251,6 +251,7 @@ def _run_gradcam(
     tensor: Any,
     rgb_float: Any,
     target_class: int,
+    eigen_smooth: bool = False,
 ) -> tuple[Any, Any]:
     """Run pytorch_grad_cam and produce (heatmap, overlay_rgb).
 
@@ -258,6 +259,11 @@ def _run_gradcam(
     The model is forced to ``eval()`` here so dropout / batchnorm don't
     perturb the heatmap; gradients ARE enabled (no ``torch.no_grad``)
     because Grad-CAM needs them by definition.
+
+    ``eigen_smooth=True`` takes the first principal component of the
+    weighted activations — it removes the high-frequency edge/corner
+    noise that plain Grad-CAM shows on EfficientNet (validated cleaner
+    in the Phase 9 method comparison).
     """
     import numpy as np  # noqa: PLC0415
     import torch  # noqa: PLC0415
@@ -272,7 +278,7 @@ def _run_gradcam(
     cam = GradCAM(model=forward_module, target_layers=[target_layer])
     targets = [ClassifierOutputTarget(int(target_class))]
     # GradCAM expects ``input_tensor`` and ``targets``; output is (B, H, W) float.
-    grayscale_cam = cam(input_tensor=tensor, targets=targets)
+    grayscale_cam = cam(input_tensor=tensor, targets=targets, eigen_smooth=eigen_smooth)
     heatmap = grayscale_cam[0]  # (H, W) float32 in [0, 1]
 
     overlay = show_cam_on_image(rgb_float, heatmap, use_rgb=True)
@@ -343,6 +349,49 @@ def disease_gradcam(
         overlay_rgb=overlay_rgb,
         heatmap=heatmap,
         pred_label=label,
+        pred_conf=float(pred.confidence),
+        pred_index=int(pred.class_index),
+    )
+
+
+def disease_gradcam_eigen(
+    image_path: Path | str | Any,
+    engine: "DiseaseInferenceEngine",
+) -> GradCAMResult:
+    """Eigen-smoothed Grad-CAM on ``blocks[-2]`` — the validated CLEAN recipe.
+
+    Phase 9 found plain Grad-CAM on ``conv_head`` shows corner-noise
+    artifacts on the C-PD model; the clean result (heat on the lesion,
+    no corner hotspots) comes from the second-to-last block + eigen
+    smoothing. Use this for the C-PD disease model in the UI / paper
+    figures. Falls back to the default target layer if the backbone has
+    no usable ``.blocks``.
+    """
+    tensor, _rgb_uint8, rgb_float = _preprocess_for_gradcam(
+        image_path, image_size=engine.image_size,
+    )
+    pil = _open_for_engine(image_path)
+    pred = engine.predict(pil).prediction
+
+    backbone = engine.model.get_feature_extractor()
+    if hasattr(backbone, "blocks") and len(backbone.blocks) >= 2:
+        target_layer = backbone.blocks[-2]
+    else:
+        target_layer = find_target_layer(backbone)
+    forward_module = engine.model._module if hasattr(engine.model, "_module") else engine.model  # noqa: SLF001
+
+    heatmap, overlay_rgb = _run_gradcam(
+        forward_module=forward_module,
+        target_layer=target_layer,
+        tensor=tensor,
+        rgb_float=rgb_float,
+        target_class=int(pred.class_index),
+        eigen_smooth=True,
+    )
+    return GradCAMResult(
+        overlay_rgb=overlay_rgb,
+        heatmap=heatmap,
+        pred_label=engine.class_names[int(pred.class_index)],
         pred_conf=float(pred.confidence),
         pred_index=int(pred.class_index),
     )
@@ -487,6 +536,7 @@ __all__ = [
     "SoilHeadWrapper",
     "compute_gradcam",
     "disease_gradcam",
+    "disease_gradcam_eigen",
     "find_target_layer",
     "soil_gradcam",
 ]

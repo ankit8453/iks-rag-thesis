@@ -86,6 +86,7 @@ class EngineBundle:
     rag_pipeline: Any
     llm: Any
     device: str
+    cropper: Any = None  # YOLO LeafCropper (crop-first pipeline for the C-PD model)
 
 
 # --------------------------------------------------------------------- #
@@ -138,6 +139,18 @@ def load_soil_engine(
         len(engine.texture_classes),
     )
     return engine
+
+
+@_cache_resource
+def load_cropper(
+    repo: str = app_config.YOLO_LEAF_REPO,
+    conf: float = app_config.YOLO_CONF,
+) -> Any:
+    """Load the pretrained YOLO leaf cropper (crop-first C-PD pipeline)."""
+    from src.disease.leaf_detect import LeafCropper  # local import
+
+    _LOGGER.info("Loading LeafCropper: repo=%s conf=%.2f", repo, conf)
+    return LeafCropper(repo=repo, conf=conf)
 
 
 @_cache_resource
@@ -197,6 +210,7 @@ def load_all(
     """
     disease_engine = load_disease_engine(device=device, work_dir=work_dir)
     soil_engine = load_soil_engine(device=device, work_dir=work_dir)
+    cropper = load_cropper()
     rag_pipeline = load_rag_pipeline()
     return EngineBundle(
         disease_engine=disease_engine,
@@ -204,6 +218,7 @@ def load_all(
         rag_pipeline=rag_pipeline,
         llm=rag_pipeline.generator,
         device=device,
+        cropper=cropper,
     )
 
 
@@ -232,6 +247,7 @@ def report_vram(prefix: str = "") -> str:
 __all__ = [
     "EngineBundle",
     "load_all",
+    "load_cropper",
     "load_disease_engine",
     "load_rag_pipeline",
     "load_soil_engine",

@@ -1,17 +1,14 @@
 """Phase 10 UI configuration — model repos, switches, dropdown menus.
 
-The disease model is behind a config switch. Today the live demo uses the
-ORIGINAL 27-class Phase 5 model (the published-SOTA-frontier 72.3% top-1
-checkpoint with clean class names). The Phase 5-R 28-class retrain ships
-in parallel as a diagnostic study (Grad-CAM shortcut + background
-randomization ablation) — adopting it later is a TWO-LINE change here:
+The disease model is the **C-PD** retrain (`iks-disease-plantdoc-crop`):
+trained on leaf CROPS so it attends to the LEAF, not the background
+(Phase 5/9). The UI pipeline is therefore CROP-FIRST: a pretrained YOLO
+leaf detector crops the leaf before the classifier sees it.
 
-    DISEASE_MODEL_REPO = "ankit-iiitdmj/iks-disease-r-plantdoc"
-    HAS_NO_LEAF_CLASS  = True
-
-Nothing else in the app needs touching: the guardrail switches its own
-implementation off this flag (native ``no_leaf`` class vs segmentation
-fallback) and ``app/loaders.py`` passes the repo through unchanged.
+Two design rules from Phase 9, applied here:
+  - **heatmap only for disease** — healthy leaves show no Grad-CAM.
+  - **advisory only for disease** — healthy leaves skip the IKS query
+    (a "treatment for a healthy leaf" query is meaningless).
 
 No GPU / network calls happen at import — this is a constants module.
 """
@@ -22,13 +19,26 @@ from __future__ import annotations
 # Model repos & switches
 # --------------------------------------------------------------------- #
 
-#: Disease classifier HF Hub repo. SEE MODULE DOCSTRING for the swap recipe.
-DISEASE_MODEL_REPO: str = "ankit-iiitdmj/iks-disease-plantdoc"
+#: Disease classifier HF Hub repo — the C-PD (leaf-attention) retrain.
+DISEASE_MODEL_REPO: str = "ankit-iiitdmj/iks-disease-plantdoc-crop"
 
-#: True when the disease model has a native ``no_leaf`` reject class
-#: (Phase 5-R). False when using the OLD 27-class model — in which case
-#: ``app.guardrail.is_leaf`` falls back to ``src.disease.segment``.
+#: C-PD is the 27-class PlantDoc model (no native ``no_leaf`` class), so the
+#: guardrail uses the segmentation fallback in ``app.guardrail.is_leaf``.
 HAS_NO_LEAF_CLASS: bool = False
+
+#: Pretrained YOLO leaf detector (no training) for the crop-first pipeline.
+YOLO_LEAF_REPO: str = "foduucom/plant-leaf-detection-and-classification"
+
+#: Detection confidence floor — 0.10 reliably detects on stock/field leaves.
+YOLO_CONF: float = 0.10
+
+#: The 10 HEALTHY PlantDoc classes (the other 17 are diseases). Drives the
+#: "heatmap/advisory only for disease" gating.
+HEALTHY_CLASSES: frozenset[str] = frozenset({
+    "Apple leaf", "Bell_pepper leaf", "Blueberry leaf", "Cherry leaf",
+    "Peach leaf", "Raspberry leaf", "Soyabean leaf", "Strawberry leaf",
+    "Tomato leaf", "grape leaf",
+})
 
 #: Soil multi-task classifier HF Hub repo.
 SOIL_MODEL_REPO: str = "ankit-iiitdmj/iks-soil-multitask-v2"
@@ -122,14 +132,15 @@ GUARDRAIL_SEGMENT_STYLE: str = "field"
 # UI strings
 # --------------------------------------------------------------------- #
 
-APP_TITLE: str = "IKS Agricultural Advisor — Live Demo"
+APP_TITLE: str = "VṚKṢA · IKS Agricultural Advisor"
+
+APP_TAGLINE: str = "Leaf + soil vision → grounded advice from classical Indian agronomy"
 
 DISCLAIMER: str = (
-    "**Research prototype.** This advisor returns recommendations derived "
-    "from classical Indian agricultural treatises (Vrikshayurveda, Brihat "
-    "Samhita, Krishi Parashara, Upavanavinoda). It is NOT a substitute for "
-    "professional agronomic advice. Verify every recommendation with a "
-    "qualified agricultural expert before field use."
+    "**Research prototype.** Recommendations are derived from classical Indian "
+    "agricultural treatises (Vrikshayurveda, Brihat Samhita, Krishi Parashara, "
+    "Upavanavinoda) — NOT a substitute for professional agronomic advice. "
+    "Verify before field use."
 )
 
 NOT_A_LEAF_MESSAGE: str = (
@@ -137,15 +148,20 @@ NOT_A_LEAF_MESSAGE: str = (
     "image of a single leaf (fill ~30-80% of the frame), then try again."
 )
 
-OLD_MODEL_HONESTY_NOTE: str = (
-    "Disease model: Phase 5 (72.3% top-1). Phase 9 Grad-CAM diagnostics "
-    "showed this model can still attend to background regions on some "
-    "PlantDoc-style images — interpret the heatmaps with that caveat. The "
-    "Phase 5-R retrain ships as a separate diagnostic study."
+MODEL_NOTE: str = (
+    "Disease model: C-PD (crop-retrained, leaf-attention). Pipeline crops the "
+    "leaf, classifies, and shows a Grad-CAM heatmap only when a disease is "
+    "detected. Healthy leaves get no heatmap and no treatment query."
 )
 
 
+def is_healthy(class_name: str) -> bool:
+    """True if the predicted disease class is actually a HEALTHY leaf class."""
+    return class_name in HEALTHY_CLASSES
+
+
 __all__ = [
+    "APP_TAGLINE",
     "APP_TITLE",
     "CAUSAL_CHOICES",
     "CORPUS_REPO",
@@ -158,10 +174,14 @@ __all__ = [
     "DISEASE_MODEL_REPO",
     "GUARDRAIL_SEGMENT_STYLE",
     "HAS_NO_LEAF_CLASS",
+    "HEALTHY_CLASSES",
     "LEAF_FOREGROUND_MAX",
     "LEAF_FOREGROUND_MIN",
     "LLM_MODEL_NAME",
+    "MODEL_NOTE",
     "NOT_A_LEAF_MESSAGE",
-    "OLD_MODEL_HONESTY_NOTE",
     "SOIL_MODEL_REPO",
+    "YOLO_CONF",
+    "YOLO_LEAF_REPO",
+    "is_healthy",
 ]

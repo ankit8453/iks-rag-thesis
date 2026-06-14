@@ -1,22 +1,22 @@
-"""Phase 10 — full-system Streamlit UI.
+"""Phase 10 — full-system Streamlit UI (modern / futuristic).
 
-Single entry point wiring Phases 5 (disease) + 6 (soil) + 7 (RAG) +
-8 (integration) + 9 (explainability) into one interactive demo.
+Wires Phases 5 (disease) + 6 (soil) + 7 (RAG) + 8 (integration) +
+9 (explainability) into one interactive demo, with the validated
+Phase 9 pipeline:
 
-Run locally::
+  - C-PD disease model + YOLO leaf crop (crop-first).
+  - eigen-smoothed Grad-CAM, shown ONLY when a disease is predicted.
+  - advisory (Strategy-B query → grounded IKS answer) ONLY for disease;
+    healthy leaves get "no treatment needed".
 
-    streamlit run app/streamlit_app.py
-
-Run on Colab via the launcher notebook ``notebooks/phase10_launch_ui.ipynb``;
-it boots streamlit on a port and exposes it via localtunnel.
+Run locally::  streamlit run app/streamlit_app.py
+Run on Colab via ``notebooks/phase10_launch_ui.ipynb`` (cloudflared tunnel).
 """
 
 from __future__ import annotations
 
-# Streamlit prepends THIS file's directory (app/) to sys.path, which
-# shadows the top-level ``app`` package and makes ``from app import
-# config`` fail with ModuleNotFoundError. Inject the repo root BEFORE
-# any ``from app import ...`` line so the package resolves correctly.
+# Streamlit prepends app/ to sys.path, shadowing the top-level ``app``
+# package. Inject the repo root before any ``from app import ...``.
 import sys as _sys
 from pathlib import Path as _Path
 _REPO_ROOT = _Path(__file__).resolve().parent.parent
@@ -34,10 +34,7 @@ from app import config as app_config
 from app.guardrail import is_leaf
 from app.loaders import load_all, report_vram
 from src.integration.causation import CausalContext, CausalPathway
-from src.integration.config import (
-    LLMMediatedStrategyConfig,
-    TemplateStrategyConfig,
-)
+from src.integration.config import LLMMediatedStrategyConfig, TemplateStrategyConfig
 from src.integration.context import MultimodalContext
 from src.integration.strategy_llm_mediated import LLMMediatedStrategy
 from src.integration.strategy_template import TemplateStrategy
@@ -45,18 +42,65 @@ from src.utils.logging_setup import get_logger
 
 _LOGGER = get_logger(__name__)
 
-
 # --------------------------------------------------------------------- #
-# Page setup
+# Page setup + futuristic theme
 # --------------------------------------------------------------------- #
 
-st.set_page_config(
-    page_title=app_config.APP_TITLE,
-    layout="wide",
-    initial_sidebar_state="expanded",
+st.set_page_config(page_title=app_config.APP_TITLE, page_icon="🌿", layout="wide")
+
+st.markdown(
+    """
+    <style>
+      .stApp {
+        background:
+          radial-gradient(1100px 520px at 15% -10%, #103b3a 0%, rgba(16,59,58,0) 55%),
+          radial-gradient(900px 500px at 95% 0%, #1a2c52 0%, rgba(26,44,82,0) 50%),
+          linear-gradient(180deg, #070d12 0%, #05080b 100%);
+        color: #e6f0f2;
+      }
+      #MainMenu, footer {visibility: hidden;}
+      .hero-title {
+        font-size: 2.5rem; font-weight: 800; letter-spacing: .5px; margin-bottom: 0;
+        background: linear-gradient(90deg, #34e0a1, #3ec6ff 55%, #b18cff);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      }
+      .hero-sub { color: #93a7af; font-size: 1.02rem; margin-top: 2px; }
+      .glass {
+        background: rgba(255,255,255,0.045);
+        border: 1px solid rgba(255,255,255,0.09);
+        border-radius: 16px; padding: 16px 20px; margin-bottom: 12px;
+        backdrop-filter: blur(9px);
+        box-shadow: 0 10px 34px rgba(0,0,0,0.40);
+      }
+      .glass-ok  { border-left: 4px solid #34e0a1; }
+      .glass-bad { border-left: 4px solid #ff7a7a; }
+      .pill {
+        display:inline-block; padding:3px 12px; border-radius:999px;
+        font-size:.78rem; font-weight:700; letter-spacing:.4px;
+      }
+      .pill-ok  { background:rgba(52,224,161,.16); color:#5ff0bf; border:1px solid rgba(52,224,161,.4); }
+      .pill-bad { background:rgba(255,122,122,.16); color:#ff9d9d; border:1px solid rgba(255,122,122,.4); }
+      .big { font-size:1.7rem; font-weight:800; margin:6px 0 2px; }
+      .muted { color:#8fa3ab; font-size:.85rem; }
+      .stButton>button {
+        border-radius: 12px; font-weight: 700; border: 0;
+        background: linear-gradient(90deg, #34e0a1, #3ec6ff);
+        color: #04121a;
+      }
+      .stButton>button:disabled { background:#243038; color:#5b6b73; }
+      h1,h2,h3,h4 { color:#eaf4f6; }
+      .stProgress > div > div { background-image: linear-gradient(90deg,#34e0a1,#3ec6ff); }
+    </style>
+    """,
+    unsafe_allow_html=True,
 )
-st.title(app_config.APP_TITLE)
-st.caption(app_config.OLD_MODEL_HONESTY_NOTE)
+
+st.markdown(
+    f'<div class="hero-title">🌿 {app_config.APP_TITLE}</div>'
+    f'<div class="hero-sub">{app_config.APP_TAGLINE}</div>',
+    unsafe_allow_html=True,
+)
+st.write("")
 
 
 # --------------------------------------------------------------------- #
@@ -64,56 +108,44 @@ st.caption(app_config.OLD_MODEL_HONESTY_NOTE)
 # --------------------------------------------------------------------- #
 
 with st.sidebar:
-    st.header("Inputs")
-    crop = st.selectbox(
-        "Crop", options=list(app_config.CROP_CHOICES), index=0,
-    )
+    st.header("⚙️ Inputs")
+    crop = st.selectbox("Crop", options=list(app_config.CROP_CHOICES), index=0)
     if crop == "other":
         crop = st.text_input("Custom crop name", value="rice").strip() or "rice"
 
     causal_labels = [label for _, label in app_config.CAUSAL_CHOICES]
     causal_values = [value for value, _ in app_config.CAUSAL_CHOICES]
     causal_idx = st.selectbox(
-        "Suspected cause",
-        options=list(range(len(causal_labels))),
-        format_func=lambda i: causal_labels[i],
-        index=0,
+        "Suspected cause", options=list(range(len(causal_labels))),
+        format_func=lambda i: causal_labels[i], index=0,
     )
     causal_value = causal_values[causal_idx]
-
-    causal_notes = st.text_area(
-        "Notes (optional)", value="", height=80,
-        help="Free-text observation: locality, season, prior interventions.",
-    )
+    causal_notes = st.text_area("Notes (optional)", value="", height=80)
 
     st.divider()
-    st.header("Retrieval strategy")
+    st.header("🔎 Retrieval")
     strategy = st.radio(
-        "Query construction",
-        options=["B", "A"],
+        "Query construction", options=["B", "A"],
         index=0 if app_config.DEFAULT_STRATEGY == "B" else 1,
-        format_func=lambda s: (
-            "Strategy B — LLM-mediated (default)" if s == "B"
-            else "Strategy A — Template"
-        ),
-        help=(
-            "Strategy B is the Phase 8 retrieval winner (0.59-0.96 vs A's "
-            "0.01-0.04). Toggle to A for an ablation comparison."
-        ),
+        format_func=lambda s: ("Strategy B — LLM-mediated (default)" if s == "B"
+                               else "Strategy A — Template (baseline)"),
+        help="Strategy B (the contribution) bridges modern labels → classical vocabulary.",
     )
     show_heatmaps = st.checkbox("Show Grad-CAM heatmaps", value=True)
     top_k = st.slider("Chunks to retrieve", 1, 10, app_config.DEFAULT_TOP_K)
+    st.divider()
+    st.caption(app_config.MODEL_NOTE)
 
 
 # --------------------------------------------------------------------- #
-# Load engines (cached)
+# Load engines (cached, once per session)
 # --------------------------------------------------------------------- #
 
-with st.spinner("Loading models (one-time per session)..."):
+with st.spinner("Booting models (one-time per session)…"):
     bundle = load_all()
-status_line = report_vram(prefix="✓ Models loaded — ")
-if status_line:
-    st.success(status_line)
+_status = report_vram(prefix="Models online — ")
+if _status:
+    st.markdown(f'<div class="glass glass-ok">⚡ {_status}</div>', unsafe_allow_html=True)
 
 
 # --------------------------------------------------------------------- #
@@ -122,37 +154,29 @@ if status_line:
 
 col_leaf, col_soil = st.columns(2)
 with col_leaf:
-    st.subheader("Leaf photo")
-    leaf_file = st.file_uploader(
-        "Upload leaf image", type=["jpg", "jpeg", "png", "webp"],
-        key="leaf_uploader",
-    )
+    st.markdown("#### 🍃 Leaf photo")
+    leaf_file = st.file_uploader("Upload leaf", type=["jpg", "jpeg", "png", "webp"],
+                                 key="leaf_uploader", label_visibility="collapsed")
     if leaf_file is not None:
         st.image(leaf_file, use_container_width=True)
 with col_soil:
-    st.subheader("Soil photo")
-    soil_file = st.file_uploader(
-        "Upload soil image", type=["jpg", "jpeg", "png", "webp"],
-        key="soil_uploader",
-    )
+    st.markdown("#### 🟤 Soil photo")
+    soil_file = st.file_uploader("Upload soil", type=["jpg", "jpeg", "png", "webp"],
+                                 key="soil_uploader", label_visibility="collapsed")
     if soil_file is not None:
         st.image(soil_file, use_container_width=True)
 
-analyze = st.button(
-    "Analyze",
-    type="primary",
-    disabled=(leaf_file is None or soil_file is None),
-    use_container_width=True,
-)
+analyze = st.button("✨  Analyze", type="primary",
+                    disabled=(leaf_file is None or soil_file is None),
+                    use_container_width=True)
 
 
 # --------------------------------------------------------------------- #
-# Analysis flow
+# Helpers
 # --------------------------------------------------------------------- #
 
 
 def _to_pil(uploader_file: Any) -> Image.Image:
-    """Streamlit ``UploadedFile`` → PIL.Image (RGB)."""
     data = uploader_file.read()
     uploader_file.seek(0)
     return Image.open(io.BytesIO(data)).convert("RGB")
@@ -167,174 +191,176 @@ def _free_cuda_cache() -> None:
         pass
 
 
-def _build_query(
-    context: MultimodalContext, strategy_choice: str, llm: Any,
-) -> str:
+def _build_query(context: MultimodalContext, strategy_choice: str, llm: Any) -> str:
     if strategy_choice == "A":
         return TemplateStrategy(TemplateStrategyConfig()).build_query(context)
-    return LLMMediatedStrategy(LLMMediatedStrategyConfig()).build_query(
-        context, llm=llm,
-    )
+    return LLMMediatedStrategy(LLMMediatedStrategyConfig()).build_query(context, llm=llm)
 
 
-def _run_rag_with_oom_retry(query: str, top_k: int) -> Any:
-    """Run RAG; on OOM, free cache + retry with smaller token budget."""
+def _run_rag_with_oom_retry(query: str, k: int) -> Any:
     try:
-        return bundle.rag_pipeline.answer(query, k=top_k)
-    except Exception as exc:  # broad on purpose
+        return bundle.rag_pipeline.answer(query, k=k)
+    except Exception as exc:
         msg = str(exc).lower()
         if "out of memory" not in msg and "cuda" not in msg:
             raise
-        _LOGGER.warning("OOM on first generation, retrying smaller: %s", exc)
+        _LOGGER.warning("OOM on generation, retrying smaller: %s", exc)
         _free_cuda_cache()
         gen = getattr(bundle.rag_pipeline, "generator", None)
         old = getattr(gen, "max_new_tokens", None) if gen is not None else None
         try:
             if gen is not None and old is not None:
                 gen.max_new_tokens = 256
-            return bundle.rag_pipeline.answer(query, k=top_k)
+            return bundle.rag_pipeline.answer(query, k=k)
         finally:
             if gen is not None and old is not None:
                 gen.max_new_tokens = old
 
 
+# --------------------------------------------------------------------- #
+# Analysis flow
+# --------------------------------------------------------------------- #
+
 if analyze and leaf_file is not None and soil_file is not None:
     leaf_img = _to_pil(leaf_file)
     soil_img = _to_pil(soil_file)
 
-    # ----- Step 1: guardrail ---------------------------------------- #
-    with st.spinner("Checking leaf upload..."):
+    # 1) guardrail
+    with st.spinner("Checking the leaf upload…"):
         ok, reason = is_leaf(
-            leaf_img,
-            has_no_leaf_class=app_config.HAS_NO_LEAF_CLASS,
+            leaf_img, has_no_leaf_class=app_config.HAS_NO_LEAF_CLASS,
             disease_engine=bundle.disease_engine,
             foreground_min=app_config.LEAF_FOREGROUND_MIN,
             foreground_max=app_config.LEAF_FOREGROUND_MAX,
             segment_style=app_config.GUARDRAIL_SEGMENT_STYLE,
         )
     if not ok:
-        st.error(app_config.NOT_A_LEAF_MESSAGE)
-        st.caption(f"Detail: {reason}")
+        st.markdown(f'<div class="glass glass-bad">🚫 {app_config.NOT_A_LEAF_MESSAGE}<br>'
+                    f'<span class="muted">Detail: {reason}</span></div>', unsafe_allow_html=True)
         st.stop()
 
-    # ----- Step 2: vision inference --------------------------------- #
-    with st.spinner("Running disease + soil inference..."):
-        disease_result = bundle.disease_engine.predict(leaf_img)
+    # 2) crop-first vision inference
+    with st.spinner("Detecting leaf → cropping → classifying…"):
+        leaf_crop, found = bundle.cropper.crop(leaf_img)
+        disease_result = bundle.disease_engine.predict(leaf_crop)
+        d_pred = disease_result.prediction
+        healthy = app_config.is_healthy(d_pred.class_name)
         soil_result = bundle.soil_engine.predict(soil_img, with_embedding=True)
+        s_pred = soil_result.prediction
 
-    st.subheader("Predictions")
+    # 3) status banner
+    if healthy:
+        st.markdown(
+            f'<div class="glass glass-ok"><span class="pill pill-ok">✓ HEALTHY</span>'
+            f'<div class="big">{d_pred.class_name}</div>'
+            f'<span class="muted">No disease detected ({d_pred.confidence:.0%} confidence) — '
+            f'no treatment required.</span></div>', unsafe_allow_html=True)
+    else:
+        st.markdown(
+            f'<div class="glass glass-bad"><span class="pill pill-bad">⚠ DISEASE</span>'
+            f'<div class="big">{d_pred.class_name}</div>'
+            f'<span class="muted">{d_pred.confidence:.0%} confidence · crop: {crop}</span></div>',
+            unsafe_allow_html=True)
+
+    # 4) prediction detail cards
     col_d, col_s = st.columns(2)
     with col_d:
-        d_pred = disease_result.prediction
-        st.metric("Disease", d_pred.class_name, f"{d_pred.confidence:.0%}")
-        with st.expander("Top-5 candidates"):
-            for name, prob in (disease_result.top_k or [])[:5]:
-                st.write(f"- **{name}** — {prob:.0%}")
+        st.markdown('<div class="glass">', unsafe_allow_html=True)
+        st.markdown("**🍃 Leaf — top candidates**")
+        for name, prob in (disease_result.top_k or [])[:5]:
+            st.write(f"- {name} — {prob:.0%}")
+        st.markdown("</div>", unsafe_allow_html=True)
     with col_s:
-        s_pred = soil_result.prediction
-        st.metric("Soil type", s_pred.soil_type)
-        st.write(f"Moisture: **{s_pred.moisture_appearance}**")
-        st.write(f"Texture: **{s_pred.texture}**")
-        with st.expander("Per-head confidence"):
-            for head, conf in (s_pred.per_head_confidence or {}).items():
-                st.write(f"- {head}: {conf:.0%}")
+        st.markdown('<div class="glass">', unsafe_allow_html=True)
+        st.markdown("**🟤 Soil**")
+        st.write(f"- Type: **{s_pred.soil_type}**")
+        st.write(f"- Moisture: **{s_pred.moisture_appearance}**")
+        st.write(f"- Texture: **{s_pred.texture}**")
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    # ----- Step 3: Grad-CAM ----------------------------------------- #
+    # 5) Grad-CAM — heatmap ONLY for disease
     if show_heatmaps:
-        with st.expander("Why the model decided this (Grad-CAM heatmaps)"):
-            with st.spinner("Computing 4 heatmaps..."):
+        st.markdown("#### 🔬 Where the model looked")
+        from src.explain.gradcam import disease_gradcam_eigen, soil_gradcam
+        cam_cols = st.columns(4)
+        with cam_cols[0]:
+            st.caption("Leaf crop")
+            st.image(leaf_crop, use_container_width=True)
+        with cam_cols[1]:
+            if healthy:
+                st.caption("Disease heatmap")
+                st.info("Healthy — no disease region to highlight.")
+            else:
+                st.caption("Disease Grad-CAM (lesion)")
                 try:
-                    from src.explain.gradcam import (
-                        disease_gradcam, soil_gradcam,
-                    )
-                    cam_cols = st.columns(2)
-                    with cam_cols[0]:
-                        st.caption("Disease (predicted class)")
-                        cam = disease_gradcam(leaf_img, bundle.disease_engine)
-                        st.image(cam.overlay_rgb, use_container_width=True)
-                    with cam_cols[1]:
-                        for head in ("soil_type", "moisture", "texture"):
-                            st.caption(f"Soil — {head}")
-                            cam = soil_gradcam(
-                                soil_img, bundle.soil_engine, head=head,
-                            )
-                            st.image(cam.overlay_rgb, use_container_width=True)
+                    dcam = disease_gradcam_eigen(leaf_crop, bundle.disease_engine)
+                    st.image(dcam.overlay_rgb, use_container_width=True)
                 except Exception as exc:
-                    st.warning(f"Grad-CAM step skipped: {exc}")
+                    st.warning(f"Grad-CAM skipped: {exc}")
+        # soil heads
+        for col, head in zip(cam_cols[2:], ("soil_type", "moisture")):
+            with col:
+                st.caption(f"Soil — {head}")
+                try:
+                    scam = soil_gradcam(soil_img, bundle.soil_engine, head=head)
+                    st.image(scam.overlay_rgb, use_container_width=True)
+                except Exception as exc:
+                    st.warning(f"skipped: {exc}")
 
-    # ----- Step 4: build context + query ---------------------------- #
-    context = MultimodalContext(
-        disease_pred=disease_result.prediction,
-        soil_pred=soil_result.prediction,
-        crop_type=crop,
-        causal_context=CausalContext(
-            pathway=CausalPathway(causal_value),
-            notes=(causal_notes.strip() or None),
-        ),
-        disease_emb=None,
-        soil_emb=soil_result.embedding,
-    )
+    # 6) advisory — ONLY for disease (gated)
+    st.markdown("#### 📜 IKS advisory")
+    if healthy:
+        st.markdown('<div class="glass glass-ok">✓ The leaf appears healthy — '
+                    'no treatment advisory is generated. Keep monitoring.</div>',
+                    unsafe_allow_html=True)
+    else:
+        context = MultimodalContext(
+            disease_pred=d_pred, soil_pred=s_pred, crop_type=crop,
+            causal_context=CausalContext(pathway=CausalPathway(causal_value),
+                                         notes=(causal_notes.strip() or None)),
+            disease_emb=None, soil_emb=soil_result.embedding,
+        )
+        with st.spinner("Bridging the query to classical vocabulary (Strategy B)…"):
+            try:
+                query = _build_query(context, strategy, llm=bundle.llm)
+            except Exception as exc:
+                st.warning(f"Strategy {strategy} failed ({exc}); using Strategy A.")
+                query = TemplateStrategy(TemplateStrategyConfig()).build_query(context)
+        st.markdown("**Retrieval query**")
+        st.code(query, language="markdown")
 
-    with st.spinner("Reformulating query for IKS corpus retrieval..."):
-        try:
-            query = _build_query(context, strategy, llm=bundle.llm)
-        except Exception as exc:
-            st.warning(
-                f"Strategy {strategy} failed ({exc}); falling back to Strategy A."
-            )
-            query = TemplateStrategy(
-                TemplateStrategyConfig(),
-            ).build_query(context)
+        with st.spinner("Retrieving + grounding in the IKS corpus…"):
+            try:
+                rag = _run_rag_with_oom_retry(query, k=top_k)
+            except Exception:
+                st.error("Generation failed (try restarting the session if VRAM is exhausted).")
+                with st.expander("Diagnostics"):
+                    st.code(traceback.format_exc())
+                st.stop()
 
-    st.subheader("Retrieval query")
-    st.code(query, language="markdown")
+        st.markdown('<div class="glass">', unsafe_allow_html=True)
+        st.markdown("**Grounded recommendation**")
+        st.markdown(rag.answer)
+        if rag.citations:
+            st.caption("Cited: " + " · ".join(rag.citations))
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    # ----- Step 5: grounded RAG ------------------------------------- #
-    with st.spinner("Retrieving + grounding answer in IKS corpus..."):
-        try:
-            rag = _run_rag_with_oom_retry(query, top_k=top_k)
-        except Exception as exc:
-            st.error(
-                "Generation failed. Try a shorter query or restart the "
-                "session if VRAM is exhausted."
-            )
-            with st.expander("Diagnostics"):
-                st.code(traceback.format_exc())
-            st.stop()
+        with st.expander(f"Show the {len(rag.retrieved)} retrieved source chunks"):
+            try:
+                from src.explain.chunk_highlight import explain_chunks
+                for ex in explain_chunks(query, rag.retrieved):
+                    st.markdown(f"**#{ex.rank}** — {ex.source_text} "
+                                f"ch.{ex.chapter} v.{ex.verse_or_section} _(score {ex.score:.3f})_")
+                    st.markdown(ex.text_with_markers)
+                    if ex.matched_terms:
+                        st.caption("Matched: " + ", ".join(ex.matched_terms))
+                    st.divider()
+            except Exception as exc:
+                st.warning(f"Chunk highlighter skipped: {exc}")
 
-    st.subheader("Grounded recommendation")
-    st.markdown(rag.answer)
-    if rag.citations:
-        st.caption("Cited: " + " · ".join(rag.citations))
-
-    # ----- Step 6: retrieved chunks with highlights ----------------- #
-    with st.expander(f"Show the {len(rag.retrieved)} retrieved source chunks"):
-        try:
-            from src.explain.chunk_highlight import explain_chunks
-            explained = explain_chunks(query, rag.retrieved)
-            for ex in explained:
-                st.markdown(
-                    f"**#{ex.rank}** — {ex.source_text} "
-                    f"ch.{ex.chapter} v.{ex.verse_or_section}  "
-                    f"_(score {ex.score:.3f})_"
-                )
-                st.markdown(ex.text_with_markers)
-                if ex.matched_terms:
-                    st.caption("Matched: " + ", ".join(ex.matched_terms))
-                st.divider()
-        except Exception as exc:
-            st.warning(f"Chunk highlighter skipped: {exc}")
-            for ch in rag.retrieved:
-                st.markdown(
-                    f"**{getattr(ch, 'source_text', '?')}** "
-                    f"ch.{getattr(ch, 'chapter', '?')} "
-                    f"v.{getattr(ch, 'verse_or_section', '?')}"
-                )
-                st.write(getattr(ch, "text", ""))
-                st.divider()
-
-    # ----- Step 7: disclaimer --------------------------------------- #
-    st.info(app_config.DISCLAIMER)
+    st.markdown(f'<div class="glass"><span class="muted">{app_config.DISCLAIMER}</span></div>',
+                unsafe_allow_html=True)
 
 elif not analyze:
-    st.info("Upload a leaf photo and a soil photo, then click **Analyze**.")
+    st.markdown('<div class="glass">⬆️ Upload a <b>leaf</b> photo and a <b>soil</b> photo, '
+                'then press <b>Analyze</b>.</div>', unsafe_allow_html=True)
