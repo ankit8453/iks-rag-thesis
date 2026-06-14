@@ -109,7 +109,13 @@ st.write("")
 
 with st.sidebar:
     st.header("⚙️ Inputs")
-    crop = st.selectbox("Crop", options=list(app_config.CROP_CHOICES), index=0)
+    # "auto" (default) = derive the crop from the detected disease label so the
+    # query can't disagree with the model. The explicit choices are a manual
+    # override for when YOLO/the classifier misreads the crop.
+    crop = st.selectbox(
+        "Crop", options=("auto", *app_config.CROP_CHOICES), index=0,
+        help="Auto = use the crop the leaf model detects. Pick one to override.",
+    )
     if crop == "other":
         crop = st.text_input("Custom crop name", value="rice").strip() or "rice"
 
@@ -245,6 +251,14 @@ if analyze and leaf_file is not None and soil_file is not None:
         disease_result = bundle.disease_engine.predict(leaf_crop)
         d_pred = disease_result.prediction
         healthy = app_config.is_healthy(d_pred.class_name)
+        # The disease label already names the crop ("Corn rust leaf" → corn),
+        # so trust it for the query rather than the (often unchanged) dropdown —
+        # otherwise a corn leaf with the dropdown on "rice" yields a query that
+        # asks about *rice* showing *corn-rust* symptoms. A manual dropdown pick
+        # (anything but "auto") overrides the detection.
+        detected_crop = (
+            crop if crop != "auto" else app_config.crop_from_disease(d_pred.class_name)
+        )
         soil_result = bundle.soil_engine.predict(soil_img, with_embedding=True)
         s_pred = soil_result.prediction
 
@@ -259,7 +273,7 @@ if analyze and leaf_file is not None and soil_file is not None:
         st.markdown(
             f'<div class="glass glass-bad"><span class="pill pill-bad">⚠ DISEASE</span>'
             f'<div class="big">{d_pred.class_name}</div>'
-            f'<span class="muted">{d_pred.confidence:.0%} confidence · crop: {crop}</span></div>',
+            f'<span class="muted">{d_pred.confidence:.0%} confidence · crop: {detected_crop}</span></div>',
             unsafe_allow_html=True)
 
     # 4) prediction detail cards
@@ -315,7 +329,7 @@ if analyze and leaf_file is not None and soil_file is not None:
                     unsafe_allow_html=True)
     else:
         context = MultimodalContext(
-            disease_pred=d_pred, soil_pred=s_pred, crop_type=crop,
+            disease_pred=d_pred, soil_pred=s_pred, crop_type=detected_crop,
             causal_context=CausalContext(pathway=CausalPathway(causal_value),
                                          notes=(causal_notes.strip() or None)),
             disease_emb=None, soil_emb=soil_result.embedding,

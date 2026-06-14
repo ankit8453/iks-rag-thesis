@@ -160,6 +160,22 @@ def is_healthy(class_name: str) -> bool:
     return class_name in HEALTHY_CLASSES
 
 
+#: Normalisations for crop names derived from a disease label's first token.
+_CROP_ALIASES: dict[str, str] = {"soyabean": "soybean", "bell": "bell pepper"}
+
+
+def crop_from_disease(class_name: str) -> str:
+    """Derive the crop from a PlantDoc class name (the crop is the first token).
+
+    The disease label already names the crop — ``"Corn rust leaf"`` → ``"corn"``,
+    ``"Apple Scab Leaf"`` → ``"apple"``, ``"Bell_pepper leaf spot"`` →
+    ``"bell pepper"``. The UI uses this instead of the (possibly stale) crop
+    dropdown so the retrieval query can't say "rice" for a corn leaf.
+    """
+    first = class_name.replace("_", " ").split()[0].lower()
+    return _CROP_ALIASES.get(first, first)
+
+
 __all__ = [
     "APP_TAGLINE",
     "APP_TITLE",
