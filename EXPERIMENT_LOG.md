@@ -170,7 +170,15 @@ Three query-construction strategies on one `MultimodalContext`:
 Grad-CAM for disease + 3 soil heads (`SoilHeadWrapper` forwards one head's logits so `ClassifierOutputTarget` works on the multi-task model). Retrieved-chunk term highlighting (query↔chunk lexical overlap, audit-grade). Matplotlib panels reused in notebook + Streamlit. **This phase surfaced the disease background-bias finding** (only 3/256 PlantDoc test images had central CAM). 17 tests pass.
 
 ### Phase 10 — Full-system Streamlit UI
-Live demo: upload leaf+soil → predictions + 4 Grad-CAM heatmaps → Strategy-B query → grounded cited answer → highlighted chunks. Colab + cloudflared tunnel (localtunnel dropped Streamlit's JS chunks). Disease model behind a config switch; no-leaf guardrail (native R class OR segmentation fallback). T4 memory plan: embedder+reranker on CPU. 13 app tests pass.
+Live demo: upload leaf+soil → predictions → Grad-CAM → grounded cited answer → highlighted chunks. Colab + cloudflared tunnel (localtunnel dropped Streamlit's JS chunks). T4 memory plan: embedder+reranker on CPU. 13 app tests pass.
+
+**Phase 10 FINAL (2026-06-13)** — rebuilt for the validated pipeline + modern UI:
+- **Crop-first C-PD**: `iks-disease-plantdoc-crop` + YOLO `LeafCropper` (conf 0.10).
+- **Heatmap only for disease**: eigen Grad-CAM (`disease_gradcam_eigen`, blocks[-2]) shown only when diseased; healthy → no heatmap.
+- **Advisory gated on disease**: healthy → "no treatment needed"; diseased → Strategy B (LLM-mediated) query → grounded IKS answer + chunks.
+- **Modern/futuristic CSS**: dark gradient, glassmorphism cards, gradient hero, green/red status pills.
+- Files: `app/config.py` (C-PD repo, HEALTHY_CLASSES, `is_healthy`, YOLO cfg), `app/loaders.py` (`load_cropper` + `EngineBundle.cropper`), `app/streamlit_app.py` (rewrite), `src/explain/gradcam.py` (`disease_gradcam_eigen` + `eigen_smooth`), `notebooks/phase10_launch_ui.ipynb` (+ultralytics).
+- **Corpus coverage caveat**: corpus = tree science (Vrikshayurveda) → covers tree/fruit diseases (apple scab → real treatment); grains (corn) → honest refusal. Demo both (integrity + novelty).
 
 ### Disease fix (active) — see §5, §6.
 
