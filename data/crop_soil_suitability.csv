@@ -1,0 +1,167 @@
+crop,category,soil_types,textures,moistures,ph,temperature,season
+Rice (Paddy),Cereal,alluvial; red; yellow; black,fine,wet,5.5–6.5,Opt ~30–32°C,Kharif
+Wheat,Cereal,alluvial; black,mixed,moderate,6.0–8.0 (opt ~6.5),20–25°C,Rabi
+Maize (Corn),Cereal,alluvial; red; black,mixed,moderate,6.0–7.5,21–32°C,Kharif/Rabi/Zaid
+Sorghum (Jowar),Cereal,black; red,mixed; fine,dry; moderate,6.0–8.5,25–32°C,Kharif & Rabi
+Pearl Millet (Bajra),Cereal,arid; red; alluvial,coarse; mixed,dry,~6–7,20–35°C,Kharif
+Finger Millet (Ragi),Cereal,red; laterite; yellow; mountain,mixed,dry; moderate,<7 (slightly acidic–neutral),20–30°C,Kharif
+Barley,Cereal,alluvial; arid; mountain,coarse; mixed,dry,6–8 (most salt-tolerant cereal),Growth 12–16°C,Rabi
+Foxtail Millet (Kangni),Cereal,red; yellow; arid,coarse; mixed,dry,5.5–7.0,Warm,Kharif
+Kodo Millet,Cereal,red; yellow,coarse; mixed,dry,5.5–7.5,Warm,Kharif
+Little Millet,Cereal,red; yellow,coarse; mixed,dry,5.5–7.0,Warm,Kharif
+Barnyard Millet,Cereal,red; yellow; alluvial,coarse; mixed,dry,5.5–7.0,Warm,Kharif
+Proso Millet,Cereal,red; alluvial,coarse; mixed,dry,5.5–6.5,Warm,Kharif/Summer
+Oats,Cereal,alluvial; mountain,mixed,moderate,5.0–6.5,Cool,Rabi (mainly fodder)
+Chickpea (Gram),Pulse,black; alluvial,mixed,dry,5.5–8.5,Cool season,Rabi
+Pigeon Pea (Arhar/Tur),Pulse,red; black; yellow,coarse; mixed,moderate,5.0–8.5,26–30°C,Kharif
+Green Gram (Moong),Pulse,alluvial; black; red,mixed,dry; moderate,~6.2–7.2,25–35°C,Kharif/Zaid
+Black Gram (Urad),Pulse,alluvial; black; red,mixed; fine,moderate,5.5–6.5 (tol. 4.7–7.5),25–35°C,Kharif/Rabi/Summer
+Lentil (Masoor),Pulse,alluvial; black,coarse; mixed,dry,6.0–7.5,Cool/cold,Rabi
+Cowpea (Lobia),Pulse,red; alluvial,coarse; mixed,dry; moderate,5.5–7.5,25–35°C,Kharif/Summer
+Horse Gram (Kulthi),Pulse,red; arid; yellow,coarse; mixed,dry,5.0–7.5,Warm,Kharif
+Moth Bean,Pulse,arid,coarse; mixed,dry; wet,~7.0–8.0,Hot arid,Kharif
+Field Pea,Pulse,alluvial,mixed,moderate,6.0–7.5,Cool,Rabi
+Rajma (Kidney Bean),Pulse,mountain; alluvial,mixed,moderate,5.5–6.5,Cool–mild,Rabi (hills: Kharif)
+Groundnut,Oilseed,red; arid; black,coarse,dry; moderate,5.5–7.0 (salt-sensitive),25–30°C,Kharif (also Rabi/Summer)
+Mustard / Rapeseed,Oilseed,alluvial; black,mixed,moderate,6.0–7.5,10–25°C,Rabi
+Soybean,Oilseed,black; alluvial,mixed,moderate,≥6.5,Warm season,Kharif
+Sunflower,Oilseed,black; red; alluvial,coarse; mixed,moderate,6.5–8.5,Cool→warm; day-neutral,Kharif & Rabi
+Sesame (Til),Oilseed,red; alluvial; arid,coarse; mixed,dry,5.5–8.0 (sources vary),25–35°C,Kharif & Rabi
+Castor,Oilseed,red; arid; black,coarse; mixed,moderate,6.0–7.5,Warm (~18–28°C)*,Kharif
+Linseed (Flax),Oilseed,black; alluvial,mixed,dry; moderate,5.5–7.0,Cool,Rabi
+Niger,Oilseed,red; laterite; yellow,coarse; mixed,dry,5.5–7.0,Warm,Kharif
+Safflower,Oilseed,black,mixed; fine,dry,6.0–8.0,Cool dry,Rabi
+Potato,Vegetable,alluvial; red; mountain,coarse; mixed,moderate,5.2–6.5,Cool; tuberization ~20°C,Rabi (N); Jul–Aug & Jan–Feb (S)
+Tomato,Vegetable,alluvial; red; black,mixed,dry; moderate,6.0–7.0,21–24°C opt,Multiple seasons
+Onion,Vegetable,alluvial; red; black,mixed,moderate,6.0–7.0,Cool→warm (bulbing),Kharif/Rabi
+Brinjal (Eggplant),Vegetable,alluvial; red,mixed,moderate,5.5–7.5,Warm ~21–32°C,Year-round
+Cabbage,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.5,Cool ~15–20°C,Rabi
+Cauliflower,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.5,Cool season,Rabi
+Okra (Bhindi),Vegetable,alluvial; red,coarse; mixed,moderate,6.0–6.8,24–27°C,Kharif & Spring-Summer
+Chilli,Vegetable,black; red; alluvial,coarse; mixed,dry; moderate,6.0–7.0,Warm season,Kharif/Rabi
+Peas,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.5,Cool season,Rabi
+Carrot,Vegetable,alluvial; red,coarse; mixed,moderate,5.5–7.0,Cool season,Rabi
+Cucumber,Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Warm,Summer/Kharif
+Bottle Gourd,Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Warm,Summer/Kharif
+Bitter Gourd,Vegetable,alluvial; red,mixed,moderate,6.0–6.7,Warm,Summer/Kharif
+Ridge Gourd,Vegetable,alluvial; red,mixed,moderate,6.0–6.7,Warm,Summer/Kharif
+Pumpkin,Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Warm,Summer/Kharif
+Radish,Vegetable,alluvial; red,coarse; mixed,moderate,6.0–7.0,Cool,Rabi (also year-round)
+Beetroot,Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Cool,Rabi
+Spinach (Palak),Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Cool,Rabi
+Sweet Potato,Vegetable,red; laterite; alluvial,coarse,dry; moderate,5.5–6.5,Warm,Kharif
+Tapioca (Cassava),Vegetable,red; laterite,coarse; mixed,dry,5.5–7.0,Warm tropical,Long-duration
+Colocasia (Arbi/Taro),Vegetable,alluvial; red,mixed; fine,wet,5.5–6.5,Warm humid,Kharif
+Drumstick (Moringa),Vegetable,red; arid; alluvial,coarse,dry,6.0–7.5 (tol. to ~9),Warm,Perennial
+Cluster Bean (Guar),Vegetable,arid,coarse,dry,7.0–8.5,Hot arid,Kharif
+Capsicum (Bell Pepper),Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Mild 21–25°C,Rabi/Year-round
+Yam (Dioscorea),Vegetable,alluvial; red; laterite,mixed,moderate; wet,5.5–6.5,Warm humid,Kharif
+Mango,Fruit,alluvial; red; laterite,mixed,moderate; dry,5.5–7.5,22–27°C ideal,Perennial
+Banana,Fruit,alluvial; black,mixed,moderate; wet,6.0–7.5,Best 20–35°C (tol 10–40°C),Perennial
+Citrus (Orange),Fruit,alluvial; black; red,coarse; mixed,moderate,5.5–7.5 (opt 6.5–7.0),13–37°C (opt ~16–20°C),Perennial
+Apple,Fruit,mountain,mixed,moderate,5.5–6.5,21–24°C; needs chilling,Perennial (temperate)
+Grape,Fruit,black; red; alluvial,mixed,moderate,6.5–8.0 (tol 4.0–9.5),15–40°C (opt 20–35°C),Perennial
+Guava,Fruit,alluvial; red; black,coarse; mixed; fine,dry,5.0–7.0,15–30°C,Perennial
+Papaya,Fruit,alluvial; red,coarse; mixed,moderate,6.5–7.0,~21–33°C,Perennial
+Pomegranate,Fruit,black; red; arid,mixed,dry,6.5–7.5,Fruit dev 35–38°C,Perennial
+Pineapple,Fruit,laterite; red,coarse; mixed,moderate,5.0–6.0,22–32°C,Perennial
+Litchi,Fruit,alluvial,mixed,moderate,5.0–7.0,20–35°C,Perennial
+Sapota (Chikoo),Fruit,alluvial; black; laterite; red,mixed,moderate,6.0–8.0,Warm 11–34°C,Perennial
+Custard Apple,Fruit,red; black,coarse; mixed,dry,7.0–8.0,Warm,Perennial
+Jackfruit,Fruit,laterite; alluvial; red,mixed,wet,6.0–7.5,Warm humid,Perennial
+Pear,Fruit,mountain,mixed,moderate,6.0–7.5,Temperate (needs chilling),Perennial
+Peach,Fruit,mountain,mixed,moderate,6.0–7.5,Subtropical/temperate (chilling),Perennial
+Plum,Fruit,mountain,mixed,moderate,5.5–6.5,Temperate,Perennial
+Apricot,Fruit,mountain,mixed,moderate,6.0–7.0,Temperate dry (chilling),Perennial
+Fig,Fruit,black; alluvial,mixed,dry; moderate,6.0–7.8,Semi-arid warm,Perennial
+Ber (Indian Jujube),Fruit,arid; red,coarse; mixed,dry,7.5–8.5 (tolerant),Hot arid,Perennial
+Aonla (Amla),Fruit,red; alluvial; arid,coarse; mixed,dry; moderate,6.5–9.5 (tolerant),Subtropical,Perennial
+Jamun,Fruit,alluvial; red,mixed,moderate; wet,6.0–8.0,Warm,Perennial
+Watermelon,Fruit,alluvial; arid,coarse,moderate,6.0–7.0,Warm dry 24–27°C,Zaid/Summer
+Muskmelon,Fruit,alluvial; arid,coarse,moderate,6.0–7.0,Warm dry,Zaid/Summer
+Strawberry,Fruit,mountain; alluvial,coarse; mixed,moderate,5.5–6.5,Cool,Winter (plains/hills)
+Kiwi,Fruit,mountain,mixed,moderate; wet,5.0–6.5,Subtropical/temperate,Perennial
+Turmeric,Spice,red; laterite; alluvial,mixed,moderate; wet,5.0–7.5,20–30°C,Kharif (plant Jun–Jul)
+Ginger,Spice,red; laterite; alluvial,mixed,wet,5.5–6.5,19–28°C,Kharif
+Garlic,Spice,alluvial; black,mixed,moderate,6.0–7.0,Cool,Rabi
+Coriander,Spice,alluvial; black,mixed,dry; moderate,6.0–8.0,Cool,Rabi
+Cumin,Spice,arid; alluvial,coarse,dry,6.8–8.3,Cool dry,Rabi
+Fennel,Spice,black; alluvial,mixed,moderate,6.5–8.0,Cool,Rabi
+Fenugreek (Methi),Spice,alluvial; black,mixed,dry; moderate,6.0–7.0,Cool,Rabi
+Black Pepper,Spice,laterite; red; mountain,mixed,wet,5.5–6.5,Warm humid 23–32°C,Perennial (vine)
+Cardamom,Spice,mountain; laterite,mixed,wet,5.0–6.5,Cool humid 10–35°C,Perennial
+Clove,Spice,laterite; red; mountain,mixed,wet,5.5–6.5,Warm humid,Perennial
+Cinnamon,Spice,laterite; red,mixed,wet,4.5–5.5,Warm humid,Perennial
+Nutmeg,Spice,laterite; red,mixed,wet,5.5–7.0,Warm humid,Perennial
+Ajwain (Carom),Spice,alluvial; black,mixed,dry; moderate,6.5–8.0,Cool,Rabi
+Cotton,Fibre/Cash,black; alluvial,mixed; fine,moderate,5.5–8.0 (opt 7.0–8.0),21–30°C (~24°C ideal),Kharif
+Sugarcane,Fibre/Cash,alluvial; black; red,mixed,moderate; wet,6.5–7.5 (tol 5.0–8.5),21–27°C,Autumn/Spring/Adsali
+Jute,Fibre/Cash,alluvial,coarse; mixed,wet,~6.4 (some 4.8–5.8),24–37°C (opt ~34°C),Sown Feb–Jun
+Tobacco,Fibre/Cash,red; black; alluvial,mixed,moderate,~5.5–6.5,15–40°C,Long-maturing (transplant Feb–Apr)
+Tea,Plantation,mountain; laterite,mixed,wet,4.5–5.5,18–30°C (opt 18–23°C),Perennial (hill)
+Coffee,Plantation,mountain; laterite; red,coarse; mixed,wet,6.0–6.5,Warm tropical (elevation-based),Perennial (hill)
+Coconut,Plantation,laterite; alluvial; red,coarse; mixed,moderate; wet,5.2–8.0 (tolerant),Warm coastal 27–32°C,Perennial
+Arecanut,Plantation,laterite; red,mixed,moderate; wet,5.0–8.0,Warm humid,Perennial
+Rubber,Plantation,laterite,mixed,wet,4.5–6.0,Warm humid 25–34°C,Perennial
+Cashew,Plantation,laterite; red; arid,coarse,dry; moderate,4.5–6.5 (tolerant),Warm coastal,Perennial
+Cocoa,Plantation,laterite; red; alluvial,mixed,wet,6.0–7.5,Warm humid,Perennial
+Oil Palm,Plantation,alluvial; laterite; red,mixed,moderate; wet,4.0–6.5,Warm humid,Perennial
+Berseem,Fodder/Green Manure,alluvial; black,mixed,wet,6.5–8.0,Cool,Rabi (fodder)
+Lucerne (Alfalfa),Fodder/Green Manure,alluvial; black,mixed,moderate,6.5–7.5,Wide,Perennial (fodder)
+Napier Grass,Fodder/Green Manure,alluvial; red; black,mixed,moderate; wet,5.5–7.5,Warm,Perennial (fodder)
+Sunhemp (Sunn Hemp),Fodder/Green Manure,alluvial; red; black,coarse,dry; moderate,5.0–8.5,Warm,Kharif (green manure)
+Dhaincha (Sesbania),Fodder/Green Manure,alluvial; black; red,mixed; fine,moderate; wet,up to ~9 (tolerant),Warm,Kharif (green manure)
+Teak,Agroforestry,alluvial; black; red,mixed,moderate,6.5–7.5,Warm tropical,Perennial (timber)
+Neem,Agroforestry,red; arid; alluvial; black,coarse; mixed,dry,6.0–8.5 (tolerant),Hot semi-arid,Perennial
+Bamboo,Agroforestry,alluvial; red; laterite,mixed,moderate; wet,4.5–6.0,Warm,Perennial
+Eucalyptus,Agroforestry,red; alluvial; laterite,mixed,moderate; wet,5.0–7.5,Warm,Perennial (timber/pulp)
+Sandalwood,Agroforestry,red; laterite,mixed,dry; moderate,6.0–7.5,Warm semi-arid,Perennial
+Poplar,Agroforestry,alluvial,mixed,moderate; wet,6.0–8.0,Subtropical,Perennial (timber)
+Subabul (Leucaena),Agroforestry,red; alluvial; black,mixed,dry; moderate,6.0–8.0 (tolerant),Warm,Perennial (fodder/fuel)
+Blueberry,Fruit,mountain,coarse; mixed,moderate; wet,4.0–5.5 (opt 4.5–5.0),Temperate; needs winter chilling,Perennial
+Raspberry,Fruit,mountain,mixed,moderate,5.5–6.5 (some to 7.0),Cool temperate; intolerant of summer heat,Perennial
+Squash (Cucurbita),Vegetable,alluvial; red,mixed,moderate,6.0–6.5 (tol. to 7.5),Warm-season; soil >15°C to germinate,Zaid/Kharif
+Cherry (Sweet/Sour),Fruit,mountain,mixed,moderate,6.0–6.8,Temperate; high chilling requirement,Perennial
+Sweet Corn,Vegetable,alluvial; red,mixed,moderate,6.0–7.5,Warm-season 21–30°C,Kharif/Zaid
+Tamarind,Fruit,red; alluvial; arid,mixed,dry,4.5–9.0 (wide),25–40°C,Perennial
+Bael (Bilva),Fruit,red; arid; alluvial,mixed,dry,up to ~8.5–9.5 (sodicity-tolerant),Tropical/subtropical,Perennial
+Wood Apple (Kavath),Fruit,red; arid; alluvial,coarse; mixed,dry,Wide; alkaline-tolerant,Hot arid,Perennial
+Mulberry,Fruit/Sericulture,alluvial; red; laterite,mixed,moderate,6.2–6.8 (opt 6.5–6.8),24–28°C ideal,Perennial
+Avocado,Fruit,mountain; laterite,mixed,moderate,~5.0–7.0,Subtropical to temperate,Perennial
+Phalsa,Fruit,red; alluvial; arid,mixed,dry; moderate,~6.5–8.0,Subtropical; tolerates heat,Perennial
+Karonda,Fruit,red; arid; alluvial,coarse; mixed,dry,~6.0–8.0,Tropical/subtropical hardy,Perennial
+Date Palm,Fruit,arid,coarse; mixed,dry,up to ~8.0 (saline-tolerant),Hot arid; fruiting needs >30°C dry heat,Perennial
+Almond,Fruit,mountain,mixed,moderate,6.0–7.5,"Temperate; needs chilling, frost-free bloom",Perennial
+Walnut,Fruit,mountain,mixed,moderate,6.0–7.5,Temperate Himalayan,Perennial
+Star Anise,Spice,mountain,mixed,moderate; wet,6.0–7.5,15–35°C (opt 20–30°C),Perennial
+Saffron,Spice,mountain,mixed,dry,6.8–7.8,Temperate Himalayan,Autumn-flowering corm
+Betel Vine,Spice/Cash,alluvial; laterite; red,mixed,moderate; wet,7.0–7.5 (range 5.6–8.2),15–40°C,Perennial
+Long Pepper (Pippali),Spice,laterite; red; mountain,mixed,wet,~5.5–7.0,Warm humid,Perennial
+Bay Leaf (Tejpatta),Spice,mountain,mixed,moderate,6.0–7.5,Subtropical to temperate,Perennial
+Vanilla,Spice,laterite; red; mountain,mixed,wet,6.0–7.0,Warm humid tropics 21–32°C,Perennial vine
+Ashwagandha,Medicinal,arid; red; alluvial,coarse; mixed,dry,~7.5–8.0 (alkaline-tolerant),Warm; soil ≥21°C to germinate,Rabi
+Aloe Vera,Medicinal,arid; red,coarse; mixed,dry,6.0–7.0 (tol. ~8.5),15–24°C,Perennial
+Isabgol (Psyllium),Medicinal,arid; alluvial,coarse; mixed,dry,7.2–7.9,Cool dry,Rabi
+Tulsi (Holy Basil),Medicinal,alluvial; red,mixed,moderate,~6.0–7.5,Tropical/subtropical warm,Kharif/Perennial
+Lemongrass,Aromatic,red; laterite; alluvial,mixed,moderate; wet,~5.5–7.5,Warm humid tropics,Perennial
+Mentha (Mint),Aromatic,alluvial,mixed,wet,6.0–7.5,Warm; 20–30°C,Zaid (Jan–Feb plant)
+Stevia,Medicinal,red; alluvial,coarse; mixed,moderate,6.0–7.5,Warm subtropical,Perennial
+Brahmi,Medicinal,alluvial,mixed,wet,5.5–7.0,Warm humid,Perennial
+Shatavari,Medicinal,red; laterite; alluvial,coarse; mixed,dry; moderate,6.0–8.0,Tropical/subtropical,Perennial
+Broccoli,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.0 (to 7.5),Cool-season 18–21°C,Rabi
+Lettuce,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.0,Cool-season,Rabi
+Asparagus,Vegetable,alluvial; red,coarse; mixed,moderate,6.0–8.0,Temperate,Perennial
+Leek,Vegetable,alluvial; mountain,mixed,moderate,6.0–8.0,Cool-season,Rabi
+Kale,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.5,Cool-season,Rabi
+Kohlrabi,Vegetable,alluvial; mountain,mixed,moderate,6.0–7.5,Cool-season,Rabi
+Celery,Vegetable,alluvial; mountain,mixed,wet,5.8–6.7,Cool-season,Rabi
+Pointed Gourd (Parwal),Vegetable,alluvial; red,coarse; mixed,moderate,6.0–7.0,Warm humid,Kharif/Zaid
+Ash Gourd,Vegetable,alluvial; red,mixed,moderate,6.0–7.5,Warm-season,Kharif/Zaid
+Snake Gourd,Vegetable,alluvial; red,mixed,moderate,6.0–7.0,Warm-season,Kharif/Zaid
+Tinda,Vegetable,arid; red; alluvial,coarse; mixed,dry; moderate,6.0–7.5,Warm arid-tolerant,Zaid/Kharif
+Elephant Foot Yam,Vegetable,alluvial; red; laterite,mixed,moderate; wet,5.5–7.0,Warm humid tropics,Kharif
+Lotus Stem,Vegetable,alluvial,fine,wet,6.0–7.5,Warm; tropical/subtropical,Perennial aquatic
+Curry Leaf,Vegetable/Spice,red; alluvial,mixed,dry; moderate,6.0–8.0,Tropical/subtropical,Perennial
+Amaranthus (Leafy),Vegetable,alluvial; red,mixed,dry; moderate,6.0–7.5,Warm-season; fast-growing,Kharif/Zaid
+Coriander Leaf,Vegetable,alluvial; red,mixed,moderate,6.0–8.0,Cool-season,Rabi
+Water Chestnut (Singhara),Vegetable,alluvial,fine,wet,6.0–7.5,Warm; tropical/subtropical,Kharif aquatic
