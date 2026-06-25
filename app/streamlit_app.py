@@ -31,8 +31,10 @@ import streamlit as st
 from PIL import Image
 
 from app import config as app_config
+from app import crop_soil
 from app.guardrail import is_leaf
 from app.loaders import load_all, report_vram
+from src.soil.model import SoilPrediction
 from src.integration.causation import CausalContext, CausalPathway
 from src.integration.config import LLMMediatedStrategyConfig, TemplateStrategyConfig
 from src.integration.context import MultimodalContext
@@ -109,6 +111,16 @@ st.write("")
 
 with st.sidebar:
     st.header("⚙️ Inputs")
+    # Two entry modes: Full (leaf + soil photo) vs Quick check (leaf only, with
+    # the soil reading auto-filled to typical baseline conditions for the crop).
+    mode = st.radio(
+        "Analysis mode", options=["full", "quick"], index=0,
+        format_func=lambda m: ("Full — leaf + soil photo" if m == "full"
+                               else "Quick check — leaf only (typical soil)"),
+        help="Quick check skips the soil photo and uses typical soil conditions "
+             "for the crop instead of a measured sample.",
+    )
+    quick = mode == "quick"
     # "auto" (default) = derive the crop from the detected disease label so the
     # query can't disagree with the model. The explicit choices are a manual
     # override for when YOLO/the classifier misreads the crop.
@@ -118,6 +130,7 @@ with st.sidebar:
     )
     if crop == "other":
         crop = st.text_input("Custom crop name", value="rice").strip() or "rice"
+    st.caption("This list is the system's honest scope — crops it can reliably recognise.")
 
     causal_labels = [label for _, label in app_config.CAUSAL_CHOICES]
     causal_values = [value for value, _ in app_config.CAUSAL_CHOICES]
@@ -166,15 +179,36 @@ with col_leaf:
     if leaf_file is not None:
         st.image(leaf_file, use_container_width=True)
 with col_soil:
-    st.markdown("#### 🟤 Soil photo")
-    soil_file = st.file_uploader("Upload soil", type=["jpg", "jpeg", "png", "webp"],
-                                 key="soil_uploader", label_visibility="collapsed")
-    if soil_file is not None:
-        st.image(soil_file, use_container_width=True)
+    if quick:
+        st.markdown("#### 🟤 Soil — *skipped (Quick check)*")
+        st.info("Quick check uses **typical soil conditions** for the crop. "
+                "For a measured soil reading, switch to **Full** mode.")
+        soil_file = None
+    else:
+        st.markdown("#### 🟤 Soil photo")
+        soil_file = st.file_uploader("Upload soil", type=["jpg", "jpeg", "png", "webp"],
+                                     key="soil_uploader", label_visibility="collapsed")
+        if soil_file is not None:
+            st.image(soil_file, use_container_width=True)
 
-analyze = st.button("✨  Analyze", type="primary",
-                    disabled=(leaf_file is None or soil_file is None),
+# "Same-location" safeguard (Full mode only): a mismatched leaf+soil pair (leaf
+# from one place, soil from another) would silently produce a wrong, unfair
+# result. Require the user to confirm both photos are from the same spot.
+if quick:
+    same_location = True
+    can_analyze = leaf_file is not None
+else:
+    same_location = st.checkbox(
+        "I confirm the leaf photo and the soil photo are from the **same plant / field**.",
+        value=False,
+        help="Prevents a mismatched leaf+soil pair from producing a misleading result.",
+    )
+    can_analyze = (leaf_file is not None and soil_file is not None and same_location)
+
+analyze = st.button("✨  Analyze", type="primary", disabled=not can_analyze,
                     use_container_width=True)
+if (not quick) and leaf_file is not None and soil_file is not None and not same_location:
+    st.caption("☝️ Tick the same-location confirmation above to enable Analyze.")
 
 
 # --------------------------------------------------------------------- #
@@ -227,9 +261,9 @@ def _run_rag_with_oom_retry(query: str, k: int) -> Any:
 # Analysis flow
 # --------------------------------------------------------------------- #
 
-if analyze and leaf_file is not None and soil_file is not None:
+if analyze and leaf_file is not None and (quick or soil_file is not None):
     leaf_img = _to_pil(leaf_file)
-    soil_img = _to_pil(soil_file)
+    soil_img = _to_pil(soil_file) if soil_file is not None else None
 
     # 1) guardrail
     with st.spinner("Checking the leaf upload…"):
@@ -259,8 +293,27 @@ if analyze and leaf_file is not None and soil_file is not None:
         detected_crop = (
             crop if crop != "auto" else app_config.crop_from_disease(d_pred.class_name)
         )
-        soil_result = bundle.soil_engine.predict(soil_img, with_embedding=True)
-        s_pred = soil_result.prediction
+        cs_row = crop_soil.find(detected_crop)
+        if quick:
+            # Quick check: no soil photo — auto-fill the crop's typical baseline
+            # soil reading (primary soil + driest acceptable moisture + primary
+            # texture). Clearly flagged downstream as "typical, not measured".
+            soil_emb = None
+            if cs_row is not None:
+                b = crop_soil.baseline(cs_row)
+                s_pred = SoilPrediction(soil_type=b["soil_type"].capitalize(),
+                                        moisture_appearance=b["moisture"],
+                                        texture=b["texture"])
+                soil_source = "typical"
+            else:
+                s_pred = SoilPrediction(soil_type="unspecified",
+                                        moisture_appearance="moderate", texture="mixed")
+                soil_source = "unknown"
+        else:
+            soil_result = bundle.soil_engine.predict(soil_img, with_embedding=True)
+            s_pred = soil_result.prediction
+            soil_emb = soil_result.embedding
+            soil_source = "measured"
 
     # 3) status banner
     if healthy:
@@ -286,11 +339,34 @@ if analyze and leaf_file is not None and soil_file is not None:
         st.markdown("</div>", unsafe_allow_html=True)
     with col_s:
         st.markdown('<div class="glass">', unsafe_allow_html=True)
-        st.markdown("**🟤 Soil**")
+        soil_title = "🟤 Soil — *typical (Quick check)*" if quick else "🟤 Soil"
+        st.markdown(f"**{soil_title}**")
         st.write(f"- Type: **{s_pred.soil_type}**")
         st.write(f"- Moisture: **{s_pred.moisture_appearance}**")
         st.write(f"- Texture: **{s_pred.texture}**")
+        if soil_source == "typical":
+            st.caption(f"Typical baseline for **{detected_crop}** — not a measured soil sample.")
+        elif soil_source == "unknown":
+            st.caption(f"'{detected_crop}' is not in the crop–soil reference; using neutral defaults.")
         st.markdown("</div>", unsafe_allow_html=True)
+
+    # 4b) crop–soil suitability — Full mode only (Quick mode is baseline-by-construction)
+    if not quick and cs_row is not None:
+        verdict = crop_soil.check_suitability(
+            cs_row, soil_type=s_pred.soil_type, texture=s_pred.texture,
+            moisture=s_pred.moisture_appearance,
+        )
+        st.markdown("#### 🧭 Crop–soil suitability")
+        if verdict["ok"]:
+            st.markdown(f'<div class="glass glass-ok">✓ The detected soil looks suitable for '
+                        f'<b>{detected_crop}</b>.</div>', unsafe_allow_html=True)
+        else:
+            bullets = "".join(f"<li>{m}</li>" for m in verdict["messages"])
+            st.markdown(f'<div class="glass glass-bad">⚠ Possible crop–soil mismatch for '
+                        f'<b>{detected_crop}</b>:<ul>{bullets}</ul>'
+                        f'<span class="muted">Indicative only — auto-derived from the crop–soil '
+                        f'reference, pending expert validation.</span></div>',
+                        unsafe_allow_html=True)
 
     # 5) Grad-CAM — heatmap ONLY for disease
     if show_heatmaps:
@@ -311,15 +387,20 @@ if analyze and leaf_file is not None and soil_file is not None:
                     st.image(dcam.overlay_rgb, use_container_width=True)
                 except Exception as exc:
                     st.warning(f"Grad-CAM skipped: {exc}")
-        # soil heads
-        for col, head in zip(cam_cols[2:], ("soil_type", "moisture")):
-            with col:
-                st.caption(f"Soil — {head}")
-                try:
-                    scam = soil_gradcam(soil_img, bundle.soil_engine, head=head)
-                    st.image(scam.overlay_rgb, use_container_width=True)
-                except Exception as exc:
-                    st.warning(f"skipped: {exc}")
+        # soil heads — only when a real soil photo was provided (Full mode)
+        if quick or soil_img is None:
+            with cam_cols[2]:
+                st.caption("Soil heatmaps")
+                st.info("Skipped in Quick check (no soil photo).")
+        else:
+            for col, head in zip(cam_cols[2:], ("soil_type", "moisture")):
+                with col:
+                    st.caption(f"Soil — {head}")
+                    try:
+                        scam = soil_gradcam(soil_img, bundle.soil_engine, head=head)
+                        st.image(scam.overlay_rgb, use_container_width=True)
+                    except Exception as exc:
+                        st.warning(f"skipped: {exc}")
 
     # 6) advisory — ONLY for disease (gated)
     st.markdown("#### 📜 IKS advisory")
@@ -332,7 +413,7 @@ if analyze and leaf_file is not None and soil_file is not None:
             disease_pred=d_pred, soil_pred=s_pred, crop_type=detected_crop,
             causal_context=CausalContext(pathway=CausalPathway(causal_value),
                                          notes=(causal_notes.strip() or None)),
-            disease_emb=None, soil_emb=soil_result.embedding,
+            disease_emb=None, soil_emb=soil_emb,
         )
         with st.spinner("Bridging the query to classical vocabulary (Strategy B)…"):
             try:
@@ -376,5 +457,8 @@ if analyze and leaf_file is not None and soil_file is not None:
                 unsafe_allow_html=True)
 
 elif not analyze:
-    st.markdown('<div class="glass">⬆️ Upload a <b>leaf</b> photo and a <b>soil</b> photo, '
-                'then press <b>Analyze</b>.</div>', unsafe_allow_html=True)
+    _hint = ("⬆️ Upload a <b>leaf</b> photo, then press <b>Analyze</b> "
+             "(Quick check — typical soil for the crop)." if quick else
+             "⬆️ Upload a <b>leaf</b> photo and a <b>soil</b> photo, confirm same location, "
+             "then press <b>Analyze</b>.")
+    st.markdown(f'<div class="glass">{_hint}</div>', unsafe_allow_html=True)
