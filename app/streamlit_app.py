@@ -31,7 +31,7 @@ import streamlit as st
 from PIL import Image
 
 from app import config as app_config
-from app import crop_soil
+from app import crop_soil, feedback
 from app.guardrail import is_leaf
 from app.loaders import load_all, report_vram
 from src.soil.model import SoilPrediction
@@ -295,6 +295,15 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
             f'{app_config.OUT_OF_SCOPE_MESSAGE.format(crop=other_crop_name.title())}'
             f'</div>', unsafe_allow_html=True)
         st.caption("Supported plants: " + ", ".join(_supported))
+        # Keep the sample (with the farmer's own plant name) so an expert can
+        # review it and the plant can be added in a later retraining round.
+        with st.spinner("Saving this sample so the plant can be added later…"):
+            sid = feedback.save_sample(
+                leaf_img, reason="out_of_scope", declared_plant=other_crop_name,
+                mode=("quick" if quick else "full"), notes=causal_notes.strip() or None,
+            )
+        if sid:
+            st.caption(f"✓ Saved for expert review (reference {sid}).")
         st.stop()
 
     # 1) guardrail
@@ -368,6 +377,19 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
             f'<div class="glass glass-bad">⚠ '
             f'{app_config.CROP_MISMATCH_MESSAGE.format(selected=selected_crop, detected=model_crop)}'
             f'</div>', unsafe_allow_html=True)
+
+    # 3c) A very unsure prediction is the other case worth learning from — the
+    # advisory still runs, we just keep the sample for expert review.
+    if d_pred.confidence < app_config.FEEDBACK_LOW_CONFIDENCE or crop_mismatch:
+        feedback.save_sample(
+            leaf_crop,
+            reason=("crop_mismatch" if crop_mismatch else "low_confidence"),
+            declared_plant=selected_crop, predicted_class=d_pred.class_name,
+            confidence=float(d_pred.confidence), mode=("quick" if quick else "full"),
+            soil={"soil_type": s_pred.soil_type, "moisture": s_pred.moisture_appearance,
+                  "texture": s_pred.texture},
+            notes=causal_notes.strip() or None,
+        )
 
     # 4) prediction detail cards
     col_d, col_s = st.columns(2)

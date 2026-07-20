@@ -51,6 +51,15 @@ LLM_MODEL_NAME: str = "meta-llama/Llama-3.1-8B-Instruct"
 #: HF dataset id for the IKS chunk corpus (206 chunks across 4 books).
 CORPUS_REPO: str = "ankit-iiitdmj/iks-corpus-chunks"
 
+#: Private HF dataset collecting real-world samples the system could not handle
+#: (out-of-scope plants, low-confidence predictions). Colab's own disk is wiped
+#: when the session ends, so samples must go somewhere persistent to be usable
+#: for a later expert-reviewed retraining round.
+FEEDBACK_REPO: str = "ankit-iiitdmj/iks-feedback-samples"
+
+#: Confidence below which a prediction is also worth collecting for review.
+FEEDBACK_LOW_CONFIDENCE: float = 0.40
+
 
 # --------------------------------------------------------------------- #
 # Dropdowns
