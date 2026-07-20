@@ -121,17 +121,6 @@ with st.sidebar:
              "for the crop instead of a measured sample.",
     )
     quick = mode == "quick"
-    # "auto" (default) = derive the crop from the detected disease label so the
-    # query can't disagree with the model. The explicit choices are a manual
-    # override for when YOLO/the classifier misreads the crop.
-    crop = st.selectbox(
-        "Crop", options=("auto", *app_config.CROP_CHOICES), index=0,
-        help="Auto = use the crop the leaf model detects. Pick one to override.",
-    )
-    if crop == "other":
-        crop = st.text_input("Custom crop name", value="rice").strip() or "rice"
-    st.caption("This list is the system's honest scope — crops it can reliably recognise.")
-
     causal_labels = [label for _, label in app_config.CAUSAL_CHOICES]
     causal_values = [value for value, _ in app_config.CAUSAL_CHOICES]
     causal_idx = st.selectbox(
@@ -171,6 +160,31 @@ if _status:
 # Uploaders
 # --------------------------------------------------------------------- #
 
+# --- Plant selection = the SCOPE GATE ------------------------------------- #
+# The classifier has a fixed class set and cannot say "I don't know" — it always
+# returns its closest class. So we do NOT infer support from the model. The
+# farmer declares the plant (they reliably know their own crop), which tells us
+# with certainty whether it is inside the trained scope BEFORE anything runs.
+# The model is then used for what it is actually good at: naming the disease.
+_supported = app_config.supported_crops(getattr(bundle.disease_engine, "class_names", []))
+st.markdown("#### 🌱 Which plant is this?")
+sel_col, note_col = st.columns([1, 2])
+with sel_col:
+    selected_crop = st.selectbox(
+        "Plant", options=[*_supported, app_config.OTHER_CROP], index=0,
+        label_visibility="collapsed",
+    )
+with note_col:
+    st.caption(f"These {len(_supported)} plants are what the model was trained on — "
+               "its honest scope. Not listed? Choose “Other”.")
+other_crop_name = ""
+if selected_crop == app_config.OTHER_CROP:
+    other_crop_name = st.text_input(
+        "Type the plant name", value="", placeholder="e.g. brinjal",
+        help="We can't diagnose this plant yet, but recording the name helps us add it later.",
+    ).strip()
+st.write("")
+
 col_leaf, col_soil = st.columns(2)
 with col_leaf:
     st.markdown("#### 🍃 Leaf photo")
@@ -205,8 +219,15 @@ else:
     )
     can_analyze = (leaf_file is not None and soil_file is not None and same_location)
 
+# For an out-of-scope plant we still need the typed name — it is what makes the
+# saved sample useful for a future retraining round.
+if selected_crop == app_config.OTHER_CROP and not other_crop_name:
+    can_analyze = False
+
 analyze = st.button("✨  Analyze", type="primary", disabled=not can_analyze,
                     use_container_width=True)
+if selected_crop == app_config.OTHER_CROP and not other_crop_name and leaf_file is not None:
+    st.caption("☝️ Type the plant name above to continue.")
 if (not quick) and leaf_file is not None and soil_file is not None and not same_location:
     st.caption("☝️ Tick the same-location confirmation above to enable Analyze.")
 
@@ -265,6 +286,17 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
     leaf_img = _to_pil(leaf_file)
     soil_img = _to_pil(soil_file) if soil_file is not None else None
 
+    # 0) SCOPE GATE — runs before any model, because the classifier cannot say
+    # "I don't know": it would return its closest trained class and present a
+    # confident, wrong diagnosis. The farmer's declaration settles scope exactly.
+    if selected_crop == app_config.OTHER_CROP:
+        st.markdown(
+            f'<div class="glass glass-bad">🚫 '
+            f'{app_config.OUT_OF_SCOPE_MESSAGE.format(crop=other_crop_name.title())}'
+            f'</div>', unsafe_allow_html=True)
+        st.caption("Supported plants: " + ", ".join(_supported))
+        st.stop()
+
     # 1) guardrail
     with st.spinner("Checking the leaf upload…"):
         ok, reason = is_leaf(
@@ -285,14 +317,13 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
         disease_result = bundle.disease_engine.predict(leaf_crop)
         d_pred = disease_result.prediction
         healthy = app_config.is_healthy(d_pred.class_name)
-        # The disease label already names the crop ("Corn rust leaf" → corn),
-        # so trust it for the query rather than the (often unchanged) dropdown —
-        # otherwise a corn leaf with the dropdown on "rice" yields a query that
-        # asks about *rice* showing *corn-rust* symptoms. A manual dropdown pick
-        # (anything but "auto") overrides the detection.
-        detected_crop = (
-            crop if crop != "auto" else app_config.crop_from_disease(d_pred.class_name)
-        )
+        # The farmer declared the plant, and they know their own crop — so that
+        # is what we act on. The disease label also implies a crop; we use it
+        # only as a CROSS-CHECK, surfacing a warning when the two disagree
+        # rather than silently overriding the person.
+        detected_crop = selected_crop
+        model_crop = app_config.crop_from_disease(d_pred.class_name)
+        crop_mismatch = model_crop != selected_crop
         cs_row = crop_soil.find(detected_crop)
         if quick:
             # Quick check: no soil photo — auto-fill the crop's typical baseline
@@ -328,6 +359,15 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
             f'<div class="big">{d_pred.class_name}</div>'
             f'<span class="muted">{d_pred.confidence:.0%} confidence · crop: {detected_crop}</span></div>',
             unsafe_allow_html=True)
+
+    # 3b) cross-check: the plant the farmer chose vs the plant the disease
+    # label implies. Non-blocking on purpose — the farmer is the authority on
+    # their own crop; we flag the disagreement instead of silently deciding.
+    if crop_mismatch:
+        st.markdown(
+            f'<div class="glass glass-bad">⚠ '
+            f'{app_config.CROP_MISMATCH_MESSAGE.format(selected=selected_crop, detected=model_crop)}'
+            f'</div>', unsafe_allow_html=True)
 
     # 4) prediction detail cards
     col_d, col_s = st.columns(2)
