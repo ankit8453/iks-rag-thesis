@@ -297,6 +297,37 @@ Deep review of what actually works for background-shortcut learning + PlantDoc:
 
 ---
 
+## 6d. Retrieval realignment + honest scope + adaptive collection (2026-06-28)
+
+Three changes that together fix a conceptual mismatch between how we queried the
+corpus and how the corpus is actually organised, and close the system's
+"unknown input" hole. All approved by the supervisor before implementation.
+
+### 6d.1 Symptom-driven retrieval (was: crop-name-driven)
+- **The mismatch.** We treated the corpus as a *crop-indexed database*: the query led with the plant name and, when that name was absent from the texts, the generator refused ("not enough information"). Our agronomy expert **Dr. Sunita T. Pandey** flagged that the classical texts are **general and symptom-based, not crop-specific** — a remedy given for a symptom applies to any plant showing it (her kunapajala work was validated on potato among many crops).
+- **Verification before changing anything.** Deep literature research confirmed it (24/25 claims verified under 3-vote adversarial checking): Vrikshayurveda classifies affliction by **symptom + dosha**, not by crop, and a peer-reviewed Vrikshayurveda **expert system diagnoses purely from symptom questions and never asks the crop** (Rananavare & Chitnis, *J Ayurveda Integr Med* 2024). Nuance kept: Surapala does contain a minority of crop-named recipes (mango, pomegranate, coconut) — so the claim is **"predominantly symptom-general", never absolute.**
+- **Fix (two places).** (a) Strategy B now states the texts are symptom-based, enforces **"LEAD WITH THE SYMPTOM"**, bans crop-led query patterns as poor-retrieval, and demotes the crop to *background context only*. (b) The §17 grounded prompt gains **rule 1a** scoping the refusal: a passage addressing the **observed condition** is sufficient evidence **even if it never names the crop**; refuse only when no passage addresses the condition. The faithfulness guardrail itself is unchanged — we corrected its *misapplication*.
+- **Why it matters:** we were *under-reporting* real coverage (refusing cases the texts do cover), which undercut the very bridge that is the contribution.
+
+### 6d.2 Scope gate — the farmer declares the plant
+- **The flaw.** The classifier has a **fixed 27-class head and cannot say "I don't know"** — given an untrained plant it returns its closest class *confidently*. Deciding "is this plant supported?" from the model asks it a question it structurally cannot answer.
+- **Fix (Ankit's design).** The **farmer selects the plant**; the **model names the disease**. Clean division of labour — the person reliably knows their own crop. Scope is settled **before any model runs**. `supported_crops()` derives the list from the model's **own `class_names`** (13 crops from the 27 classes), so the displayed scope can never drift from the checkpoint. Out-of-scope → honest *"it will not guess"* + the supported list.
+- The disease label's implied crop is retained as a **cross-check only**: disagreement raises a warning (*"you selected tomato but this looks like potato"*) **without blocking** — the farmer stays the authority.
+
+### 6d.3 Adaptive learning — collection, not live self-learning
+- Supervisor asked whether the system can learn from new inputs. Adopted form: **collect → expert validates → offline retrain**. Learning directly from unverified user labels would poison the model; naive retraining also risks catastrophic forgetting.
+- **Storage.** Samples go to a **private HF dataset** (`iks-feedback-samples`). Colab's disk is wiped at session end, so local storage would silently lose everything, and the end goal is a farmer-facing app rather than a notebook. Deliberately **no multi-backend abstraction** — a real DB can be swapped in when the app is built.
+- **Design detail:** one **self-contained record per sample** (`images/<id>.jpg` + `records/<id>.json`) rather than appending to a shared index, so concurrent submissions cannot clash. Every sample arrives `status="pending_expert_review"`, `expert_label=None`. Upload is **best-effort and never raises** — a missing token must not break a farmer's advisory.
+- **Collected:** out-of-scope plants (the farmer's typed name is the only label we have — and what makes the sample useful), low-confidence predictions, and crop mismatches.
+
+**Validated:** `test_symptom_driven.py` (7) + `test_scope_gate.py` (5) + `test_feedback.py` (6). Full suite **325 passed**.
+
+**Phase 11 (evaluation) remains deliberately deferred to the end** — RAGAS context_precision/recall needs the expert-curated gold-query set; Dr. Pandey's newer asks add Precision@k / Recall@k / nDCG and the no-bridge / no-grounding **baselines** (the baselines are what will actually *prove* the contribution).
+
+> **Doc debt:** `README.md`'s timeline still uses the older 10-phase numbering (Phase 9 = Evaluation) while `progress.md` and all real work use 9 = explainability, 10 = UI, 11 = evaluation. Align before the write-up.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.

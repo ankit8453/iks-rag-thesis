@@ -51,6 +51,15 @@ LLM_MODEL_NAME: str = "meta-llama/Llama-3.1-8B-Instruct"
 #: HF dataset id for the IKS chunk corpus (206 chunks across 4 books).
 CORPUS_REPO: str = "ankit-iiitdmj/iks-corpus-chunks"
 
+#: Private HF dataset collecting real-world samples the system could not handle
+#: (out-of-scope plants, low-confidence predictions). Colab's own disk is wiped
+#: when the session ends, so samples must go somewhere persistent to be usable
+#: for a later expert-reviewed retraining round.
+FEEDBACK_REPO: str = "ankit-iiitdmj/iks-feedback-samples"
+
+#: Confidence below which a prediction is also worth collecting for review.
+FEEDBACK_LOW_CONFIDENCE: float = 0.40
+
 
 # --------------------------------------------------------------------- #
 # Dropdowns
@@ -164,6 +173,31 @@ def is_healthy(class_name: str) -> bool:
 _CROP_ALIASES: dict[str, str] = {"soyabean": "soybean", "bell": "bell pepper"}
 
 
+#: Sentinel used in the plant dropdown for a crop the model was not trained on.
+OTHER_CROP: str = "Other (not in this list)"
+
+OUT_OF_SCOPE_MESSAGE: str = (
+    "**{crop}** is not in the list of plants this system was trained on, so it "
+    "cannot give a reliable diagnosis for it — and it will not guess. Your photo "
+    "has been noted so the plant can be reviewed and added in a future version."
+)
+
+CROP_MISMATCH_MESSAGE: str = (
+    "You selected **{selected}**, but this leaf looks like **{detected}**. "
+    "Please check the plant you chose — continue only if your selection is correct."
+)
+
+
+def supported_crops(class_names: "list[str] | tuple[str, ...]") -> list[str]:
+    """The plants the disease model can actually recognise.
+
+    Derived from the model's own class names (``engine.class_names``) rather
+    than hand-maintained, so the UI's honest-scope list can never drift from
+    what the checkpoint was really trained on.
+    """
+    return sorted({crop_from_disease(n) for n in class_names if n})
+
+
 def crop_from_disease(class_name: str) -> str:
     """Derive the crop from a PlantDoc class name (the crop is the first token).
 
@@ -182,6 +216,9 @@ __all__ = [
     "CAUSAL_CHOICES",
     "CORPUS_REPO",
     "CROP_CHOICES",
+    "CROP_MISMATCH_MESSAGE",
+    "OTHER_CROP",
+    "OUT_OF_SCOPE_MESSAGE",
     "DEFAULT_MAX_NEW_TOKENS",
     "DEFAULT_STRATEGY",
     "DEFAULT_TEMPERATURE",
@@ -199,5 +236,7 @@ __all__ = [
     "SOIL_MODEL_REPO",
     "YOLO_CONF",
     "YOLO_LEAF_REPO",
+    "crop_from_disease",
     "is_healthy",
+    "supported_crops",
 ]
