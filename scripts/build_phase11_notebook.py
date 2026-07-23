@@ -98,13 +98,31 @@ chunks = load_chunks_from_hf()
 print("corpus chunks:", len(chunks))
 
 collection = build_chroma(chunks, persist_dir="/content/eval_vecdb")
+
+# build_chroma embeds on the GPU and leaves the model there. On a T4 that
+# stolen VRAM is what later forces Llama to offload onto CPU RAM and crash the
+# session, so reclaim it before anything else loads.
+import gc, torch
+gc.collect()
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+
+# One CPU embedder + reranker, shared by every retrieval variant: retrieval is
+# cheap on CPU, and the GPU must stay free for the LLM in Cell 3.
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.cross_encoder import CrossEncoder
+cpu_embedder = SentenceTransformer("BAAI/bge-large-en-v1.5", device="cpu")
+cpu_reranker = CrossEncoder("BAAI/bge-reranker-base", device="cpu")
+SHARED = {"embedder": cpu_embedder, "reranker": cpu_reranker}
+
 cases = load_query_set()
 print(f"queries: {len(cases)} "
       f"({len(answerable_cases(cases))} answerable, "
       f"{len(cases) - len(answerable_cases(cases))} deliberate negatives)")
 
 K = 5
-retrieval_only = run_full_evaluation(cases, collection=collection, k=K)
+retrieval_only = run_full_evaluation(cases, collection=collection, k=K,
+                                     shared_models=SHARED)
 print()
 print(retrieval_only["retrieval_table"])"""),
 
@@ -117,18 +135,41 @@ place. `dense_only` and `hybrid_no_rerank` isolate which stage contributes what.
 
 `R@5` shows `n/a` by design: recall is undefined under book-level labels."""),
 
-    md("## Cell 3 — load the LLM and run generation + the ungrounded control"),
-    code("""\
-from app.loaders import load_all
+    md("""\
+## Cell 3 — load the LLM and run generation + the ungrounded control
 
-bundle = load_all()          # disease/soil engines + RAG pipeline + Llama
-print("models ready")
+Deliberately **not** `load_all()`: that also loads the disease, soil and YOLO
+models, which evaluation never touches. On a T4 they crowd the GPU, Llama then
+offloads onto CPU RAM, and the session dies. Here only the LLM goes to the GPU;
+retrieval keeps using the CPU embedder/reranker from Cell 2.
+
+If this still runs out of memory, set `LLM_NAME` to
+`"meta-llama/Llama-3.2-3B-Instruct"` — a smaller generator is a fair evaluation
+as long as the same model is used for the grounded system and the ungrounded
+control (it is: both use `generator` below). Record which one you used."""),
+    code("""\
+from src.rag.generator import GroundedGenerator
+from src.rag.pipeline import RAGPipeline
+from src.rag.retriever import HybridRetriever
+
+LLM_NAME = "meta-llama/Llama-3.1-8B-Instruct"   # -> Llama-3.2-3B-Instruct if OOM
+
+# Retrieval stays on CPU; the GPU is reserved entirely for the generator.
+retriever = HybridRetriever(collection, embedder=cpu_embedder, reranker=cpu_reranker)
+generator = GroundedGenerator(model_name=LLM_NAME)      # 4-bit
+pipeline = RAGPipeline(collection=collection, retriever=retriever,
+                       generator=generator, default_k=K)
+print("LLM ready:", LLM_NAME)
+
+if torch.cuda.is_available():
+    free, total = torch.cuda.mem_get_info()
+    print(f"VRAM free {free/1024**3:.2f} / {total/1024**3:.2f} GiB")
 
 full_eval = run_full_evaluation(
     cases, collection=collection,
-    pipeline=bundle.rag_pipeline,     # grounded system
-    llm=bundle.llm,                   # same model, used ungrounded as the control
-    k=K,
+    pipeline=pipeline,                # grounded system
+    llm=generator,                    # same model, ungrounded, as the control
+    k=K, shared_models=SHARED,
 )
 
 g = full_eval["generation"]
@@ -154,7 +195,7 @@ from src.eval.ragas_eval import RAGEvalSample, run_ragas_evaluation
 # Build one RAGAS row per answerable query from the grounded system's output.
 samples = []
 for case in answerable_cases(cases):
-    res = bundle.rag_pipeline.answer(case.query, k=K)
+    res = pipeline.answer(case.query, k=K)
     samples.append(RAGEvalSample(
         query=case.query,
         answer=getattr(res, "answer", "") or "",
