@@ -166,27 +166,56 @@ print("RAGAS samples:", len(samples))
 cfg = EvalConfig()
 cfg.ragas.metrics = ["faithfulness", "answer_relevancy"]   # the two that need no reference
 
+# ---------------------------------------------------------------------------
+# Judge selection. Leave False for the free run; flip to True for a second pass
+# with an INDEPENDENT judge (see the note below for why that is worth doing).
+# ---------------------------------------------------------------------------
+USE_PAID_JUDGE = False
+
+judge = judge_emb = None
+if USE_PAID_JUDGE:
+    import getpass, os, subprocess, sys
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q", "langchain-openai"])
+    os.environ["OPENAI_API_KEY"] = getpass.getpass("OpenAI API key: ")  # never hard-code
+    from langchain_openai import ChatOpenAI
+    from langchain_community.embeddings import HuggingFaceEmbeddings
+    judge = ChatOpenAI(model="gpt-4o-mini", temperature=0)   # cheap, independent
+    judge_emb = HuggingFaceEmbeddings(model_name="BAAI/bge-large-en-v1.5")  # local, free
+
 scores = run_ragas_evaluation(
     samples, cfg,
     output_path="results/phase11_ragas_per_sample.csv",
-    judge_llm=None,        # TODO: pass a LangChain-wrapped local Llama to avoid any API
-    judge_embeddings=None,
+    judge_llm=judge, judge_embeddings=judge_emb,
 )
+print("judge           :", "gpt-4o-mini (independent)" if USE_PAID_JUDGE else "none configured")
 print("faithfulness    :", scores.faithfulness)
 print("answer relevancy:", scores.answer_relevancy)
 if scores.skipped:
     print("skipped:", scores.skipped)"""),
 
     md("""\
-> **Cost guard.** `judge_llm=None` lets RAGAS pick its own default, which may call
-> a paid API. If RAGAS reports a missing API key, either wrap the already-loaded
-> Llama as the judge, or simply skip this cell — **citation verification in Cell 3
-> already measures grounding deterministically and for free**, and is the stronger
-> claim for the thesis."""),
+> **Cost guard.** With `USE_PAID_JUDGE = False` and no key set, RAGAS may simply
+> report a missing key — that is fine, **skip this cell**. Cell 5 handles a skipped
+> Cell 4 without failing. Citation verification in Cell 3 already measures grounding
+> deterministically and for free, and is the claim to lead with.
+>
+> **Why a later paid pass is worth ~a few dollars.** Judging Llama's answers with
+> Llama is self-evaluation — a reviewer can fairly object that the model marked its
+> own homework. Re-running with `USE_PAID_JUDGE = True` (~22 queries, ~100 short
+> calls) gives *"generated locally, judged independently"*, and reporting both
+> judges side by side is stronger than either alone."""),
 
     md("## Cell 5 — save the results"),
     code("""\
 import json, pathlib, datetime
+
+# Cell 4 is optional — if it was skipped, carry on and record that RAGAS was
+# not computed rather than failing the whole run at the last step.
+try:
+    scores
+except NameError:
+    from src.eval.ragas_eval import RAGASScores
+    scores = RAGASScores(skipped={"_all": "Cell 4 skipped - no judge configured"})
 
 out = {
     "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -206,11 +235,17 @@ out = {
     "ungrounded_control": {k: v for k, v in u.items() if k != "answers"},
     "ragas": scores.as_row(),
     "ragas_skipped": scores.skipped,
+    "ragas_judge": ("gpt-4o-mini (independent)"
+                    if globals().get("USE_PAID_JUDGE") else "none / local"),
 }
+# Name the file after the judge so a later independent-judge pass ADDS a second
+# data point instead of overwriting this one.
+suffix = "paidjudge" if globals().get("USE_PAID_JUDGE") else "free"
 p = pathlib.Path("results"); p.mkdir(exist_ok=True)
-(p / "phase11_results.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+target = p / f"phase11_results_{suffix}.json"
+target.write_text(json.dumps(out, indent=2), encoding="utf-8")
 print(json.dumps(out["retrieval"], indent=2))
-print("\\nSaved -> results/phase11_results.json")
+print(f"\\nSaved -> {target}")
 print("Download it and share with Claude Code to write up the results.")"""),
 ]
 
