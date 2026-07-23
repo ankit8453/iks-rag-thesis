@@ -92,7 +92,7 @@
       "relevant_chunk_ids": [], "expect_answerable": true
     },
     {
-      "id": "q15", "crop": "tomato", "disease": "Tomato two spotted spider mites leaf",
+      "id": "q15", "crop": "tomato", "disease": null,
       "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing beneath",
       "relevant_books": ["vrikshayurveda", "upavanavinoda"],
       "relevant_chunk_ids": [], "expect_answerable": true
