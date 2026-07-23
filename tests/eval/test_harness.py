@@ -112,6 +112,42 @@ def test_generation_rewards_grounded_answer_and_honest_refusal() -> None:
     assert run.over_refusal_rate == pytest.approx(0.0)     # answered the answerable
 
 
+class _V17Pipeline:
+    """The real pipeline shape: cites "[Source, ch.X, v.Y]" and resolves those
+    to chunk_ids itself via RAGAnswer.citations / .used_chunk_ids."""
+
+    def answer(self, query: str, k: int = 5):
+        ans = _Answer("Apply the paste [Vrikshayurveda, ch.full, v.160.3].",
+                      [_Chunk("c1"), _Chunk("c2")])
+        ans.citations = ["Vrikshayurveda ch.full v.160.3"]
+        ans.used_chunk_ids = ["c1"]
+        return ans
+
+
+def test_v17_style_citations_are_scored_as_grounded() -> None:
+    """Regression: the chunk-id regex cannot match "[Source, ch.X, v.Y]", so
+    re-parsing the text scored every real answer 0% grounded. The resolved
+    fields must be preferred."""
+    run = run_generation_eval([_cases()[0]], _V17Pipeline(), k=5)
+    assert run.grounded_answer_rate == pytest.approx(1.0)
+    assert run.valid_citation_rate == pytest.approx(1.0)
+    assert run.per_query[0]["n_valid"] == 1
+
+
+def test_resolved_citation_to_unretrieved_chunk_is_not_counted() -> None:
+    """A resolved id that was never actually retrieved must not count."""
+
+    class _Bogus:
+        def answer(self, query, k=5):
+            a = _Answer("Apply [X, ch.1, v.1].", [_Chunk("c1")])
+            a.citations = ["X ch.1 v.1"]
+            a.used_chunk_ids = ["not_retrieved"]
+            return a
+
+    run = run_generation_eval([_cases()[0]], _Bogus(), k=5)
+    assert run.grounded_answer_rate == pytest.approx(0.0)
+
+
 def test_generation_penalises_citations_to_unretrieved_passages() -> None:
     run = run_generation_eval([_cases()[0]], _HallucinatingPipeline(), k=5)
     assert run.grounded_answer_rate == pytest.approx(0.0)

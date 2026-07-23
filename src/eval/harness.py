@@ -120,14 +120,27 @@ def run_generation_eval(
         result = pipeline.answer(case.query, k=k)
         answer = getattr(result, "answer", "") or ""
         retrieved_ids = [c.chunk_id for c in getattr(result, "retrieved", [])]
-        report = verify_citations_in_context(answer, retrieved_ids)
         refused = is_refusal(answer)
+
+        # The generator cites as "[Source, ch.X, v.Y]" and RESOLVES those to
+        # chunk_ids itself (RAGAnswer.citations / .used_chunk_ids). Prefer that
+        # over re-parsing the text: the chunk-id regex in citation_verification
+        # cannot match the source/chapter/verse form and would score every
+        # answer as ungrounded. Fall back to it only for pipelines that do not
+        # expose the resolved fields.
+        cited = list(getattr(result, "citations", []) or [])
+        used_ids = list(getattr(result, "used_chunk_ids", []) or [])
+        if not cited and not used_ids:
+            report = verify_citations_in_context(answer, retrieved_ids)
+            cited, used_ids = report.cited_ids, report.valid_ids
+        # a citation is "valid" when it resolved to a genuinely retrieved chunk
+        valid_ids = [cid for cid in used_ids if cid in set(retrieved_ids)]
 
         if case.expect_answerable:
             run.n_answerable += 1
-            grounded_hits.append(1.0 if report.valid_ids else 0.0)
-            if report.cited_ids:
-                citation_rates.append(len(report.valid_ids) / len(report.cited_ids))
+            grounded_hits.append(1.0 if valid_ids else 0.0)
+            if cited:
+                citation_rates.append(min(1.0, len(valid_ids) / len(cited)))
             refusals_pos.append(1.0 if refused else 0.0)
         else:
             run.n_negative += 1
@@ -135,8 +148,11 @@ def run_generation_eval(
 
         run.per_query.append({
             "id": case.id, "expect_answerable": case.expect_answerable,
-            "refused": refused, "n_cited": len(report.cited_ids),
-            "n_valid": len(report.valid_ids), "n_invalid": len(report.invalid_ids),
+            "refused": refused, "n_cited": len(cited),
+            "n_valid": len(valid_ids),
+            "n_invalid": max(0, len(cited) - len(valid_ids)),
+            # keep the text so a surprising score can actually be diagnosed
+            "answer": answer[:400],
         })
 
     mean = lambda xs: (sum(xs) / len(xs)) if xs else 0.0  # noqa: E731
