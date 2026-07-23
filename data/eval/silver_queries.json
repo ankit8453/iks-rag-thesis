@@ -1,0 +1,157 @@
+{
+  "_about": {
+    "purpose": "Phase 11 evaluation query set. SILVER (provisional) labels — authored by the project, not yet expert-validated. Numbers computed against it must be reported as preliminary until Dr. Sunita T. Pandey / the expert gold-set replaces or ratifies these labels.",
+    "labelling": "Two levels. BOOK level (available now): `relevant_books` marks which treatise(s) plausibly address the condition — supports Precision@k, nDCG, MRR, Hit@k. PASSAGE level (added later): `relevant_chunk_ids`, once populated, additionally makes Recall@k well-defined, since only then is the true number of relevant passages known.",
+    "query_style": "Queries are SYMPTOM-led, not crop-led, because the classical texts are general and symptom-based rather than crop-indexed. The crop is recorded separately as context only.",
+    "book_ids": ["vrikshayurveda", "brihat_samhita", "krishi_parashara", "upavanavinoda"],
+    "created": "2026-06-28"
+  },
+  "queries": [
+    {
+      "id": "q01", "crop": "apple", "disease": "Apple Scab Leaf",
+      "query": "dark rough corky lesions and scabby patches spreading over the leaves of a tree",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q02", "crop": "apple", "disease": "Apple rust leaf",
+      "query": "orange to brown powdery pustules raised on the surface of tree leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q03", "crop": "corn", "disease": "Corn rust leaf",
+      "query": "rust-coloured powdery eruptions scattered along the leaf blade",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q04", "crop": "corn", "disease": "Corn leaf blight",
+      "query": "long brown withering patches spreading and drying the leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q05", "crop": "corn", "disease": "Corn Gray leaf spot",
+      "query": "greyish rectangular dead spots forming between the veins of the leaf",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q06", "crop": "potato", "disease": "Potato leaf early blight",
+      "query": "dark brown spots with concentric rings appearing first on the older lower leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q07", "crop": "potato", "disease": "Potato leaf late blight",
+      "query": "rapidly spreading water-soaked blackening patches rotting the leaves in damp weather",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda", "brihat_samhita"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q08", "crop": "tomato", "disease": "Tomato Early blight leaf",
+      "query": "ringed brown lesions enlarging on the leaves and causing them to fall",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q09", "crop": "tomato", "disease": "Tomato leaf late blight",
+      "query": "dark decaying blotches with pale mould at the leaf margins during wet weather",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda", "brihat_samhita"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q10", "crop": "tomato", "disease": "Tomato Septoria leaf spot",
+      "query": "numerous small dark spots with pale centres covering the leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q11", "crop": "tomato", "disease": "Tomato leaf bacterial spot",
+      "query": "small greasy dark specks on leaves that later dry and tear",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q12", "crop": "tomato", "disease": "Tomato mold leaf",
+      "query": "fuzzy discoloured mould growing on the underside of the leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q13", "crop": "tomato", "disease": "Tomato leaf mosaic virus",
+      "query": "mottled light and dark green patches with puckering and curling of the leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q14", "crop": "tomato", "disease": "Tomato leaf yellow virus",
+      "query": "leaves turning yellow, cupping upward and the plant remaining stunted",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q15", "crop": "tomato", "disease": "Tomato two spotted spider mites leaf",
+      "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing beneath",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q16", "crop": "bell pepper", "disease": "Bell_pepper leaf spot",
+      "query": "dark sunken spots scattered across the leaves that later dry out",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q17", "crop": "squash", "disease": "Squash Powdery mildew leaf",
+      "query": "white powdery coating spreading over the surface of the leaves",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q18", "crop": "grape", "disease": "grape leaf black rot",
+      "query": "dark sunken decaying areas on leaves and shrivelling of the fruit on a climbing vine",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q19", "crop": "general", "disease": null,
+      "query": "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q20", "crop": "general", "disease": null,
+      "query": "insects boring into the trunk and eating the leaves of a tree",
+      "relevant_books": ["vrikshayurveda", "upavanavinoda"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q21", "crop": "general", "disease": null,
+      "query": "preparing and enriching the soil before planting a young sapling",
+      "relevant_books": ["upavanavinoda", "vrikshayurveda", "krishi_parashara"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q22", "crop": "general", "disease": null,
+      "query": "signs that foretell the coming of rain and the right time for sowing",
+      "relevant_books": ["brihat_samhita", "krishi_parashara"],
+      "relevant_chunk_ids": [], "expect_answerable": true
+    },
+    {
+      "id": "q23", "crop": "general", "disease": null,
+      "query": "the exact nitrogen phosphorus and potassium percentages required in the soil, expressed numerically",
+      "relevant_books": [],
+      "relevant_chunk_ids": [], "expect_answerable": false,
+      "note": "Deliberate negative: modern quantitative agronomy is absent from the classical texts. The system should REFUSE rather than fabricate."
+    },
+    {
+      "id": "q24", "crop": "general", "disease": null,
+      "query": "which synthetic fungicide spray and dosage in millilitres per litre should be applied",
+      "relevant_books": [],
+      "relevant_chunk_ids": [], "expect_answerable": false,
+      "note": "Deliberate negative: modern agrochemicals are outside the corpus; an honest refusal is the correct behaviour."
+    }
+  ]
+}
