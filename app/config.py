@@ -60,6 +60,42 @@ FEEDBACK_REPO: str = "ankit-iiitdmj/iks-feedback-samples"
 #: Confidence below which a prediction is also worth collecting for review.
 FEEDBACK_LOW_CONFIDENCE: float = 0.40
 
+# --------------------------------------------------------------------- #
+# Untrained-plant handling (Dr. Pandey): diseases transfer across plants,
+# so we run the model even on an untrained plant, show a CALIBRATED
+# confidence, and advise via symptom-RAG with a caution — refusing only
+# when the model is genuinely unsure.
+# --------------------------------------------------------------------- #
+
+#: Temperature for confidence calibration (Guo et al. 2017). 1.0 = raw softmax.
+#: Fit once on the held-out test set (Colab) and paste the value here so the
+#: confidence shown to a farmer is trustworthy rather than over-confident.
+DISEASE_TEMPERATURE: float = 1.0
+
+#: Calibrated-confidence floor for giving ANY advisory. At/above this we advise
+#: (with a caution when the plant is untrained); below it we do not guess —
+#: we collect images and defer to a retraining round. Set empirically from the
+#: test-set confidence distribution; 0.50 is the starting default.
+CONFIDENCE_ADVISE_MIN: float = 0.50
+
+#: How many leaf images to request when deferring an unfamiliar plant/disease,
+#: so the collected set is large enough to seed a retraining round.
+RETRAIN_IMAGES_REQUESTED: int = 8
+
+LOW_CONFIDENCE_MESSAGE: str = (
+    "The system is not confident enough about this leaf to give reliable advice "
+    "(confidence {conf:.0%}, below the {floor:.0%} needed). Rather than guess, "
+    "please upload about {n} clear photos of this plant's leaves — we'll review "
+    "them, teach the system this case, and get back to you."
+)
+
+UNTRAINED_PLANT_CAUTION: str = (
+    "⚠ The system was **not trained on {plant}**, but many diseases look alike "
+    "across plants — it recognises a **{disease}** pattern here with **{conf:.0%}** "
+    "confidence. Treat the advice below as indicative, and confirm with a local "
+    "expert before acting."
+)
+
 
 # --------------------------------------------------------------------- #
 # Dropdowns
@@ -210,15 +246,32 @@ def crop_from_disease(class_name: str) -> str:
     return _CROP_ALIASES.get(first, first)
 
 
+def disease_type_from_class(class_name: str) -> str:
+    """The disease/symptom part of a class name, with the crop word removed.
+
+    Labels are plant+disease coupled ("Tomato Septoria leaf spot"); on an
+    UNTRAINED plant we must show the disease, not the wrong plant name. Dropping
+    the leading crop token gives "Septoria leaf spot" / "rust leaf" / "Scab Leaf".
+    Falls back to the whole label if there is nothing after the crop word.
+    """
+    parts = class_name.split(None, 1)
+    return parts[1].strip() if len(parts) == 2 else class_name
+
+
 __all__ = [
     "APP_TAGLINE",
     "APP_TITLE",
     "CAUSAL_CHOICES",
+    "CONFIDENCE_ADVISE_MIN",
     "CORPUS_REPO",
     "CROP_CHOICES",
     "CROP_MISMATCH_MESSAGE",
+    "DISEASE_TEMPERATURE",
+    "LOW_CONFIDENCE_MESSAGE",
     "OTHER_CROP",
     "OUT_OF_SCOPE_MESSAGE",
+    "RETRAIN_IMAGES_REQUESTED",
+    "UNTRAINED_PLANT_CAUTION",
     "DEFAULT_MAX_NEW_TOKENS",
     "DEFAULT_STRATEGY",
     "DEFAULT_TEMPERATURE",
@@ -237,6 +290,7 @@ __all__ = [
     "YOLO_CONF",
     "YOLO_LEAF_REPO",
     "crop_from_disease",
+    "disease_type_from_class",
     "is_healthy",
     "supported_crops",
 ]

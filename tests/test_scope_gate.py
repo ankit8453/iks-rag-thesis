@@ -49,6 +49,31 @@ def test_other_sentinel_is_not_a_real_crop() -> None:
     assert app_config.OTHER_CROP not in crops
 
 
+def test_disease_type_strips_the_crop_word() -> None:
+    """On an untrained plant we must show the DISEASE, not the wrong plant."""
+    assert app_config.disease_type_from_class("Tomato Septoria leaf spot") == "Septoria leaf spot"
+    assert app_config.disease_type_from_class("Corn rust leaf") == "rust leaf"
+    assert app_config.disease_type_from_class("Bell_pepper leaf spot") == "leaf spot"
+    # single-token label falls back to itself, never empty
+    assert app_config.disease_type_from_class("Healthy") == "Healthy"
+
+
+def test_untrained_and_low_confidence_messages_format() -> None:
+    caution = app_config.UNTRAINED_PLANT_CAUTION.format(
+        plant="brinjal", disease="leaf spot", conf=0.63)
+    assert "brinjal" in caution and "leaf spot" in caution and "63%" in caution
+
+    low = app_config.LOW_CONFIDENCE_MESSAGE.format(
+        conf=0.31, floor=app_config.CONFIDENCE_ADVISE_MIN,
+        n=app_config.RETRAIN_IMAGES_REQUESTED)
+    assert "31%" in low and str(app_config.RETRAIN_IMAGES_REQUESTED) in low
+
+
+def test_confidence_threshold_is_sane() -> None:
+    assert 0.0 < app_config.CONFIDENCE_ADVISE_MIN < 1.0
+    assert app_config.RETRAIN_IMAGES_REQUESTED >= 1
+
+
 def test_scope_and_mismatch_messages_format() -> None:
     out = app_config.OUT_OF_SCOPE_MESSAGE.format(crop="Brinjal")
     assert "Brinjal" in out

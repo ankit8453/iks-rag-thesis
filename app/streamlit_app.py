@@ -34,6 +34,7 @@ from app import config as app_config
 from app import crop_soil, feedback
 from app.guardrail import is_leaf
 from app.loaders import load_all, report_vram
+from src.disease import calibration as cal
 from src.soil.model import SoilPrediction
 from src.integration.causation import CausalContext, CausalPathway
 from src.integration.config import LLMMediatedStrategyConfig, TemplateStrategyConfig
@@ -286,25 +287,12 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
     leaf_img = _to_pil(leaf_file)
     soil_img = _to_pil(soil_file) if soil_file is not None else None
 
-    # 0) SCOPE GATE — runs before any model, because the classifier cannot say
-    # "I don't know": it would return its closest trained class and present a
-    # confident, wrong diagnosis. The farmer's declaration settles scope exactly.
-    if selected_crop == app_config.OTHER_CROP:
-        st.markdown(
-            f'<div class="glass glass-bad">🚫 '
-            f'{app_config.OUT_OF_SCOPE_MESSAGE.format(crop=other_crop_name.title())}'
-            f'</div>', unsafe_allow_html=True)
-        st.caption("Supported plants: " + ", ".join(_supported))
-        # Keep the sample (with the farmer's own plant name) so an expert can
-        # review it and the plant can be added in a later retraining round.
-        with st.spinner("Saving this sample so the plant can be added later…"):
-            sid = feedback.save_sample(
-                leaf_img, reason="out_of_scope", declared_plant=other_crop_name,
-                mode=("quick" if quick else "full"), notes=causal_notes.strip() or None,
-            )
-        if sid:
-            st.caption(f"✓ Saved for expert review (reference {sid}).")
-        st.stop()
+    # The plant the farmer declared. For a supported plant this is the crop; for
+    # "Other" we keep the typed name — the disease still transfers across plants,
+    # so we no longer refuse before running the model (Dr. Pandey). Scope is
+    # handled AFTER inference, by the calibrated confidence.
+    untrained = selected_crop == app_config.OTHER_CROP
+    plant_name = (other_crop_name or "this plant") if untrained else selected_crop
 
     # 1) guardrail
     with st.spinner("Checking the leaf upload…"):
@@ -326,14 +314,41 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
         disease_result = bundle.disease_engine.predict(leaf_crop)
         d_pred = disease_result.prediction
         healthy = app_config.is_healthy(d_pred.class_name)
-        # The farmer declared the plant, and they know their own crop — so that
-        # is what we act on. The disease label also implies a crop; we use it
-        # only as a CROSS-CHECK, surfacing a warning when the two disagree
-        # rather than silently overriding the person.
-        detected_crop = selected_crop
-        model_crop = app_config.crop_from_disease(d_pred.class_name)
-        crop_mismatch = model_crop != selected_crop
-        cs_row = crop_soil.find(detected_crop)
+        # Calibrated confidence (temperature scaling): the raw softmax is
+        # over-confident, especially on an untrained plant, so what we show the
+        # farmer and route on is the calibrated number, not the raw one.
+        confidence = cal.top_confidence(d_pred.logits, app_config.DISEASE_TEMPERATURE)
+        disease_type = app_config.disease_type_from_class(d_pred.class_name)
+
+    # 2b) CONFIDENCE GATE — diseases transfer across plants, so we run the model
+    # even for an untrained plant; but if the calibrated confidence is too low we
+    # do NOT guess. We collect the sample and ask for more images to retrain on.
+    if confidence < app_config.CONFIDENCE_ADVISE_MIN:
+        st.markdown(
+            f'<div class="glass glass-bad">🤔 '
+            f'{app_config.LOW_CONFIDENCE_MESSAGE.format(conf=confidence, floor=app_config.CONFIDENCE_ADVISE_MIN, n=app_config.RETRAIN_IMAGES_REQUESTED)}'
+            f'</div>', unsafe_allow_html=True)
+        with st.spinner("Saving this sample for review…"):
+            sid = feedback.save_sample(
+                leaf_crop, reason="low_confidence", declared_plant=plant_name,
+                predicted_class=d_pred.class_name, confidence=confidence,
+                mode=("quick" if quick else "full"), notes=causal_notes.strip() or None,
+            )
+        if sid:
+            st.caption(f"✓ Saved for expert review (reference {sid}). "
+                       f"Submitting a few more clear photos the same way helps us "
+                       f"learn this plant faster.")
+        st.stop()
+
+    # From here the model is confident enough to advise. For a supported plant we
+    # act on the farmer's choice and CROSS-CHECK it against the disease label; for
+    # an untrained plant the typed name is soft context only (no cross-check).
+    detected_crop = plant_name
+    model_crop = app_config.crop_from_disease(d_pred.class_name)
+    crop_mismatch = (not untrained) and (model_crop != selected_crop)
+    cs_row = crop_soil.find(detected_crop)
+
+    with st.spinner("Reading soil…"):
         if quick:
             # Quick check: no soil photo — auto-fill the crop's typical baseline
             # soil reading (primary soil + driest acceptable moisture + primary
@@ -355,18 +370,26 @@ if analyze and leaf_file is not None and (quick or soil_file is not None):
             soil_emb = soil_result.embedding
             soil_source = "measured"
 
-    # 3) status banner
+    # 2c) untrained-plant caution — shown once we've decided to advise.
+    if untrained:
+        st.markdown(
+            f'<div class="glass glass-bad">'
+            f'{app_config.UNTRAINED_PLANT_CAUTION.format(plant=plant_name, disease=disease_type, conf=confidence)}'
+            f'</div>', unsafe_allow_html=True)
+
+    # 3) status banner — confidence shown is the CALIBRATED value.
     if healthy:
         st.markdown(
             f'<div class="glass glass-ok"><span class="pill pill-ok">✓ HEALTHY</span>'
             f'<div class="big">{d_pred.class_name}</div>'
-            f'<span class="muted">No disease detected ({d_pred.confidence:.0%} confidence) — '
+            f'<span class="muted">No disease detected ({confidence:.0%} confidence) — '
             f'no treatment required.</span></div>', unsafe_allow_html=True)
     else:
+        _label = disease_type if untrained else d_pred.class_name
         st.markdown(
             f'<div class="glass glass-bad"><span class="pill pill-bad">⚠ DISEASE</span>'
-            f'<div class="big">{d_pred.class_name}</div>'
-            f'<span class="muted">{d_pred.confidence:.0%} confidence · crop: {detected_crop}</span></div>',
+            f'<div class="big">{_label}</div>'
+            f'<span class="muted">{confidence:.0%} confidence · plant: {detected_crop}</span></div>',
             unsafe_allow_html=True)
 
     # 3b) cross-check: the plant the farmer chose vs the plant the disease

@@ -328,6 +328,42 @@ corpus and how the corpus is actually organised, and close the system's
 
 ---
 
+## 6e. Untrained-plant handling: calibrated confidence, not hard refusal (2026-07)
+
+Dr. Pandey's refinement of the scope gate. Diseases are visually similar across
+species, so the classifier's *disease* knowledge transfers even to plants it was
+never trained on. Rather than flatly refuse an untrained plant, we run the model,
+show a **calibrated confidence**, and advise via symptom-RAG with a caution —
+refusing only when the model is genuinely unsure.
+
+- **Why calibration first.** A softmax classifier is over-confident, worse so on
+  out-of-distribution inputs (exactly the untrained-plant case). Showing the raw
+  softmax to a farmer would mislead. **Temperature scaling** (Guo et al. 2017) —
+  one scalar `T`, `softmax(z/T)` — fixes the *number* without changing *which*
+  class wins, so accuracy is untouched. `src/disease/calibration.py` fits `T` by
+  a deterministic golden-section NLL minimisation (pure NumPy, dependency-free,
+  unit-tested); `scripts/fit_disease_temperature.py` fits it once on the PlantDoc
+  test set on Colab, reports ECE before/after, and suggests the advise floor from
+  the confidence distribution of the model's *correct* predictions.
+- **Routing.** `confidence >= CONFIDENCE_ADVISE_MIN` -> advise (with a caution if
+  the plant is untrained); below it -> do NOT guess, collect the image to the
+  feedback DB (`reason="low_confidence"`) and ask for more photos to retrain on.
+- **Show the disease, not the wrong plant.** Labels are plant+disease coupled;
+  `disease_type_from_class()` drops the crop token so an untrained plant is shown
+  its *disease* ("Septoria leaf spot"), and the crop is soft context for RAG.
+- **Honest wording.** "confidence", never "accuracy"; the untrained caution says
+  the disease was recognised at X% and to confirm with an expert.
+
+This replaces the scope gate's hard pre-inference refusal (§6d.2). It is the same
+philosophy as symptom-based retrieval, applied to the vision side: the *disease*
+generalises; the plant is context. Defaults `DISEASE_TEMPERATURE=1.0` (identity
+until fitted) and `CONFIDENCE_ADVISE_MIN=0.50` (until the fit script sets it).
+Thesis angle: cross-plant disease generalization with calibrated confidence + a
+human-in-the-loop safety net. Tests: `test_calibration.py` (7) + scope-gate
+additions; app + config + scope + feedback + calibration suites green.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
