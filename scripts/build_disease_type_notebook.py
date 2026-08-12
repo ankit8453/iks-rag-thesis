@@ -60,7 +60,12 @@ os.chdir(REPO); sys.path.insert(0,REPO)
 
 subprocess.run([sys.executable,"-m","pip","install","-q","timm>=1.0","huggingface_hub>=0.24",
                 "datasets>=2.20","pillow","scikit-learn","grad-cam>=1.5"],check=True)
-from huggingface_hub import login; login()
+
+# HF login — same as the other notebooks: paste your write token in the box.
+from huggingface_hub import HfApi, login
+login()
+print("HF user:", HfApi().whoami().get("name"))
+
 import torch
 assert torch.cuda.is_available(), "Switch Runtime -> T4 GPU"
 print("GPU:", torch.cuda.get_device_name(0))
