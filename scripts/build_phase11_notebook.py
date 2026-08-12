@@ -76,9 +76,16 @@ if r.returncode != 0:
     print("\\n".join(r.stdout.splitlines()[-30:]))
     raise RuntimeError("pip install failed")
 
-# RAGAS is optional: if it will not install, the harness still reports every
-# other metric and simply records that RAGAS was skipped.
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "ragas>=0.1.9"])
+# RAGAS (contribution C3). It must be a stack that is INTERNALLY consistent:
+# Colab ships langchain 0.3, but ragas 0.1.x expects the 0.2 layout, so an
+# unpinned install fails with "No module named
+# 'langchain_community.chat_models.vertexai'". Pin a mutually-compatible set.
+# These imports happen BEFORE any langchain import in this notebook, so no
+# runtime restart is needed on a clean run. RAGAS stays optional — if this fails
+# the harness still reports every other metric and records that RAGAS was skipped.
+subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+                "ragas==0.1.21", "langchain==0.2.16", "langchain-community==0.2.17",
+                "langchain-openai==0.1.25", "langchain-core<0.3"])
 print("deps installed")
 
 from huggingface_hub import login
@@ -189,7 +196,7 @@ print(f"\\nungrounded control      : {u['n']} answers with no corpus at all; "
 
     md("## Cell 4 — RAGAS faithfulness (judged by the local Llama, no API cost)"),
     code("""\
-from src.eval.config import EvalConfig
+from src.eval.config import EvalConfig, RAGASConfig
 from src.eval.ragas_eval import RAGEvalSample, run_ragas_evaluation
 
 # Build one RAGAS row per answerable query from the grounded system's output.
@@ -204,8 +211,9 @@ for case in answerable_cases(cases):
     ))
 print("RAGAS samples:", len(samples))
 
-cfg = EvalConfig()
-cfg.ragas.metrics = ["faithfulness", "answer_relevancy"]   # the two that need no reference
+# The config is frozen (immutable), so set the metric list at CONSTRUCTION time
+# rather than assigning to cfg.ragas.metrics afterwards.
+cfg = EvalConfig(ragas=RAGASConfig(metrics=["faithfulness", "answer_relevancy"]))
 
 # ---------------------------------------------------------------------------
 # Judge selection. Leave False for the free run; flip to True for a second pass

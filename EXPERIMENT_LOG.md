@@ -364,6 +364,49 @@ additions; app + config + scope + feedback + calibration suites green.
 
 ---
 
+## 6f. Phase 11 — first evaluation pass (PRELIMINARY, silver query set)
+
+First real run of the harness on Colab (Llama-3.1-8B, 22 answerable + 2 negative
+queries, book-level silver labels). **Preliminary until the expert gold-set.**
+
+**Retrieval (book-level Precision@k etc.; Recall = n/a until passage labels):**
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full (dense+BM25+rerank) | 0.736 | 0.942 | 0.909 | 1.00 |
+| **keyword_only (baseline)** | **0.555** | **0.697** | **0.615** | 0.909 |
+| dense_only | 0.800 | 0.942 | 0.943 | 1.00 |
+| hybrid_no_rerank | 0.709 | 0.863 | 0.814 | 1.00 |
+
+**Generation / grounding:** grounded-answer rate 13.6%, valid-citation rate
+14.2%, **honest refusal 100%** (both negatives), **over-refusal 54.5%** (answerable
+queries refused); ungrounded control 0% unfounded citations.
+
+**RAGAS (gpt-4o-mini judge, local bge embeddings):** faithfulness **0.559**,
+answer_relevancy **0.163**. Independent cross-check (direct gpt-4o-mini, refusals
+excluded): faithfulness **0.86** (n=10), answer_relevancy 0.48.
+
+**Findings.**
+1. **The bridge is proven** — full beats the keyword-only baseline decisively
+   (nDCG 0.94 vs 0.70, MRR 0.91 vs 0.62). Semantic retrieval matters because the
+   corpus is classical translated text and queries are modern symptom descriptions.
+2. **Ablation surprise:** `dense_only` (P@5 0.80) edges out `full` (0.74) — BM25
+   injects lexically-matched but off-topic passages that the reranker only partly
+   cleans up. Honest finding; reinforces "semantic > lexical for this corpus".
+   Caveat: n=22 + book-level labels, so the dense-vs-full gap may be noise.
+3. **When it answers it is faithful (0.56–0.86) and never fabricates** (100% honest
+   refusal, 0% unfounded citations). The low relevancy (0.16) is dominated by the
+   refusals (each is the same sentence, scores ~0), not by bad answers.
+4. **The limiter is corpus coverage**, not retrieval or the bridge: 206
+   tree-focused passages don't cover every symptom, so the generator honestly
+   refuses ~55% of the answerable queries. → motivates the 2 AAHF texts.
+
+**Infra notes for reproducibility:** T4 OOM if `load_all()` is used (loads unused
+vision models) or the chroma embedder is left on GPU — build only
+retriever+generator, embedder/reranker on CPU. RAGAS needs a pinned
+ragas 0.1.21 + langchain 0.2.x stack (Colab's langchain 0.3 breaks unpinned ragas).
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
