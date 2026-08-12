@@ -201,7 +201,7 @@ print(classification_report(yt,yp,target_names=test_ds.classes,digits=3))"""),
 
     md("## Cell 5 — leaf-focus sanity (Grad-CAM)"),
     code("""\
-import numpy as np, matplotlib.pyplot as plt
+import numpy as np, matplotlib.pyplot as plt, random
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 # DiseaseClassifier is a delegation wrapper; Grad-CAM needs the real nn.Module.
@@ -209,13 +209,21 @@ gm = model._module
 try: target=model._backbone.blocks[-2]
 except Exception: target=[m for m in gm.modules() if isinstance(m,torch.nn.Conv2d)][-1]
 cam=GradCAM(model=gm, target_layers=[target])
-xb,yb=next(iter(te)); fig,ax=plt.subplots(1,4,figsize=(14,4))
-for i in range(4):
-    g=cam(input_tensor=xb[i:i+1].to(DEV))[0]
-    img=(xb[i].permute(1,2,0).numpy()*std+mean).clip(0,1).astype(np.float32)
-    ax[i].imshow(show_cam_on_image(img,g,use_rgb=True))
-    ax[i].set_title(test_ds.classes[yb[i]]); ax[i].axis("off")
-plt.show()"""),
+
+# ORIGINAL next to Grad-CAM, across DIVERSE classes (the test loader is sorted,
+# so a plain batch is all one class), with true vs predicted labels — so you can
+# judge whether the hot region sits on the actual lesion.
+idxs=random.sample(range(len(test_ds)), 6)
+fig,ax=plt.subplots(len(idxs),2,figsize=(7,3.2*len(idxs))); model.eval()
+for r,idx in enumerate(idxs):
+    x,y=test_ds[idx]; xb1=x.unsqueeze(0).to(DEV)
+    with torch.no_grad(): pred=int(model(xb1).argmax(1).item())
+    g=cam(input_tensor=xb1)[0]
+    img=(x.permute(1,2,0).numpy()*std+mean).clip(0,1).astype(np.float32)
+    ax[r,0].imshow(img); ax[r,0].axis("off"); ax[r,0].set_title(f"original — true: {test_ds.classes[y]}")
+    ax[r,1].imshow(show_cam_on_image(img,g,use_rgb=True)); ax[r,1].axis("off")
+    ax[r,1].set_title(f"Grad-CAM — pred: {test_ds.classes[pred]} ({'correct' if pred==y else 'WRONG'})")
+plt.tight_layout(); plt.show()"""),
 
     md("""\
 ### Reading the result — honestly
