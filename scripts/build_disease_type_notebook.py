@@ -204,9 +204,11 @@ print(classification_report(yt,yp,target_names=test_ds.classes,digits=3))"""),
 import numpy as np, matplotlib.pyplot as plt
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+# DiseaseClassifier is a delegation wrapper; Grad-CAM needs the real nn.Module.
+gm = model._module
 try: target=model._backbone.blocks[-2]
-except Exception: target=[m for m in model.modules() if isinstance(m,torch.nn.Conv2d)][-1]
-cam=GradCAM(model=model, target_layers=[target])
+except Exception: target=[m for m in gm.modules() if isinstance(m,torch.nn.Conv2d)][-1]
+cam=GradCAM(model=gm, target_layers=[target])
 xb,yb=next(iter(te)); fig,ax=plt.subplots(1,4,figsize=(14,4))
 for i in range(4):
     g=cam(input_tensor=xb[i:i+1].to(DEV))[0]
