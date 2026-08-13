@@ -60,6 +60,7 @@ os.chdir(REPO); sys.path.insert(0,REPO)
 
 subprocess.run([sys.executable,"-m","pip","install","-q","timm>=1.0","huggingface_hub>=0.24",
                 "datasets>=2.20","pillow","scikit-learn","grad-cam>=1.5"],check=True)
+subprocess.run([sys.executable,"-m","pip","install","-q","ultralytics>=8.0"],check=True)  # YOLO leaf crop
 
 # HF login — same as the other notebooks: paste your write token in the box.
 from huggingface_hub import HfApi, login
@@ -70,9 +71,15 @@ import torch
 assert torch.cuda.is_available(), "Switch Runtime -> T4 GPU"
 print("GPU:", torch.cuda.get_device_name(0))
 
-BRAZIL_REPO = "ankit-iiitdmj/iks-brazil-multicrop"   # raw Brazilian zip (push once)
-DATA_REPO   = "ankit-iiitdmj/iks-disease-type-data"  # built, unified set
-MODEL_REPO  = "ankit-iiitdmj/iks-disease-type-v1"    # trained model (NEW)"""),
+BRAZIL_REPO = "ankit-iiitdmj/iks-brazil-multicrop"           # raw Brazilian zip (push once)
+# Leaf-cropping the training data is the C-PD fix for the field/scene images
+# (e.g. palm blight) where attention wandered to the background. Keep the two
+# builds in SEPARATE repos so we can compare cropped vs uncropped.
+CROP_LEAF   = True
+DATA_REPO   = ("ankit-iiitdmj/iks-disease-type-data-cropped" if CROP_LEAF
+               else "ankit-iiitdmj/iks-disease-type-data")
+MODEL_REPO  = ("ankit-iiitdmj/iks-disease-type-v1-cropped" if CROP_LEAF
+               else "ankit-iiitdmj/iks-disease-type-v1")    # trained model (NEW)"""),
 
     md("""\
 ## Cell 2 — get the disease-type dataset into `data/disease_type/`
@@ -126,8 +133,10 @@ if BUILD_FROM_RAW and not built:
     srcs=[]
     for name,root in [("plantvillage",PV),("plantdoc",PD),("paddy",PA),("brazil","/content/brazil")]:
         if root: srcs += ["--source", f"{name}={root}"]
-    subprocess.run([sys.executable,"scripts/build_disease_type_dataset.py",*srcs,
-                    "--out",OUTDIR,"--size","384","--min-per-class","60"],check=True)
+    build_cmd=[sys.executable,"scripts/build_disease_type_dataset.py",*srcs,
+               "--out",OUTDIR,"--size","384","--min-per-class","60"]
+    if CROP_LEAF: build_cmd.append("--crop-leaf")     # YOLO leaf crop (slower, GPU)
+    subprocess.run(build_cmd,check=True)
 
     # push the built set to HF so future runs skip the raw download + build
     try:

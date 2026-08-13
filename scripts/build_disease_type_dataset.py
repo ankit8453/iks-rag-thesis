@@ -88,10 +88,21 @@ def _iter_images(root: Path):
 def build(
     sources: dict[str, Path], out_dir: Path, *, size: int = 256, seed: int = 42,
     ratios: tuple[float, float, float] = (0.8, 0.1, 0.1),
-    keep_pest: bool = False, min_per_class: int = 1,
+    keep_pest: bool = False, min_per_class: int = 1, crop_leaf: bool = False,
 ) -> dict:
-    """Do the unification. Returns a summary dict (also printed by ``main``)."""
+    """Do the unification. Returns a summary dict (also printed by ``main``).
+
+    ``crop_leaf`` runs the pretrained YOLO :class:`LeafCropper` on every image
+    before resize, so the model trains on LEAF crops rather than whole scenes —
+    the same fix that made C-PD leaf-attentive. Images where no leaf is detected
+    fall back to the full frame (never dropped).
+    """
     from PIL import Image  # noqa: PLC0415 - heavy import kept local
+
+    cropper = None
+    if crop_leaf:
+        from src.disease.leaf_detect import LeafCropper  # noqa: PLC0415
+        cropper = LeafCropper()
 
     # 1) collect (type, source, path) for every image, deduping by content hash
     seen: set[str] = set()
@@ -135,6 +146,7 @@ def build(
     out_dir.mkdir(parents=True, exist_ok=True)
     manifest = out_dir / "manifest.csv"
     counts: Counter = Counter()
+    n_cropped = 0
     with manifest.open("w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
         w.writerow(["split", "disease_type", "source", "orig_class", "out_path"])
@@ -144,7 +156,11 @@ def build(
             dst_dir.mkdir(parents=True, exist_ok=True)
             dst = dst_dir / f"{source}_{i:06d}.jpg"
             try:
-                Image.open(path).convert("RGB").resize((size, size)).save(dst, quality=90)
+                im = Image.open(path).convert("RGB")
+                if cropper is not None:
+                    im, found = cropper.crop(im)   # YOLO leaf crop (full frame if none)
+                    n_cropped += int(found)
+                im.resize((size, size)).save(dst, quality=90)
             except Exception as exc:  # noqa: BLE001
                 print(f"  ! failed {path}: {exc}", file=sys.stderr)
                 continue
@@ -155,6 +171,7 @@ def build(
     summary = {
         "sources": {k: str(v) for k, v in sources.items()},
         "total_images": len(records), "duplicates_skipped": dupes,
+        "leaf_cropped": (n_cropped if crop_leaf else None),
         "types": sorted(kept_types),
         "dropped_small_types": sorted(set(per_type_raw) - kept_types),
         "per_type": {t: per_type_raw[t] for t in sorted(kept_types)},
@@ -173,6 +190,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--min-per-class", type=int, default=1)
     ap.add_argument("--keep-pest", action="store_true",
                     help="keep insect/mite damage as a class (default: drop)")
+    ap.add_argument("--crop-leaf", action="store_true",
+                    help="YOLO-crop the leaf from each image before resize (the "
+                         "C-PD leaf-focus fix; needs ultralytics + GPU)")
     args = ap.parse_args(argv)
 
     sources: dict[str, Path] = {}
@@ -185,10 +205,13 @@ def main(argv: list[str] | None = None) -> int:
         ap.error("give at least one --source name=path")
 
     summary = build(sources, Path(args.out), size=args.size, seed=args.seed,
-                    keep_pest=args.keep_pest, min_per_class=args.min_per_class)
+                    keep_pest=args.keep_pest, min_per_class=args.min_per_class,
+                    crop_leaf=args.crop_leaf)
 
     print("\n=== disease-type dataset built ===")
     print(f"  total images: {summary['total_images']}  (dupes skipped: {summary['duplicates_skipped']})")
+    if summary.get("leaf_cropped") is not None:
+        print(f"  leaf-cropped by YOLO: {summary['leaf_cropped']} (rest kept full frame)")
     print(f"  dropped small types: {summary['dropped_small_types'] or 'none'}")
     print("  per type:")
     for t in summary["types"]:

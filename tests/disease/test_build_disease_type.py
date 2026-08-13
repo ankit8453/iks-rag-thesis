@@ -47,3 +47,38 @@ def test_split_covers_every_key_exactly_once() -> None:
     a = bdt.stratified_split(keys, (0.7, 0.15, 0.15), seed=1)
     assert set(a) == set(keys)
     assert all(v in {"train", "val", "test"} for v in a.values())
+
+
+def test_crop_leaf_flag_invokes_the_cropper(tmp_path, monkeypatch) -> None:
+    """With --crop-leaf, every image must pass through the YOLO LeafCropper."""
+    from PIL import Image
+    import src.disease.leaf_detect as ld
+
+    # a source tree with two 'rust' images
+    src = tmp_path / "src" / "Apple___Cedar_apple_rust"
+    src.mkdir(parents=True)
+    # distinct colours so content-hash dedup keeps BOTH images
+    for n, col in (("a.jpg", (0, 128, 0)), ("b.jpg", (10, 90, 40))):
+        Image.new("RGB", (40, 40), col).save(src / n)
+
+    calls = {"n": 0}
+
+    class _FakeCropper:                       # no YOLO / no network
+        def __init__(self, *a, **k): ...
+        def crop(self, img):
+            calls["n"] += 1
+            return img.crop((5, 5, 35, 35)), True   # pretend a leaf was found
+    monkeypatch.setattr(ld, "LeafCropper", _FakeCropper)
+
+    out = tmp_path / "out"
+    summary = bdt.build({"t": tmp_path / "src"}, out, size=32,
+                        min_per_class=1, crop_leaf=True)
+    assert calls["n"] == 2                     # both images cropped
+    assert summary["leaf_cropped"] == 2
+    assert summary["total_images"] == 2
+
+    # and NOT called when the flag is off
+    calls["n"] = 0
+    bdt.build({"t": tmp_path / "src"}, tmp_path / "out2", size=32,
+              min_per_class=1, crop_leaf=False)
+    assert calls["n"] == 0
