@@ -60,6 +60,7 @@ os.chdir(REPO); sys.path.insert(0,REPO)
 
 subprocess.run([sys.executable,"-m","pip","install","-q","timm>=1.0","huggingface_hub>=0.24",
                 "datasets>=2.20","pillow","scikit-learn","grad-cam>=1.5"],check=True)
+subprocess.run([sys.executable,"-m","pip","install","-q","ultralytics>=8.0"],check=True)  # YOLO leaf crop
 
 # HF login — same as the other notebooks: paste your write token in the box.
 from huggingface_hub import HfApi, login
@@ -70,9 +71,15 @@ import torch
 assert torch.cuda.is_available(), "Switch Runtime -> T4 GPU"
 print("GPU:", torch.cuda.get_device_name(0))
 
-BRAZIL_REPO = "ankit-iiitdmj/iks-brazil-multicrop"   # raw Brazilian zip (push once)
-DATA_REPO   = "ankit-iiitdmj/iks-disease-type-data"  # built, unified set
-MODEL_REPO  = "ankit-iiitdmj/iks-disease-type-v1"    # trained model (NEW)"""),
+BRAZIL_REPO = "ankit-iiitdmj/iks-brazil-multicrop"           # raw Brazilian zip (push once)
+# Leaf-cropping the training data is the C-PD fix for the field/scene images
+# (e.g. palm blight) where attention wandered to the background. Keep the two
+# builds in SEPARATE repos so we can compare cropped vs uncropped.
+CROP_LEAF   = True
+DATA_REPO   = ("ankit-iiitdmj/iks-disease-type-data-cropped" if CROP_LEAF
+               else "ankit-iiitdmj/iks-disease-type-data")
+MODEL_REPO  = ("ankit-iiitdmj/iks-disease-type-v1-cropped" if CROP_LEAF
+               else "ankit-iiitdmj/iks-disease-type-v1")    # trained model (NEW)"""),
 
     md("""\
 ## Cell 2 — get the disease-type dataset into `data/disease_type/`
@@ -126,8 +133,10 @@ if BUILD_FROM_RAW and not built:
     srcs=[]
     for name,root in [("plantvillage",PV),("plantdoc",PD),("paddy",PA),("brazil","/content/brazil")]:
         if root: srcs += ["--source", f"{name}={root}"]
-    subprocess.run([sys.executable,"scripts/build_disease_type_dataset.py",*srcs,
-                    "--out",OUTDIR,"--size","384","--min-per-class","60"],check=True)
+    build_cmd=[sys.executable,"scripts/build_disease_type_dataset.py",*srcs,
+               "--out",OUTDIR,"--size","384","--min-per-class","60"]
+    if CROP_LEAF: build_cmd.append("--crop-leaf")     # YOLO leaf crop (slower, GPU)
+    subprocess.run(build_cmd,check=True)
 
     # push the built set to HF so future runs skip the raw download + build
     try:
@@ -201,19 +210,29 @@ print(classification_report(yt,yp,target_names=test_ds.classes,digits=3))"""),
 
     md("## Cell 5 — leaf-focus sanity (Grad-CAM)"),
     code("""\
-import numpy as np, matplotlib.pyplot as plt
+import numpy as np, matplotlib.pyplot as plt, random
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+# DiseaseClassifier is a delegation wrapper; Grad-CAM needs the real nn.Module.
+gm = model._module
 try: target=model._backbone.blocks[-2]
-except Exception: target=[m for m in model.modules() if isinstance(m,torch.nn.Conv2d)][-1]
-cam=GradCAM(model=model, target_layers=[target])
-xb,yb=next(iter(te)); fig,ax=plt.subplots(1,4,figsize=(14,4))
-for i in range(4):
-    g=cam(input_tensor=xb[i:i+1].to(DEV))[0]
-    img=(xb[i].permute(1,2,0).numpy()*std+mean).clip(0,1).astype(np.float32)
-    ax[i].imshow(show_cam_on_image(img,g,use_rgb=True))
-    ax[i].set_title(test_ds.classes[yb[i]]); ax[i].axis("off")
-plt.show()"""),
+except Exception: target=[m for m in gm.modules() if isinstance(m,torch.nn.Conv2d)][-1]
+cam=GradCAM(model=gm, target_layers=[target])
+
+# ORIGINAL next to Grad-CAM, across DIVERSE classes (the test loader is sorted,
+# so a plain batch is all one class), with true vs predicted labels — so you can
+# judge whether the hot region sits on the actual lesion.
+idxs=random.sample(range(len(test_ds)), 6)
+fig,ax=plt.subplots(len(idxs),2,figsize=(7,3.2*len(idxs))); model.eval()
+for r,idx in enumerate(idxs):
+    x,y=test_ds[idx]; xb1=x.unsqueeze(0).to(DEV)
+    with torch.no_grad(): pred=int(model(xb1).argmax(1).item())
+    g=cam(input_tensor=xb1)[0]
+    img=(x.permute(1,2,0).numpy()*std+mean).clip(0,1).astype(np.float32)
+    ax[r,0].imshow(img); ax[r,0].axis("off"); ax[r,0].set_title(f"original — true: {test_ds.classes[y]}")
+    ax[r,1].imshow(show_cam_on_image(img,g,use_rgb=True)); ax[r,1].axis("off")
+    ax[r,1].set_title(f"Grad-CAM — pred: {test_ds.classes[pred]} ({'correct' if pred==y else 'WRONG'})")
+plt.tight_layout(); plt.show()"""),
 
     md("""\
 ### Reading the result — honestly
