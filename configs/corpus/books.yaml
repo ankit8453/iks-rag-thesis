@@ -93,8 +93,19 @@ books:
   # to ``ready`` (or ``ready_external`` for Gemini-OCR'd books) and
   # re-run ``python -m src.rag.corpus.build_corpus``. No code change.
   - id: kashyapiyakrishisukti
-    title: Kashyapiyakrishisukti
-    status: pending
+    title: Kashyapiya Krishisukti
+    author: Kashyapa
+    translator: "Gemini Flash 3.6 (Sanskrit->English), verse-level"
+    edition: "Sanskrit mula (root text); OCR+translated 2026-08"
+    original_language: Sanskrit
+    pdf: 512447135-Kakayapiya-Krishi-Sukti-of-Kashyapa.pdf
+    status: ready_external
+    ocr_method: gemini_external
+    scope: pages
+    page_range: [1, 64]
+    text_source: corpus/ocr_external/kashyapiyakrishisukti.md
+    note: "Sanskrit-only scan; each verse OCR'd + translated to English by Gemini Flash 3.6. Cultivation-focused (soil/water/seed/sowing); light on disease-treatment. text_source holds the English translation only (Sanskrit kept in sanskrit_ocr_demo/)."
+    default_topic_tags: [soil_selection, water_management, seed_preservation, sowing, cultivation, grain]
   - id: text_six_tbd
     title: "TBD (sixth text)"
     status: pending
