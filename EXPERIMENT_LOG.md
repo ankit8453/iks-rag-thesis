@@ -407,6 +407,96 @@ ragas 0.1.21 + langchain 0.2.x stack (Colab's langchain 0.3 breaks unpinned raga
 
 ---
 
+## 6g. Crop-agnostic disease-TYPE classifier — ISOLATED experiment (2026-08-13)
+
+Research-only experiment (never overwrites the deployed C-PD model; new HF repos,
+new `data/disease_type/`). **Hypothesis:** pooling the ~194 crop×disease labels
+into ~13 crop-agnostic disease *types* (rust, blight, leaf_spot, …) is trainable,
+aligns with the symptom-based IKS direction, and supports the untrained-plant
+claim (§6e). Backbone = PlantVillage warm-start; EfficientNet-B4. Sources unified
+by `scripts/build_disease_type_dataset.py` (PlantVillage + PlantDoc + Dr. Pandey's
+Brazilian multi-crop set), deepest-disease-folder wins, content-hash dedup.
+
+**Two runs — the leaf-crop trade-off (same shape as C-PD):**
+
+| Run | TEST acc | macro F1 | Grad-CAM attention on FIELD images |
+|---|---|---|---|
+| uncropped | **0.782** | — | **background** on field/scene images (palm-blight bias) ❌ |
+| **YOLO leaf-crop** | **0.719** | 0.635 | **on the leaf/lesions**, background cold ✅ |
+
+- **The −6.3 accuracy is the honest tax; the leaf attention is what it buys.**
+  Grad-CAM (6-image diverse panel) on the cropped model: corn-in-field *blight*
+  and *leaf_spot* now heat the **lesions**, soil/background cold — the exact
+  failure the crop targeted. Same call as C-PD (66.6% leaf-focused > 72.3%
+  background): **keep the cropped version.**
+- **Per-class (cropped):** healthy 0.82, rot 0.87, blight 0.79, powdery 0.77,
+  rust 0.76, leaf_spot 0.73; weak = **downy_mildew 0.000** (8 samples — too small
+  to be honest), **early_blight 0.364** (early↔late confusion), leaf_mold recall
+  0.42 (12 samples).
+- **The one Grad-CAM miss** (bacterial→leaf_spot) is a disease↔disease confusion
+  on plant tissue, **not** background — a "good" error to report.
+- **Caveat:** disease-type accuracy is a *coarser* label space than the 27-class
+  C-PD, so 0.72 here is **not** directly comparable to C-PD's 66.6% — different
+  task. It is a proof-of-concept for the crop-agnostic direction, not a drop-in.
+
+**Next (paper-critical):** merge early+late→`blight`, drop/grow downy_mildew, then
+a **held-out-crop test** (train excluding one crop, test on it) — the strongest
+direct evidence for cross-plant generalization behind §6e.
+
+---
+
+## 6h. Corpus re-OCR + Kashyapiya ingest — coverage expansion (2026-08-31)
+
+Motivated by the Phase 11 finding that **corpus coverage, not method, is the
+limiter** (§6f: faithful but ~55% over-refusal). Two workstreams:
+
+**(A) Re-OCR of the existing books with Gemini Flash 3.6 (no output-token cap).**
+Ankit's hypothesis was that the original 3.5 OCR truncated dense pages. Confirmed:
+the original run had a hard output cap that (i) truncated multi-verse pages and
+(ii) once saved an API-error string as page text
+(`brihat_samhita/page_0332.txt` = "An error occurred..."). Re-OCR fix = Flash 3.6,
+**no `max_output_tokens`**, a completeness instruction, a tightened SKIP rule
+(keep Introduction/preface/commentary prose; skip only blank/Devanagari-only/
+index), and error-string detection (never cache a refusal). Ran **one book at a
+time, verified old-vs-new, then swapped** (safety: separate `raw_reocr/` folder,
+compared, copied into live `corpus/raw/`, temp deleted).
+- **Vrikshayurveda:** 15 pages fixed (9 wrongly-blanked incl. the Introduction;
+  6 truncated e.g. p71 622->3031, p72 464->3068 chars). 0 regressions.
+- **Brihat Samhita:** the error page 332 fixed (56->1418 chars) + 18 truncated
+  pages restored. 0 regressions. (scope=chapters, so the build still keeps only
+  the 12 wanted chapters regardless of extra OCR'd pages.)
+- Krishi Parashara + Upavanavinoda: **left as-is** (already Gemini-OCR'd, clean).
+- Cost: Vrik ~₹7.7, Brihat ~₹29.9 (Flash 3.6). Script: `scripts/reocr_one_book.py`.
+
+**(B) Kashyapiya Krishisukti ingested as the 5th book.** The 64-page Sanskrit-only
+scan Dr. Pandey supplied was OCR'd + translated verse-by-verse (Gemini Flash 3.6,
+857 verses, ~₹17; see `sanskrit_ocr_demo/`). Registered as `ready_external` with
+the **English translation only** as `text_source`
+(`corpus/ocr_external/kashyapiyakrishisukti.md`, 859 lines) so it matches the
+other books' English-embedded format; Sanskrit kept in `sanskrit_ocr_demo/`.
+**Honest caveat (verified against the AAHF scholarly edition + our own retrieval
+test):** Kashyapiya is a **cultivation** text (soil/water/seed/sowing retrieve
+0.62-0.69) — **light on disease-treatment** (disease queries ~0.58, one generic
+pest tip only). So it strengthens soil/water/cultivation coverage but is not
+expected to fix the disease-advice refusals; **Vishvavallabha** (Chakrapani
+Mishra, ~1577; explicitly covers plant disease/pest management) is the higher-
+value text to obtain next.
+
+**Rebuild note (Windows):** the old `iks_corpus` was deleted + recreated empty in
+a chromadb-only process (never with torch in-process — the DLL-crash rule), then
+`build_corpus` re-embeds all 5 books fresh. Embedding forced to **CPU**
+(`CUDA_VISIBLE_DEVICES=""`) — bge-large thrashes the 2 GB MX550 GPU (293 s/batch),
+but CPU is ~0.4 s/chunk after a one-time ~116 s model load.
+
+**Result (build done 2026-08-31):** corpus grew **206 -> 259 chunks (+53, +26%)**,
+4 books -> 5. Per book: Brihat 136->140, Vrikshayurveda 42->**52** (+10, the
+re-OCR recovery), Krishi Parashara 13 (same), Upavanavinoda 15 (same), Kashyapiya
+**39** (new). Verified: live `iks_corpus` = 259 vectors (matches manifest).
+Phase 11 re-run over-refusal = _TBD_ (was 54.5%) — the number that tells us
+whether the coverage expansion actually helped.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.

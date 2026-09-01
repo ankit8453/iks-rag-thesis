@@ -1,16 +1,16 @@
 {
   "config_path": "configs\\corpus\\books.yaml",
-  "config_sha1": "3226cbb837f170349a25ccfb7f35530806a1e587",
-  "generated_at": "2026-06-08T10:53:07.681544+00:00",
-  "elapsed_seconds": 1461.375,
+  "config_sha1": "9c435fb699b4839200f541ff3da7eee98e5547b7",
+  "generated_at": "2026-08-31T06:52:50.953630+00:00",
+  "elapsed_seconds": 3303.407,
   "ready_books": [
     "vrikshayurveda",
     "brihat_samhita",
     "krishi_parashara",
-    "upavanavinoda"
+    "upavanavinoda",
+    "kashyapiyakrishisukti"
   ],
   "pending_books": [
-    "kashyapiyakrishisukti",
     "text_six_tbd"
   ],
   "rows": [
@@ -21,8 +21,8 @@
       "chapters_wanted": null,
       "chapters_found": null,
       "chapters_missing": null,
-      "chunks": 42,
-      "chunks_embedded": 42,
+      "chunks": 52,
+      "chunks_embedded": 52,
       "chunks_jsonl": "corpus\\chunks\\vrikshayurveda.jsonl"
     },
     {
@@ -32,8 +32,8 @@
       "chapters_wanted": 12,
       "chapters_found": 12,
       "chapters_missing": null,
-      "chunks": 136,
-      "chunks_embedded": 136,
+      "chunks": 140,
+      "chunks_embedded": 140,
       "chunks_jsonl": "corpus\\chunks\\brihat_samhita.jsonl"
     },
     {
@@ -57,8 +57,19 @@
       "chunks": 15,
       "chunks_embedded": 15,
       "chunks_jsonl": "corpus\\chunks\\upavanavinoda.jsonl"
+    },
+    {
+      "book_id": "kashyapiyakrishisukti",
+      "pages_ocr": 0,
+      "scope": "pages",
+      "chapters_wanted": null,
+      "chapters_found": null,
+      "chapters_missing": null,
+      "chunks": 39,
+      "chunks_embedded": 39,
+      "chunks_jsonl": "corpus\\chunks\\kashyapiyakrishisukti.jsonl"
     }
   ],
-  "total_chunks_embedded": 206,
-  "vector_db_count": 206
+  "total_chunks_embedded": 259,
+  "vector_db_count": 259
 }

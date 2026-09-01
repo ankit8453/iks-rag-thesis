@@ -53,6 +53,7 @@ BOOK_FILES: dict[str, str] = {
     "brihat_samhita": "brihat_samhita.jsonl",
     "krishi_parashara": "krishi_parashara.jsonl",
     "upavanavinoda": "upavanavinoda.jsonl",
+    "kashyapiyakrishisukti": "kashyapiyakrishisukti.jsonl",
 }
 
 REQUIRED_FIELDS: tuple[str, ...] = (
