@@ -94,3 +94,15 @@ corpus/ocr_external/*
 # tracked; the OCR cache (corpus/raw/*) and ChromaDB store
 # (corpus/vector_db/*) are already gitignored above.
 data/corpus_pdfs/
+
+# Kashyapiya side-task: the scanned Sanskrit PDF (copyrighted) and the
+# sanskrit_ocr_demo/ workspace (OCR'd Sanskrit+English text + demo vector DB +
+# embeddings). The corpus-ready English lands in corpus/chunks/*.jsonl (tracked)
+# and corpus/ocr_external/ (gitignored copyright). Keep the raw scan/workspace local.
+512447135-Kakayapiya-Krishi-Sukti-of-Kashyapa.pdf
+sanskrit_ocr_demo/
+
+# Stray binaries / large media dropped at repo root (not source)
+*.xlsx
+*.jpeg
+demo_images/

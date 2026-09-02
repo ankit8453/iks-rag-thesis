@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VṚKṢA · Workflow Simulator</title>
+<style>
+  :root{
+    --bg:#eef1f7; --bg2:#e4e9f2; --grid:rgba(30,41,80,.055); --txt:#1f2937; --mut:#56657e; --dim:#9aa7bd;
+    --green:#0ea371; --amber:#d97706; --blue:#2563eb; --pink:#db2777; --red:#e11d48;
+    --violet:#7c3aed; --cyan:#0891b2; --panel:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    background:var(--bg);color:var(--txt)}
+
+  /* ---------- top bar ---------- */
+  .bar{height:52px;display:flex;align-items:center;gap:16px;padding:0 16px;
+    border-bottom:1px solid rgba(30,41,80,.10);background:rgba(255,255,255,.82);backdrop-filter:blur(10px);
+    position:relative;z-index:20}
+  .bar .logo{font-weight:800;letter-spacing:.5px;font-size:15px;
+    background:linear-gradient(90deg,var(--green),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .bar .sep{width:1px;height:22px;background:rgba(30,41,80,.14)}
+  .legend{display:flex;gap:13px;flex-wrap:wrap;font-size:11.5px;color:var(--mut)}
+  .legend span{display:flex;align-items:center;gap:5px}
+  .legend i{width:16px;height:0;border-top:2px dashed;display:inline-block}
+  .spacer{flex:1}
+  .hint{font-size:11.5px;color:var(--dim)}
+  .zoom{display:flex;gap:6px}
+  .zoom button{width:30px;height:30px;border-radius:8px;border:1px solid rgba(30,41,80,.16);
+    background:#fff;color:var(--txt);font-size:15px;cursor:pointer;line-height:1;box-shadow:0 1px 2px rgba(30,41,80,.08)}
+  .zoom button:hover{background:#f0f3f9;border-color:rgba(30,41,80,.28)}
+  .zoom button.wide{width:auto;padding:0 10px;font-size:12px;font-weight:600}
+
+  /* ---------- viewport / stage ---------- */
+  #viewport{position:absolute;top:52px;left:0;right:0;bottom:0;overflow:hidden;cursor:grab;
+    background:
+      linear-gradient(var(--grid) 1px,transparent 1px) 0 0/26px 26px,
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px) 0 0/26px 26px,
+      radial-gradient(900px 500px at 72% -5%,rgba(14,163,113,.07),transparent 60%),
+      radial-gradient(800px 500px at 0% 105%,rgba(124,58,237,.06),transparent 55%),
+      linear-gradient(180deg,#f2f5fa,#e7ecf4);}
+  #viewport.grabbing{cursor:grabbing}
+  #stage{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+  svg.wires{position:absolute;top:0;left:0;overflow:visible;pointer-events:none}
+  .edge{fill:none;stroke-width:2.4;stroke-dasharray:9 7;opacity:.75;
+    animation:flow 1.1s linear infinite}
+  .edge.dim{opacity:.18;animation:none}
+  .edge.hot{opacity:1;stroke-width:3.6;filter:drop-shadow(0 1px 4px currentColor)}
+  @keyframes flow{to{stroke-dashoffset:-32}}
+  .port{stroke:#fff;stroke-width:1.5;opacity:.95}
+
+  /* ---------- nodes ---------- */
+  .node{position:absolute;width:184px;border-radius:14px;padding:11px 13px 12px;cursor:pointer;
+    background:linear-gradient(180deg,#ffffff,#f6f8fc);
+    border:1px solid rgba(30,41,80,.13);
+    box-shadow:0 10px 22px -12px rgba(30,41,80,.30), 0 1px 0 rgba(255,255,255,.7) inset;
+    transition:transform .15s, box-shadow .2s, border-color .2s;user-select:none}
+  .node::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:4px;
+    background:var(--ac);box-shadow:0 0 10px -1px var(--ac)}
+  .node:hover{transform:translateY(-2px);border-color:var(--ac);box-shadow:0 16px 30px -14px rgba(30,41,80,.38)}
+  .node.sel{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac),0 14px 30px -14px rgba(30,41,80,.40)}
+  .node.faded{opacity:.34}
+  .node .kk{font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ac);font-weight:800}
+  .node .tt{font-weight:700;font-size:13.5px;margin-top:2px;display:flex;align-items:center;gap:7px;color:#1b2433}
+  .node .ss{font-size:11px;color:var(--mut);margin-top:3px;line-height:1.35}
+  .node .plus{position:absolute;top:9px;right:11px;color:var(--dim);font-size:13px}
+  .node.term{border-style:dashed}
+
+  /* ---------- info panel ---------- */
+  #info{position:absolute;top:52px;right:0;bottom:0;width:340px;z-index:30;
+    background:linear-gradient(180deg,#ffffff,#f4f7fc);border-left:1px solid rgba(30,41,80,.12);
+    transform:translateX(105%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow:-20px 0 50px -24px rgba(30,41,80,.35);overflow-y:auto}
+  #info.open{transform:none}
+  #info .head{padding:18px 18px 14px;border-bottom:1px solid rgba(30,41,80,.10);position:relative}
+  #info .tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:800;color:var(--ac)}
+  #info h2{font-size:18px;margin-top:6px;color:#1b2433}
+  #info .close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:8px;cursor:pointer;
+    border:1px solid rgba(30,41,80,.16);background:#fff;color:var(--mut);font-size:15px;
+    display:grid;place-items:center}
+  #info .close:hover{background:#f0f3f9}
+  #info .body{padding:16px 18px}
+  #info .body p{font-size:13px;color:var(--mut);margin-bottom:12px;line-height:1.5}
+  #info ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  #info li{font-size:12.5px;color:var(--mut);padding-left:18px;position:relative;line-height:1.45}
+  #info li::before{content:"";position:absolute;left:0;top:7px;width:7px;height:7px;border-radius:2px;background:var(--ac)}
+  #info li b{color:var(--txt)}
+  #info .techrow{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+  #info .tech{font-size:10.5px;font-family:ui-monospace,Consolas,monospace;color:#1d4ed8;
+    background:#eef2fe;border:1px solid #d6e0fb;padding:3px 8px;border-radius:6px}
+  #info .links{margin-top:18px;border-top:1px solid rgba(30,41,80,.10);padding-top:14px}
+  #info .links .lh{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  #info .links a{display:block;font-size:12px;color:var(--mut);padding:5px 0;cursor:pointer}
+  #info .links a:hover{color:var(--txt)}
+  #info .links a span{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="logo">🌿 VṚKṢA</span><span style="font-size:12px;color:var(--mut)">Workflow Simulator</span>
+  <span class="sep"></span>
+  <div class="legend">
+    <span><i style="border-color:var(--green)"></i>vision/health</span>
+    <span><i style="border-color:var(--violet)"></i>soil</span>
+    <span><i style="border-color:var(--red)"></i>advisory</span>
+    <span><i style="border-color:var(--amber)"></i>decision</span>
+    <span><i style="border-color:var(--cyan)"></i>explain</span>
+    <span><i style="border-color:var(--blue)"></i>context</span>
+  </div>
+  <span class="spacer"></span>
+  <span class="hint">drag&nbsp;to&nbsp;pan&nbsp;·&nbsp;scroll&nbsp;to&nbsp;zoom&nbsp;·&nbsp;click&nbsp;a&nbsp;block</span>
+  <div class="zoom">
+    <button id="zout">−</button><button id="zin">+</button><button id="fit" class="wide">Fit</button>
+  </div>
+</div>
+
+<div id="viewport">
+  <div id="stage">
+    <svg class="wires" id="wires"></svg>
+  </div>
+</div>
+
+<div id="info">
+  <div class="head">
+    <div class="tag" id="iTag">—</div>
+    <h2 id="iTitle">—</h2>
+    <div class="close" id="iClose">✕</div>
+  </div>
+  <div class="body">
+    <p id="iDesc"></p>
+    <ul id="iList"></ul>
+    <div class="techrow" id="iTech"></div>
+    <div class="links" id="iLinks"></div>
+  </div>
+</div>
+
+<script>
+const C = {green:'#0ea371',amber:'#d97706',blue:'#2563eb',pink:'#db2777',red:'#e11d48',violet:'#7c3aed',cyan:'#0891b2'};
+
+// ---- NODES (x,y = top-left on the canvas) ----
+const NODES = [
+  {id:'leaf', x:20,  y:120, ac:C.green, k:'Input A', t:'🍃 Leaf photo', s:'Close-up leaf upload',
+    grp:'Input', desc:'The farmer photographs a single affected leaf — the primary visual evidence.',
+    li:['Sent straight into the guardrail + crop pipeline.','One leaf per request.'], tech:['JPG/PNG upload']},
+  {id:'soil', x:20,  y:300, ac:C.violet, k:'Input B', t:'🟤 Soil photo', s:'Soil surface upload',
+    grp:'Input', desc:'A photo of the surface soil, read by the multi-task soil model.',
+    li:['Drives soil type / moisture / texture.','Grounds the query in soil conditions.'], tech:['JPG/PNG upload']},
+  {id:'ctx', x:20,  y:520, ac:C.blue, k:'Input C', t:'⚙️ User context', s:'Suspected cause + notes',
+    grp:'Input', desc:'Optional causal pathway and free notes — supplied by the user, never inferred from the image.',
+    li:['Pathways: unknown · soil_driven · pest_vector · contagion.','Threads into the Strategy-B query.'], tech:['app/config.py']},
+
+  {id:'guard', x:250, y:120, ac:C.amber, k:'Step 1', t:'🛡️ Guardrail', s:'Reject non-leaf uploads',
+    grp:'Pre-process', desc:'Segmentation foreground check rejects anything that is clearly not a leaf photo.',
+    li:['Foreground band 8–92%.','Blocks obvious non-leaf images early.'], tech:['app/guardrail.py','rembg / U²-Net']},
+
+  {id:'soilm', x:250, y:300, ac:C.violet, k:'Step 2b', t:'🪨 Soil model', s:'type · moisture · texture',
+    grp:'Vision', desc:'Multi-task classifier reading three soil properties from one photo (+ an embedding).',
+    li:['Heads: soil type, moisture, texture.','Emits an embedding for the context.'], tech:['iks-soil-multitask-v2']},
+
+  {id:'yolo', x:480, y:120, ac:C.green, k:'Step 2a · crop-first', t:'✂️ YOLO crop', s:'Crop leaf from background',
+    grp:'Pre-process', desc:'A pretrained YOLO leaf detector crops the leaf out of the background BEFORE classification — the key to leaf-focused attention.',
+    li:['Confidence floor 0.10.','No training — used off-the-shelf.','Graceful fallback if no leaf found.'], tech:['LeafCropper','foduucom/plant-leaf-detection']},
+
+  {id:'dis', x:710, y:60, ac:C.green, k:'Step 3 · diagnose', t:'🧬 Disease model', s:'C-PD · 27 classes',
+    grp:'Vision', desc:'EfficientNet-B4 (crop-retrained "C-PD") classifies the leaf crop into the SPECIFIC disease — not just diseased/healthy.',
+    li:['Outputs the exact disease type + top-k + confidence.','Leaf-attentive (fixes the background-bias).','Healthy-vs-diseased is near-perfect.'], tech:['iks-disease-plantdoc-crop','EfficientNet-B4']},
+
+  {id:'cam', x:710, y:240, ac:C.cyan, k:'Explain', t:'🔬 Eigen Grad-CAM', s:'Lesion heatmap',
+    grp:'Explainability', desc:'Shows WHERE the model looked — a lesion heatmap on the leaf crop, produced ONLY when a disease is detected.',
+    li:['Target layer blocks[-2] + eigen_smooth.','Suppressed for healthy leaves.','Answers the supervisor’s attention concern.'], tech:['disease_gradcam_eigen','pytorch-grad-cam']},
+
+  {id:'gate', x:960, y:140, ac:C.amber, k:'Step 4 · DECISION', t:'⚖️ Health gate', s:'is_healthy(label)?',
+    grp:'Decision', desc:'The spine of the system. 10 healthy vs 17 disease classes. Heatmap AND advisory are produced ONLY when diseased.',
+    li:['Healthy → stop (no query, no heatmap).','Diseased → run the advisory engine.','Prevents nonsensical "treat a healthy leaf" queries.'], tech:['app_config.is_healthy()']},
+
+  {id:'healthy', x:1210, y:60, ac:C.green, k:'Branch ✓', t:'✓ Healthy — no Rx', s:'Keep monitoring', term:true,
+    grp:'Output', desc:'Healthy branch: returns a "leaf appears healthy — keep monitoring" note. No retrieval, no generation.',
+    li:['Zero LLM cost on healthy leaves.','Honest, minimal response.'], tech:['gated output']},
+
+  {id:'stratB', x:1210, y:300, ac:C.red, k:'Step 5 · the novelty', t:'🌉 Strategy B', s:'LLM query bridge',
+    grp:'Advisory', desc:'Frozen Llama REWRITES the vision labels (disease + soil + cause) into the descriptive vocabulary the classical corpus actually uses. This vision→IKS bridge is the core contribution.',
+    li:['Translates the EXACT detected disease to its symptoms.','No treatment proposed here — query only.','Beats the template baseline (0.59–0.96 vs ~0.04).'], tech:['strategy_llm_mediated.py','Llama-3.1-8B (frozen)']},
+
+  {id:'retr', x:1460, y:300, ac:C.red, k:'Step 6 · retrieve', t:'🔎 Hybrid retrieve', s:'dense + BM25',
+    grp:'Retrieval', desc:'Hybrid retrieval over the IKS corpus: dense bge-large semantics + sparse BM25 lexical, fused.',
+    li:['Dense top-20 (bge-large) + BM25 top-20.','Fusion alpha 0.5.','BM25 catches transliterated Sanskrit terms.'], tech:['HybridRetriever','ChromaDB','bge-large-en-v1.5']},
+
+  {id:'rerank', x:1710, y:300, ac:C.violet, k:'Step 7 · rerank', t:'🎯 Cross-encoder', s:'top-20 → top-5',
+    grp:'Retrieval', desc:'A cross-encoder re-scores the fused candidates and keeps the 5 most relevant chunks.',
+    li:['Precision step before generation.','Hands clean evidence to the LLM.'], tech:['bge-reranker-base']},
+
+  {id:'llm', x:1960, y:300, ac:C.red, k:'Step 8 · ground', t:'🦙 Grounded LLM', s:'cite or refuse',
+    grp:'Advisory', desc:'Frozen Llama-3.1-8B writes the advisory strictly from the retrieved chunks — with citations, or an honest "insufficient evidence" refusal.',
+    li:['No fine-tuning — knowledge is in the chunks.','CRAG-style faithfulness gate.','Model-agnostic swap point.'], tech:['GroundedGenerator','Llama-3.1-8B · 4-bit']},
+
+  {id:'out', x:2210, y:160, ac:C.green, k:'Output', t:'📜 Recommendation', s:'cited advice + chunks', term:true,
+    grp:'Output', desc:'Final view: diagnosis + soil readout + the gated Grad-CAM + cited IKS advice (or refusal) + source chunks + disclaimer.',
+    li:['Citations map back to the treatises.','Grad-CAM shown only for disease.','Disclaimer: research prototype.'], tech:['Streamlit UI']},
+];
+
+// ---- EDGES ----
+const EDGES = [
+  ['leaf','guard',C.green],['guard','yolo',C.green],['yolo','dis',C.green],
+  ['soil','soilm',C.violet],
+  ['dis','gate',C.green],['dis','cam',C.cyan],
+  ['gate','healthy',C.amber],['gate','stratB',C.red],
+  ['soilm','stratB',C.violet],['ctx','stratB',C.blue],
+  ['stratB','retr',C.red],['retr','rerank',C.red],['rerank','llm',C.violet],['llm','out',C.green],
+  ['cam','out',C.cyan],
+];
+
+const NW=184, stage=document.getElementById('stage'), wires=document.getElementById('wires'),
+      vp=document.getElementById('viewport');
+const nodeEl={}, nodeH={};
+
+// build nodes
+NODES.forEach(n=>{
+  const d=document.createElement('div');
+  d.className='node'+(n.term?' term':''); d.style.left=n.x+'px'; d.style.top=n.y+'px'; d.style.setProperty('--ac',n.ac);
+  d.innerHTML=`<span class="plus">＋</span><div class="kk">${n.k}</div>
+    <div class="tt">${n.t}</div><div class="ss">${n.s}</div>`;
+  d.addEventListener('click',e=>{e.stopPropagation(); selectNode(n.id);});
+  stage.appendChild(d); nodeEl[n.id]=d;
+});
+// measure heights after layout
+NODES.forEach(n=>{ nodeH[n.id]=nodeEl[n.id].offsetHeight; });
+
+// edge geometry
+function nodeBox(id){const n=NODES.find(z=>z.id===id);return {x:n.x,y:n.y,w:NW,h:nodeH[id]||64};}
+function pathFor(a,b){
+  const A=nodeBox(a),B=nodeBox(b);
+  const ax=A.x+A.w/2, ay=A.y+A.h/2, bx=B.x+B.w/2, by=B.y+B.h/2;
+  const dx=bx-ax, dy=by-ay;
+  if(Math.abs(dx)>=Math.abs(dy)){
+    const s=Math.sign(dx)||1;
+    const sx=ax+s*A.w/2, sy=ay, tx=bx-s*B.w/2, ty=by;
+    const cp=Math.max(50,Math.abs(tx-sx)*0.5);
+    return {d:`M${sx},${sy} C${sx+s*cp},${sy} ${tx-s*cp},${ty} ${tx},${ty}`,sx,sy,tx,ty};
+  }else{
+    const s=Math.sign(dy)||1;
+    const sx=ax, sy=ay+s*A.h/2, tx=bx, ty=by-s*B.h/2;
+    const cp=Math.max(40,Math.abs(ty-sy)*0.5);
+    return {d:`M${sx},${sy} C${sx},${sy+s*cp} ${tx},${ty-s*cp} ${tx},${ty}`,sx,sy,tx,ty};
+  }
+}
+const edgeObjs=[];
+EDGES.forEach(([a,b,col])=>{
+  const g=pathFor(a,b);
+  const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d',g.d); p.setAttribute('class','edge'); p.setAttribute('stroke',col); p.style.color=col;
+  wires.appendChild(p);
+  const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dot.setAttribute('cx',g.tx); dot.setAttribute('cy',g.ty); dot.setAttribute('r','4');
+  dot.setAttribute('fill',col); dot.setAttribute('class','port'); wires.appendChild(dot);
+  edgeObjs.push({a,b,p,dot});
+});
+// size svg to content
+function sizeSvg(){
+  let mx=0,my=0; NODES.forEach(n=>{mx=Math.max(mx,n.x+NW+40); my=Math.max(my,n.y+(nodeH[n.id]||64)+40);});
+  wires.setAttribute('width',mx); wires.setAttribute('height',my);
+  stage.style.width=mx+'px'; stage.style.height=my+'px';
+  return {w:mx,h:my};
+}
+const CONTENT=sizeSvg();
+
+// ---- pan / zoom ----
+let zoom=1,px=0,py=0;
+function apply(){stage.style.transform=`translate(${px}px,${py}px) scale(${zoom})`;}
+function fit(){
+  const vw=vp.clientWidth, vh=vp.clientHeight;
+  zoom=Math.min(vw/CONTENT.w, vh/CONTENT.h)*0.94;
+  zoom=Math.min(zoom,1.1);
+  px=(vw-CONTENT.w*zoom)/2; py=(vh-CONTENT.h*zoom)/2; apply();
+}
+document.getElementById('zin').onclick=()=>{zoomAt(vp.clientWidth/2,vp.clientHeight/2,1.18);};
+document.getElementById('zout').onclick=()=>{zoomAt(vp.clientWidth/2,vp.clientHeight/2,1/1.18);};
+document.getElementById('fit').onclick=fit;
+function zoomAt(cx,cy,f){
+  const nz=Math.min(Math.max(zoom*f,0.25),2.2);
+  px=cx-(cx-px)*(nz/zoom); py=cy-(cy-py)*(nz/zoom); zoom=nz; apply();
+}
+vp.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY-52,e.deltaY<0?1.12:1/1.12);},{passive:false});
+let drag=false,lx,ly,moved;
+vp.addEventListener('pointerdown',e=>{drag=true;moved=false;lx=e.clientX;ly=e.clientY;vp.classList.add('grabbing');});
+window.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;
+  if(Math.abs(dx)+Math.abs(dy)>3)moved=true; px+=dx;py+=dy;lx=e.clientX;ly=e.clientY;apply();});
+window.addEventListener('pointerup',()=>{drag=false;vp.classList.remove('grabbing');});
+vp.addEventListener('click',e=>{if(!moved)deselect();});
+
+// ---- selection / info ----
+const info=document.getElementById('info');
+function selectNode(id){
+  const n=NODES.find(z=>z.id===id);
+  Object.values(nodeEl).forEach(el=>el.classList.add('faded'));
+  Object.keys(nodeEl).forEach(k=>nodeEl[k].classList.remove('sel'));
+  nodeEl[id].classList.remove('faded'); nodeEl[id].classList.add('sel');
+  const conn=new Set([id]);
+  edgeObjs.forEach(o=>{
+    const on=(o.a===id||o.b===id);
+    o.p.classList.toggle('hot',on); o.p.classList.toggle('dim',!on);
+    o.dot.style.opacity=on?1:.12;
+    if(on){conn.add(o.a);conn.add(o.b);}
+  });
+  conn.forEach(c=>nodeEl[c]&&nodeEl[c].classList.remove('faded'));
+  // fill panel
+  info.style.setProperty('--ac',n.ac);
+  document.getElementById('iTag').textContent=n.grp;
+  document.getElementById('iTitle').textContent=n.t;
+  document.getElementById('iDesc').textContent=n.desc;
+  document.getElementById('iList').innerHTML=n.li.map(x=>`<li>${x}</li>`).join('');
+  document.getElementById('iTech').innerHTML=(n.tech||[]).map(x=>`<span class="tech">${x}</span>`).join('');
+  const ins=EDGES.filter(e=>e[1]===id).map(e=>e[0]);
+  const outs=EDGES.filter(e=>e[0]===id).map(e=>e[1]);
+  const nm=i=>{const z=NODES.find(q=>q.id===i);return z?z.t:i;};
+  let lk='';
+  if(ins.length) lk+=`<div class="lh">Receives from</div>`+ins.map(i=>`<a data-go="${i}"><span>◂</span> ${nm(i)}</a>`).join('');
+  if(outs.length) lk+=`<div class="lh" style="margin-top:12px">Sends to</div>`+outs.map(i=>`<a data-go="${i}">${nm(i)} <span>▸</span></a>`).join('');
+  document.getElementById('iLinks').innerHTML=lk;
+  document.querySelectorAll('#iLinks a').forEach(a=>a.onclick=()=>{selectNode(a.dataset.go);focusNode(a.dataset.go);});
+  info.classList.add('open');
+}
+function deselect(){
+  info.classList.remove('open');
+  Object.values(nodeEl).forEach(el=>{el.classList.remove('faded','sel');});
+  edgeObjs.forEach(o=>{o.p.classList.remove('hot','dim');o.dot.style.opacity=.85;});
+}
+function focusNode(id){
+  const b=nodeBox(id), vw=vp.clientWidth-340, vh=vp.clientHeight;
+  px=vw/2-(b.x+b.w/2)*zoom; py=vh/2-(b.y+b.h/2)*zoom; apply();
+}
+document.getElementById('iClose').onclick=deselect;
+window.addEventListener('keydown',e=>{if(e.key==='Escape')deselect();});
+
+// init
+fit();
+window.addEventListener('resize',()=>{if(!info.classList.contains('open'))fit();});
+</script>
+</body>
+</html>
