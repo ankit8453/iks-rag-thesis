@@ -244,7 +244,10 @@ def build_corpus() -> dict[str, Any]:
         chapters_found: dict[int, int] = {}
 
         # ---- Phase 3b branch: external OCR (e.g. Gemini) -----------
-        if book.get("ocr_method") == "gemini_external":
+        # Books whose English text is supplied as a prepared file rather than
+        # OCR'd here: ``gemini_external`` (Gemini-OCR'd scans) and ``text_layer``
+        # (PDF already carried an extractable text layer, e.g. the NITI manual).
+        if book.get("ocr_method") in {"gemini_external", "text_layer"}:
             chunks = _chunks_for_external_book(book)
             if chunks is None:
                 # Already logged a clear "awaiting Gemini OCR" line.

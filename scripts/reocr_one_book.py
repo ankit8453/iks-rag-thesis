@@ -107,11 +107,11 @@ def book_pdf_and_pages(book_id: str):
     return pdf, lo, hi
 
 
-def ocr_page(client, model, pdf, pg, poppler):
+def ocr_page(client, model, pdf, pg, poppler, dpi: int = 220):
     from pdf2image import convert_from_path
     from google.genai import types
 
-    kw = {"dpi": 220, "first_page": pg, "last_page": pg}
+    kw = {"dpi": dpi, "first_page": pg, "last_page": pg}
     if poppler:
         kw["poppler_path"] = poppler
     imgs = convert_from_path(str(pdf), **kw)
@@ -154,6 +154,10 @@ def main(argv=None):
     ap.add_argument("--model", default="gemini-3.6-flash")
     ap.add_argument("--pages", default=None, help="subrange like 41-93 (default: book's full span)")
     ap.add_argument("--throttle-seconds", type=float, default=1.5)
+    ap.add_argument("--dpi", type=int, default=220,
+                    help="render DPI; lower it for high-resolution scans -- a "
+                         "1.2MB page image made Gemini calls take minutes, 150 "
+                         "DPI (~570KB) takes ~40s with no loss on printed text")
     args = ap.parse_args(argv)
 
     from google import genai
@@ -178,11 +182,11 @@ def main(argv=None):
         if cache.is_file():
             cached += 1
             continue
-        text, i, o, is_error = ocr_page(client, args.model, pdf, pg, poppler)
+        text, i, o, is_error = ocr_page(client, args.model, pdf, pg, poppler, args.dpi)
         if is_error:
             # retry once, then leave UNcached so a re-run tries again
             time.sleep(4)
-            text, i2, o2, is_error = ocr_page(client, args.model, pdf, pg, poppler)
+            text, i2, o2, is_error = ocr_page(client, args.model, pdf, pg, poppler, args.dpi)
             i += i2; o += o2
             if is_error:
                 failed += 1
