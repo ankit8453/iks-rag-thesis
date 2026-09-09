@@ -106,6 +106,32 @@ books:
     text_source: corpus/ocr_external/kashyapiyakrishisukti.md
     note: "Sanskrit-only scan; each verse OCR'd + translated to English by Gemini Flash 3.6. Cultivation-focused (soil/water/seed/sowing); light on disease-treatment. text_source holds the English translation only (Sanskrit kept in sanskrit_ocr_demo/)."
     default_topic_tags: [soil_selection, water_management, seed_preservation, sowing, cultivation, grain]
+  # Majumdar's own English essay that opens the Upavanavinoda volume (book pp.1-33,
+  # PDF pp.9-42) -- "The Science of Arbori-Horticulture in Ancient India". Phase 3b
+  # deliberately skipped it as a "modern essay", but it is English prose that quotes
+  # and TRANSLATES further classical verses (e.g. water-divining by plant
+  # indicators), so it is usable content we already owned but never indexed.
+  #
+  # Registered SEPARATELY from ``upavanavinoda`` rather than appended to it: this is
+  # the 1935 editor's commentary, not Sarngadhara's text, and a citation must not
+  # imply otherwise. Hence ``source_tier: scholarly_commentary``.
+  - id: upavanavinoda_introduction
+    title: "Upavanavinoda - Introduction: The Science of Arbori-Horticulture in Ancient India"
+    author: Girija Prasanna Majumdar
+    translator: Girija Prasanna Majumdar
+    edition: "Indian Research Institute, Indian Positive Sciences Series No. 1, 1935"
+    original_language: English
+    pdf: data/corpus_pdfs/2015.282467.Upavana-Vinoda.pdf
+    status: ready_external
+    ocr_method: gemini_external
+    source_tier: scholarly_commentary
+    scope: pages
+    page_range: [9, 42]
+    text_source: corpus/ocr_external/upavanavinoda_introduction.md
+    exclude_note: "Introduction only (book pp.1-33 = PDF pp.9-42). The Sanskrit text (PDF 45-73), the translation (77-96, indexed as `upavanavinoda`), the Sanskrit appendix (99-121) and the plant list are not included here."
+    note: "Editor's scholarly essay, not the classical text itself -- tiered as scholarly_commentary. OCR'd at 150 DPI: this scan is ~690KB/page and 220 DPI made each Gemini call take minutes."
+    default_topic_tags: [arboriculture, plant_science, water_divination, soil, ancient_india]
+
   # Modern IKS-derived practice (NOT a classical treatise). Tiered separately via
   # ``source_tier`` so a citation always tells the reader whether the advice came
   # from a classical text or from contemporary IKS-derived guidance, and the
