@@ -497,6 +497,50 @@ whether the coverage expansion actually helped.
 
 ---
 
+## 6i. NITI Aayog natural-farming manual ingested (2026-09-09)
+
+Dr. Pandey's point that the corpus need not be classical books alone -- IKS-derived
+practical knowledge counts too -- turned out to target our actual bottleneck. Phase 11
+showed coverage, not retrieval, is the limiter (~55% over-refusal); the classical texts
+are thin on symptom -> remedy.
+
+**Source.** "Empowering Farmers: Natural Farming Training Toolkit and Best Practices
+Guide", NITI Aayog, Feb 2026, ISBN 978-81-991080-0-4. 192p with a **clean text layer
+-- no OCR, zero API spend**. Ch5 (Pest & Disease Management) and Ch6.1-6.2 (bio-inputs)
+give structured **Purpose / Ingredients / Preparation / Application** entries for
+Jeevamrit, Beejamrit, Neemastra, Brahmastra, Agniastra, Dashaparni -- exactly the
+missing layer, and IKS-rooted (cow dung, urine, neem = the kunapajala tradition).
+
+**Ingested** (`scripts/extract_niti_manual.py`): Ch2 seed (pp.36-43), Ch4 soil (60-65),
+Ch5 pest+disease (66-77), Ch6.1-6.2 bio-inputs (78-92), Ch8 22 key crops (112-165).
+**Skipped:** Ch1 theory, Ch3 water, Ch6.3-6.4 BRC infrastructure+schemes, Ch7
+certification, Ch9 carbon credits, Ch10-11 frameworks -- none give plant-level advice.
+64 sections, 23,819 words. Sections are emitted one per block so a formulation is not
+split from its ingredients (verified: Neemastra intact in one 277-word chunk).
+
+**Honesty tier.** Registered with `source_tier: modern_iks` -- a 2026 government
+manual is not a classical treatise, so citations must say which tier they came from
+and the "grounded in classical texts" claim stays true.
+
+**Corpus: 259 -> 327 chunks** (NITI 68). Per book: brihat 140, niti **68**,
+vrikshayurveda 52, kashyapiya 39, upavanavinoda 15, krishi_parashara 13.
+
+**Deferred:** Upavanavinoda's English Introduction (PDF pp.9-42, Majumdar's essay,
+contains translated verses) -- registered as `upavanavinoda_introduction`
+(`source_tier: scholarly_commentary`) but the Gemini key hit free-tier quota
+(429 RESOURCE_EXHAUSTED) mid-OCR, so it skips cleanly until its text_source exists.
+
+**Infra fix.** `IKS_EMBED_DEVICE=cpu` override added to `embed.py`: bge-large (1.3GB)
+thrashes the 2GB MX550 at **~454 s per 16-chunk batch**, and `CUDA_VISIBLE_DEVICES=""`
+does NOT force CPU on Windows (PyTorch treats the empty string as unset -- the rebuild
+log said "on cuda"). With the override the same batches ran ~34 s. Note the earlier
+259-chunk build was also silently on GPU.
+
+**Open:** Phase 11 re-run over the 327-chunk corpus -- the over-refusal before/after
+(was 54.5%) is the number that answers "what is the benefit of adding a book".
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
