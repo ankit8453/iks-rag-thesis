@@ -492,8 +492,8 @@ but CPU is ~0.4 s/chunk after a one-time ~116 s model load.
 4 books -> 5. Per book: Brihat 136->140, Vrikshayurveda 42->**52** (+10, the
 re-OCR recovery), Krishi Parashara 13 (same), Upavanavinoda 15 (same), Kashyapiya
 **39** (new). Verified: live `iks_corpus` = 259 vectors (matches manifest).
-Phase 11 re-run over-refusal = _TBD_ (was 54.5%) — the number that tells us
-whether the coverage expansion actually helped.
+Phase 11 re-run over-refusal: **72.7% (WORSE than 54.5%)** — see §6j for the
+result and the diagnosis.
 
 ---
 
@@ -536,14 +536,106 @@ does NOT force CPU on Windows (PyTorch treats the empty string as unset -- the r
 log said "on cuda"). With the override the same batches ran ~34 s. Note the earlier
 259-chunk build was also silently on GPU.
 
-**Open:** Phase 11 re-run over the 327-chunk corpus -- the over-refusal before/after
-(was 54.5%) is the number that answers "what is the benefit of adding a book".
+**Result:** the re-run made over-refusal **worse** (54.5% -> 72.7%). Full result and
+root-cause analysis in **§6j** — the book covers insect pests, not the fungal leaf
+diseases our query set asks about.
+
+---
+
+## 6j. Phase 11 re-run on 327 chunks — corpus expansion made it WORSE (2026-09-09)
+
+The number §6h/§6i were waiting for. **Adding the NITI manual increased over-refusal
+from 54.5% to 72.7%.** Honest negative result; kept in full.
+
+**Generation / grounding (22 answerable + 2 negatives, Colab, same harness as §6f):**
+
+| metric | 206 chunks (§6f) | 327 chunks | |
+|---|---|---|---|
+| over-refusal (answerable refused) | 54.5% | **72.7%** | WORSE by 18pp |
+| grounded answer rate | 13.6% | 13.64% | unchanged |
+| valid citation rate | 14.2% | **41.7%** | ~3x BETTER |
+| honest refusal (negatives) | 100% | 100% | held |
+| unfounded citations (ungrounded control) | 0% | 0% | held |
+
+Raw counts: **10/22 answered -> 6/22 answered**; refusals 12 -> 16. The four lost
+answers were *ungrounded* ones, so the system became **safer but less useful** — it
+stopped guessing and refused instead. That also explains the citation-rate jump.
+
+**Retrieval (same run):** full nDCG@5 0.94 -> **0.87**, P@5 0.74 -> **0.65**, MRR 0.91
+-> 0.86; dense_only 0.94 -> 0.88; keyword_only collapsed 0.70 -> **0.49** (Hit@5 0.91
+-> 0.64). **Hit@5 stayed 1.00 for full and dense_only.**
+
+**Two things to separate here.**
+1. *Measurement artifact.* The silver labels are **book-level** and were written when
+   the corpus was 4 books, so the 107 new chunks (Kashyapiya 39 + NITI 68) appear in
+   **no** query's `relevant_books` and score as noise even when useful. P@5/nDCG must
+   fall mechanically. **Hit@5 = 1.00 proves nothing was lost.** The query set must be
+   re-labelled before any future expansion is judged, or every addition will look like
+   a regression.
+2. *A real effect.* Over-refusal is measured on **answers**, not on book labels, so the
+   artifact does not touch it. It genuinely got worse.
+
+**Root cause (evidence).** Our 22 answerable queries are **100% fungal / bacterial /
+viral leaf diseases** (scab, rust, blight, gray leaf spot, early/late blight, Septoria,
+bacterial spot, leaf mould, mosaic, yellow virus). Word counts in the ingested NITI text:
+
+| term | count |
+|---|---|
+| insect-pest terms (insect 44, borer 15, caterpillar 14, sucking pest 14, aphid 7, whitefly 6, jassid 5, mite 6, thrips 3, larvae 4, mealybug 1) | **119** |
+| leaf spot / septoria / bacterial spot / leaf mould / gray leaf | **0 each** |
+| scab / mildew / mosaic | 1 each |
+| rust | 2 |
+| blight | 4 |
+
+So **NITI is an insect-pest manual, not a fungal-disease manual.** Neemastra treats
+aphids, jassids and whiteflies — not apple scab or Septoria. (`rot: 66` in a first pass
+was a false positive matching "rotation"; true standalone count is 17.)
+
+**Mechanism.** NITI chunks are *semantically adjacent* ("pest and disease management",
+"control", "spray") so they rank into the top-5, **displacing classical passages**
+(P@5 0.74 -> 0.65). The generator then has too little usable classical evidence for the
+§17 prompt's sufficiency test and refuses. Near-miss content is **actively harmful**,
+not merely neutral.
+
+**The generalisable finding (paper-worthy):** *expanding a RAG corpus with
+topically-adjacent but non-matching material degrades performance by displacing
+relevant passages — corpus growth must be matched to the query distribution, not to
+volume.* This is the honest, evidence-backed answer to "what is the benefit of adding
+a book": **not all books help; this one measurably hurt on disease queries.**
+
+**Process failure to remember.** The book was recommended on the strength of "pest 197 /
+disease 91" keyword counts and the well-structured Neemastra recipe, **without checking
+overlap against the specific diseases in the query set**. Rule going forward: before
+ingesting a source, measure its term overlap with the evaluation queries.
+
+**Agreed plan (2026-09-14), in order:**
+1. **Displacement check** — confirm NITI chunks actually occupy top-5 slots for the 22
+   queries (local, no Colab, no LLM). Turns the hypothesis into evidence.
+2. **Tier-aware retrieval** — route by problem type: fungal/bacterial disease -> classical
+   tier; insect/pest -> NITI (`source_tier: modern_iks`). Keeps the book for what it is
+   genuinely good at instead of reverting it.
+3. **Extend the query set with insect-pest queries** — NITI is currently being tested on
+   the one thing it cannot do; a fair evaluation needs queries in its scope. Re-label
+   `relevant_books` at the same time (see artifact above).
+4. Then consider extending the pipeline so the vision side can also *signal pest damage*,
+   letting the combiner generate a pest-side query — a design change to evaluate only
+   after step 1-3 show the routing works.
+
+**Not done / deferred:** Upavanavinoda English Introduction (Gemini free-tier quota hit
+mid-OCR); Vishvavallabha (the classical text that *does* cover plant disease) remains the
+highest-value content fix.
 
 ---
 
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
+
+### 7.0 Corpus expansion with near-miss content (2026-09-09) — FAILED, see §6j
+- **Idea:** add the NITI Aayog natural-farming manual (68 chunks) to close the symptom->remedy gap behind the ~55% over-refusal.
+- **Result:** over-refusal **54.5% -> 72.7%**; answered 10/22 -> 6/22. Valid-citation rate improved 14.2% -> 41.7% (it stopped guessing).
+- **Why:** the manual is insect-pest content (119 pest terms) while every evaluation query is a fungal/bacterial/viral leaf disease (leaf spot/septoria/bacterial spot/leaf mould = 0 mentions). Its chunks are semantically adjacent, so they displace classical passages in the top-5.
+- **Verdict:** near-miss corpus material is actively harmful. Match corpus growth to the query distribution. Fix = tier-aware routing (§6j plan), not reverting the book.
 
 ### 7.1 Background randomization (Phase 5-R) — FAILED as a fix
 - **Idea:** segment the leaf, composite onto random backgrounds each epoch so background can't be a label cue. Added a `no_leaf` reject class.
