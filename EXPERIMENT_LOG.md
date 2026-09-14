@@ -627,9 +627,102 @@ highest-value content fix.
 
 ---
 
+## 6k. Displacement check — CONFIRMED, and it uncovered a much older corpus bug (2026-09-14)
+
+Step 1 of the §6j plan. `scripts/check_displacement.py` retrieves the top-5 for each of
+the 22 answerable queries **twice** — over the full 327-chunk corpus, then over
+classical-only — and diffs them. Local, no Colab, no LLM. (Doc embeddings are cached to
+`results/_docemb_*.npy`; the first run costs ~16 min on CPU, re-runs are seconds.)
+
+**Result — the displacement hypothesis is CONFIRMED:**
+
+| | |
+|---|---|
+| top-5 slots taken by NITI (modern tier) | **25 / 110 (22.7%)** |
+| queries with >=1 NITI passage in top-5 | **17 / 22 (77%)** |
+| classical passages pushed out | **28** |
+
+Slot share: vrikshayurveda 56 (50.9%), **niti 25 (22.7%)**, brihat 18 (16.4%),
+kashyapiya 6, upavanavinoda 4, krishi_parashara 1.
+
+**But the per-query detail does NOT support the simple story.** Inspecting what was
+actually displaced, most of it was *not* useful content:
+- `vrikshayurveda 1.1` = **the publisher's address block** ("Chairman, Asian Agri-History
+  Foundation, 47 ICRISAT Colony-I ... Secunderabad") — displaced in q04, q08, q15
+- `brihat_samhita section_11` = "meteors are ... those who fall down after having enjoyed
+  the fruits of their meritorious deeds" (astrology)
+- `brihat_samhita section_1` = "Chapter XXVII—The Wind Circle [According to Utpala this
+  chapter is **spurious**...]"
+- `brihat_samhita section_7` = "[For an explanation of the Karaṇas see the author's
+  *Fundamentals of Astrology* p.185...]"
+- `vrikshayurveda 1.2` = editorial commentary about the text, not a remedy
+
+Only **three** genuinely valuable displacements were found: `vrikshayurveda 207-222`
+(remedy: sugar/sesame/milk for heat-dried trees, q04), `vrikshayurveda 173-189` (the key
+symptom passage — insects at the roots, yellowing leaves, q06) and `vrikshayurveda
+110-125` (watering guidance, q07).
+
+So NITI is mostly **replacing junk with off-topic-but-clean text**. Displacement is real,
+but it is *not* a sufficient explanation for the 18pp over-refusal jump — the generator
+had roughly the same amount of usable classical evidence either way. Flagged as an open
+question rather than papered over.
+
+### The bigger finding: Brihat Samhita chapter spans over-capture (bug since Phase 3)
+
+Chasing the junk led to a genuine defect in `src/rag/corpus/chapter_split.py`
+(`locate_chapters`, lines ~161-166):
+
+```python
+if i + 1 < len(sorted_chapters):
+    end_idx = sorted_chapters[i + 1][1]   # start of the next WANTED chapter
+```
+
+Each wanted chapter's span ends at the next **wanted** chapter, not the next **actual**
+chapter. Every gap between wanted chapters is therefore silently ingested. With
+`chapters: [21..29, 40, 54, 55]` that means **chapters 30-39 are swallowed into 29, and
+41-53 into 40**.
+
+Evidence in the data — chunks tagged `chapter: 40` ("Growth of Crops", a short chapter)
+number **75 of Brihat's 140 chunks** and contain:
+- "If at the time of the Sun's entry into Scorpio Jupiter be in Aquarius..." (astrology)
+- "Sign Aries is considered to rule over cloths, sheep's wool..." (commodity divination)
+- "The Gods with Indra as their leader ... went to the Milky Ocean" (mythology)
+- house-dimension calculations in cubits for Brahmana dwellings (architecture)
+
+Span check from the build log: chapter 29 -> pages 327-376 (50pp), **chapter 40 -> pages
+377-543 (167pp)** for a chapter that is a few pages long.
+
+**Scale:** roughly **~83 of 140 Brihat chunks (~25% of the whole 327-chunk corpus)** is
+content we never intended to index. It has polluted retrieval **since Phase 3**, so the
+original 206-chunk baseline in §6f is affected too — every evaluation number in this log
+was measured against a partly-unintended corpus.
+
+**Revised fix order (supersedes the §6j plan):**
+1. **Fix `locate_chapters`** to end a span at the next *detected* chapter heading (or a
+   page cap), not the next wanted one; rebuild; confirm Brihat drops from 140 to roughly
+   40-55 chunks of genuinely wanted material.
+2. **Drop front-matter / editorial-apparatus chunks** (publisher block, "[Cf. ...]",
+   "see the author's ...", "this chapter is spurious") with a cleaning rule + test.
+3. **Then** re-run Phase 11. Only after a clean corpus does tier-aware routing get
+   evaluated — otherwise we would be tuning routing against polluted retrieval.
+4. Tier-aware routing + pest queries (§6j steps 2-3) follow, evaluated as **A** (pest
+   queries vs NITI alone) **and B** (full set re-run) — Ankit's refinement, so a bad book
+   can be told apart from bad routing.
+
+**Lesson for the write-up:** the displacement test was designed to confirm a hypothesis
+and instead surfaced a deeper data-quality defect. Worth reporting as-is — corpus quality
+was the confound underneath the coverage story.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
+
+### 7.0b Brihat Samhita chapter over-capture (found 2026-09-14) — CORPUS BUG, see §6k
+- **Defect:** `locate_chapters` ends each wanted chapter at the next *wanted* chapter, so chapters 30-39 and 41-53 were silently ingested (astrology, commodity divination, mythology, architecture).
+- **Scale:** ~83 of 140 Brihat chunks (~25% of the 327-chunk corpus). Present since Phase 3 — every evaluation number in this log was measured against a partly-unintended corpus.
+- **Verdict:** fix before any further retrieval tuning; re-baseline afterwards.
 
 ### 7.0 Corpus expansion with near-miss content (2026-09-09) — FAILED, see §6j
 - **Idea:** add the NITI Aayog natural-farming manual (68 chunks) to close the symptom->remedy gap behind the ~55% over-refusal.
