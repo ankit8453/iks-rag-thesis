@@ -80,6 +80,67 @@ def _roman_chapter_regex(chapter_number: int) -> re.Pattern[str]:
     )
 
 
+#: A *real* chapter heading, used to find where a chapter ENDS. Three guards, each
+#: needed against a false positive seen in the Brihat Samhita OCR:
+#:
+#: 1. the literal word "chapter" — running headers are ``Treatment of Trees LV 533``
+#:    (title + numeral + folio, no "chapter"), so they cannot match;
+#: 2. a separator and a capitalised title after the numeral — cross-references such
+#:    as ``[Cf. chapter IX]`` or ``as stated in chapter XXI`` have no title and are
+#:    rejected. Without this, p.291 (continuation of ch.23 Rainfall) and p.304
+#:    (continuation of ch.24 Rohini) were read as chapter starts and truncated
+#:    their real chapters;
+#: 3. it must appear at the very top of the page (see ``_HEADING_MAX_OFFSET``).
+_ANY_CHAPTER_RE = re.compile(
+    r"\bchapter\b[\s\W]{0,4}([IVXLCDM]+)\s*[.\-–—:]+\s*[A-Z]",
+    re.IGNORECASE,
+)
+
+#: How far into the page text a heading may start. Headings are the first thing on
+#: the page; a few characters of leading folio/OCR noise are tolerated, but prose
+#: mentions further down are not.
+_HEADING_MAX_OFFSET = 40
+
+#: Only scan the head of the page at all.
+_HEADING_WINDOW = 300
+
+
+def _from_roman(roman: str) -> int | None:
+    """Parse a Roman numeral; ``None`` if it is not a well-formed numeral."""
+    values = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+    roman = roman.upper()
+    if not roman or any(ch not in values for ch in roman):
+        return None
+    total = 0
+    for i, ch in enumerate(roman):
+        v = values[ch]
+        nxt = values.get(roman[i + 1]) if i + 1 < len(roman) else None
+        total += -v if (nxt is not None and v < nxt) else v
+    # round-trip guard: rejects malformed strings such as "IIII" or "VV"
+    return total if 0 < total < 4000 and to_roman(total) == roman else None
+
+
+def find_chapter_starts(pages: list[str]) -> dict[int, int]:
+    """Map ``page_idx -> chapter_number`` for every explicit chapter heading found.
+
+    Used to decide where a wanted chapter *ends*. Without this, a wanted chapter's
+    span runs to the next **wanted** chapter and silently swallows every chapter in
+    between — the defect that put Brihat Samhita chapters XLI-LIII ("Fluctuation of
+    Prices", "Signs of Swords", "Architecture", ...) inside chapter XL
+    ("Growth of Crops"). See EXPERIMENT_LOG.md §6k.
+    """
+    starts: dict[int, int] = {}
+    for idx, page_text in enumerate(pages):
+        head = page_text.lstrip()[:_HEADING_WINDOW]
+        m = _ANY_CHAPTER_RE.search(head)
+        if not m or m.start() > _HEADING_MAX_OFFSET:
+            continue
+        number = _from_roman(m.group(1))
+        if number is not None:
+            starts[idx] = number
+    return starts
+
+
 def _heading_score(
     page_text: str,
     *,
@@ -156,14 +217,35 @@ def locate_chapters(
             continue
         located[chapter_number] = best_idx
 
+    # Where does EVERY chapter start? A wanted chapter must end at the next chapter
+    # heading of any kind, not at the next *wanted* one.
+    all_starts = find_chapter_starts(pages)
+
     # Sort by page index and convert to [start, end) spans.
     sorted_chapters = sorted(located.items(), key=lambda kv: kv[1])
     spans: dict[int, ChapterSpan] = {}
     for i, (chapter_number, start_idx) in enumerate(sorted_chapters):
+        # Upper bound: the next wanted chapter (or end of book) — the old behaviour.
         if i + 1 < len(sorted_chapters):
             end_idx = sorted_chapters[i + 1][1]
         else:
             end_idx = len(pages)
+
+        # Tighten it to the next chapter heading that belongs to a DIFFERENT chapter.
+        # `min` keeps this a pure narrowing: a span can only shrink, never grow, so a
+        # previously-correct span cannot be broken by this step.
+        next_any = [p for p, num in all_starts.items()
+                    if p > start_idx and num != chapter_number]
+        if next_any:
+            tightened = min(next_any)
+            if tightened < end_idx:
+                _LOGGER.info(
+                    "locate_chapters: chapter %d end tightened %d -> %d "
+                    "(next heading is chapter %d)",
+                    chapter_number, end_idx, tightened, all_starts[tightened],
+                )
+                end_idx = tightened
+
         spans[chapter_number] = ChapterSpan(
             chapter_number=chapter_number,
             title=chapter_titles[chapter_number],

@@ -4,7 +4,12 @@ from __future__ import annotations
 
 import pytest
 
-from src.rag.corpus.chapter_split import ChapterSpan, locate_chapters, to_roman
+from src.rag.corpus.chapter_split import (
+    ChapterSpan,
+    find_chapter_starts,
+    locate_chapters,
+    to_roman,
+)
 
 
 def test_to_roman_basic_cases() -> None:
@@ -108,3 +113,71 @@ def test_locate_chapters_warns_but_does_not_crash_when_chapter_missing(caplog) -
 
 def test_locate_chapters_empty_pages_returns_empty() -> None:
     assert locate_chapters([], {1: "Anything"}) == {}
+
+
+# --------------------------------------------------------------------------- #
+# Regression: a wanted chapter must NOT swallow the unwanted chapters that
+# follow it. See EXPERIMENT_LOG.md §6k — Brihat Samhita chapter XL
+# ("Growth of Crops", 4 printed pages) had absorbed chapters XLI..LIII
+# (prices, swords, architecture, ...) because its span ran to the next
+# *wanted* chapter (LIV) instead of the next chapter heading.
+# --------------------------------------------------------------------------- #
+
+
+def test_wanted_chapter_does_not_swallow_following_unwanted_chapters() -> None:
+    pages = [
+        "Chapter XL — Growth of Crops\nThe good and bad yogas ...",   # 0  wanted
+        "continuation of the crops chapter ...",                      # 1
+        "Chapter XLI — Classification of Substances\n...",            # 2  NOT wanted
+        "more about substances ...",                                  # 3
+        "Chapter XLII — Fluctuation of Prices\n...",                  # 4  NOT wanted
+        "Chapter LIV — Exploration of Water Springs\n...",            # 5  wanted
+        "water springs continued ...",                                # 6
+    ]
+    spans = locate_chapters(pages, {40: "Growth of Crops",
+                                    54: "Exploration of Water Springs"})
+
+    # chapter 40 must stop at the chapter XLI heading (page idx 2), NOT at 54 (idx 5)
+    assert spans[40].start_page_idx == 0
+    assert spans[40].end_page_idx == 2, (
+        f"chapter 40 swallowed unwanted chapters: span is "
+        f"{spans[40].start_page_idx}..{spans[40].end_page_idx}, expected 0..2"
+    )
+    assert spans[54].start_page_idx == 5
+    assert spans[54].end_page_idx == len(pages)
+
+
+def test_running_header_does_not_end_a_chapter_early() -> None:
+    """Running headers ('Treatment of Trees LV 533') carry no 'Chapter' word,
+    so they must not be mistaken for a new chapter start."""
+    pages = [
+        "Chapter LV — Treatment of Trees\nOne should treat trees ...",
+        "Treatment of Trees LV 533\ncontinuation of the same chapter ...",
+        "Treatment of Trees LV 534\nstill the same chapter ...",
+    ]
+    spans = locate_chapters(pages, {55: "Treatment of Trees"})
+    assert spans[55].start_page_idx == 0
+    assert spans[55].end_page_idx == 3, "a running header ended the chapter early"
+
+
+def test_chapter_mentioned_in_prose_does_not_end_a_chapter() -> None:
+    """A passing 'this chapter is spurious' style remark deep in the page body
+    must not be read as a chapter boundary."""
+    pages = [
+        "Chapter XXI — Pregnancy of Clouds\nAs food forms the very life ...",
+        "body text " * 80 + " [According to Utpala this chapter is spurious] " + "more body",
+        "Chapter XXII — Retention of Embryo\n...",
+    ]
+    spans = locate_chapters(pages, {21: "Pregnancy of Clouds"})
+    assert spans[21].end_page_idx == 2, "a prose mention of 'chapter' ended the span early"
+
+
+def test_find_chapter_starts_parses_roman_numerals() -> None:
+    pages = [
+        "Chapter XL — Growth of Crops",
+        "no heading here",
+        "CHAPTER LIII - Architecture",
+        "Chapter IIII — malformed numeral, must be ignored",
+    ]
+    starts = find_chapter_starts(pages)
+    assert starts == {0: 40, 2: 53}
