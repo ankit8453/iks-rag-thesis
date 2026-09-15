@@ -715,6 +715,73 @@ was the confound underneath the coverage story.
 
 ---
 
+## 6l. Chapter-span fix applied and rebuilt — corpus 327 -> 233 (2026-09-15)
+
+Step 1 of the §6k plan, done. `locate_chapters` now ends a wanted chapter at the next
+**detected chapter heading** rather than the next **wanted** chapter
+(`find_chapter_starts`, tightened with `min()` so a span can only shrink — a
+previously-correct span cannot break).
+
+**Heading detection needed three guards**, each earned from a real false positive in this
+OCR, and each verified against the actual pages:
+1. require the literal word "chapter" — running headers are `Treatment of Trees LV 533`;
+2. require a separator + capitalised title after the numeral — this rejects
+   `[Cf. chapter IX]` and "as stated in chapter XXI". **Without it the first version of
+   the fix silently truncated ch.23 Rainfall to 1 page and ch.24 Rohini to 10** — caught
+   only by checking the gap pages against the printed book before rebuilding;
+3. require the heading at the top of the page.
+Verified: real headings at p.330 (XXX), p.381 (XLI), p.581 (LVI) detect; cross-references
+at p.291, p.304, p.314 do not.
+
+**Brihat spans now match the printed book** (96 pages ingested, was 319):
+
+| ch | title | pages | len |
+|---|---|---|---|
+| 21-29 | rain / cloud / prognostics | 275-329 (contiguous) | 42 |
+| 40 | Growth of Crops | 377-380 | **4** (was 167) |
+| 54 | Exploration of Water Springs | 544-571 | 28 |
+| 55 | Treatment of Trees | 572-580 | 9 |
+
+**Rebuild result:** brihat **140 -> 46 chunks**; corpus **327 -> 233**. Others unchanged
+(vrikshayurveda 52, niti 68, kashyapiya 39, upavanavinoda 15, krishi_parashara 13).
+Build took **74 min** on CPU (`IKS_EMBED_DEVICE=cpu`); no OCR, no API spend — the raw
+text was already cached, which is what made the fix free after the Gemini quota ran out.
+Tests: 4 new regression tests; **414 passed** across the whole suite.
+
+**Verification that the junk is gone.** Commodity divination ("Fluctuation of Prices",
+"sheep's wool"), mythology ("Milky Ocean", "Indra's Banner") and "Signs of Swords /
+Crowns / Pimples" are now **0 matches**. Remaining astrology terms (Jupiter, Scorpio,
+meteor) and "cubits" are **legitimate**: ch.21/28/40 predict rain and crop yield from
+planetary positions — *"If at the Sun's entry into Scorpio Jupiter be in Aquarius…"* IS
+the text of "Growth of Crops" — and ch.54 measures well depth in cubits. A first pass
+flagged these as junk; inspecting them in context showed the pattern, not the corpus,
+was wrong.
+
+### Correction to §6k
+
+§6k said NITI was mostly "displacing junk", citing `vrikshayurveda 1.1` (the
+publisher-address block) as an example. **That was partly wrong.** Chunk `1.1` begins
+with the ICRISAT address but **ends with Table 1 — the disorder / cause / symptom /
+remedy table** ("Broken trees should be smeared with a paste of the bark of plaksa and
+udumbara mixed with ghee, honey, wine, and milk"). So one of the displaced passages was
+genuinely useful, and the displacement harm in §6k was **understated**.
+
+The other §6k examples (Brihat meteors, "Wind Circle … spurious", Karana notes) came from
+the over-captured chapters and are **now removed by this fix**.
+
+**Front matter still present, deliberately NOT deleted:** 4 vrikshayurveda chunks
+(`1.1` x2, `306.1`, `section_2`) open with author affiliations / "About the Translator"
+but continue into Table 1, Table 2 (materials + properties) and land-suitability
+indicators. Deleting them would destroy real remedy content; the correct fix is to strip
+the front-matter *prefix* during cleaning, which needs another 74-min rebuild and is not
+worth blocking the re-baseline. Logged as open.
+
+**Next:** push the 233 chunks to HF and re-run Phase 11. This will be the **first clean
+baseline** — every earlier number in this log (including §6f's 206-chunk run) was
+measured against a corpus that was ~25% content we never asked for.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
