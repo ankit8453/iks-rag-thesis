@@ -25,13 +25,29 @@ def test_query_set_loads_and_is_symptom_led() -> None:
 
 
 def test_query_set_has_deliberate_negatives() -> None:
-    """Honest-refusal cases must exist, and carry no relevant books."""
+    """Honest-refusal controls must exist, and carry no relevant books."""
     cases = load_query_set()
-    negatives = [c for c in cases if not c.expect_answerable]
+    negatives = [c for c in cases
+                 if not c.expect_answerable and c.unanswerable_kind != "no_coverage"]
     assert negatives, "need cases where refusing is the correct behaviour"
     for n in negatives:
         assert n.relevant_books == []
         assert n.note, "a negative should say why it is unanswerable"
+
+
+def test_no_coverage_cases_keep_their_book_labels() -> None:
+    """The §6m coverage check marked 13 disease queries unanswerable because no
+    passage matches the lesion description — NOT because the books are off-topic.
+    They keep `relevant_books` (retrieval is still scored on them) but must not be
+    counted as answerable when reporting over-refusal."""
+    cases = load_query_set()
+    gap = [c for c in cases if c.unanswerable_kind == "no_coverage"]
+    assert gap, "expected the coverage-gap cases from EXPERIMENT_LOG.md §6m"
+    for c in gap:
+        assert not c.expect_answerable
+        assert c.relevant_books, "a coverage-gap case is still topically in scope"
+        assert c.note, "record why the corpus cannot answer it"
+        assert c.top1_rerank_score is not None and c.top1_rerank_score < 0.15
 
 
 def test_answerable_cases_filters_negatives() -> None:

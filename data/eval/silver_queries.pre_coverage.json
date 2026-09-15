@@ -9,8 +9,7 @@
       "krishi_parashara",
       "upavanavinoda"
     ],
-    "created": "2026-06-28",
-    "coverage_relabel_2026_09_15": "expect_answerable was originally true for all 22 non-negative queries — an ASSUMPTION, never verified against the corpus. Coverage check (§6m, scripts/check_coverage.py) scored every query with the pipeline's own cross-encoder: 4 strong (>=0.35), 5 marginal (0.15-0.35), 13 no match (<0.15). The 13 are now expect_answerable=false with the score recorded. Over-refusal must be reported on the answerable subset; the original file is preserved as silver_queries.pre_coverage.json. This is a finding, not a patch: it quantifies the gap between classical IKS aetiology and modern lesion-based disease labels."
+    "created": "2026-06-28"
   },
   "queries": [
     {
@@ -23,11 +22,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1039,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1039). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q02",
@@ -39,9 +34,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.2239,
-      "coverage_tier": "marginal"
+      "expect_answerable": true
     },
     {
       "id": "q03",
@@ -53,11 +46,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0828,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0828). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q04",
@@ -69,9 +58,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.1669,
-      "coverage_tier": "marginal"
+      "expect_answerable": true
     },
     {
       "id": "q05",
@@ -83,11 +70,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1175,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1175). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q06",
@@ -99,11 +82,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0765,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0765). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q07",
@@ -116,11 +95,7 @@
         "brihat_samhita"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1493,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1493). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q08",
@@ -132,11 +107,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0669,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0669). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q09",
@@ -149,11 +120,7 @@
         "brihat_samhita"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0617,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0617). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q10",
@@ -165,11 +132,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1043,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1043). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q11",
@@ -181,11 +144,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1361,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1361). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q12",
@@ -197,11 +156,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0983,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0983). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q13",
@@ -213,9 +168,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.2706,
-      "coverage_tier": "marginal"
+      "expect_answerable": true
     },
     {
       "id": "q14",
@@ -227,9 +180,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.5755,
-      "coverage_tier": "strong"
+      "expect_answerable": true
     },
     {
       "id": "q15",
@@ -241,11 +192,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0613,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0613). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q16",
@@ -257,9 +204,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.2258,
-      "coverage_tier": "marginal"
+      "expect_answerable": true
     },
     {
       "id": "q17",
@@ -271,9 +216,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.2927,
-      "coverage_tier": "marginal"
+      "expect_answerable": true
     },
     {
       "id": "q18",
@@ -285,11 +228,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.1218,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1218). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q19",
@@ -301,11 +240,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0562,
-      "coverage_tier": "none",
-      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0562). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
-      "unanswerable_kind": "no_coverage"
+      "expect_answerable": true
     },
     {
       "id": "q20",
@@ -317,9 +252,7 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.6957,
-      "coverage_tier": "strong"
+      "expect_answerable": true
     },
     {
       "id": "q21",
@@ -332,9 +265,7 @@
         "krishi_parashara"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.6336,
-      "coverage_tier": "strong"
+      "expect_answerable": true
     },
     {
       "id": "q22",
@@ -346,9 +277,7 @@
         "krishi_parashara"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.7192,
-      "coverage_tier": "strong"
+      "expect_answerable": true
     },
     {
       "id": "q23",
@@ -358,8 +287,7 @@
       "relevant_books": [],
       "relevant_chunk_ids": [],
       "expect_answerable": false,
-      "note": "Deliberate negative: modern quantitative agronomy is absent from the classical texts. The system should REFUSE rather than fabricate.",
-      "unanswerable_kind": "out_of_scope"
+      "note": "Deliberate negative: modern quantitative agronomy is absent from the classical texts. The system should REFUSE rather than fabricate."
     },
     {
       "id": "q24",
@@ -369,8 +297,7 @@
       "relevant_books": [],
       "relevant_chunk_ids": [],
       "expect_answerable": false,
-      "note": "Deliberate negative: modern agrochemicals are outside the corpus; an honest refusal is the correct behaviour.",
-      "unanswerable_kind": "out_of_scope"
+      "note": "Deliberate negative: modern agrochemicals are outside the corpus; an honest refusal is the correct behaviour."
     }
   ]
 }

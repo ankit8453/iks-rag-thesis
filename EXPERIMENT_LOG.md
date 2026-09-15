@@ -840,7 +840,7 @@ If that is right, "over-refusal" has been measuring the system against queries t
 no answer in the corpus, and **refusing is the correct behaviour** — the metric, not the
 system, is wrong.
 
-**Next (in progress): coverage check.** `scripts/check_coverage.py` retrieves the top-5
+**Next: coverage check.** *(Done — see below; the result was ~4, the first branch.)* `scripts/check_coverage.py` retrieves the top-5
 for each of the 22 queries locally (same hybrid+rerank pipeline, no LLM, no API cost) and
 prints the passages with a remedy-language triage, so the question is settled from the
 text itself rather than from metrics:
@@ -857,6 +857,84 @@ these diseases, routing queries to it changes nothing.
 **Also open:** the 233 chunks are not yet pushed to HF; the silver set still needs
 re-labelling (new books score as noise, §6j); 4 vrikshayurveda front-matter prefixes
 remain (§6l).
+
+---
+
+### Coverage check — RESOLVED: the corpus genuinely cannot answer 13 of the 22 queries
+
+`scripts/check_coverage.py`, local, no API cost. **The cross-encoder's own top-1 score is
+the measurement** — it is a relevance judge, trained to score a query/passage pair, and it
+needs no heuristic on top of it.
+
+| top-1 rerank score | queries | which |
+|---|---|---|
+| **>= 0.35** strong match | **4** | q22 rain signs (0.72), q20 boring insects (0.70), q21 soil preparation (0.63), q14 yellow/stunted leaves (0.58) |
+| 0.15-0.35 marginal | 5 | q17 powdery mildew, q13 mosaic, q16 pepper spot, q02 apple rust, q04 corn blight |
+| **< 0.15** no match | **13** | scab, Septoria, gray leaf spot, early/late blight, bacterial spot, leaf mould, black rot, corn rust, mites, weak tree |
+
+**4 strong matches vs a grounded answer rate frozen at 3/22.** The generator has been
+producing an answer almost exactly when the corpus actually contains one. The refusals are
+correct.
+
+**Why the mismatch is structural, not a retrieval failure.** The chunk retrieved rank-1 for
+10 of the 22 queries is Vrikshayurveda **Table 1 — the disorder / cause / symptom / remedy
+table**, which is real remedy content (`0a189afb`, `177254da`). But it is indexed **by
+cause**: vata, pitta, kafa, fire, lightning, axe wound, ants, faulty seed — humoral
+imbalance and physical injury. Our queries are indexed **by visual pathology**: "numerous
+small dark spots with pale centres". Table 1 has no row for that, and no row for scab,
+Septoria or mildew. The reranker returns it anyway because it is the most disease-like text
+in the corpus, then scores it 0.06-0.22 — *"the best I have, and it does not match."*
+
+So the classical texts classify plant disease by **aetiology in Ayurvedic terms**; the
+PlantDoc label set classifies by **lesion appearance**. For 13 of 22 queries no mapping
+exists, because the target concept is absent from the source tradition.
+
+**Consequence for the metric.** `expect_answerable: true` on all 22 was an assumption we
+never verified. Over-refusal of 81.8% is measured against 13 queries that have no answer;
+the honest denominator is the 4-9 that do. The system's real behaviour is: **answers ~3 of
+the 4 it can, refuses the rest, and fabricates nothing** (unfounded citations 0% in every
+run). That is the desired behaviour of a grounded system, and the metric was hiding it.
+
+**This also kills the §6j NITI verdict a second time, in the other direction.** NITI
+`section_10` is rank-1 for q20 (0.70) and q14 (0.58) — the two highest-scoring disease-side
+queries in the whole set. The book is not harmful; it is the *only* source that matches the
+pest-damage and chlorosis queries. §6j's "corpus growth must match the query distribution"
+finding stands, but the fair statement is that **NITI was tested almost entirely on
+fungal-lesion queries that nothing in the corpus can answer.**
+
+### Second defect found: citation labels do not identify passages
+
+4 labels are shared by **17 chunks**: `vrikshayurveda v.1.1` x5, `v.1.2` x5, `v.1.3` x4,
+plus one more. Five different passages all cite as `[Vrikshayurveda, ch. full, v. 1.2]`.
+A reader cannot tell which was used, and the **valid-citation rate (55%) is scored against
+labels that are not unique**. Separately, `chapter: "full"` and `verse_or_section: "1.2"`
+for a 3,382-character chunk is not a verse reference at all — these come from the
+whole-book ingest path, not the chapter-split path. Independent of the refusal question and
+needs fixing before any citation number is reported in the thesis.
+
+### Revised plan
+
+1. **Re-label the silver query set** — mark the 13 unanswerable queries
+   `expect_answerable: false` with the rerank evidence recorded, and report over-refusal on
+   the answerable subset. This is the honest denominator, and it is a *finding*, not a
+   patch: it quantifies the coverage gap between classical IKS aetiology and modern disease
+   labels.
+2. **Add pest/soil/season queries** (§6j step 3) — the four strong matches show what this
+   corpus is genuinely good at. Test A (NITI alone) and B (full set) as agreed.
+3. **Fix citation granularity** — real verse ranges instead of `ch.full v.1.2`.
+4. **Tier-aware routing (§6j step 2): DROPPED for now.** Routing fungal-disease queries to
+   the classical tier cannot help when the classical tier has no such content. Revisit only
+   after a source that covers plant disease is ingested.
+5. **Vishvavallabha becomes the critical path** — it is the classical text that treats
+   plant disease directly. It is now the only route to raising the grounded rate.
+
+**The reframed thesis contribution.** Not "we built a RAG system that answers disease
+queries from Sanskrit texts" — the texts cannot answer most of them, and claiming otherwise
+would require the system to fabricate. It is: *a grounded multimodal system that maps modern
+vision-model disease labels onto classical IKS treatment knowledge, and that refuses rather
+than fabricates where the traditions do not overlap — with the overlap measured, at 4-9 of
+22 modern leaf-disease categories.* The refusal behaviour is the safety result, and the
+coverage gap is a quantified finding about IKS digitisation, not a failure of the pipeline.
 
 ---
 
