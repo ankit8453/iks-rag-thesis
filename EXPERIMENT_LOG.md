@@ -6,7 +6,7 @@
 >
 > **Companion docs.** `progress.md` = narrative weekly log (engineering detail per phase). `research_journal/daily/*` = day-by-day "ran / worked / didn't work". This file = the structured results ledger that ties it together. Keep all three updated.
 >
-> **Last updated:** 2026-06-12.
+> **Last updated:** 2026-09-15 (see §6m — first clean-corpus Phase 11 baseline).
 
 ---
 
@@ -16,13 +16,18 @@
 
 **What works end-to-end (as of 2026-06-12):** The full pipeline runs live (Phase 10 Streamlit UI on Colab+cloudflared). Disease model → soil model → Strategy-B query rewrite → grounded RAG answer with citations → highlighted source chunks. Demonstrated working with real images.
 
-**The open problem we are actively fixing:** the **disease classifier's PlantDoc (in-the-wild) stage**. It predicts correctly but with only 72.3% accuracy and — critically — Grad-CAM shows it attends to **background, not the leaf**. We have diagnosed the cause (see §5) and are testing the fix (LP-FT, see §6).
+**The open problem we are actively fixing (2026-09):** the RAG side's **over-refusal on disease queries** — 81.8% of the 22 answerable silver queries are refused, and the grounded answer rate has been frozen at 13.64% (3/22) across three corpus versions. Corpus expansion (§6j), displacement (§6k) and the chapter-span bug (§6l) have all been ruled out as causes; the live hypothesis is that the classical texts genuinely lack remedies for these fungal/bacterial diseases and the silver labels are wrong (coverage check in progress, §6m).
+
+**Earlier open problem (resolved into a position, §6c):** the **disease classifier's PlantDoc (in-the-wild) stage**. It predicts correctly but with only 72.3% accuracy and — critically — Grad-CAM shows it attends to **background, not the leaf**. We have diagnosed the cause (see §5) and are testing the fix (LP-FT, see §6).
 
 **Component status snapshot:**
 
 | Component | Status | Headline number |
 |---|---|---|
-| IKS corpus + RAG retrieval | ✅ Working | Strategy B retrieval score 0.59–0.96 |
+| IKS corpus (6 books, 233 chunks) | ✅ Clean (§6l) | brihat over-capture fixed; 327 → 233 |
+| IKS RAG retrieval | ✅ Working | P@5 0.673, nDCG@5 0.878, Hit@5 1.00 (§6m) |
+| Grounded answering | ⚠️ Under investigation | grounded 13.6%, over-refusal 81.8% (§6m) |
+| Strategy-B query rewrite | ✅ Working | retrieval score 0.59–0.96 vs 0.01–0.04 |
 | Grounded generation (Llama-3.1-8B) | ✅ Working | §17 prompt, cites source+chapter+verse |
 | Soil multi-task classifier (B0) | ✅ Production (v2) | soil_type 89.9% / moisture 95.8% / texture 67.9% |
 | Disease classifier (B4) | ⚠️ Works but background-biased | PlantDoc 72.3% (frontier) but off-leaf attention |
@@ -779,6 +784,79 @@ worth blocking the re-baseline. Logged as open.
 **Next:** push the 233 chunks to HF and re-run Phase 11. This will be the **first clean
 baseline** — every earlier number in this log (including §6f's 206-chunk run) was
 measured against a corpus that was ~25% content we never asked for.
+
+---
+
+## 6m. Phase 11 on the clean 233-chunk corpus — the first honest baseline (2026-09-15)
+
+Re-run after the §6l chapter fix. This is the first Phase 11 measured on a corpus that
+contains only what we asked for.
+
+**Retrieval (22 answerable queries, book-level silver labels):**
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full (hybrid + rerank) | 0.6727 | 0.8779 | 0.8561 | **1.0000** |
+| dense_only | 0.6636 | 0.8818 | — | 1.0000 |
+| hybrid_no_rerank | 0.5364 | 0.7250 | — | — |
+| keyword_only | 0.3273 | 0.5151 | — | 0.6818 |
+
+vs the 327-chunk run: P@5 0.65 -> 0.67, nDCG 0.87 -> 0.88, keyword_only nDCG 0.49 ->
+0.52. Removing 94 chapters of astrology and commodity divination **did** clean up
+retrieval, as predicted. The rerank is still carrying the pipeline (+0.14 P@5 over
+hybrid_no_rerank), and keyword_only remains the weak leg — expected with Sanskrit
+transliterations and a symptom-phrase query style.
+
+**Generation / grounding:**
+
+| metric | 206 (§6f) | 327 (§6j) | **233 (clean)** |
+|---|---|---|---|
+| grounded answer rate | 13.6% | 13.64% | **13.64%** |
+| valid citation rate | 14.2% | 41.7% | **55.00%** |
+| over-refusal | 54.5% | 72.7% | **81.82%** |
+| honest refusal (negatives) | 100% | 100% | 100% |
+| unfounded citations | 0% | 0% | 0% |
+
+**The finding that reframes §6j.** Across three corpora of 206, 327 and 233 chunks —
+different books, different sizes, a 94-chapter bug fixed in between — the grounded
+answer rate is **frozen at exactly 13.64%, i.e. 3 of 22 queries, every single time.**
+Nothing we changed moved it.
+
+What *did* move is the weakly-grounded answers: **7 -> 3 -> 1**. Those were answers the
+generator produced without solid support. As the corpus got cleaner, it stopped
+producing them and refused instead. That single mechanism explains all three trends at
+once: over-refusal rises (54.5 -> 72.7 -> 81.8) because refusals replace weak answers,
+and valid-citation rate rises (14.2 -> 41.7 -> 55.0) because the surviving answers are
+the well-supported ones. The system is behaving **more honestly at every step**.
+
+**So the §6j root cause was incomplete.** NITI displacement is real (§6k measured it:
+25/110 top-5 slots), and the chapter bug was real, but **neither was the cause of the
+refusals** — fixing both left the grounded rate untouched. The remaining explanation is
+the simplest one: **the classical texts may genuinely not contain remedies for most of
+these 22 diseases.** The query set is *silver* — we asserted `expect_answerable: true`
+for all 22; we never verified the corpus can answer them.
+
+If that is right, "over-refusal" has been measuring the system against queries that have
+no answer in the corpus, and **refusing is the correct behaviour** — the metric, not the
+system, is wrong.
+
+**Next (in progress): coverage check.** `scripts/check_coverage.py` retrieves the top-5
+for each of the 22 queries locally (same hybrid+rerank pipeline, no LLM, no API cost) and
+prints the passages with a remedy-language triage, so the question is settled from the
+text itself rather than from metrics:
+- ~3-5 queries with real treatment content -> the system is correct, the labels are
+  wrong, and the story is **coverage** (-> Vishvavallabha, the classical text that does
+  cover plant disease);
+- ~12-15 -> the generator's sufficiency rule is too strict, and the fix is the §17
+  prompt, not the corpus.
+
+**Tier-aware routing (§6j step 2) is ON HOLD** until this resolves. On current evidence
+it would be solving a problem that is not there: if the classical tier has no remedy for
+these diseases, routing queries to it changes nothing.
+
+**Also open:** the 233 chunks are not yet pushed to HF; the silver set still needs
+re-labelling (new books score as noise, §6j); 4 vrikshayurveda front-matter prefixes
+remain (§6l).
 
 ---
 
