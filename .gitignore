@@ -106,3 +106,6 @@ sanskrit_ocr_demo/
 *.xlsx
 *.jpeg
 demo_images/
+
+# B.Tech InferAI guidance work — kept out of thesis history
+inferai/
