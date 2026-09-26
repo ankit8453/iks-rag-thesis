@@ -74,11 +74,12 @@ SYSTEM_PROMPT_V17: str = (
     "on a general passage, say so plainly (e.g. \"the texts prescribe this for "
     "this symptom generally\") rather than implying it was written for that "
     "crop.\n"
-    "2. CITE EVERY CLAIM. After each factual statement, cite the source "
-    "text, chapter, and verse or section in the form "
-    "[Source Text, ch.<chapter>, v.<verse_or_section>]. Example: "
-    "[Vrikshayurveda, ch.full, v.160.3]. Cite only sources that "
-    "actually appear in the retrieved passages.\n"
+    "2. CITE EVERY CLAIM. Each retrieved passage below begins with its citation in "
+    "square brackets, for example [Vrikshayurveda, ch.full, v.160.3]. After each "
+    "factual statement, COPY that bracketed label exactly as it is written above the "
+    "passage you used. Do not rewrite it, do not abbreviate it, and never replace the "
+    "text's name with its position in the list (\"Source 2\" is not a citation). Cite "
+    "only passages that actually appear below.\n"
     "3. STRUCTURE AS A STEP-BY-STEP ORGANIC PROTOCOL when the user asks "
     "for treatment / remedy / procedure. Use numbered steps. Each step "
     "must carry at least one citation.\n"
@@ -123,9 +124,18 @@ def _format_context_block(chunks: list[RetrievedChunk]) -> str:
         chap = meta.get("chapter", "?")
         verse = meta.get("verse_or_section", "?")
         translator = meta.get("translator", "")
-        tag = f"[Source {i}] {src}, ch.{chap}, v.{verse}"
+        # The header IS the citation, character for character, so the model can copy it
+        # rather than assemble one.
+        #
+        # It used to read "[Source {i}] {src}, ch.{chap}, v.{verse}" while the citation
+        # rule asked for "[Source Text, ch.X, v.Y]". The word "Source" appeared in both,
+        # so the model merged them and cited "[Source 2, ch.full, v.1.2d]" -- chapter and
+        # verse correct, the book's name replaced by its position in the list. Those
+        # citations resolve to nothing, and the measured valid-citation rate collapsed to
+        # 20.7% even though the passages were being used correctly (§6p).
+        tag = f"[{src}, ch.{chap}, v.{verse}]"
         if translator:
-            tag += f" (tr. {translator})"
+            tag += f"  (tr. {translator})"
         body = (ch.text or "").strip()
         lines.append(f"{tag}\n{body}")
     return "\n\n".join(lines)
