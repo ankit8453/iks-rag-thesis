@@ -23,7 +23,8 @@ So this version only gathers evidence for a human (or an LLM reading the dump):
 
 Local, no Colab, no LLM, no API cost. Embeddings cached in results/_docemb_*.npy.
 
-Usage:  python scripts/check_coverage.py
+Usage:  python scripts/check_coverage.py                     # the silver set
+        python scripts/check_coverage.py <queries.json> [tag]  # any query file
 """
 
 from __future__ import annotations
@@ -40,8 +41,8 @@ sys.path.insert(0, str(ROOT))
 
 CHUNKS_DIR = ROOT / "corpus" / "chunks"
 QUERY_SET = ROOT / "data" / "eval" / "silver_queries.json"
-OUT_JSON = ROOT / "results" / "coverage_check.json"
-OUT_DUMP = ROOT / "results" / "coverage_passages.md"
+OUT_JSON_TMPL = str(ROOT / "results" / "coverage_check_{tag}.json")
+OUT_DUMP_TMPL = str(ROOT / "results" / "coverage_passages_{tag}.md")
 
 EMBED_MODEL = "BAAI/bge-large-en-v1.5"
 RERANK_MODEL = "BAAI/bge-reranker-base"
@@ -83,8 +84,16 @@ def main() -> int:
                 rows.append(json.loads(line))
     texts = [r["text"] for r in rows]
     n = len(rows)
-    qs = [q for q in json.loads(QUERY_SET.read_text(encoding="utf-8"))["queries"]
-          if q.get("expect_answerable")]
+    # Any query file may be scored. Candidate files carry no expect_answerable
+    # label yet -- that is the point: the label is assigned FROM this measurement,
+    # never before it (6n).
+    args = [a for a in sys.argv[1:] if not a.startswith("-")]
+    qpath = Path(args[0]) if args else QUERY_SET
+    tag = args[1] if len(args) > 1 else qpath.stem
+    payload = json.loads(qpath.read_text(encoding="utf-8"))
+    qs = [q for q in payload["queries"]
+          if q.get("expect_answerable") or "expect_answerable" not in q]
+    print(f"queries from {qpath.name}")
     print(f"corpus {n} chunks | {len(qs)} answerable queries")
 
     # --- citation labels: can a citation identify a passage at all? ----------
@@ -127,14 +136,27 @@ def main() -> int:
                       "label": _label(rows[i]), "rerank_score": round(s, 4)}
                      for i, s in top],
         })
-        print(f"  [{qi:2}/{len(qs)}] {q['id']}  {(q.get('disease') or '')[:38]}")
+        s = results[-1]["top5"][0]["rerank_score"]
+        tier = "strong  " if s >= 0.35 else ("marginal" if s >= 0.15 else "none    ")
+        subject = (q.get("disease") or q.get("domain") or "")[:26]
+        print(f"  [{qi:2}/{len(qs)}] {q['id']}  {s:7.4f}  {tier}  {subject}")
 
     # --- concentration, keyed on chunk_id (labels are not unique) ------------
     top1 = Counter(r["top5"][0]["chunk_id"] for r in results)
     top5 = Counter(p["chunk_id"] for r in results for p in r["top5"])
     by_id = {r["chunk_id"]: r for r in rows}
+    tiers = Counter("strong" if r["top5"][0]["rerank_score"] >= 0.35
+                    else ("marginal" if r["top5"][0]["rerank_score"] >= 0.15
+                          else "none") for r in results)
 
     print("\n" + "=" * 74)
+    print("COVERAGE  (top-1 cross-encoder score = the pipeline's own judge)")
+    print("=" * 74)
+    for key, label in (("strong", ">= 0.35   genuine match"),
+                       ("marginal", "0.15-0.35 weak"),
+                       ("none", "< 0.15    no match")):
+        print(f"  {key:9} {tiers.get(key, 0):3} / {len(qs)}   {label}")
+    print("=" * 74)
     print("RETRIEVAL CONCENTRATION  (how varied is the evidence the LLM sees?)")
     print("=" * 74)
     print(f"  distinct chunks across all top-5 : {len(top5)} of {n}")
@@ -168,12 +190,15 @@ def main() -> int:
                   f"_retrieved in {c} top-5 slots; rank-1 for {top1[cid]} queries; "
                   f"{len(r['text'])} chars_", "",
                   " ".join(r["text"].split()), ""]
+    OUT_DUMP = Path(OUT_DUMP_TMPL.format(tag=tag))
     OUT_DUMP.parent.mkdir(parents=True, exist_ok=True)
     OUT_DUMP.write_text("\n".join(lines), encoding="utf-8")
 
+    OUT_JSON = Path(OUT_JSON_TMPL.format(tag=tag))
     OUT_JSON.write_text(json.dumps({
         "n_chunks": n, "n_queries": len(qs),
         "distinct_chunks_in_top5": len(top5), "distinct_rank1_chunks": len(top1),
+        "tiers": dict(tiers),
         "colliding_citation_labels": collide,
         "chunk_top5_counts": dict(top5.most_common()),
         "results": results}, indent=2), encoding="utf-8")

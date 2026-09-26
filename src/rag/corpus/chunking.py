@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any
 
 from src.utils.logging_setup import get_logger
@@ -203,6 +203,68 @@ def _compute_chunk_id(
     return hashlib.sha1(payload.encode("utf-8")).hexdigest()
 
 
+def _suffix(index: int) -> str:
+    """0 -> 'a', 1 -> 'b', ... 25 -> 'z', 26 -> 'aa'. Stable and readable."""
+    out = ""
+    index += 1
+    while index:
+        index, rem = divmod(index - 1, 26)
+        out = chr(ord("a") + rem) + out
+    return out
+
+
+def uniquify_labels(chunks: list[Chunk]) -> list[Chunk]:
+    """Make ``(chapter, verse_or_section)`` unique across a book's chunks.
+
+    A citation must identify exactly one passage. It did not: in Vrikshayurveda,
+    17 chunks shared only 4 labels, so ``[Vrikshayurveda, ch.full, v.1.2]`` pointed
+    at five different passages, and the valid-citation rate was being measured
+    against labels that cannot be checked. See EXPERIMENT_LOG.md 6n.
+
+    Cause: the front matter contains numbered lists (an abbreviations list opening
+    ``1. Upavana. = Upavanavinoda. 2. ch. = Chapter no.``), so several separate
+    ``1.`` markers are each read as verse 1; every oversized one is then sub-split
+    into ``1.1, 1.2, ...`` with ``sub_idx`` restarting each time.
+
+    This is deliberately a *post-hoc* repair rather than a change to marker
+    detection: it only ever touches labels that already collide, so a label that
+    was already correct cannot be altered. Colliding labels gain a letter suffix in
+    document order (``1.2`` -> ``1.2a``, ``1.2b``, ...), and ``chunk_id`` is
+    recomputed because the label is part of its hash.
+
+    Returns a new list; the input is not modified. Chunk text is never touched.
+    """
+    counts: dict[tuple[str, str], int] = {}
+    for ch in chunks:
+        key = (ch.chapter, ch.verse_or_section)
+        counts[key] = counts.get(key, 0) + 1
+
+    seen: dict[tuple[str, str], int] = {}
+    out: list[Chunk] = []
+    for ch in chunks:
+        key = (ch.chapter, ch.verse_or_section)
+        if counts[key] == 1:
+            out.append(ch)
+            continue
+        i = seen.get(key, 0)
+        seen[key] = i + 1
+        label = f"{ch.verse_or_section}{_suffix(i)}"
+        out.append(
+            replace(
+                ch,
+                verse_or_section=label,
+                chunk_id=_compute_chunk_id(ch.book_id, ch.chapter, label, ch.text),
+            )
+        )
+    collided = {k: v for k, v in counts.items() if v > 1}
+    if collided:
+        _LOGGER.info(
+            "uniquify_labels: %d colliding label(s) covering %d chunks were suffixed",
+            len(collided), sum(collided.values()),
+        )
+    return out
+
+
 def chunk_chapter(
     text: str,
     meta: dict[str, Any],
@@ -329,6 +391,7 @@ def chunk_chapter(
 
 
 __all__ = [
+    "uniquify_labels",
     "Chunk",
     "TARGET_MAX_TOKENS",
     "TARGET_MIN_TOKENS",

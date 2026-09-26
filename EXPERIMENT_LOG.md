@@ -938,6 +938,103 @@ coverage gap is a quantified finding about IKS digitisation, not a failure of th
 
 ---
 
+## 6n. Citation uniqueness + extending the query set into what the corpus covers (2026-09-26)
+
+Two of the three open items from §6m. Vishvavallabha (the third) stays blocked — the book
+has not been obtained. **No paid API anywhere in this work**: the OCR text is already
+cached, embedding and reranking run on CPU, generation on Colab's free tier.
+
+### Safety net first
+
+The citation fix forces a corpus rebuild, so the change was made provably reversible
+before any code was touched: git tag `thesis-safe-2026-09-26-pre-citationfix`, full copies
+of `corpus/chunks/`, `corpus/vector_db/` and the query set, and a content fingerprint
+(`corpus/_fingerprint_pre_citationfix.json`). Restore commands in `corpus/RESTORE.md`.
+
+`scripts/verify_corpus.py` turns "did we lose anything?" into a checkable claim. The fix
+renames labels and never edits text, so the **sorted set of 233 chunk texts must stay
+byte-identical**; the script compares a SHA-256 of that set. PASS proves no content moved.
+This is precisely the check that was missing when the chapter over-capture bug (§6l) went
+unnoticed through two builds.
+
+### Defect: a citation could not identify a passage
+
+220 distinct labels for 233 chunks — **4 labels shared by 17 chunks**, all Vrikshayurveda
+front matter:
+
+| label | chunks |
+|---|---|
+| `vrikshayurveda ch.full v.1.1` | 5 |
+| `vrikshayurveda ch.full v.1.2` | 5 |
+| `vrikshayurveda ch.full v.1.3` | 4 |
+| `vrikshayurveda ch.full v.1.4` | 3 |
+
+So `[Vrikshayurveda, ch.full, v.1.2]` pointed at five different passages, and the
+**valid-citation rate (55.0%, §6m) was being scored against labels that cannot be
+checked.** The other 35 Vrikshayurveda chunks carry proper verse ranges (`v.1-17`,
+`v.18-37`, …) and were never affected; no other book collides.
+
+**Root cause.** The front matter contains numbered lists — the abbreviations list opens
+*"1. Upavana. = Upavanavinoda. 2. ch. = Chapter no. 3. …"*. `_split_verses` reads each
+`1.` as verse 1, and every oversized verse is then sub-split with `sub_marker =
+f"{marker}.{sub_idx}"` where `sub_idx` **restarts for each oversized verse**. Five separate
+"verse 1"s therefore each produced `1.1, 1.2, …`.
+
+**Fix:** `uniquify_labels()` in `chunking.py`, applied per book in `build_corpus.py` at
+both the external-OCR and Tesseract branches. Colliding labels gain a letter suffix in
+document order (`1.2` → `1.2a`, `1.2b`, …) and `chunk_id` is recomputed, since the label is
+part of its hash.
+
+Deliberately a **post-hoc repair rather than a change to marker detection**: it only ever
+touches labels that already collide, so a label that was correct cannot be broken. That is
+the same narrowing discipline used for the chapter fix, and for the same reason — the first
+version of that fix silently deleted good content (§6l).
+
+7 regression tests: only-colliding-labels-change, all-labels-unique, text-never-changes,
+chunk_id-recomputed-for-renamed-only, no-op-when-already-unique, same-label-in-different-
+chapters-left-alone, >26-collisions. Suite **415 → 422 passing**.
+
+### Extending the query set — and why the method matters
+
+§6m established that 13 of the 22 queries have no answer in the corpus, because the texts
+index disease by Ayurvedic cause and the queries index by lesion appearance. The set is
+therefore testing the system almost exclusively on the one thing this corpus cannot do.
+
+16 candidate queries drafted across the subject areas the treatises **do** cover: insect
+and pest damage, seed treatment, soil suitability and enrichment, liquid manure, sowing
+season, rain signs, irrigation, well-water divining, planting and transplanting, physical
+injury, unproductiveness, grain storage.
+
+**Method, stated because it is the part that can go wrong.** The candidates were written
+from the **domain** — what a farmer would plausibly ask — **not** by reading the corpus and
+picking passages. Choosing queries to match text we had already read would make the
+evaluation circular: we would be measuring retrieval on passages selected for matching.
+Labels are then assigned *from* measurement, never before it: `check_coverage.py` scores
+each candidate with the pipeline's own cross-encoder and `merge_new_queries.py` writes the
+label using the §6m thresholds (≥0.35 strong, 0.15–0.35 marginal, <0.15 none).
+
+**Candidates scoring "none" are kept, not deleted.** Deleting them would bias the set
+toward whatever the corpus happens to contain and inflate every number afterwards. A query
+set built only from what the corpus can answer is not an evaluation.
+
+`check_coverage.py` now accepts any query file and tags its outputs, so a candidate run
+cannot overwrite the silver-set run.
+
+### Results
+
+_Pending the runs below; this section will be completed with the measured tiers and the
+Phase 11 A/B numbers._
+
+**Run order (each step gated on the previous):**
+1. `python scripts/build_corpus.py` with `IKS_EMBED_DEVICE=cpu` — rebuild with unique labels (~74 min, no API)
+2. `python scripts/verify_corpus.py` — must print PASS before continuing
+3. `python scripts/check_coverage.py data/eval/new_queries_draft_2026-09-26.json newq`
+4. `python scripts/merge_new_queries.py` then `--apply`
+5. `python scripts/push_corpus_chunks.py` — push the final 233 chunks to HF
+6. Phase 11 as **A** (NITI-scope queries alone) and **B** (whole set)
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.

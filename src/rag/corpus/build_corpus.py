@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 import yaml
 
 from src.rag.corpus.chapter_split import locate_chapters
-from src.rag.corpus.chunking import Chunk, chunk_chapter
+from src.rag.corpus.chunking import Chunk, chunk_chapter, uniquify_labels
 from src.rag.corpus.cleaning import clean_text
 from src.rag.corpus.embed import collection_count, embed_chunks
 from src.rag.corpus.ocr import ocr_pdf
@@ -264,6 +264,8 @@ def build_corpus() -> dict[str, Any]:
                     "skipped": "awaiting external OCR",
                 })
                 continue
+            # A citation must name exactly one passage (6n).
+            chunks = uniquify_labels(chunks)
             jsonl_path = _write_chunks_jsonl(book_id, chunks)
             n_embedded = embed_chunks(chunks)
             total_chunks_embedded += n_embedded
@@ -288,6 +290,8 @@ def build_corpus() -> dict[str, Any]:
         else:
             chunks = _chunks_for_full_book(book, cleaned_pages)
 
+        # A citation must name exactly one passage (6n).
+        chunks = uniquify_labels(chunks)
         jsonl_path = _write_chunks_jsonl(book_id, chunks)
         n_embedded = embed_chunks(chunks)
         total_chunks_embedded += n_embedded
