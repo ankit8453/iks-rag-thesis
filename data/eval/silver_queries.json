@@ -12,7 +12,8 @@
     "created": "2026-06-28",
     "coverage_relabel_2026_09_15": "expect_answerable was originally true for all 22 non-negative queries — an ASSUMPTION, never verified against the corpus. Coverage check (§6m, scripts/check_coverage.py) scored every query with the pipeline's own cross-encoder: 4 strong (>=0.35), 5 marginal (0.15-0.35), 13 no match (<0.15). The 13 are now expect_answerable=false with the score recorded. Over-refusal must be reported on the answerable subset; the original file is preserved as silver_queries.pre_coverage.json. This is a finding, not a patch: it quantifies the gap between classical IKS aetiology and modern lesion-based disease labels.",
     "extension_2026_09_26": "Extended with 16 domain-derived queries covering pest damage, soil, seed treatment, season, water, planting and physical injury — the subject areas these treatises actually cover. The original 22 queries were almost entirely modern fungal leaf diseases, which §6m showed the texts cannot address, so the evaluation was measuring the system against unanswerable questions. Candidates were written from the domain WITHOUT consulting the corpus (to avoid circularity), then labelled from measured cross-encoder scores: 8 strong, 7 marginal, 1 no-coverage. Queries scoring 'none' were kept as honest negatives, not deleted.",
-    "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline."
+    "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline.",
+    "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting."
   },
   "queries": [
     {
@@ -31,7 +32,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1039). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "dark rough corky patches spreading over the leaves of an apple tree."
     },
     {
       "id": "q02",
@@ -45,7 +47,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.2239,
-      "coverage_tier": "marginal"
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves with orange-to-brown powdery pustules on apple."
     },
     {
       "id": "q03",
@@ -63,7 +66,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0828). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves with orange-to-brown powdery pustules on corn."
     },
     {
       "id": "q04",
@@ -77,7 +81,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.1669,
-      "coverage_tier": "marginal"
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves drying and withering on a corn tree."
     },
     {
       "id": "q05",
@@ -95,7 +100,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1175). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale centres spreading over the leaves of a corn plant."
     },
     {
       "id": "q06",
@@ -113,7 +119,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0765). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves with dark brown patches spreading until they dry and wither on a potato."
     },
     {
       "id": "q07",
@@ -132,7 +139,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1493). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "brown patches spreading over the leaves of a potato."
     },
     {
       "id": "q08",
@@ -150,7 +158,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0669). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant."
     },
     {
       "id": "q09",
@@ -169,7 +178,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0617). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves drying and withering on a tomato plant."
     },
     {
       "id": "q10",
@@ -187,7 +197,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1043). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
     },
     {
       "id": "q11",
@@ -205,7 +216,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1361). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
     },
     {
       "id": "q12",
@@ -223,7 +235,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0983). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "fuzzy discoloured patches spreading over the surface of the leaves of a tomato."
     },
     {
       "id": "q13",
@@ -237,7 +250,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.2706,
-      "coverage_tier": "marginal"
+      "coverage_tier": "marginal",
+      "generated_query": "leaves turning mottled yellow-green with curling and gradual withering on a tomato plant."
     },
     {
       "id": "q14",
@@ -251,7 +265,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.5755,
-      "coverage_tier": "strong"
+      "coverage_tier": "strong",
+      "generated_query": "leaves turning yellow with excessive paleness and gradual shedding on a tomato plant."
     },
     {
       "id": "q15",
@@ -281,7 +296,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.2258,
-      "coverage_tier": "marginal"
+      "coverage_tier": "marginal",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a bell pepper."
     },
     {
       "id": "q17",
@@ -295,7 +311,8 @@
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.2927,
-      "coverage_tier": "marginal"
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves covered in a white powdery coating on a squash plant."
     },
     {
       "id": "q18",
@@ -313,7 +330,8 @@
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1218). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
       "label_provisional": true,
-      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o."
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "dark sunken decaying areas spreading over the leaves of a grape."
     },
     {
       "id": "q19",

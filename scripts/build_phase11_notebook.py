@@ -122,10 +122,31 @@ cpu_embedder = SentenceTransformer("BAAI/bge-large-en-v1.5", device="cpu")
 cpu_reranker = CrossEncoder("BAAI/bge-reranker-base", device="cpu")
 SHARED = {"embedder": cpu_embedder, "reranker": cpu_reranker}
 
-cases = load_query_set()
+# QUERY_SOURCE decides what this run measures, and the two are not interchangeable.
+#
+#   "generated" - the query Strategy B actually writes from the disease label. This is
+#                 the DEPLOYED SYSTEM: photo -> label -> bridge -> retrieval. Nothing in
+#                 the real pipeline ever sends a hand-written query, so this is the only
+#                 setting that describes something a farmer would experience.
+#   "authored"  - the human-written wording. A CEILING, not a measurement: what a
+#                 well-phrased query could have achieved. Kept because every number
+#                 before 2026-09-26 was measured this way.
+#
+# 6o measured the gap: the bridge scored 3.8x worse than the ceiling before its prompt
+# was fixed, and level with it after. Run BOTH and report them separately - the disease
+# queries exercise the whole pipeline, the 23 domain queries only corpus + retrieval.
+QUERY_SOURCE = "generated"
+
+cases = load_query_set(query_source=QUERY_SOURCE)
+n_swapped = sum(1 for c in cases if c.generated_query and c.query == c.generated_query)
+print(f"query source: {QUERY_SOURCE}  ({n_swapped} of {len(cases)} using the bridge's "
+      f"real wording)")
 print(f"queries: {len(cases)} "
       f"({len(answerable_cases(cases))} answerable, "
       f"{len(cases) - len(answerable_cases(cases))} deliberate negatives)")
+disease = [c for c in cases if c.disease]
+print(f"  {len(disease)} disease-label queries (whole pipeline) | "
+      f"{len(cases) - len(disease)} domain queries (corpus + retrieval only)")
 
 K = 5
 retrieval_only = run_full_evaluation(cases, collection=collection, k=K,
