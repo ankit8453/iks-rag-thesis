@@ -162,3 +162,18 @@ def test_prompt_still_carries_the_original_symptom_first_instruction() -> None:
     p = _prompt(_ctx())
     assert "LEAD WITH THE SYMPTOM" in p
     assert "Potato leaf late blight" in p
+
+
+def test_symptom_family_phrases_obey_the_word_list() -> None:
+    """Rule 3 hands Llama a ready-made phrase per disease family. Those phrases must
+    not use the vocabulary the WORD CHOICE section bans, or the prompt contradicts
+    itself — which is exactly what happened: rule 3 said blight -> "spreading brown
+    NECROTIC patches" while WORD CHOICE banned "necrotic", and 5 of 17 generated
+    queries duly kept the banned word."""
+    from src.integration.strategy_llm_mediated import _SYSTEM_INSTRUCTIONS as s
+    rule3 = s[s.index("3. The query MUST"):s.index("4. Phrase the symptoms")].lower()
+    for word in ("necrotic", "lesion", "pathogen", "chlorosis", "fungal", "bacterial"):
+        assert word not in rule3, (
+            f"rule 3 supplies '{word}', which WORD CHOICE forbids; the prompt would be "
+            "telling Llama to use a word it also tells it to avoid"
+        )
