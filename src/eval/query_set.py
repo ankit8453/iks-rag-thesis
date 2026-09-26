@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
 from src.eval.retrieval_metrics import (
     hit_at_k,
@@ -58,6 +59,15 @@ class QueryCase:
     #: 16/16 candidates strong while several top-1 passages were plainly off-topic
     #: (EXPERIMENT_LOG.md 6n). Empty for the original queries, which predate grading.
     human_grade: str = ""
+    #: The query Strategy B (Llama) actually generates from this disease label. The
+    #: deployed system never sends the authored ``query`` for a disease case - it only
+    #: ever sends what the bridge writes - so measuring the real system means using this.
+    #: Empty for the domain queries and the negative controls, which the vision pipeline
+    #: cannot produce. See EXPERIMENT_LOG.md 6o.
+    generated_query: str = ""
+    #: The human-written wording, kept even when ``query`` has been swapped for the
+    #: generated one, so a run can report both without reloading the file.
+    authored_query: str = ""
     #: Top-1 cross-encoder score from the §6m coverage check (evidence for the label).
     top1_rerank_score: float | None = None
 
@@ -67,13 +77,54 @@ class QueryCase:
         return bool(self.relevant_chunk_ids)
 
 
-def load_query_set(path: Path | str | None = None) -> list[QueryCase]:
-    """Read the query set JSON into :class:`QueryCase` objects."""
+#: Which wording each case is evaluated with.
+#:
+#: ``"authored"`` uses the query a human wrote. ``"generated"`` substitutes the query
+#: Strategy B actually produces for that disease label, where one exists.
+#:
+#: This distinction matters more than it looks. The deployed pipeline is
+#: photo -> disease label -> Strategy B -> retrieval; nothing in it ever emits an
+#: authored query. So every retrieval number measured on authored wording describes a
+#: system that does not exist. §6o measured the difference and found the bridge scoring
+#: 3.8x worse than the authored ceiling before its prompt was fixed, and level with it
+#: after. ``"generated"`` is therefore the honest setting for any claim about the real
+#: system; ``"authored"`` remains useful as a ceiling — what a well-worded query could
+#: have achieved — and stays the default so existing results remain reproducible.
+QuerySource = Literal["authored", "generated"]
+
+
+def load_query_set(
+    path: Path | str | None = None,
+    *,
+    query_source: QuerySource = "authored",
+) -> list[QueryCase]:
+    """Read the query set JSON into :class:`QueryCase` objects.
+
+    Parameters
+    ----------
+    path
+        Query-set JSON. Defaults to the silver set.
+    query_source
+        ``"authored"`` (default) evaluates the human-written wording.
+        ``"generated"`` swaps in Strategy B's real output for every case that has one —
+        the 17 disease queries. The 23 domain queries and the 2 negative controls have no
+        generated form, because the vision pipeline cannot produce them, so they keep
+        their authored wording under either setting. ``QueryCase.query`` always holds the
+        wording actually used, so downstream code needs no changes.
+    """
+    if query_source not in ("authored", "generated"):
+        raise ValueError(
+            f"query_source must be 'authored' or 'generated', got {query_source!r}"
+        )
     p = Path(path) if path is not None else DEFAULT_QUERY_SET
     payload = json.loads(p.read_text(encoding="utf-8"))
     return [
         QueryCase(
-            id=q["id"], query=q["query"], crop=q.get("crop", ""),
+            id=q["id"],
+            query=(q.get("generated_query") or q["query"]
+                   if query_source == "generated" else q["query"]),
+            authored_query=q["query"],
+            crop=q.get("crop", ""),
             disease=q.get("disease"),
             relevant_books=list(q.get("relevant_books") or []),
             relevant_chunk_ids=list(q.get("relevant_chunk_ids") or []),
@@ -81,6 +132,7 @@ def load_query_set(path: Path | str | None = None) -> list[QueryCase]:
             note=q.get("note", ""),
             unanswerable_kind=q.get("unanswerable_kind", ""),
             human_grade=q.get("human_grade", ""),
+            generated_query=q.get("generated_query", ""),
             top1_rerank_score=q.get("top1_rerank_score"),
         )
         for q in payload["queries"]
@@ -170,6 +222,7 @@ __all__ = [
     "QueryCase",
     "aggregate",
     "answerable_cases",
+    "QuerySource",
     "load_query_set",
     "score_case",
 ]

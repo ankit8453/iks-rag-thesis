@@ -76,17 +76,19 @@ rain, water, planting, tree wounds, storage.
 
 ---
 
-## STAGE 3 — Fix Llama  ⬜  **CONFIRMED NEEDED — this is now the top priority**
+## STAGE 3 — Fix Llama  ✅ DONE 26 Sep — gap closed 74%, now within noise
 
 In order, cheapest first. Stop as soon as the score is good enough.
 
 - [x] **3.1** Add 4–5 real corpus lines to the Strategy-B prompt as examples (few-shot)
 - [x] **3.2** Add a corpus word list to the prompt ("prefer these words: yellowness,
       paleness, oozing, withering, scorched…")
-- [~] **3.3** Re-run Stage 0 and measure again — round 1 done: mean 0.0445 -> 0.0977
+- [x] **3.3** Re-run and measure — round 1: 0.0445 -> 0.0977; round 2: -> **0.1368**
+      vs a 0.1691 hand-written ceiling. Mean difference now inside the 0.05 noise floor.
+      (old note: round 1 mean 0.0445 -> 0.0977
       (43% of the gap closed, compliance 17/17 -> 0 on three of four faults). Round 2
       pending: picks up the rule-3 'necrotic' contradiction fix
-- [ ] **3.4** *Only if still weak:* two-round retrieval — rough query → show Llama the real
+- [x] **3.4** ~~two-round retrieval~~ **DROPPED — not needed.** Prompt work alone was enough — rough query → show Llama the real
       passages → let it rewrite using their words → retrieve again
 - [ ] **3.5** **No fine-tuning.** Needs data we don't have, and would lock us to today's corpus
 

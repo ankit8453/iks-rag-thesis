@@ -128,3 +128,54 @@ def test_aggregate_withholds_recall_unless_all_rows_have_it() -> None:
 
 def test_aggregate_handles_no_rows() -> None:
     assert aggregate([])["n"] == 0
+
+
+# --------------------------------------------------------------------------- #
+# query_source: authored wording vs what the bridge really generates (§6o).
+#
+# The deployed pipeline is photo -> disease label -> Strategy B -> retrieval. It never
+# emits an authored query, so every number measured on authored wording describes a
+# system that does not exist. §6o measured the difference: the bridge scored 3.8x worse
+# than the authored ceiling before its prompt was fixed, and level with it after.
+# --------------------------------------------------------------------------- #
+
+
+def test_generated_source_swaps_in_the_bridges_real_wording() -> None:
+    authored = {c.id: c for c in load_query_set()}
+    generated = {c.id: c for c in load_query_set(query_source="generated")}
+    swapped = [i for i in authored if authored[i].query != generated[i].query]
+    assert swapped, "no case was swapped; the generated_query field is missing"
+    for i in swapped:
+        assert generated[i].query == authored[i].generated_query
+
+
+def test_cases_without_a_generated_form_keep_their_authored_wording() -> None:
+    """Domain queries and the negative controls cannot come from the vision pipeline,
+    so there is nothing to substitute and they must pass through untouched."""
+    for c in load_query_set(query_source="generated"):
+        if not c.generated_query:
+            assert c.query == c.authored_query
+
+
+def test_authored_wording_survives_the_swap() -> None:
+    """Both must be reportable from one load: the generated wording is the system, the
+    authored wording is the ceiling it is measured against."""
+    for c in load_query_set(query_source="generated"):
+        assert c.authored_query, f"{c.id} lost its authored wording"
+
+
+def test_authored_is_the_default_so_old_results_stay_reproducible() -> None:
+    assert [c.query for c in load_query_set()] == \
+           [c.query for c in load_query_set(query_source="authored")]
+
+
+def test_unknown_query_source_is_rejected() -> None:
+    with pytest.raises(ValueError, match="authored"):
+        load_query_set(query_source="llama")
+
+
+def test_every_disease_query_has_a_generated_form() -> None:
+    """A disease case with no recorded bridge output would silently fall back to
+    authored wording and quietly inflate a 'real system' run."""
+    missing = [c.id for c in load_query_set() if c.disease and not c.generated_query]
+    assert not missing, f"disease queries with no recorded Strategy-B output: {missing}"
