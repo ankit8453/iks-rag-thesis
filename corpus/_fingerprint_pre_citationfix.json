@@ -1,0 +1,13 @@
+{
+  "n_chunks": 233,
+  "per_book": {
+    "brihat_samhita": 46,
+    "kashyapiyakrishisukti": 39,
+    "krishi_parashara": 13,
+    "niti_natural_farming": 68,
+    "upavanavinoda": 15,
+    "vrikshayurveda": 52
+  },
+  "text_set_sha256": "c1c2edd208c76476c5c753e993bdf6b27d19aeb579d709aadb03fd306662fdd6",
+  "total_chars": 599263
+}
