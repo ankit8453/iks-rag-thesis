@@ -1,0 +1,492 @@
+{
+  "n_chunks": 327,
+  "per_book": {
+    "brihat_samhita": 140,
+    "kashyapiyakrishisukti": 39,
+    "krishi_parashara": 13,
+    "niti_natural_farming": 68,
+    "upavanavinoda": 15,
+    "vrikshayurveda": 52
+  },
+  "slots": {
+    "vrikshayurveda": 56,
+    "brihat_samhita": 18,
+    "niti_natural_farming": 25,
+    "kashyapiyakrishisukti": 6,
+    "upavanavinoda": 4,
+    "krishi_parashara": 1
+  },
+  "total_slots": 110,
+  "modern_slots": 25,
+  "queries_with_modern": 17,
+  "classical_displaced": 28,
+  "verdict": "CONFIRMED - the modern tier is taking top-5 slots and pushing classical passages out",
+  "per_query": [
+    {
+      "id": "q01",
+      "disease": "Apple Scab Leaf",
+      "query": "dark rough corky lesions and scabby patches spreading over the leaves ",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "niti_natural_farming",
+        "brihat_samhita"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "upavanavinoda",
+          "verse": "189-207",
+          "text": "189. The trees which get at dotage through repeated production of fruits and flowers, when bathed (treated) in"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "disease": "Apple rust leaf",
+      "query": "orange to brown powdery pustules raised on the surface of tree leaves",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 0,
+      "classical_pushed_out": []
+    },
+    {
+      "id": "q03",
+      "disease": "Corn rust leaf",
+      "query": "rust-coloured powdery eruptions scattered along the leaf blade",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "brihat_samhita"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.2",
+          "text": "The text abounds with references to the various methods for raising plants, e.g., from seed, from stalks, from"
+        },
+        {
+          "book": "upavanavinoda",
+          "verse": "82-103",
+          "text": "82. And after writing down the (above) formula on the leaf and reciting it one should burry it in the ground u"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "disease": "Corn leaf blight",
+      "query": "long brown withering patches spreading and drying the leaves",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "niti_natural_farming"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.1",
+          "text": "Chairman, Asian Agri-History Foundation, 47 ICRISAT Colony-I, Brig. Sayeed Road, Secunderabad 500 009, Andhra "
+        },
+        {
+          "book": "vrikshayurveda",
+          "verse": "207-222",
+          "text": "207. Trees which are dried up due to heat caused by fire are cured when a mixture of sugar, sesame, and milk i"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "disease": "Corn Gray leaf spot",
+      "query": "greyish rectangular dead spots forming between the veins of the leaf",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "brihat_samhita",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 0,
+      "classical_pushed_out": []
+    },
+    {
+      "id": "q06",
+      "disease": "Potato leaf early blight",
+      "query": "dark brown spots with concentric rings appearing first on the older lo",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "brihat_samhita"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "173-189",
+          "text": "173. If the trees are exposed to scorching heat, the roots are eaten away by insects and result in drying, yel"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_16",
+          "text": "The multi-coloured rays of the Sun, being dispersed by the wind in a cloudy sky, are seen in the form of a bow"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "disease": "Potato leaf late blight",
+      "query": "rapidly spreading water-soaked blackening patches rotting the leaves i",
+      "top5_books_full": [
+        "brihat_samhita",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "110-125",
+          "text": "110. In marshy land, watering should be restricted to only once in five days. In ordinary soil, watering shoul"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "disease": "Tomato Early blight leaf",
+      "query": "ringed brown lesions enlarging on the leaves and causing them to fall",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "niti_natural_farming",
+        "kashyapiyakrishisukti"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "brihat_samhita",
+          "verse": "section_11",
+          "text": "The meteors are nothing but the forms of those who fall down after having enjoyed the fruits of their meritori"
+        },
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.1",
+          "text": "Chairman, Asian Agri-History Foundation, 47 ICRISAT Colony-I, Brig. Sayeed Road, Secunderabad 500 009, Andhra "
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "disease": "Tomato leaf late blight",
+      "query": "dark decaying blotches with pale mould at the leaf margins during wet ",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "niti_natural_farming"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "brihat_samhita",
+          "verse": "section_1",
+          "text": "Chapter XXVIII\u2014Signs of Immediate Rain\n\nIf, at a query regarding rain, the Moon be posited in the ascendant wh"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "disease": "Tomato Septoria leaf spot",
+      "query": "numerous small dark spots with pale centres covering the leaves",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "upavanavinoda",
+          "verse": "189-207",
+          "text": "189. The trees which get at dotage through repeated production of fruits and flowers, when bathed (treated) in"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_12",
+          "text": "A rock that is full of red or variegated spots that is pale white or has the colour of ashes, camels, donkeys,"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "disease": "Tomato leaf bacterial spot",
+      "query": "small greasy dark specks on leaves that later dry and tear",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "kashyapiyakrishisukti",
+          "verse": "section_30",
+          "text": "In that field, multi-mouthed basins (\u0101lav\u0101la) should be prepared, and in these active basins, one should plant"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_2",
+          "text": "the meaning intended by the author, as far as I can judge. The author must have meant that in case a good tree"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "disease": "Tomato mold leaf",
+      "query": "fuzzy discoloured mould growing on the underside of the leaves",
+      "top5_books_full": [
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 0,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.2",
+          "text": "The text abounds with references to the various methods for raising plants, e.g., from seed, from stalks, from"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "disease": "Tomato leaf mosaic virus",
+      "query": "mottled light and dark green patches with puckering and curling of the",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "kashyapiyakrishisukti",
+          "verse": "section_39",
+          "text": "Using the flours of *godh\u016bma* (wheat), *m\u0101\u1e63a* (black gram), *mudga* (green gram), and *ca\u1e47aka* (chickpea), var"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_2",
+          "text": "The foetuses of clouds formed in the bright fortnight of the M\u0101rga\u015b\u012br\u1e63a and Pau\u1e63a months are of little consequ"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "disease": "Tomato leaf yellow virus",
+      "query": "leaves turning yellow, cupping upward and the plant remaining stunted",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.2",
+          "text": "The text abounds with references to the various methods for raising plants, e.g., from seed, from stalks, from"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_7",
+          "text": "[For an explanation of the Kara\u1e47as see the author's 'Fundamentals of Astrology' p. 185, also C. 1-2 infra. The"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "disease": "(unlabelled)",
+      "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "upavanavinoda",
+        "upavanavinoda",
+        "upavanavinoda"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.1",
+          "text": "Chairman, Asian Agri-History Foundation, 47 ICRISAT Colony-I, Brig. Sayeed Road, Secunderabad 500 009, Andhra "
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "disease": "Bell_pepper leaf spot",
+      "query": "dark sunken spots scattered across the leaves that later dry out",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "niti_natural_farming"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "brihat_samhita",
+          "verse": "section_4",
+          "text": "Rays that are greyish, tawny, russet, variegated, madder-hued, green and spotted, and stretch all over the sky"
+        },
+        {
+          "book": "brihat_samhita",
+          "verse": "section_1",
+          "text": "Chapter XXVII\u2014The Wind Circle\n\n[According to Utpala this chapter is spurious, as it is patently redundant. But"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "disease": "Squash Powdery mildew leaf",
+      "query": "white powdery coating spreading over the surface of the leaves",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "brihat_samhita",
+          "verse": "section_1",
+          "text": "Chapter XXVII\u2014The Wind Circle\n\n[According to Utpala this chapter is spurious, as it is patently redundant. But"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "disease": "grape leaf black rot",
+      "query": "dark sunken decaying areas on leaves and shrivelling of the fruit on a",
+      "top5_books_full": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "kashyapiyakrishisukti",
+          "verse": "section_29",
+          "text": "Therefore, the cultivation of vegetables and other food crops should be specially undertaken by farmers in vil"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "disease": "(unlabelled)",
+      "query": "a tree that is weak and poorly nourished with pale drooping foliage in",
+      "top5_books_full": [
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "upavanavinoda"
+      ],
+      "modern_in_top5": 0,
+      "classical_pushed_out": []
+    },
+    {
+      "id": "q20",
+      "disease": "(unlabelled)",
+      "query": "insects boring into the trunk and eating the leaves of a tree",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "modern_in_top5": 1,
+      "classical_pushed_out": [
+        {
+          "book": "upavanavinoda",
+          "verse": "189-207",
+          "text": "189. The trees which get at dotage through repeated production of fruits and flowers, when bathed (treated) in"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "disease": "(unlabelled)",
+      "query": "preparing and enriching the soil before planting a young sapling",
+      "top5_books_full": [
+        "niti_natural_farming",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "niti_natural_farming",
+        "kashyapiyakrishisukti"
+      ],
+      "modern_in_top5": 2,
+      "classical_pushed_out": [
+        {
+          "book": "kashyapiyakrishisukti",
+          "verse": "section_29",
+          "text": "Therefore, the cultivation of vegetables and other food crops should be specially undertaken by farmers in vil"
+        },
+        {
+          "book": "vrikshayurveda",
+          "verse": "1.2",
+          "text": "The text abounds with references to the various methods for raising plants, e.g., from seed, from stalks, from"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "disease": "(unlabelled)",
+      "query": "signs that foretell the coming of rain and the right time for sowing",
+      "top5_books_full": [
+        "krishi_parashara",
+        "brihat_samhita",
+        "brihat_samhita",
+        "brihat_samhita",
+        "brihat_samhita"
+      ],
+      "modern_in_top5": 0,
+      "classical_pushed_out": []
+    }
+  ]
+}

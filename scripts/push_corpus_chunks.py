@@ -44,17 +44,18 @@ _LOGGER = get_logger(__name__)
 EXPECTED_HF_USERNAME = "ankit-iiitdmj"
 TARGET_REPO = f"{EXPECTED_HF_USERNAME}/iks-corpus-chunks"
 
-# Sources to merge into the single uploaded dataset, in this order. New
-# books from Phase 3's pending list (Krishi Parashara, Upavanavinoda,
-# Kashyapiyakrishisukti, sixth-text-TBD) will append to this list as
-# their JSONL files land in ``corpus/chunks/``.
-BOOK_FILES: dict[str, str] = {
-    "vrikshayurveda": "vrikshayurveda.jsonl",
-    "brihat_samhita": "brihat_samhita.jsonl",
-    "krishi_parashara": "krishi_parashara.jsonl",
-    "upavanavinoda": "upavanavinoda.jsonl",
-    "kashyapiyakrishisukti": "kashyapiyakrishisukti.jsonl",
-}
+# Sources to merge into the single uploaded dataset.
+#
+# Discovered from ``corpus/chunks/*.jsonl`` rather than hard-coded: a hard-coded
+# list silently dropped a book once (Kashyapiya was built by the pipeline but
+# missing here, so it never reached the HF dataset the evaluation reads). Whatever
+# ``build_corpus`` produced is what gets pushed. Order is stable (alphabetical) so
+# re-runs are reproducible.
+def _discover_book_files() -> dict[str, str]:
+    return {p.stem: p.name for p in sorted(CORPUS_CHUNKS_DIR.glob("*.jsonl"))}
+
+
+BOOK_FILES: dict[str, str] = _discover_book_files()
 
 REQUIRED_FIELDS: tuple[str, ...] = (
     "source_text",

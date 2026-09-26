@@ -89,3 +89,76 @@ def test_generator_scopes_refusal_so_missing_crop_is_not_a_refusal() -> None:
 def test_generator_requires_flagging_general_passages() -> None:
     """When leaning on a general passage, the answer must say so honestly."""
     assert "generally" in SYSTEM_PROMPT_V17
+
+
+# ------------------------------------------------------------------ #
+# Bridge-quality rules added after §6o measured what Strategy B really writes.
+#
+# Stage 0 scored Llama's actual output against hand-written queries and lost
+# 14-0 (mean top-1 0.0445 vs 0.1691, 16 of 17 below the 0.15 floor). Every
+# generated query broke the prompt the same three ways: it opened with
+# "In loam soil with moderate moisture", it ended by asking what was
+# "described in the classical Sanskrit treatises", and it kept modern
+# pathology words. These tests pin the instructions that address each fault,
+# so the fix cannot be silently lost in a later edit.
+# ------------------------------------------------------------------ #
+
+
+def test_prompt_requires_a_description_not_a_question() -> None:
+    """Llama asked the texts about themselves; the corpus is written in statements."""
+    p = _prompt(_ctx())
+    assert "NOT a question" in p
+    assert "Never end with a question mark" in p
+
+
+def test_prompt_forbids_mentioning_the_texts() -> None:
+    """'...described in the classical Sanskrit treatises?' matched nothing: the
+    passages describe the plant, they do not discuss themselves."""
+    p = _prompt(_ctx())
+    assert "Never mention the texts" in p
+    assert "they do not discuss themselves" in p
+
+
+def test_prompt_forbids_opening_with_soil_or_crop() -> None:
+    """All 17 generated queries opened with soil, burying the only words that
+    could match a passage."""
+    p = _prompt(_ctx())
+    assert "Do NOT open with the soil" in p
+    assert "first words must be the observed condition" in p
+
+
+def test_prompt_keeps_soil_available_but_conditional() -> None:
+    """Soil is NOT removed — the corpus does link disorder to soil, and the soil
+    model is half the multimodal input. It is demoted, not dropped."""
+    p = _prompt(_ctx())
+    assert "SOIL IS CONDITIONAL, AND NEVER FIRST" in p
+    assert "aridity of the soil" in p          # why soil can legitimately belong
+    assert "AFTER the symptom" in p
+    # the soil reading itself must still reach the model
+    assert "Alluvial_Soil" in p and "moderate" in p and "mixed" in p
+
+
+def test_prompt_lists_corpus_vocabulary_to_prefer_and_avoid() -> None:
+    p = _prompt(_ctx())
+    assert "WORD CHOICE" in p
+    for word in ("yellowness", "paleness", "withering", "oozing"):
+        assert word in p, f"missing preferred corpus word: {word}"
+    for word in ("necrotic", "lesion", "pathogen", "chlorosis"):
+        assert word in p, f"missing banned modern word: {word}"
+
+
+def test_prompt_shows_worked_examples_including_the_observed_failure() -> None:
+    """Few-shot beats instruction alone: the prompt already SAID lead with the
+    symptom and Llama ignored it, so show it the real failing query."""
+    p = _prompt(_ctx())
+    assert "EXAMPLES." in p
+    assert p.count("GOOD:") >= 3
+    assert "In loam soil with moderate moisture" in p     # the actual §6o failure
+    assert "why it is bad" in p
+
+
+def test_prompt_still_carries_the_original_symptom_first_instruction() -> None:
+    """The new rules extend the old ones; they must not have replaced them."""
+    p = _prompt(_ctx())
+    assert "LEAD WITH THE SYMPTOM" in p
+    assert "Potato leaf late blight" in p

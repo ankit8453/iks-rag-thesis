@@ -5,9 +5,11 @@ from __future__ import annotations
 import pytest
 
 from src.rag.corpus.chunking import (
+    Chunk,
     TARGET_MAX_TOKENS,
     TARGET_MIN_TOKENS,
     chunk_chapter,
+    uniquify_labels,
 )
 
 
@@ -107,3 +109,79 @@ def test_no_chunk_text_is_empty() -> None:
     chunks = chunk_chapter(text, _make_meta())
     for ch in chunks:
         assert ch.text.strip() != ""
+
+
+# --------------------------------------------------------------------------- #
+# Citation uniqueness (EXPERIMENT_LOG.md 6n).
+#
+# 17 Vrikshayurveda chunks shared only 4 labels, so a citation such as
+# `[Vrikshayurveda, ch.full, v.1.2]` pointed at five different passages and the
+# valid-citation rate could not be verified. Cause: numbered lists in the front
+# matter are read as verse markers, and each oversized one sub-splits into
+# `1.1, 1.2, ...` with the sub-index restarting every time.
+# --------------------------------------------------------------------------- #
+
+
+def _chunk(verse: str, text: str, *, chapter: str = "full", book: str = "b") -> Chunk:
+    return Chunk(
+        chunk_id=f"id-{verse}-{text[:4]}", book_id=book, source_text="S", edition="E",
+        chapter=chapter, verse_or_section=verse, topic_tags=[],
+        original_language="Sanskrit", translator="T", text=text, metadata_extras={},
+    )
+
+
+def test_uniquify_labels_suffixes_only_colliding_labels() -> None:
+    chunks = [
+        _chunk("1.1", "alpha"),
+        _chunk("1.1", "beta"),
+        _chunk("1.1", "gamma"),
+        _chunk("18-37", "untouched"),
+    ]
+    out = uniquify_labels(chunks)
+    assert [c.verse_or_section for c in out] == ["1.1a", "1.1b", "1.1c", "18-37"]
+
+
+def test_uniquify_labels_makes_every_citation_unique() -> None:
+    chunks = [_chunk("1.1", f"t{i}") for i in range(5)] + \
+             [_chunk("1.2", f"u{i}") for i in range(3)]
+    out = uniquify_labels(chunks)
+    labels = [(c.chapter, c.verse_or_section) for c in out]
+    assert len(set(labels)) == len(labels)
+
+
+def test_uniquify_labels_never_changes_text() -> None:
+    chunks = [_chunk("1.1", "alpha"), _chunk("1.1", "beta"), _chunk("9", "solo")]
+    out = uniquify_labels(chunks)
+    assert [c.text for c in out] == [c.text for c in chunks]
+
+
+def test_uniquify_labels_recomputes_chunk_id_for_renamed_chunks() -> None:
+    """chunk_id hashes the label, so a renamed chunk must get a new id -- and an
+    untouched chunk must keep its old one."""
+    chunks = [_chunk("1.1", "alpha"), _chunk("1.1", "beta"), _chunk("9", "solo")]
+    out = uniquify_labels(chunks)
+    assert out[0].chunk_id != chunks[0].chunk_id
+    assert out[1].chunk_id != chunks[1].chunk_id
+    assert out[0].chunk_id != out[1].chunk_id
+    assert out[2].chunk_id == chunks[2].chunk_id     # unchanged label -> unchanged id
+
+
+def test_uniquify_labels_is_a_no_op_when_labels_are_already_unique() -> None:
+    chunks = [_chunk("1-17", "a"), _chunk("18-37", "b"), _chunk("38-58", "c")]
+    out = uniquify_labels(chunks)
+    assert out == chunks
+
+
+def test_uniquify_labels_keeps_same_label_in_different_chapters_apart() -> None:
+    """Scoped books repeat `section_1` per chapter; those are already unique
+    because the chapter differs, so they must not be suffixed."""
+    chunks = [_chunk("section_1", "a", chapter="21"), _chunk("section_1", "b", chapter="24")]
+    out = uniquify_labels(chunks)
+    assert [c.verse_or_section for c in out] == ["section_1", "section_1"]
+
+
+def test_uniquify_labels_handles_more_than_26_collisions() -> None:
+    out = uniquify_labels([_chunk("1.1", f"t{i}") for i in range(28)])
+    tail = [c.verse_or_section for c in out][-3:]
+    assert tail == ["1.1z", "1.1aa", "1.1ab"]
+    assert len({c.verse_or_section for c in out}) == 28

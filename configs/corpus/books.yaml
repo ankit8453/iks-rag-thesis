@@ -106,6 +106,60 @@ books:
     text_source: corpus/ocr_external/kashyapiyakrishisukti.md
     note: "Sanskrit-only scan; each verse OCR'd + translated to English by Gemini Flash 3.6. Cultivation-focused (soil/water/seed/sowing); light on disease-treatment. text_source holds the English translation only (Sanskrit kept in sanskrit_ocr_demo/)."
     default_topic_tags: [soil_selection, water_management, seed_preservation, sowing, cultivation, grain]
+  # Majumdar's own English essay that opens the Upavanavinoda volume (book pp.1-33,
+  # PDF pp.9-42) -- "The Science of Arbori-Horticulture in Ancient India". Phase 3b
+  # deliberately skipped it as a "modern essay", but it is English prose that quotes
+  # and TRANSLATES further classical verses (e.g. water-divining by plant
+  # indicators), so it is usable content we already owned but never indexed.
+  #
+  # Registered SEPARATELY from ``upavanavinoda`` rather than appended to it: this is
+  # the 1935 editor's commentary, not Sarngadhara's text, and a citation must not
+  # imply otherwise. Hence ``source_tier: scholarly_commentary``.
+  - id: upavanavinoda_introduction
+    title: "Upavanavinoda - Introduction: The Science of Arbori-Horticulture in Ancient India"
+    author: Girija Prasanna Majumdar
+    translator: Girija Prasanna Majumdar
+    edition: "Indian Research Institute, Indian Positive Sciences Series No. 1, 1935"
+    original_language: English
+    pdf: data/corpus_pdfs/2015.282467.Upavana-Vinoda.pdf
+    status: ready_external
+    ocr_method: gemini_external
+    source_tier: scholarly_commentary
+    scope: pages
+    page_range: [9, 42]
+    text_source: corpus/ocr_external/upavanavinoda_introduction.md
+    exclude_note: "Introduction only (book pp.1-33 = PDF pp.9-42). The Sanskrit text (PDF 45-73), the translation (77-96, indexed as `upavanavinoda`), the Sanskrit appendix (99-121) and the plant list are not included here."
+    note: "Editor's scholarly essay, not the classical text itself -- tiered as scholarly_commentary. OCR'd at 150 DPI: this scan is ~690KB/page and 220 DPI made each Gemini call take minutes."
+    default_topic_tags: [arboriculture, plant_science, water_divination, soil, ancient_india]
+
+  # Modern IKS-derived practice (NOT a classical treatise). Tiered separately via
+  # ``source_tier`` so a citation always tells the reader whether the advice came
+  # from a classical text or from contemporary IKS-derived guidance, and the
+  # thesis's "grounded in classical texts" claim stays honest.
+  #
+  # Rationale: Phase 11 showed corpus COVERAGE is the limiter (~55% over-refusal on
+  # answerable queries) because the classical texts are thin on symptom -> remedy.
+  # This manual supplies that layer in structured form (Purpose / Ingredients /
+  # Preparation / Application) and is itself IKS-rooted (cow dung, cow urine, neem
+  # -- the kunapajala tradition). Clean text layer, so no OCR was needed.
+  # Advisory chapters only: 2, 4, 5, 6.1-6.2, 8 (see scripts/extract_niti_manual.py).
+  - id: niti_natural_farming
+    title: "Empowering Farmers: Natural Farming Training Toolkit and Best Practices Guide"
+    author: "Neelam Patel, Paremal Banafarr, Somnath Choudhary et al."
+    translator: ""
+    edition: "NITI Aayog, Government of India, February 2026, ISBN 978-81-991080-0-4"
+    original_language: English
+    pdf: newbooks/Training-Manual-English.pdf
+    status: ready_external
+    ocr_method: text_layer
+    source_tier: modern_iks
+    scope: pages
+    page_range: [36, 165]
+    text_source: corpus/ocr_external/niti_natural_farming.md
+    exclude_note: "Advisory chapters only. Ingested: Ch2 seed (36-43), Ch4 soil (60-65), Ch5 pest+disease (66-77), Ch6.1-6.2 bio-inputs (78-92), Ch8 key crops (112-165). Skipped: Ch1 theory, Ch3 water, Ch6.3-6.4 BRC infrastructure+schemes (93-103), Ch7 certification, Ch9 carbon credits, Ch10-11 frameworks/schemes."
+    note: "Modern government publication, not a classical treatise -- tiered as modern_iks. Sections are emitted one per block so formulations (Jeevamrit, Beejamrit, Neemastra, Brahmastra, Agniastra, Dashaparni) stay intact through chunking."
+    default_topic_tags: [pest_control, disease_management, bio_inputs, seed_treatment, soil_health, natural_farming]
+
   - id: text_six_tbd
     title: "TBD (sixth text)"
     status: pending

@@ -1,0 +1,865 @@
+{
+  "n_chunks": 233,
+  "n_queries": 22,
+  "distinct_chunks_in_top5": 35,
+  "distinct_rank1_chunks": 9,
+  "colliding_citation_labels": {
+    "vrikshayurveda, ch.full, v.1.1": 5,
+    "vrikshayurveda, ch.full, v.1.2": 5,
+    "vrikshayurveda, ch.full, v.1.3": 4,
+    "vrikshayurveda, ch.full, v.1.4": 3
+  },
+  "chunk_top5_counts": {
+    "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a": 18,
+    "826f66438f091b2dd401069fb8de9480c8db0251": 16,
+    "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1": 15,
+    "177254da661e297b7d8a4fc3df19afb66727576e": 14,
+    "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf": 6,
+    "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d": 4,
+    "968795d3723ae0640d7bcb69d7cd3535ae258d65": 3,
+    "aad03b5e5338dc0608bd231414ec52e5f226d195": 3,
+    "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68": 2,
+    "35c1fef514bd568eb97e7168ffcbe61231408144": 2,
+    "899491e5c3fc46a75403010683f817262412a006": 2,
+    "5a09951203c75d77fc303d06208c86629c87d511": 2,
+    "d72fd2f03db4442778cad4aef09580fd95cd58a5": 1,
+    "5fd7318f8bbf3f76e9c9fa5dd9c7c85cf7227504": 1,
+    "ef092c173a1858547bb2f2b9fcf9f2437983fbb7": 1,
+    "9460514089d0949d1e369eb1ddd05633833ae22b": 1,
+    "626d1b695db297e30104427d3fdab2fc98b45ca1": 1,
+    "bd3333978eb061282fd6ef92caa87f1bf0697b97": 1,
+    "4f5db0df51221eff10ef962bd0c11a517c8c3da4": 1,
+    "af2d330e1ebba9b08892ff92791eee81b9bc75df": 1,
+    "b0dda2bcd55f160e0470470c29a9def7a89160f4": 1,
+    "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e": 1,
+    "078991b4dbdf4d1dddda8697fd2d1e72dfd1a12e": 1,
+    "47fc74e39ac2e49bbd98319a1bd140355953ca7d": 1,
+    "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b": 1,
+    "623909cb0f6a47d2e550719bc074746f849f3d4c": 1,
+    "1bc294d3af3485f6db1304d85fb92d6325083605": 1,
+    "328e28fe358c344469a1174730835aa1b9b6e379": 1,
+    "921d2df1604ffe3698d82d3f5e6bb2113b8db2ed": 1,
+    "5b6f82ebdcc1dbb2592d2939c12afe3f24de278d": 1,
+    "7aa8b5ba916bc8cdce126724f0adfc3ad6522f93": 1,
+    "66683a1c3016fc7290d3627607d8ea99ce583556": 1,
+    "eecd8b50f0dd609a9c8738cd6494f8b859675dcf": 1,
+    "4bc58ca5927969a8df8258f62b1b6f76a089fd5e": 1,
+    "22c29ca55c8795780dcb0fb23322dd3881c0037d": 1
+  },
+  "results": [
+    {
+      "id": "q01",
+      "disease": "Apple Scab Leaf",
+      "query": "dark rough corky lesions and scabby patches spreading over the leaves of a tree",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1039
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0652
+        },
+        {
+          "chunk_id": "d72fd2f03db4442778cad4aef09580fd95cd58a5",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.27, v.section_1",
+          "rerank_score": 0.0564
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.048
+        },
+        {
+          "chunk_id": "968795d3723ae0640d7bcb69d7cd3535ae258d65",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.189-207",
+          "rerank_score": 0.0327
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "disease": "Apple rust leaf",
+      "query": "orange to brown powdery pustules raised on the surface of tree leaves",
+      "top5": [
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.2239
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0816
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0506
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.0462
+        },
+        {
+          "chunk_id": "5fd7318f8bbf3f76e9c9fa5dd9c7c85cf7227504",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.140-154",
+          "rerank_score": 0.0437
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "disease": "Corn rust leaf",
+      "query": "rust-coloured powdery eruptions scattered along the leaf blade",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0828
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0696
+        },
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0434
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0365
+        },
+        {
+          "chunk_id": "ef092c173a1858547bb2f2b9fcf9f2437983fbb7",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0245
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "disease": "Corn leaf blight",
+      "query": "long brown withering patches spreading and drying the leaves",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1669
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0882
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0624
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0565
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0523
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "disease": "Corn Gray leaf spot",
+      "query": "greyish rectangular dead spots forming between the veins of the leaf",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1175
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0979
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.0818
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0675
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0489
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "disease": "Potato leaf early blight",
+      "query": "dark brown spots with concentric rings appearing first on the older lower leaves",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0765
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0347
+        },
+        {
+          "chunk_id": "9460514089d0949d1e369eb1ddd05633833ae22b",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.76-92",
+          "rerank_score": 0.0206
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0198
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0144
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "disease": "Potato leaf late blight",
+      "query": "rapidly spreading water-soaked blackening patches rotting the leaves in damp weather",
+      "top5": [
+        {
+          "chunk_id": "35c1fef514bd568eb97e7168ffcbe61231408144",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.21, v.section_5",
+          "rerank_score": 0.1493
+        },
+        {
+          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
+          "rerank_score": 0.0447
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0311
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0302
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0257
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "disease": "Tomato Early blight leaf",
+      "query": "ringed brown lesions enlarging on the leaves and causing them to fall",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0669
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0459
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0339
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0312
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0255
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "disease": "Tomato leaf late blight",
+      "query": "dark decaying blotches with pale mould at the leaf margins during wet weather",
+      "top5": [
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0617
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.042
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0362
+        },
+        {
+          "chunk_id": "bd3333978eb061282fd6ef92caa87f1bf0697b97",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.24, v.section_3",
+          "rerank_score": 0.0112
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0087
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "disease": "Tomato Septoria leaf spot",
+      "query": "numerous small dark spots with pale centres covering the leaves",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1043
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0401
+        },
+        {
+          "chunk_id": "968795d3723ae0640d7bcb69d7cd3535ae258d65",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.189-207",
+          "rerank_score": 0.0245
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0202
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0165
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "disease": "Tomato leaf bacterial spot",
+      "query": "small greasy dark specks on leaves that later dry and tear",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1361
+        },
+        {
+          "chunk_id": "5a09951203c75d77fc303d06208c86629c87d511",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_54",
+          "rerank_score": 0.0977
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0767
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0459
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0408
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "disease": "Tomato mold leaf",
+      "query": "fuzzy discoloured mould growing on the underside of the leaves",
+      "top5": [
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0983
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0507
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.039
+        },
+        {
+          "chunk_id": "4f5db0df51221eff10ef962bd0c11a517c8c3da4",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_7",
+          "rerank_score": 0.0337
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0272
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "disease": "Tomato leaf mosaic virus",
+      "query": "mottled light and dark green patches with puckering and curling of the leaves",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.2706
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1831
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.1029
+        },
+        {
+          "chunk_id": "af2d330e1ebba9b08892ff92791eee81b9bc75df",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_12",
+          "rerank_score": 0.0851
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.047
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "disease": "Tomato leaf yellow virus",
+      "query": "leaves turning yellow, cupping upward and the plant remaining stunted",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.5755
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.4855
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.3555
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.3539
+        },
+        {
+          "chunk_id": "b0dda2bcd55f160e0470470c29a9def7a89160f4",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.55, v.section_2",
+          "rerank_score": 0.0321
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "disease": "(unlabelled)",
+      "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing beneath",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0613
+        },
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0248
+        },
+        {
+          "chunk_id": "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.82-103",
+          "rerank_score": 0.0173
+        },
+        {
+          "chunk_id": "078991b4dbdf4d1dddda8697fd2d1e72dfd1a12e",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.116-149",
+          "rerank_score": 0.0107
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0092
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "disease": "Bell_pepper leaf spot",
+      "query": "dark sunken spots scattered across the leaves that later dry out",
+      "top5": [
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.2258
+        },
+        {
+          "chunk_id": "5a09951203c75d77fc303d06208c86629c87d511",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_54",
+          "rerank_score": 0.1239
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.102
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0494
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0426
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "disease": "Squash Powdery mildew leaf",
+      "query": "white powdery coating spreading over the surface of the leaves",
+      "top5": [
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.2927
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.1621
+        },
+        {
+          "chunk_id": "35c1fef514bd568eb97e7168ffcbe61231408144",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.21, v.section_5",
+          "rerank_score": 0.0893
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0657
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0606
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "disease": "grape leaf black rot",
+      "query": "dark sunken decaying areas on leaves and shrivelling of the fruit on a climbing vine",
+      "top5": [
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.1218
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0881
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0197
+        },
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.0153
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.008
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "disease": "(unlabelled)",
+      "query": "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil",
+      "top5": [
+        {
+          "chunk_id": "47fc74e39ac2e49bbd98319a1bd140355953ca7d",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.0562
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0423
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.0355
+        },
+        {
+          "chunk_id": "968795d3723ae0640d7bcb69d7cd3535ae258d65",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.189-207",
+          "rerank_score": 0.0255
+        },
+        {
+          "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_12",
+          "rerank_score": 0.0237
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "disease": "(unlabelled)",
+      "query": "insects boring into the trunk and eating the leaves of a tree",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.6957
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.566
+        },
+        {
+          "chunk_id": "177254da661e297b7d8a4fc3df19afb66727576e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1",
+          "rerank_score": 0.4882
+        },
+        {
+          "chunk_id": "0a189afb237c5c4b22ef63e0be0a6a0dc4c47d5a",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.4391
+        },
+        {
+          "chunk_id": "623909cb0f6a47d2e550719bc074746f849f3d4c",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.190-206",
+          "rerank_score": 0.3147
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "disease": "(unlabelled)",
+      "query": "preparing and enriching the soil before planting a young sapling",
+      "top5": [
+        {
+          "chunk_id": "1bc294d3af3485f6db1304d85fb92d6325083605",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_3",
+          "rerank_score": 0.6336
+        },
+        {
+          "chunk_id": "328e28fe358c344469a1174730835aa1b9b6e379",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.section_3",
+          "rerank_score": 0.3794
+        },
+        {
+          "chunk_id": "921d2df1604ffe3698d82d3f5e6bb2113b8db2ed",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_20",
+          "rerank_score": 0.2922
+        },
+        {
+          "chunk_id": "5b6f82ebdcc1dbb2592d2939c12afe3f24de278d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_13",
+          "rerank_score": 0.2258
+        },
+        {
+          "chunk_id": "c5250a4514cc07fbfe8bcb1f797c0e5475f0eacf",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2",
+          "rerank_score": 0.1119
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "disease": "(unlabelled)",
+      "query": "signs that foretell the coming of rain and the right time for sowing",
+      "top5": [
+        {
+          "chunk_id": "7aa8b5ba916bc8cdce126724f0adfc3ad6522f93",
+          "book": "krishi_parashara",
+          "label": "krishi_parashara, ch.pages_94_119, v.48-60",
+          "rerank_score": 0.7192
+        },
+        {
+          "chunk_id": "66683a1c3016fc7290d3627607d8ea99ce583556",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_16",
+          "rerank_score": 0.5977
+        },
+        {
+          "chunk_id": "eecd8b50f0dd609a9c8738cd6494f8b859675dcf",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.21, v.section_3",
+          "rerank_score": 0.3161
+        },
+        {
+          "chunk_id": "4bc58ca5927969a8df8258f62b1b6f76a089fd5e",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.28, v.section_1",
+          "rerank_score": 0.2212
+        },
+        {
+          "chunk_id": "22c29ca55c8795780dcb0fb23322dd3881c0037d",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.28, v.section_2",
+          "rerank_score": 0.2127
+        }
+      ]
+    }
+  ]
+}

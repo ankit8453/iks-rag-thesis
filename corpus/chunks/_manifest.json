@@ -1,14 +1,16 @@
 {
   "config_path": "configs\\corpus\\books.yaml",
-  "config_sha1": "9c435fb699b4839200f541ff3da7eee98e5547b7",
-  "generated_at": "2026-08-31T06:52:50.953630+00:00",
-  "elapsed_seconds": 3303.407,
+  "config_sha1": "561b8950a5d850be357950ee549950d473482e97",
+  "generated_at": "2026-09-26T11:26:11.945745+00:00",
+  "elapsed_seconds": 622.9679999999935,
   "ready_books": [
     "vrikshayurveda",
     "brihat_samhita",
     "krishi_parashara",
     "upavanavinoda",
-    "kashyapiyakrishisukti"
+    "kashyapiyakrishisukti",
+    "upavanavinoda_introduction",
+    "niti_natural_farming"
   ],
   "pending_books": [
     "text_six_tbd"
@@ -32,8 +34,8 @@
       "chapters_wanted": 12,
       "chapters_found": 12,
       "chapters_missing": null,
-      "chunks": 140,
-      "chunks_embedded": 140,
+      "chunks": 46,
+      "chunks_embedded": 46,
       "chunks_jsonl": "corpus\\chunks\\brihat_samhita.jsonl"
     },
     {
@@ -68,8 +70,31 @@
       "chunks": 39,
       "chunks_embedded": 39,
       "chunks_jsonl": "corpus\\chunks\\kashyapiyakrishisukti.jsonl"
+    },
+    {
+      "book_id": "upavanavinoda_introduction",
+      "pages_ocr": 0,
+      "scope": "pages",
+      "chapters_wanted": null,
+      "chapters_found": null,
+      "chapters_missing": null,
+      "chunks": 0,
+      "chunks_embedded": 0,
+      "chunks_jsonl": null,
+      "skipped": "awaiting external OCR"
+    },
+    {
+      "book_id": "niti_natural_farming",
+      "pages_ocr": 0,
+      "scope": "pages",
+      "chapters_wanted": null,
+      "chapters_found": null,
+      "chapters_missing": null,
+      "chunks": 68,
+      "chunks_embedded": 68,
+      "chunks_jsonl": "corpus\\chunks\\niti_natural_farming.jsonl"
     }
   ],
-  "total_chunks_embedded": 259,
-  "vector_db_count": 259
+  "total_chunks_embedded": 233,
+  "vector_db_count": 250
 }

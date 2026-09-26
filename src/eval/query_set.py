@@ -44,6 +44,22 @@ class QueryCase:
     relevant_chunk_ids: list[str] = field(default_factory=list)
     expect_answerable: bool = True
     note: str = ""
+    #: Why a case is not answerable. ``"out_of_scope"`` = no book in the corpus
+    #: covers the topic at all (the original honest-refusal controls).
+    #: ``"no_coverage"`` = the books ARE topically relevant but contain no
+    #: matching passage — the 13 lesion-appearance disease queries the classical
+    #: texts cannot address, found by the §6m coverage check. The distinction
+    #: matters: only ``out_of_scope`` cases have no relevant books.
+    unanswerable_kind: str = ""
+    #: How the passages were judged when read, not scored: "answers" (a retrieved
+    #: passage directly answers), "partial" (right subject, but top-1 off-topic or
+    #: identification only), or "no". Recorded because the cross-encoder score proved
+    #: unreliable as evidence of PRESENCE - it measures vocabulary overlap, so it marked
+    #: 16/16 candidates strong while several top-1 passages were plainly off-topic
+    #: (EXPERIMENT_LOG.md 6n). Empty for the original queries, which predate grading.
+    human_grade: str = ""
+    #: Top-1 cross-encoder score from the §6m coverage check (evidence for the label).
+    top1_rerank_score: float | None = None
 
     @property
     def has_passage_labels(self) -> bool:
@@ -63,6 +79,9 @@ def load_query_set(path: Path | str | None = None) -> list[QueryCase]:
             relevant_chunk_ids=list(q.get("relevant_chunk_ids") or []),
             expect_answerable=bool(q.get("expect_answerable", True)),
             note=q.get("note", ""),
+            unanswerable_kind=q.get("unanswerable_kind", ""),
+            human_grade=q.get("human_grade", ""),
+            top1_rerank_score=q.get("top1_rerank_score"),
         )
         for q in payload["queries"]
     ]

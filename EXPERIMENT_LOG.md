@@ -6,7 +6,7 @@
 >
 > **Companion docs.** `progress.md` = narrative weekly log (engineering detail per phase). `research_journal/daily/*` = day-by-day "ran / worked / didn't work". This file = the structured results ledger that ties it together. Keep all three updated.
 >
-> **Last updated:** 2026-06-12.
+> **Last updated:** 2026-09-15 (see §6m — first clean-corpus Phase 11 baseline).
 
 ---
 
@@ -16,13 +16,18 @@
 
 **What works end-to-end (as of 2026-06-12):** The full pipeline runs live (Phase 10 Streamlit UI on Colab+cloudflared). Disease model → soil model → Strategy-B query rewrite → grounded RAG answer with citations → highlighted source chunks. Demonstrated working with real images.
 
-**The open problem we are actively fixing:** the **disease classifier's PlantDoc (in-the-wild) stage**. It predicts correctly but with only 72.3% accuracy and — critically — Grad-CAM shows it attends to **background, not the leaf**. We have diagnosed the cause (see §5) and are testing the fix (LP-FT, see §6).
+**The open problem we are actively fixing (2026-09):** the RAG side's **over-refusal on disease queries** — 81.8% of the 22 answerable silver queries are refused, and the grounded answer rate has been frozen at 13.64% (3/22) across three corpus versions. Corpus expansion (§6j), displacement (§6k) and the chapter-span bug (§6l) have all been ruled out as causes; the live hypothesis is that the classical texts genuinely lack remedies for these fungal/bacterial diseases and the silver labels are wrong (coverage check in progress, §6m).
+
+**Earlier open problem (resolved into a position, §6c):** the **disease classifier's PlantDoc (in-the-wild) stage**. It predicts correctly but with only 72.3% accuracy and — critically — Grad-CAM shows it attends to **background, not the leaf**. We have diagnosed the cause (see §5) and are testing the fix (LP-FT, see §6).
 
 **Component status snapshot:**
 
 | Component | Status | Headline number |
 |---|---|---|
-| IKS corpus + RAG retrieval | ✅ Working | Strategy B retrieval score 0.59–0.96 |
+| IKS corpus (6 books, 233 chunks) | ✅ Clean (§6l) | brihat over-capture fixed; 327 → 233 |
+| IKS RAG retrieval | ✅ Working | P@5 0.673, nDCG@5 0.878, Hit@5 1.00 (§6m) |
+| Grounded answering | ⚠️ Under investigation | grounded 13.6%, over-refusal 81.8% (§6m) |
+| Strategy-B query rewrite | ✅ Working | retrieval score 0.59–0.96 vs 0.01–0.04 |
 | Grounded generation (Llama-3.1-8B) | ✅ Working | §17 prompt, cites source+chapter+verse |
 | Soil multi-task classifier (B0) | ✅ Production (v2) | soil_type 89.9% / moisture 95.8% / texture 67.9% |
 | Disease classifier (B4) | ⚠️ Works but background-biased | PlantDoc 72.3% (frontier) but off-leaf attention |
@@ -492,14 +497,718 @@ but CPU is ~0.4 s/chunk after a one-time ~116 s model load.
 4 books -> 5. Per book: Brihat 136->140, Vrikshayurveda 42->**52** (+10, the
 re-OCR recovery), Krishi Parashara 13 (same), Upavanavinoda 15 (same), Kashyapiya
 **39** (new). Verified: live `iks_corpus` = 259 vectors (matches manifest).
-Phase 11 re-run over-refusal = _TBD_ (was 54.5%) — the number that tells us
-whether the coverage expansion actually helped.
+Phase 11 re-run over-refusal: **72.7% (WORSE than 54.5%)** — see §6j for the
+result and the diagnosis.
+
+---
+
+## 6i. NITI Aayog natural-farming manual ingested (2026-09-09)
+
+Dr. Pandey's point that the corpus need not be classical books alone -- IKS-derived
+practical knowledge counts too -- turned out to target our actual bottleneck. Phase 11
+showed coverage, not retrieval, is the limiter (~55% over-refusal); the classical texts
+are thin on symptom -> remedy.
+
+**Source.** "Empowering Farmers: Natural Farming Training Toolkit and Best Practices
+Guide", NITI Aayog, Feb 2026, ISBN 978-81-991080-0-4. 192p with a **clean text layer
+-- no OCR, zero API spend**. Ch5 (Pest & Disease Management) and Ch6.1-6.2 (bio-inputs)
+give structured **Purpose / Ingredients / Preparation / Application** entries for
+Jeevamrit, Beejamrit, Neemastra, Brahmastra, Agniastra, Dashaparni -- exactly the
+missing layer, and IKS-rooted (cow dung, urine, neem = the kunapajala tradition).
+
+**Ingested** (`scripts/extract_niti_manual.py`): Ch2 seed (pp.36-43), Ch4 soil (60-65),
+Ch5 pest+disease (66-77), Ch6.1-6.2 bio-inputs (78-92), Ch8 22 key crops (112-165).
+**Skipped:** Ch1 theory, Ch3 water, Ch6.3-6.4 BRC infrastructure+schemes, Ch7
+certification, Ch9 carbon credits, Ch10-11 frameworks -- none give plant-level advice.
+64 sections, 23,819 words. Sections are emitted one per block so a formulation is not
+split from its ingredients (verified: Neemastra intact in one 277-word chunk).
+
+**Honesty tier.** Registered with `source_tier: modern_iks` -- a 2026 government
+manual is not a classical treatise, so citations must say which tier they came from
+and the "grounded in classical texts" claim stays true.
+
+**Corpus: 259 -> 327 chunks** (NITI 68). Per book: brihat 140, niti **68**,
+vrikshayurveda 52, kashyapiya 39, upavanavinoda 15, krishi_parashara 13.
+
+**Deferred:** Upavanavinoda's English Introduction (PDF pp.9-42, Majumdar's essay,
+contains translated verses) -- registered as `upavanavinoda_introduction`
+(`source_tier: scholarly_commentary`) but the Gemini key hit free-tier quota
+(429 RESOURCE_EXHAUSTED) mid-OCR, so it skips cleanly until its text_source exists.
+
+**Infra fix.** `IKS_EMBED_DEVICE=cpu` override added to `embed.py`: bge-large (1.3GB)
+thrashes the 2GB MX550 at **~454 s per 16-chunk batch**, and `CUDA_VISIBLE_DEVICES=""`
+does NOT force CPU on Windows (PyTorch treats the empty string as unset -- the rebuild
+log said "on cuda"). With the override the same batches ran ~34 s. Note the earlier
+259-chunk build was also silently on GPU.
+
+**Result:** the re-run made over-refusal **worse** (54.5% -> 72.7%). Full result and
+root-cause analysis in **§6j** — the book covers insect pests, not the fungal leaf
+diseases our query set asks about.
+
+---
+
+## 6j. Phase 11 re-run on 327 chunks — corpus expansion made it WORSE (2026-09-09)
+
+The number §6h/§6i were waiting for. **Adding the NITI manual increased over-refusal
+from 54.5% to 72.7%.** Honest negative result; kept in full.
+
+**Generation / grounding (22 answerable + 2 negatives, Colab, same harness as §6f):**
+
+| metric | 206 chunks (§6f) | 327 chunks | |
+|---|---|---|---|
+| over-refusal (answerable refused) | 54.5% | **72.7%** | WORSE by 18pp |
+| grounded answer rate | 13.6% | 13.64% | unchanged |
+| valid citation rate | 14.2% | **41.7%** | ~3x BETTER |
+| honest refusal (negatives) | 100% | 100% | held |
+| unfounded citations (ungrounded control) | 0% | 0% | held |
+
+Raw counts: **10/22 answered -> 6/22 answered**; refusals 12 -> 16. The four lost
+answers were *ungrounded* ones, so the system became **safer but less useful** — it
+stopped guessing and refused instead. That also explains the citation-rate jump.
+
+**Retrieval (same run):** full nDCG@5 0.94 -> **0.87**, P@5 0.74 -> **0.65**, MRR 0.91
+-> 0.86; dense_only 0.94 -> 0.88; keyword_only collapsed 0.70 -> **0.49** (Hit@5 0.91
+-> 0.64). **Hit@5 stayed 1.00 for full and dense_only.**
+
+**Two things to separate here.**
+1. *Measurement artifact.* The silver labels are **book-level** and were written when
+   the corpus was 4 books, so the 107 new chunks (Kashyapiya 39 + NITI 68) appear in
+   **no** query's `relevant_books` and score as noise even when useful. P@5/nDCG must
+   fall mechanically. **Hit@5 = 1.00 proves nothing was lost.** The query set must be
+   re-labelled before any future expansion is judged, or every addition will look like
+   a regression.
+2. *A real effect.* Over-refusal is measured on **answers**, not on book labels, so the
+   artifact does not touch it. It genuinely got worse.
+
+**Root cause (evidence).** Our 22 answerable queries are **100% fungal / bacterial /
+viral leaf diseases** (scab, rust, blight, gray leaf spot, early/late blight, Septoria,
+bacterial spot, leaf mould, mosaic, yellow virus). Word counts in the ingested NITI text:
+
+| term | count |
+|---|---|
+| insect-pest terms (insect 44, borer 15, caterpillar 14, sucking pest 14, aphid 7, whitefly 6, jassid 5, mite 6, thrips 3, larvae 4, mealybug 1) | **119** |
+| leaf spot / septoria / bacterial spot / leaf mould / gray leaf | **0 each** |
+| scab / mildew / mosaic | 1 each |
+| rust | 2 |
+| blight | 4 |
+
+So **NITI is an insect-pest manual, not a fungal-disease manual.** Neemastra treats
+aphids, jassids and whiteflies — not apple scab or Septoria. (`rot: 66` in a first pass
+was a false positive matching "rotation"; true standalone count is 17.)
+
+**Mechanism.** NITI chunks are *semantically adjacent* ("pest and disease management",
+"control", "spray") so they rank into the top-5, **displacing classical passages**
+(P@5 0.74 -> 0.65). The generator then has too little usable classical evidence for the
+§17 prompt's sufficiency test and refuses. Near-miss content is **actively harmful**,
+not merely neutral.
+
+**The generalisable finding (paper-worthy):** *expanding a RAG corpus with
+topically-adjacent but non-matching material degrades performance by displacing
+relevant passages — corpus growth must be matched to the query distribution, not to
+volume.* This is the honest, evidence-backed answer to "what is the benefit of adding
+a book": **not all books help; this one measurably hurt on disease queries.**
+
+**Process failure to remember.** The book was recommended on the strength of "pest 197 /
+disease 91" keyword counts and the well-structured Neemastra recipe, **without checking
+overlap against the specific diseases in the query set**. Rule going forward: before
+ingesting a source, measure its term overlap with the evaluation queries.
+
+**Agreed plan (2026-09-14), in order:**
+1. **Displacement check** — confirm NITI chunks actually occupy top-5 slots for the 22
+   queries (local, no Colab, no LLM). Turns the hypothesis into evidence.
+2. **Tier-aware retrieval** — route by problem type: fungal/bacterial disease -> classical
+   tier; insect/pest -> NITI (`source_tier: modern_iks`). Keeps the book for what it is
+   genuinely good at instead of reverting it.
+3. **Extend the query set with insect-pest queries** — NITI is currently being tested on
+   the one thing it cannot do; a fair evaluation needs queries in its scope. Re-label
+   `relevant_books` at the same time (see artifact above).
+4. Then consider extending the pipeline so the vision side can also *signal pest damage*,
+   letting the combiner generate a pest-side query — a design change to evaluate only
+   after step 1-3 show the routing works.
+
+**Not done / deferred:** Upavanavinoda English Introduction (Gemini free-tier quota hit
+mid-OCR); Vishvavallabha (the classical text that *does* cover plant disease) remains the
+highest-value content fix.
+
+---
+
+## 6k. Displacement check — CONFIRMED, and it uncovered a much older corpus bug (2026-09-14)
+
+Step 1 of the §6j plan. `scripts/check_displacement.py` retrieves the top-5 for each of
+the 22 answerable queries **twice** — over the full 327-chunk corpus, then over
+classical-only — and diffs them. Local, no Colab, no LLM. (Doc embeddings are cached to
+`results/_docemb_*.npy`; the first run costs ~16 min on CPU, re-runs are seconds.)
+
+**Result — the displacement hypothesis is CONFIRMED:**
+
+| | |
+|---|---|
+| top-5 slots taken by NITI (modern tier) | **25 / 110 (22.7%)** |
+| queries with >=1 NITI passage in top-5 | **17 / 22 (77%)** |
+| classical passages pushed out | **28** |
+
+Slot share: vrikshayurveda 56 (50.9%), **niti 25 (22.7%)**, brihat 18 (16.4%),
+kashyapiya 6, upavanavinoda 4, krishi_parashara 1.
+
+**But the per-query detail does NOT support the simple story.** Inspecting what was
+actually displaced, most of it was *not* useful content:
+- `vrikshayurveda 1.1` = **the publisher's address block** ("Chairman, Asian Agri-History
+  Foundation, 47 ICRISAT Colony-I ... Secunderabad") — displaced in q04, q08, q15
+- `brihat_samhita section_11` = "meteors are ... those who fall down after having enjoyed
+  the fruits of their meritorious deeds" (astrology)
+- `brihat_samhita section_1` = "Chapter XXVII—The Wind Circle [According to Utpala this
+  chapter is **spurious**...]"
+- `brihat_samhita section_7` = "[For an explanation of the Karaṇas see the author's
+  *Fundamentals of Astrology* p.185...]"
+- `vrikshayurveda 1.2` = editorial commentary about the text, not a remedy
+
+Only **three** genuinely valuable displacements were found: `vrikshayurveda 207-222`
+(remedy: sugar/sesame/milk for heat-dried trees, q04), `vrikshayurveda 173-189` (the key
+symptom passage — insects at the roots, yellowing leaves, q06) and `vrikshayurveda
+110-125` (watering guidance, q07).
+
+So NITI is mostly **replacing junk with off-topic-but-clean text**. Displacement is real,
+but it is *not* a sufficient explanation for the 18pp over-refusal jump — the generator
+had roughly the same amount of usable classical evidence either way. Flagged as an open
+question rather than papered over.
+
+### The bigger finding: Brihat Samhita chapter spans over-capture (bug since Phase 3)
+
+Chasing the junk led to a genuine defect in `src/rag/corpus/chapter_split.py`
+(`locate_chapters`, lines ~161-166):
+
+```python
+if i + 1 < len(sorted_chapters):
+    end_idx = sorted_chapters[i + 1][1]   # start of the next WANTED chapter
+```
+
+Each wanted chapter's span ends at the next **wanted** chapter, not the next **actual**
+chapter. Every gap between wanted chapters is therefore silently ingested. With
+`chapters: [21..29, 40, 54, 55]` that means **chapters 30-39 are swallowed into 29, and
+41-53 into 40**.
+
+Evidence in the data — chunks tagged `chapter: 40` ("Growth of Crops", a short chapter)
+number **75 of Brihat's 140 chunks** and contain:
+- "If at the time of the Sun's entry into Scorpio Jupiter be in Aquarius..." (astrology)
+- "Sign Aries is considered to rule over cloths, sheep's wool..." (commodity divination)
+- "The Gods with Indra as their leader ... went to the Milky Ocean" (mythology)
+- house-dimension calculations in cubits for Brahmana dwellings (architecture)
+
+Span check from the build log: chapter 29 -> pages 327-376 (50pp), **chapter 40 -> pages
+377-543 (167pp)** for a chapter that is a few pages long.
+
+**Scale:** roughly **~83 of 140 Brihat chunks (~25% of the whole 327-chunk corpus)** is
+content we never intended to index. It has polluted retrieval **since Phase 3**, so the
+original 206-chunk baseline in §6f is affected too — every evaluation number in this log
+was measured against a partly-unintended corpus.
+
+**Revised fix order (supersedes the §6j plan):**
+1. **Fix `locate_chapters`** to end a span at the next *detected* chapter heading (or a
+   page cap), not the next wanted one; rebuild; confirm Brihat drops from 140 to roughly
+   40-55 chunks of genuinely wanted material.
+2. **Drop front-matter / editorial-apparatus chunks** (publisher block, "[Cf. ...]",
+   "see the author's ...", "this chapter is spurious") with a cleaning rule + test.
+3. **Then** re-run Phase 11. Only after a clean corpus does tier-aware routing get
+   evaluated — otherwise we would be tuning routing against polluted retrieval.
+4. Tier-aware routing + pest queries (§6j steps 2-3) follow, evaluated as **A** (pest
+   queries vs NITI alone) **and B** (full set re-run) — Ankit's refinement, so a bad book
+   can be told apart from bad routing.
+
+**Lesson for the write-up:** the displacement test was designed to confirm a hypothesis
+and instead surfaced a deeper data-quality defect. Worth reporting as-is — corpus quality
+was the confound underneath the coverage story.
+
+---
+
+## 6l. Chapter-span fix applied and rebuilt — corpus 327 -> 233 (2026-09-15)
+
+Step 1 of the §6k plan, done. `locate_chapters` now ends a wanted chapter at the next
+**detected chapter heading** rather than the next **wanted** chapter
+(`find_chapter_starts`, tightened with `min()` so a span can only shrink — a
+previously-correct span cannot break).
+
+**Heading detection needed three guards**, each earned from a real false positive in this
+OCR, and each verified against the actual pages:
+1. require the literal word "chapter" — running headers are `Treatment of Trees LV 533`;
+2. require a separator + capitalised title after the numeral — this rejects
+   `[Cf. chapter IX]` and "as stated in chapter XXI". **Without it the first version of
+   the fix silently truncated ch.23 Rainfall to 1 page and ch.24 Rohini to 10** — caught
+   only by checking the gap pages against the printed book before rebuilding;
+3. require the heading at the top of the page.
+Verified: real headings at p.330 (XXX), p.381 (XLI), p.581 (LVI) detect; cross-references
+at p.291, p.304, p.314 do not.
+
+**Brihat spans now match the printed book** (96 pages ingested, was 319):
+
+| ch | title | pages | len |
+|---|---|---|---|
+| 21-29 | rain / cloud / prognostics | 275-329 (contiguous) | 42 |
+| 40 | Growth of Crops | 377-380 | **4** (was 167) |
+| 54 | Exploration of Water Springs | 544-571 | 28 |
+| 55 | Treatment of Trees | 572-580 | 9 |
+
+**Rebuild result:** brihat **140 -> 46 chunks**; corpus **327 -> 233**. Others unchanged
+(vrikshayurveda 52, niti 68, kashyapiya 39, upavanavinoda 15, krishi_parashara 13).
+Build took **74 min** on CPU (`IKS_EMBED_DEVICE=cpu`); no OCR, no API spend — the raw
+text was already cached, which is what made the fix free after the Gemini quota ran out.
+Tests: 4 new regression tests; **414 passed** across the whole suite.
+
+**Verification that the junk is gone.** Commodity divination ("Fluctuation of Prices",
+"sheep's wool"), mythology ("Milky Ocean", "Indra's Banner") and "Signs of Swords /
+Crowns / Pimples" are now **0 matches**. Remaining astrology terms (Jupiter, Scorpio,
+meteor) and "cubits" are **legitimate**: ch.21/28/40 predict rain and crop yield from
+planetary positions — *"If at the Sun's entry into Scorpio Jupiter be in Aquarius…"* IS
+the text of "Growth of Crops" — and ch.54 measures well depth in cubits. A first pass
+flagged these as junk; inspecting them in context showed the pattern, not the corpus,
+was wrong.
+
+### Correction to §6k
+
+§6k said NITI was mostly "displacing junk", citing `vrikshayurveda 1.1` (the
+publisher-address block) as an example. **That was partly wrong.** Chunk `1.1` begins
+with the ICRISAT address but **ends with Table 1 — the disorder / cause / symptom /
+remedy table** ("Broken trees should be smeared with a paste of the bark of plaksa and
+udumbara mixed with ghee, honey, wine, and milk"). So one of the displaced passages was
+genuinely useful, and the displacement harm in §6k was **understated**.
+
+The other §6k examples (Brihat meteors, "Wind Circle … spurious", Karana notes) came from
+the over-captured chapters and are **now removed by this fix**.
+
+**Front matter still present, deliberately NOT deleted:** 4 vrikshayurveda chunks
+(`1.1` x2, `306.1`, `section_2`) open with author affiliations / "About the Translator"
+but continue into Table 1, Table 2 (materials + properties) and land-suitability
+indicators. Deleting them would destroy real remedy content; the correct fix is to strip
+the front-matter *prefix* during cleaning, which needs another 74-min rebuild and is not
+worth blocking the re-baseline. Logged as open.
+
+**Next:** push the 233 chunks to HF and re-run Phase 11. This will be the **first clean
+baseline** — every earlier number in this log (including §6f's 206-chunk run) was
+measured against a corpus that was ~25% content we never asked for.
+
+---
+
+## 6m. Phase 11 on the clean 233-chunk corpus — the first honest baseline (2026-09-15)
+
+Re-run after the §6l chapter fix. This is the first Phase 11 measured on a corpus that
+contains only what we asked for.
+
+**Retrieval (22 answerable queries, book-level silver labels):**
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full (hybrid + rerank) | 0.6727 | 0.8779 | 0.8561 | **1.0000** |
+| dense_only | 0.6636 | 0.8818 | — | 1.0000 |
+| hybrid_no_rerank | 0.5364 | 0.7250 | — | — |
+| keyword_only | 0.3273 | 0.5151 | — | 0.6818 |
+
+vs the 327-chunk run: P@5 0.65 -> 0.67, nDCG 0.87 -> 0.88, keyword_only nDCG 0.49 ->
+0.52. Removing 94 chapters of astrology and commodity divination **did** clean up
+retrieval, as predicted. The rerank is still carrying the pipeline (+0.14 P@5 over
+hybrid_no_rerank), and keyword_only remains the weak leg — expected with Sanskrit
+transliterations and a symptom-phrase query style.
+
+**Generation / grounding:**
+
+| metric | 206 (§6f) | 327 (§6j) | **233 (clean)** |
+|---|---|---|---|
+| grounded answer rate | 13.6% | 13.64% | **13.64%** |
+| valid citation rate | 14.2% | 41.7% | **55.00%** |
+| over-refusal | 54.5% | 72.7% | **81.82%** |
+| honest refusal (negatives) | 100% | 100% | 100% |
+| unfounded citations | 0% | 0% | 0% |
+
+**The finding that reframes §6j.** Across three corpora of 206, 327 and 233 chunks —
+different books, different sizes, a 94-chapter bug fixed in between — the grounded
+answer rate is **frozen at exactly 13.64%, i.e. 3 of 22 queries, every single time.**
+Nothing we changed moved it.
+
+What *did* move is the weakly-grounded answers: **7 -> 3 -> 1**. Those were answers the
+generator produced without solid support. As the corpus got cleaner, it stopped
+producing them and refused instead. That single mechanism explains all three trends at
+once: over-refusal rises (54.5 -> 72.7 -> 81.8) because refusals replace weak answers,
+and valid-citation rate rises (14.2 -> 41.7 -> 55.0) because the surviving answers are
+the well-supported ones. The system is behaving **more honestly at every step**.
+
+**So the §6j root cause was incomplete.** NITI displacement is real (§6k measured it:
+25/110 top-5 slots), and the chapter bug was real, but **neither was the cause of the
+refusals** — fixing both left the grounded rate untouched. The remaining explanation is
+the simplest one: **the classical texts may genuinely not contain remedies for most of
+these 22 diseases.** The query set is *silver* — we asserted `expect_answerable: true`
+for all 22; we never verified the corpus can answer them.
+
+If that is right, "over-refusal" has been measuring the system against queries that have
+no answer in the corpus, and **refusing is the correct behaviour** — the metric, not the
+system, is wrong.
+
+**Next: coverage check.** *(Done — see below; the result was ~4, the first branch.)* `scripts/check_coverage.py` retrieves the top-5
+for each of the 22 queries locally (same hybrid+rerank pipeline, no LLM, no API cost) and
+prints the passages with a remedy-language triage, so the question is settled from the
+text itself rather than from metrics:
+- ~3-5 queries with real treatment content -> the system is correct, the labels are
+  wrong, and the story is **coverage** (-> Vishvavallabha, the classical text that does
+  cover plant disease);
+- ~12-15 -> the generator's sufficiency rule is too strict, and the fix is the §17
+  prompt, not the corpus.
+
+**Tier-aware routing (§6j step 2) is ON HOLD** until this resolves. On current evidence
+it would be solving a problem that is not there: if the classical tier has no remedy for
+these diseases, routing queries to it changes nothing.
+
+**Also open:** the 233 chunks are not yet pushed to HF; the silver set still needs
+re-labelling (new books score as noise, §6j); 4 vrikshayurveda front-matter prefixes
+remain (§6l).
+
+---
+
+### Coverage check — RESOLVED: the corpus genuinely cannot answer 13 of the 22 queries
+
+`scripts/check_coverage.py`, local, no API cost. **The cross-encoder's own top-1 score is
+the measurement** — it is a relevance judge, trained to score a query/passage pair, and it
+needs no heuristic on top of it.
+
+| top-1 rerank score | queries | which |
+|---|---|---|
+| **>= 0.35** strong match | **4** | q22 rain signs (0.72), q20 boring insects (0.70), q21 soil preparation (0.63), q14 yellow/stunted leaves (0.58) |
+| 0.15-0.35 marginal | 5 | q17 powdery mildew, q13 mosaic, q16 pepper spot, q02 apple rust, q04 corn blight |
+| **< 0.15** no match | **13** | scab, Septoria, gray leaf spot, early/late blight, bacterial spot, leaf mould, black rot, corn rust, mites, weak tree |
+
+**4 strong matches vs a grounded answer rate frozen at 3/22.** The generator has been
+producing an answer almost exactly when the corpus actually contains one. The refusals are
+correct.
+
+**Why the mismatch is structural, not a retrieval failure.** The chunk retrieved rank-1 for
+10 of the 22 queries is Vrikshayurveda **Table 1 — the disorder / cause / symptom / remedy
+table**, which is real remedy content (`0a189afb`, `177254da`). But it is indexed **by
+cause**: vata, pitta, kafa, fire, lightning, axe wound, ants, faulty seed — humoral
+imbalance and physical injury. Our queries are indexed **by visual pathology**: "numerous
+small dark spots with pale centres". Table 1 has no row for that, and no row for scab,
+Septoria or mildew. The reranker returns it anyway because it is the most disease-like text
+in the corpus, then scores it 0.06-0.22 — *"the best I have, and it does not match."*
+
+So the classical texts classify plant disease by **aetiology in Ayurvedic terms**; the
+PlantDoc label set classifies by **lesion appearance**. For 13 of 22 queries no mapping
+exists, because the target concept is absent from the source tradition.
+
+**Consequence for the metric.** `expect_answerable: true` on all 22 was an assumption we
+never verified. Over-refusal of 81.8% is measured against 13 queries that have no answer;
+the honest denominator is the 4-9 that do. The system's real behaviour is: **answers ~3 of
+the 4 it can, refuses the rest, and fabricates nothing** (unfounded citations 0% in every
+run). That is the desired behaviour of a grounded system, and the metric was hiding it.
+
+**This also kills the §6j NITI verdict a second time, in the other direction.** NITI
+`section_10` is rank-1 for q20 (0.70) and q14 (0.58) — the two highest-scoring disease-side
+queries in the whole set. The book is not harmful; it is the *only* source that matches the
+pest-damage and chlorosis queries. §6j's "corpus growth must match the query distribution"
+finding stands, but the fair statement is that **NITI was tested almost entirely on
+fungal-lesion queries that nothing in the corpus can answer.**
+
+### Second defect found: citation labels do not identify passages
+
+4 labels are shared by **17 chunks**: `vrikshayurveda v.1.1` x5, `v.1.2` x5, `v.1.3` x4,
+plus one more. Five different passages all cite as `[Vrikshayurveda, ch. full, v. 1.2]`.
+A reader cannot tell which was used, and the **valid-citation rate (55%) is scored against
+labels that are not unique**. Separately, `chapter: "full"` and `verse_or_section: "1.2"`
+for a 3,382-character chunk is not a verse reference at all — these come from the
+whole-book ingest path, not the chapter-split path. Independent of the refusal question and
+needs fixing before any citation number is reported in the thesis.
+
+### Revised plan
+
+1. **Re-label the silver query set** — mark the 13 unanswerable queries
+   `expect_answerable: false` with the rerank evidence recorded, and report over-refusal on
+   the answerable subset. This is the honest denominator, and it is a *finding*, not a
+   patch: it quantifies the coverage gap between classical IKS aetiology and modern disease
+   labels.
+2. **Add pest/soil/season queries** (§6j step 3) — the four strong matches show what this
+   corpus is genuinely good at. Test A (NITI alone) and B (full set) as agreed.
+3. **Fix citation granularity** — real verse ranges instead of `ch.full v.1.2`.
+4. **Tier-aware routing (§6j step 2): DROPPED for now.** Routing fungal-disease queries to
+   the classical tier cannot help when the classical tier has no such content. Revisit only
+   after a source that covers plant disease is ingested.
+5. **Vishvavallabha becomes the critical path** — it is the classical text that treats
+   plant disease directly. It is now the only route to raising the grounded rate.
+
+**The reframed thesis contribution.** Not "we built a RAG system that answers disease
+queries from Sanskrit texts" — the texts cannot answer most of them, and claiming otherwise
+would require the system to fabricate. It is: *a grounded multimodal system that maps modern
+vision-model disease labels onto classical IKS treatment knowledge, and that refuses rather
+than fabricates where the traditions do not overlap — with the overlap measured, at 4-9 of
+22 modern leaf-disease categories.* The refusal behaviour is the safety result, and the
+coverage gap is a quantified finding about IKS digitisation, not a failure of the pipeline.
+
+---
+
+## 6n. Citation uniqueness + extending the query set into what the corpus covers (2026-09-26)
+
+Two of the three open items from §6m. Vishvavallabha (the third) stays blocked — the book
+has not been obtained. **No paid API anywhere in this work**: the OCR text is already
+cached, embedding and reranking run on CPU, generation on Colab's free tier.
+
+### Safety net first
+
+The citation fix forces a corpus rebuild, so the change was made provably reversible
+before any code was touched: git tag `thesis-safe-2026-09-26-pre-citationfix`, full copies
+of `corpus/chunks/`, `corpus/vector_db/` and the query set, and a content fingerprint
+(`corpus/_fingerprint_pre_citationfix.json`). Restore commands in `corpus/RESTORE.md`.
+
+`scripts/verify_corpus.py` turns "did we lose anything?" into a checkable claim. The fix
+renames labels and never edits text, so the **sorted set of 233 chunk texts must stay
+byte-identical**; the script compares a SHA-256 of that set. PASS proves no content moved.
+This is precisely the check that was missing when the chapter over-capture bug (§6l) went
+unnoticed through two builds.
+
+### Defect: a citation could not identify a passage
+
+220 distinct labels for 233 chunks — **4 labels shared by 17 chunks**, all Vrikshayurveda
+front matter:
+
+| label | chunks |
+|---|---|
+| `vrikshayurveda ch.full v.1.1` | 5 |
+| `vrikshayurveda ch.full v.1.2` | 5 |
+| `vrikshayurveda ch.full v.1.3` | 4 |
+| `vrikshayurveda ch.full v.1.4` | 3 |
+
+So `[Vrikshayurveda, ch.full, v.1.2]` pointed at five different passages, and the
+**valid-citation rate (55.0%, §6m) was being scored against labels that cannot be
+checked.** The other 35 Vrikshayurveda chunks carry proper verse ranges (`v.1-17`,
+`v.18-37`, …) and were never affected; no other book collides.
+
+**Root cause.** The front matter contains numbered lists — the abbreviations list opens
+*"1. Upavana. = Upavanavinoda. 2. ch. = Chapter no. 3. …"*. `_split_verses` reads each
+`1.` as verse 1, and every oversized verse is then sub-split with `sub_marker =
+f"{marker}.{sub_idx}"` where `sub_idx` **restarts for each oversized verse**. Five separate
+"verse 1"s therefore each produced `1.1, 1.2, …`.
+
+**Fix:** `uniquify_labels()` in `chunking.py`, applied per book in `build_corpus.py` at
+both the external-OCR and Tesseract branches. Colliding labels gain a letter suffix in
+document order (`1.2` → `1.2a`, `1.2b`, …) and `chunk_id` is recomputed, since the label is
+part of its hash.
+
+Deliberately a **post-hoc repair rather than a change to marker detection**: it only ever
+touches labels that already collide, so a label that was correct cannot be broken. That is
+the same narrowing discipline used for the chapter fix, and for the same reason — the first
+version of that fix silently deleted good content (§6l).
+
+7 regression tests: only-colliding-labels-change, all-labels-unique, text-never-changes,
+chunk_id-recomputed-for-renamed-only, no-op-when-already-unique, same-label-in-different-
+chapters-left-alone, >26-collisions. Suite **415 → 422 passing**.
+
+### Extending the query set — and why the method matters
+
+§6m established that 13 of the 22 queries have no answer in the corpus, because the texts
+index disease by Ayurvedic cause and the queries index by lesion appearance. The set is
+therefore testing the system almost exclusively on the one thing this corpus cannot do.
+
+16 candidate queries drafted across the subject areas the treatises **do** cover: insect
+and pest damage, seed treatment, soil suitability and enrichment, liquid manure, sowing
+season, rain signs, irrigation, well-water divining, planting and transplanting, physical
+injury, unproductiveness, grain storage.
+
+**Method, stated because it is the part that can go wrong.** The candidates were written
+from the **domain** — what a farmer would plausibly ask — **not** by reading the corpus and
+picking passages. Choosing queries to match text we had already read would make the
+evaluation circular: we would be measuring retrieval on passages selected for matching.
+Labels are then assigned *from* measurement, never before it: `check_coverage.py` scores
+each candidate with the pipeline's own cross-encoder and `merge_new_queries.py` writes the
+label using the §6m thresholds (≥0.35 strong, 0.15–0.35 marginal, <0.15 none).
+
+**Candidates scoring "none" are kept, not deleted.** Deleting them would bias the set
+toward whatever the corpus happens to contain and inflate every number afterwards. A query
+set built only from what the corpus can answer is not an evaluation.
+
+`check_coverage.py` now accepts any query file and tags its outputs, so a candidate run
+cannot overwrite the silver-set run.
+
+### Results — Stage 1 and Stage 2 (26 Sep)
+
+**Stage 1, citation uniqueness: done and verified.** Rebuild took 623 s, not the 74 min
+feared — the OCR cache carried most of it. Corpus **233 chunks, 233 distinct citation
+labels**, text byte-identical to the pre-fix fingerprint. Every passage is now uniquely
+citable, so a citation number finally means something.
+
+**A second defect surfaced during the rebuild, and it is worth recording.** The build log
+read *"ChromaDB collection now holds 250 vectors"* for a 233-chunk corpus. `embed_chunks`
+upserts by id, so renaming 17 chunks **added** their new ids and left the old ones
+orphaned: every renamed passage was present twice, the second copy still carrying the
+ambiguous label the fix existed to remove. Retrieval would have returned duplicates inside
+a single top-5 and reintroduced un-checkable citations — silently undoing the fix.
+
+`verify_corpus.py` had printed **PASS** while this was true, because it only compared the
+chunk *files*. **Retrieval reads the vector store.** The verifier now compares both and
+refuses to PASS unless they agree. This is the same class of gap that let the chapter
+over-capture bug through two builds: a check that did not cover the thing that mattered.
+`prune_stale_vectors.py` deletes an orphan only after confirming its text survives under a
+new id, and refuses entirely if any does not. After pruning: 233 chunks, 233 labels, 233
+vectors, PASS. Tests 422.
+
+**Stage 2, the new queries — and a methodological correction.**
+
+The coverage script scored **16 / 16 "strong"**, several above 0.95. That result is not
+trustworthy, and reading the passages showed why:
+
+| graded by reading | n | examples |
+|---|---|---|
+| **answers** — a retrieved passage directly answers | **8** | n05 seed treatment finds the Beejamrit recipe; n10 rain signs finds Brihat ch.28 on ants shifting eggs, snakes mating, chameleons gazing up; n11 watering finds Vrik v.110-125 with an exact schedule by soil and season; n14 broken branch finds Table 1, dress the spot with honey and ghee; n15 no flowers finds Upavanavinoda 177 |
+| **partial** — right subject, top-1 off-topic or identification only | **7** | n13 "how to plant a sapling" scored **0.985** but returned text about *where* to cultivate vegetables; n02 "caterpillars chewing holes" scored **0.915** but top-1 was about raising plants from seed |
+| **no** — nothing addresses it | **1** | n16 "protecting stored grain" scored **0.625** and returned a materials table about roots and branches |
+
+**The finding: the cross-encoder score is sound evidence of ABSENCE but not of PRESENCE.**
+It measures vocabulary overlap. A score of 0.06 (§6m) genuinely means nothing in the corpus
+matches. A score of 0.98 means the passage shares the query's vocabulary, which is not the
+same as containing an answer. §6m used it in the safe direction; extending it to confirm
+coverage would have inflated this result by roughly 2x.
+
+Score and reading disagree badly in the upper range: n07 scores **0.462** and answers
+fully, while n13 scores **0.985** and does not. **Labels are therefore set from reading,**
+and the score-only tier is retained alongside for comparison.
+
+One sharper illustration, taken from the two query sets:
+
+| query | score |
+|---|---|
+| q19 "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil" | **0.056** |
+| n15 "a tree that does not flower or bear fruit even though it looks healthy" | **0.935** |
+
+Nearly the same question about an unproductive tree; a 17x difference in score, because
+n15's wording tracks Upavanavinoda 177 almost verbatim. **Phrasing, not content
+availability, dominates the score** — which makes Stage 0 (does Llama phrase well?) the
+decisive open question rather than a side check.
+
+**Honesty note on method.** These candidates were drafted from the domain rather than from
+the corpus, to avoid circularity. That was only partly achieved: passages from
+Vrikshayurveda Table 1, v.173-189, NITI section_10 and Kashyapiya section_26 had been read
+earlier in the same working session, so some corpus vocabulary very likely leaked into the
+phrasing. The 16/16 score is partly an artefact of that. The reading-based grades are the
+defensible numbers; they are the author's own and await expert ratification like the rest of
+this silver set.
+
+**Query set now:** 24 to **40 queries**, answerable 9 to **24**; 17 disease-label queries
+and 23 domain queries. Reported separately from here on, because they measure different
+things — the disease queries exercise the whole deployed pipeline (vision to bridge to
+retrieval), the domain queries exercise only corpus and retrieval.
+
+**What the two sets say together.** Disease-label queries: 1 of 17 reaches a genuine match.
+Domain queries: 8 of 16 are directly answered, 15 of 16 at least on-topic. The books are not
+the limitation — **the question vocabulary is.** The corpus was being examined on a syllabus
+it was never taught.
+
+**Still open:** Stage 0 (capture and score Llama's real queries — needs Colab), HF push,
+Phase 11 A/B.
+
+---
+
+
+## 6o. Stage 0 — the bridge measured, not assumed. It is the bottleneck. (2026-09-26)
+
+Every retrieval number in this project had been measured on **hand-written** queries. The
+deployed system never sends those: Strategy B (Llama-3.1-8B) writes the query from the
+vision label. Nobody had checked that the two match, so the entire retrieval evaluation
+rested on an untested assumption. Ankit's call was to test both before fixing anything.
+
+`scripts/capture_llama_queries.py` ran Strategy B over the 17 disease labels on Colab
+(vision models not run — the label is exactly what the vision model hands over; neutral soil
+held constant so any difference comes from the label alone; temperature 0.2, seed 42). The
+generated queries were then scored by the same cross-encoder as the hand-written ones.
+
+### Result: the hand-written queries win 14–0
+
+| | mean top-1 | strong | marginal | none |
+|---|---|---|---|---|
+| hand-written | **0.1691** | 1 | 5 | 11 |
+| **Llama (deployed bridge)** | **0.0445** | 1 | 0 | **16** |
+
+Per query: Llama better on **0**, hand-written better on **14**, tied on 3 (tie = within
+0.05). Llama's mean is **3.8x lower**. Sixteen of 17 score below 0.15.
+
+**So the published numbers overstate the deployed system.** nDCG@5 0.878, P@5 0.673 and
+Hit@5 1.00 (§6m) were all measured on queries the system does not produce. The real disease-
+side performance is materially worse, and §6m's headline — "the corpus cannot answer these" —
+was only half the story. There are **two independent problems**, not one:
+
+1. **corpus coverage** — real, established in §6m, affects 13 queries;
+2. **bridge quality** — newly measured here, affects all 17.
+
+### Why Llama's queries fail — three faults, in every single one
+
+The prompt is explicit ("LEAD WITH THE SYMPTOM"; crop as "light background context at
+most"). Llama violates it consistently:
+
+> *"**In loam soil with moderate moisture**, where apple plants exhibit dark, rough, corky
+> lesions on their leaves, **what are the observable symptoms and underlying causes described
+> in the classical Sanskrit treatises?**"*
+
+against the hand-written equivalent:
+
+> *"dark rough corky lesions and scabby patches spreading over the leaves of a tree"*
+
+1. **It leads with soil.** All 17 open with "In loam soil with moderate moisture" — words
+   that match nothing in the corpus and dilute the symptom that does.
+2. **It asks a question *about the books*.** "…described in the classical Sanskrit
+   treatises?" The corpus contains remedies, not discussion of treatises, so that clause is
+   pure noise. The corpus is written in **statements**; a query phrased as a question about
+   sources cannot match it.
+3. **It keeps modern pathology vocabulary** — "necrotic patches", "plant vigor", "lesions" —
+   the very terms the bridge exists to remove.
+
+The one thing it does right is the core translation: *Apple Scab → "dark, rough, corky
+lesions"*. Rule 3's symptom-family mapping is working. The failure is everything Llama wraps
+around it.
+
+**This is prompt non-compliance, not a model limitation** — which is the good news, because
+it is fixable by rewriting the prompt rather than by retraining anything.
+
+### Consequences
+
+- **Strategy B's headline claim needs restating.** "0.59–0.96 vs 0.01–0.04" (Strategy B vs
+  the template baseline) came from a small qualitative Phase 8 comparison. Measured properly
+  across 17 queries, the deployed bridge averages **0.0445**. Strategy B still beats a bare
+  template, but the gap is far smaller than reported, and the honest framing is that **the
+  bridge is necessary but currently under-performing its own design**.
+- **The 11 provisional `no_coverage` labels stand.** They were flagged for re-measurement in
+  case Llama phrased better; it phrased worse. The hand-written wording is the *generous*
+  ceiling, so those labels are if anything conservative. No re-labelling needed.
+- **The evaluation must switch to Llama's queries** for the disease half. Hand-written
+  queries remain useful as a *ceiling* — "what a well-worded query could have achieved" —
+  but they are a diagnostic, not a measurement of the system.
+- **Reporting both is the contribution.** The gap between the two (0.169 vs 0.045) is a
+  quantified measure of how much the query-generation step costs, which is exactly the kind
+  of number a multimodal-bridge paper should carry and almost never does.
+
+### Stage 3 — the prompt fix, cheapest first
+
+1. **Forbid the soil-first opening and the meta-question.** Require the query to be a
+   *statement describing what is seen*, never a question, and never a reference to the texts
+   or treatises. Soil only if a soil cause is supplied, and never in first position.
+2. **Few-shot examples drawn from the corpus** — show Llama four real lines
+   (*"drying, yellowness, and excessive paleness of leaves"*, *"the trees ooze out even
+   without wounds"*) plus one good query, so it copies the register instead of inferring it.
+3. **A corpus word list** in the prompt: prefer *yellowness, paleness, drying, withering,
+   oozing, scorched, eaten away, spots*; avoid *necrotic, vigor, lesion, pathogen*.
+4. Only if 1–3 are insufficient: **two-round retrieval** — rough query, show Llama the real
+   passages retrieved, let it rewrite in their vocabulary, retrieve again.
+5. **No fine-tuning.** It needs data we do not have and would lock the bridge to today's
+   corpus.
+
+Re-run `capture_llama_queries.py` after each step and compare — the target is to close the
+0.1246 mean gap to the hand-written ceiling.
 
 ---
 
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
+
+### 7.0b Brihat Samhita chapter over-capture (found 2026-09-14) — CORPUS BUG, see §6k
+- **Defect:** `locate_chapters` ends each wanted chapter at the next *wanted* chapter, so chapters 30-39 and 41-53 were silently ingested (astrology, commodity divination, mythology, architecture).
+- **Scale:** ~83 of 140 Brihat chunks (~25% of the 327-chunk corpus). Present since Phase 3 — every evaluation number in this log was measured against a partly-unintended corpus.
+- **Verdict:** fix before any further retrieval tuning; re-baseline afterwards.
+
+### 7.0 Corpus expansion with near-miss content (2026-09-09) — FAILED, see §6j
+- **Idea:** add the NITI Aayog natural-farming manual (68 chunks) to close the symptom->remedy gap behind the ~55% over-refusal.
+- **Result:** over-refusal **54.5% -> 72.7%**; answered 10/22 -> 6/22. Valid-citation rate improved 14.2% -> 41.7% (it stopped guessing).
+- **Why:** the manual is insect-pest content (119 pest terms) while every evaluation query is a fungal/bacterial/viral leaf disease (leaf spot/septoria/bacterial spot/leaf mould = 0 mentions). Its chunks are semantically adjacent, so they displace classical passages in the top-5.
+- **Verdict:** near-miss corpus material is actively harmful. Match corpus growth to the query distribution. Fix = tier-aware routing (§6j plan), not reverting the book.
 
 ### 7.1 Background randomization (Phase 5-R) — FAILED as a fix
 - **Idea:** segment the leaf, composite onto random backgrounds each epoch so background can't be a label cue. Added a `no_leaf` reject class.

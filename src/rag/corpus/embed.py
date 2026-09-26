@@ -32,10 +32,25 @@ DEFAULT_BATCH_SIZE: int = 16
 
 
 def _load_model() -> "SentenceTransformer":
+    """Load the embedder, honouring an explicit device override.
+
+    ``IKS_EMBED_DEVICE=cpu`` forces CPU. This exists because bge-large (1.3 GB)
+    does not fit comfortably in a 2 GB laptop GPU: it thrashes and embedding
+    collapses to ~450 s per 16-chunk batch, versus ~0.4 s per chunk on CPU.
+    ``CUDA_VISIBLE_DEVICES=""`` is NOT a reliable way to force CPU on Windows --
+    PyTorch treats the empty string as unset and still finds the GPU -- so the
+    override is read here rather than left to the environment.
+    """
+    import os  # noqa: PLC0415
+
     from sentence_transformers import SentenceTransformer  # noqa: PLC0415
     import torch  # noqa: PLC0415
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    override = (os.environ.get("IKS_EMBED_DEVICE") or "").strip().lower()
+    if override:
+        device = override
+    else:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
     _LOGGER.info("Loading embedding model %s on %s ...", EMBEDDING_MODEL_NAME, device)
     return SentenceTransformer(EMBEDDING_MODEL_NAME, device=device)
 
