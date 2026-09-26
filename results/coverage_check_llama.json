@@ -1,39 +1,38 @@
 {
   "n_chunks": 233,
   "n_queries": 17,
-  "distinct_chunks_in_top5": 26,
-  "distinct_rank1_chunks": 7,
+  "distinct_chunks_in_top5": 25,
+  "distinct_rank1_chunks": 9,
   "tiers": {
-    "none": 14,
-    "marginal": 1,
+    "none": 11,
+    "marginal": 4,
     "strong": 2
   },
   "colliding_citation_labels": {},
   "chunk_top5_counts": {
     "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1": 16,
     "899491e5c3fc46a75403010683f817262412a006": 11,
-    "78a3d715f91036f0e326ed9cea8af89f41357773": 11,
-    "56366d9628257cd7c66dc4e5df7ec0d2e6c02725": 8,
-    "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68": 7,
-    "826f66438f091b2dd401069fb8de9480c8db0251": 5,
+    "826f66438f091b2dd401069fb8de9480c8db0251": 8,
+    "78a3d715f91036f0e326ed9cea8af89f41357773": 7,
+    "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68": 6,
+    "56366d9628257cd7c66dc4e5df7ec0d2e6c02725": 6,
+    "d72fd2f03db4442778cad4aef09580fd95cd58a5": 3,
+    "bea5eb09cc890545220e16699bb97db8d7cf57c7": 3,
     "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d": 3,
     "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b": 3,
-    "d72fd2f03db4442778cad4aef09580fd95cd58a5": 2,
     "8d229642cc7a1206f2383a5c70c02a1b8d10fa59": 2,
+    "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50": 2,
+    "3acb6be5723f955f985cc7caac8b9266415050a6": 2,
     "66a24ca23171f7aa5cf55bb4de572ca3cbb5053b": 2,
-    "bea5eb09cc890545220e16699bb97db8d7cf57c7": 1,
     "4564e29f99c018355804908e1c587c237c179377": 1,
     "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f": 1,
     "32f6f7241300eaed609a66f4b13fbbb7b9c9789e": 1,
     "e6146bbca41726b9794ad47b1b253960adefc42e": 1,
     "067742195fce7496206450faef26166722c05f5f": 1,
-    "60f8d5ac4ef66c8589d4801325963492a3b9ca9e": 1,
-    "fd2b1c7d679c55e405e4cf934ffb813ebecf4cad": 1,
+    "8e431e3865417a9cf9464bc2eb281e176e825778": 1,
     "9f1d4fb58a199bf90d7bef27e2794771a6914b78": 1,
-    "af2d330e1ebba9b08892ff92791eee81b9bc75df": 1,
-    "623909cb0f6a47d2e550719bc074746f849f3d4c": 1,
-    "e4d29425247ae82df4f50a2e09243c5f1baa9678": 1,
-    "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50": 1,
+    "ffc8861b6a354f19ff007a01f693e56a2aa541b2": 1,
+    "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e": 1,
     "9460514089d0949d1e369eb1ddd05633833ae22b": 1,
     "dd7f40ebbef23b46828743a43516aa08d7aabb1e": 1
   },
@@ -115,407 +114,407 @@
     {
       "id": "q03",
       "disease": "Corn rust leaf",
-      "query": "Leaves with orange-to-brown powdery pustules on the corn.",
+      "query": "Leaves with orange-to-brown powdery pustules on corn.",
       "top5": [
+        {
+          "chunk_id": "e6146bbca41726b9794ad47b1b253960adefc42e",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.29, v.section_1",
+          "rerank_score": 0.013
+        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0118
+          "rerank_score": 0.0106
         },
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0099
+          "rerank_score": 0.0103
         },
         {
           "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
           "book": "kashyapiyakrishisukti",
           "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
-          "rerank_score": 0.009
-        },
-        {
-          "chunk_id": "e6146bbca41726b9794ad47b1b253960adefc42e",
-          "book": "brihat_samhita",
-          "label": "brihat_samhita, ch.29, v.section_1",
-          "rerank_score": 0.0086
+          "rerank_score": 0.0047
         },
         {
           "chunk_id": "067742195fce7496206450faef26166722c05f5f",
           "book": "brihat_samhita",
           "label": "brihat_samhita, ch.40, v.section_2",
-          "rerank_score": 0.003
+          "rerank_score": 0.0029
         }
       ]
     },
     {
       "id": "q04",
       "disease": "Corn leaf blight",
-      "query": "Leaves withering and drying, turning brown with spreading necrotic patches on a corn plant.",
+      "query": "Leaves drying and withering on a corn tree.",
       "top5": [
         {
-          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.2001
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.1531
         },
         {
           "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0832
+          "rerank_score": 0.0974
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0827
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0808
         },
         {
           "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
           "book": "kashyapiyakrishisukti",
           "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
-          "rerank_score": 0.0335
+          "rerank_score": 0.0709
         },
         {
-          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "chunk_id": "bea5eb09cc890545220e16699bb97db8d7cf57c7",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
-          "rerank_score": 0.0276
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_20",
+          "rerank_score": 0.0358
         }
       ]
     },
     {
       "id": "q05",
       "disease": "Corn Gray leaf spot",
-      "query": "Leaves with small, circular, dark spots with pale centres on a corn plant.",
+      "query": "Small dark spots with pale centres spreading over the leaves of a corn plant.",
       "top5": [
+        {
+          "chunk_id": "8d229642cc7a1206f2383a5c70c02a1b8d10fa59",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.177-187-188",
+          "rerank_score": 0.0119
+        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0413
+          "rerank_score": 0.0104
         },
         {
-          "chunk_id": "60f8d5ac4ef66c8589d4801325963492a3b9ca9e",
-          "book": "kashyapiyakrishisukti",
-          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_28",
-          "rerank_score": 0.0275
-        },
-        {
-          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
-          "book": "kashyapiyakrishisukti",
-          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
-          "rerank_score": 0.024
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.003
         },
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0087
+          "rerank_score": 0.0022
         },
         {
-          "chunk_id": "fd2b1c7d679c55e405e4cf934ffb813ebecf4cad",
-          "book": "kashyapiyakrishisukti",
-          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_19",
-          "rerank_score": 0.0051
+          "chunk_id": "d72fd2f03db4442778cad4aef09580fd95cd58a5",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.27, v.section_1",
+          "rerank_score": 0.0017
         }
       ]
     },
     {
       "id": "q06",
       "disease": "Potato leaf early blight",
-      "query": "Leaves with spreading brown necrotic patches on a potato.",
+      "query": "Leaves with dark brown patches spreading until they dry and wither on a potato.",
       "top5": [
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0261
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0161
+          "rerank_score": 0.1732
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0207
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0195
         },
         {
           "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
-          "rerank_score": 0.0128
+          "rerank_score": 0.012
         },
         {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0066
-        },
-        {
-          "chunk_id": "9f1d4fb58a199bf90d7bef27e2794771a6914b78",
+          "chunk_id": "8e431e3865417a9cf9464bc2eb281e176e825778",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_58",
-          "rerank_score": 0.006
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_56",
+          "rerank_score": 0.0047
         }
       ]
     },
     {
       "id": "q07",
       "disease": "Potato leaf late blight",
-      "query": "Leaves with spreading brown necrotic patches.",
+      "query": "brown patches spreading over the leaves of a potato.",
       "top5": [
         {
-          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
-          "rerank_score": 0.0111
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.038
+        },
+        {
+          "chunk_id": "9f1d4fb58a199bf90d7bef27e2794771a6914b78",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_58",
+          "rerank_score": 0.016
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0102
+          "rerank_score": 0.0153
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0084
-        },
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.006
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0133
         },
         {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0037
+          "chunk_id": "ffc8861b6a354f19ff007a01f693e56a2aa541b2",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_59",
+          "rerank_score": 0.0066
         }
       ]
     },
     {
       "id": "q08",
       "disease": "Tomato Early blight leaf",
-      "query": "Leaves with spreading brown necrotic patches on a tomato plant.",
+      "query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant.",
       "top5": [
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0222
-        },
-        {
-          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
-          "rerank_score": 0.0152
-        },
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0139
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0051
+          "rerank_score": 0.2181
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0033
+          "rerank_score": 0.0305
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0226
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0209
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0188
         }
       ]
     },
     {
       "id": "q09",
       "disease": "Tomato leaf late blight",
-      "query": "Leaves with spreading brown necrotic patches on a tomato plant.",
+      "query": "Leaves drying and withering on a tomato plant.",
       "top5": [
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0222
+          "rerank_score": 0.1588
         },
         {
-          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
-          "rerank_score": 0.0152
-        },
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0139
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
           "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0051
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.0958
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0599
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0033
+          "rerank_score": 0.0449
+        },
+        {
+          "chunk_id": "bea5eb09cc890545220e16699bb97db8d7cf57c7",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_20",
+          "rerank_score": 0.0437
         }
       ]
     },
     {
       "id": "q10",
       "disease": "Tomato Septoria leaf spot",
-      "query": "Distinct dark spots with pale or ringed centres on the leaves of a tomato.",
+      "query": "Small dark spots with pale or ringed centres on the leaves of a tomato.",
       "top5": [
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0279
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0092
+          "rerank_score": 0.0278
         },
         {
-          "chunk_id": "af2d330e1ebba9b08892ff92791eee81b9bc75df",
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_12",
-          "rerank_score": 0.0066
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0273
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0011
+          "rerank_score": 0.0059
         },
         {
           "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
           "book": "brihat_samhita",
           "label": "brihat_samhita, ch.54, v.section_12",
-          "rerank_score": 0.001
+          "rerank_score": 0.0022
+        },
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.0016
         }
       ]
     },
     {
       "id": "q11",
       "disease": "Tomato leaf bacterial spot",
-      "query": "Distinct dark spots with pale centres appearing on the leaves of a tomato.",
+      "query": "Small dark spots with pale or ringed centres on the leaves of a tomato.",
       "top5": [
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0353
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.008
+          "rerank_score": 0.0278
         },
         {
-          "chunk_id": "623909cb0f6a47d2e550719bc074746f849f3d4c",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.190-206",
-          "rerank_score": 0.0017
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0273
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0007
+          "rerank_score": 0.0059
         },
         {
           "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
           "book": "brihat_samhita",
           "label": "brihat_samhita, ch.54, v.section_12",
-          "rerank_score": 0.0006
+          "rerank_score": 0.0022
+        },
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.0016
         }
       ]
     },
     {
       "id": "q12",
       "disease": "Tomato mold leaf",
-      "query": "fine stippling and bronzing on the leaves of a tomato.",
+      "query": "fuzzy discoloured patches spreading over the surface of the leaves of a tomato.",
       "top5": [
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0123
+          "rerank_score": 0.0161
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0043
+          "rerank_score": 0.0104
         },
         {
-          "chunk_id": "e4d29425247ae82df4f50a2e09243c5f1baa9678",
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0096
+        },
+        {
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.0056
+        },
+        {
+          "chunk_id": "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e",
           "book": "upavanavinoda",
-          "label": "upavanavinoda, ch.pages_77_96, v.59-81",
-          "rerank_score": 0.0015
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0014
-        },
-        {
-          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2c",
-          "rerank_score": 0.0008
+          "label": "upavanavinoda, ch.pages_77_96, v.82-103",
+          "rerank_score": 0.0028
         }
       ]
     },
     {
       "id": "q13",
       "disease": "Tomato leaf mosaic virus",
-      "query": "leaves turning mottled yellow-green with gradual curling and distortion.",
+      "query": "leaves turning mottled yellow-green with curling and gradual withering on a tomato plant.",
       "top5": [
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.5243
+          "rerank_score": 0.7634
         },
         {
           "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.3351
+          "rerank_score": 0.2245
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.185
+          "rerank_score": 0.1101
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0284
+        },
+        {
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
           "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0255
-        },
-        {
-          "chunk_id": "8d229642cc7a1206f2383a5c70c02a1b8d10fa59",
-          "book": "upavanavinoda",
-          "label": "upavanavinoda, ch.pages_77_96, v.177-187-188",
-          "rerank_score": 0.0181
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.0197
         }
       ]
     },
@@ -559,37 +558,37 @@
     {
       "id": "q16",
       "disease": "Bell_pepper leaf spot",
-      "query": "Distinct dark spots with pale centres appearing on the leaves of a bell pepper.",
+      "query": "Small dark spots with pale or ringed centres on the leaves of a bell pepper.",
       "top5": [
-        {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0085
-        },
-        {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0015
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0015
+          "rerank_score": 0.0068
         },
         {
           "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
           "book": "brihat_samhita",
           "label": "brihat_samhita, ch.54, v.section_12",
-          "rerank_score": 0.0006
+          "rerank_score": 0.0027
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0023
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0003
+          "rerank_score": 0.0021
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0017
         }
       ]
     },

@@ -1248,6 +1248,64 @@ the retrieved passages, let it rewrite in their words) is still needed.
 
 ---
 
+### Stage 3 round 2 — the bridge now matches the hand-written ceiling
+
+Rule 3's phrases rewritten into the corpus's vocabulary. Same 17 labels, same corpus, same
+scorer.
+
+| | baseline (§6o) | round 1 | **round 2** | hand-written ceiling |
+|---|---|---|---|---|
+| mean top-1 | 0.0445 | 0.0977 | **0.1368** | 0.1691 |
+| strong | 1 | 2 | **2** | 1 |
+| marginal | 0 | 1 | **4** | 5 |
+| none | 16 | 14 | **11** | 11 |
+| wins vs hand-written | 0 | 1 | **4** | — |
+| gap to ceiling | −0.1246 | −0.0714 | **−0.0323** | — |
+
+**74% of the gap closed, and the mean difference is now inside the 0.05 noise floor** — the
+script's verdict flipped to *"no meaningful difference"*. Llama's "none" count (11) now
+equals the hand-written count exactly, and it beats the hand-written wording outright on
+4 queries, including mosaic virus at **0.7634** against 0.2706.
+
+Compliance is total: 0/17 open with soil, 0/17 are questions, 0/17 mention the treatises,
+0/17 use banned vocabulary.
+
+**Read the verdict carefully.** The *mean* is within noise, but per query the hand-written
+set still wins 10 to 4. So the honest statement is that the bridge has caught up on
+average, not that it is equal everywhere. And the ceiling itself is soft: those hand-written
+queries were drafted after reading corpus passages in the same session, so part of 0.1691
+is vocabulary leakage. Measured against a fair human baseline the remaining gap would be
+smaller still.
+
+**Conclusion: two-round retrieval is not needed.** Step 4 of the Stage 3 plan is dropped.
+Prompt engineering alone took the bridge from 3.8x worse than a human to statistically
+level, at zero cost and with no retraining.
+
+**A behaviour change worth recording.** Forcing corpus vocabulary made the queries less
+discriminating. Septoria leaf spot, bacterial spot and bell-pepper leaf spot now generate
+*the same query* apart from the crop name — "small dark spots with pale or ringed centres" —
+and late blight collapsed to "leaves drying and withering". Three diseases producing one
+query means the system cannot return three different answers.
+
+Whether that is a defect is genuinely arguable, and the honest answer is that it is mostly
+not: the treatises do not distinguish those conditions either. They prescribe by observed
+symptom, and all three really do present as dark spots with pale centres. The bridge has
+stopped asserting distinctions the target tradition does not make. It should be reported,
+not hidden — it is a direct consequence of mapping a fine-grained modern taxonomy onto a
+coarse-grained classical one, which is the same boundary §6m measured from the other side.
+
+Minor artefact: one query says "a corn tree", from the tree-centric worked examples.
+
+**What the residue is.** The 11 remaining failures are scab, rust, gray leaf spot, Septoria,
+bacterial spot, leaf mould and black rot — exactly the set §6m established the texts do not
+contain. The two successes are both virus cases, whose yellowing-and-mottling language the
+corpus does use. With the bridge no longer adding noise, **what is left is the coverage
+boundary, not a query-wording problem.** The two failures are now cleanly separated and can
+be reported independently.
+
+---
+
+
 
 ## 7. Negative Results (paper ammunition — keep these honest)
 
