@@ -26,7 +26,7 @@ Until now the evaluation assumed the hand-written ones were correct. That was ne
 
 ---
 
-## STAGE 0 — Capture and score Llama's real queries  ⬜
+## STAGE 0 — Capture and score Llama's real queries  ✅ DONE 26 Sep — hand-written won 14-0
 
 Nothing has ever recorded what Llama actually writes. Do this before trusting any
 retrieval number.
@@ -34,11 +34,12 @@ retrieval number.
 - [x] **0.1** Write `scripts/capture_llama_queries.py` + `scripts/compare_query_sources.py` — DONE — feed the 18 disease labels (+ soil
       values) through Strategy B, save each generated query to a file. *(Runs on Colab, free
       T4, Llama-3.1-8B.)*
-- [ ] **0.2** Run it on Colab → `data/eval/llama_generated_queries.json`
-- [ ] **0.3** Score them locally: `python scripts/check_coverage.py data/eval/llama_generated_queries.json llama`
-- [ ] **0.4** `python scripts/compare_query_sources.py` — side by side, per query, with a verdict
-- [ ] **0.5** Write the verdict into `EXPERIMENT_LOG.md` §6o — including which was better and by how much
-- [ ] **0.6** **If Llama wins:** re-measure the 13 disease queries marked `no_coverage`.
+- [x] **0.2** Run it on Colab → `data/eval/llama_generated_queries.json`
+- [x] **0.3** Score them locally: `python scripts/check_coverage.py data/eval/llama_generated_queries.json llama`
+- [x] **0.4** `python scripts/compare_query_sources.py` — side by side, per query, with a verdict
+- [x] **0.5** Write the verdict into `EXPERIMENT_LOG.md` §6o — including which was better and by how much
+- [x] **0.6** ~~If Llama wins:~~ **Llama lost** (mean 0.045 vs 0.169), so the 11 provisional
+      labels stand — hand-written wording is the generous ceiling. Original note: re-measure the 13 disease queries marked `no_coverage`.
       Their labels rest on the hand-written wording scoring low, and wording alone moves
       the score up to 17x. They are flagged `label_provisional: true` in the query set.
 
@@ -75,7 +76,7 @@ rain, water, planting, tree wounds, storage.
 
 ---
 
-## STAGE 3 — Fix Llama, only if Stage 0 says it needs it  ⬜
+## STAGE 3 — Fix Llama  ⬜  **CONFIRMED NEEDED — this is now the top priority**
 
 In order, cheapest first. Stop as soon as the score is good enough.
 

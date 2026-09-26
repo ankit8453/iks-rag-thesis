@@ -1099,6 +1099,102 @@ Phase 11 A/B.
 ---
 
 
+## 6o. Stage 0 — the bridge measured, not assumed. It is the bottleneck. (2026-09-26)
+
+Every retrieval number in this project had been measured on **hand-written** queries. The
+deployed system never sends those: Strategy B (Llama-3.1-8B) writes the query from the
+vision label. Nobody had checked that the two match, so the entire retrieval evaluation
+rested on an untested assumption. Ankit's call was to test both before fixing anything.
+
+`scripts/capture_llama_queries.py` ran Strategy B over the 17 disease labels on Colab
+(vision models not run — the label is exactly what the vision model hands over; neutral soil
+held constant so any difference comes from the label alone; temperature 0.2, seed 42). The
+generated queries were then scored by the same cross-encoder as the hand-written ones.
+
+### Result: the hand-written queries win 14–0
+
+| | mean top-1 | strong | marginal | none |
+|---|---|---|---|---|
+| hand-written | **0.1691** | 1 | 5 | 11 |
+| **Llama (deployed bridge)** | **0.0445** | 1 | 0 | **16** |
+
+Per query: Llama better on **0**, hand-written better on **14**, tied on 3 (tie = within
+0.05). Llama's mean is **3.8x lower**. Sixteen of 17 score below 0.15.
+
+**So the published numbers overstate the deployed system.** nDCG@5 0.878, P@5 0.673 and
+Hit@5 1.00 (§6m) were all measured on queries the system does not produce. The real disease-
+side performance is materially worse, and §6m's headline — "the corpus cannot answer these" —
+was only half the story. There are **two independent problems**, not one:
+
+1. **corpus coverage** — real, established in §6m, affects 13 queries;
+2. **bridge quality** — newly measured here, affects all 17.
+
+### Why Llama's queries fail — three faults, in every single one
+
+The prompt is explicit ("LEAD WITH THE SYMPTOM"; crop as "light background context at
+most"). Llama violates it consistently:
+
+> *"**In loam soil with moderate moisture**, where apple plants exhibit dark, rough, corky
+> lesions on their leaves, **what are the observable symptoms and underlying causes described
+> in the classical Sanskrit treatises?**"*
+
+against the hand-written equivalent:
+
+> *"dark rough corky lesions and scabby patches spreading over the leaves of a tree"*
+
+1. **It leads with soil.** All 17 open with "In loam soil with moderate moisture" — words
+   that match nothing in the corpus and dilute the symptom that does.
+2. **It asks a question *about the books*.** "…described in the classical Sanskrit
+   treatises?" The corpus contains remedies, not discussion of treatises, so that clause is
+   pure noise. The corpus is written in **statements**; a query phrased as a question about
+   sources cannot match it.
+3. **It keeps modern pathology vocabulary** — "necrotic patches", "plant vigor", "lesions" —
+   the very terms the bridge exists to remove.
+
+The one thing it does right is the core translation: *Apple Scab → "dark, rough, corky
+lesions"*. Rule 3's symptom-family mapping is working. The failure is everything Llama wraps
+around it.
+
+**This is prompt non-compliance, not a model limitation** — which is the good news, because
+it is fixable by rewriting the prompt rather than by retraining anything.
+
+### Consequences
+
+- **Strategy B's headline claim needs restating.** "0.59–0.96 vs 0.01–0.04" (Strategy B vs
+  the template baseline) came from a small qualitative Phase 8 comparison. Measured properly
+  across 17 queries, the deployed bridge averages **0.0445**. Strategy B still beats a bare
+  template, but the gap is far smaller than reported, and the honest framing is that **the
+  bridge is necessary but currently under-performing its own design**.
+- **The 11 provisional `no_coverage` labels stand.** They were flagged for re-measurement in
+  case Llama phrased better; it phrased worse. The hand-written wording is the *generous*
+  ceiling, so those labels are if anything conservative. No re-labelling needed.
+- **The evaluation must switch to Llama's queries** for the disease half. Hand-written
+  queries remain useful as a *ceiling* — "what a well-worded query could have achieved" —
+  but they are a diagnostic, not a measurement of the system.
+- **Reporting both is the contribution.** The gap between the two (0.169 vs 0.045) is a
+  quantified measure of how much the query-generation step costs, which is exactly the kind
+  of number a multimodal-bridge paper should carry and almost never does.
+
+### Stage 3 — the prompt fix, cheapest first
+
+1. **Forbid the soil-first opening and the meta-question.** Require the query to be a
+   *statement describing what is seen*, never a question, and never a reference to the texts
+   or treatises. Soil only if a soil cause is supplied, and never in first position.
+2. **Few-shot examples drawn from the corpus** — show Llama four real lines
+   (*"drying, yellowness, and excessive paleness of leaves"*, *"the trees ooze out even
+   without wounds"*) plus one good query, so it copies the register instead of inferring it.
+3. **A corpus word list** in the prompt: prefer *yellowness, paleness, drying, withering,
+   oozing, scorched, eaten away, spots*; avoid *necrotic, vigor, lesion, pathogen*.
+4. Only if 1–3 are insufficient: **two-round retrieval** — rough query, show Llama the real
+   passages retrieved, let it rewrite in their vocabulary, retrieve again.
+5. **No fine-tuning.** It needs data we do not have and would lock the bridge to today's
+   corpus.
+
+Re-run `capture_llama_queries.py` after each step and compare — the target is to close the
+0.1246 mean gap to the hand-written ceiling.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
