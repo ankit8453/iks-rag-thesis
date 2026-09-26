@@ -31,12 +31,12 @@ Until now the evaluation assumed the hand-written ones were correct. That was ne
 Nothing has ever recorded what Llama actually writes. Do this before trusting any
 retrieval number.
 
-- [ ] **0.1** Write `scripts/capture_llama_queries.py` — feed the 18 disease labels (+ soil
+- [x] **0.1** Write `scripts/capture_llama_queries.py` + `scripts/compare_query_sources.py` — DONE — feed the 18 disease labels (+ soil
       values) through Strategy B, save each generated query to a file. *(Runs on Colab, free
       T4, Llama-3.1-8B.)*
 - [ ] **0.2** Run it on Colab → `data/eval/llama_generated_queries.json`
 - [ ] **0.3** Score them locally: `python scripts/check_coverage.py data/eval/llama_generated_queries.json llama`
-- [ ] **0.4** Compare side by side against the hand-written scores, per query
+- [ ] **0.4** `python scripts/compare_query_sources.py` — side by side, per query, with a verdict
 - [ ] **0.5** Write the verdict into `EXPERIMENT_LOG.md` §6o — including which was better and by how much
 
 ---
