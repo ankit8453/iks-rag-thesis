@@ -73,6 +73,9 @@ def _context(disease: str, crop: str):
 
 
 def main() -> int:
+    import torch
+
+    from src.integration.config import LLMMediatedStrategyConfig
     from src.integration.strategy_llm_mediated import LLMMediatedStrategy
     from src.rag.generator import GroundedGenerator
 
@@ -82,11 +85,19 @@ def main() -> int:
     cases = [q for q in payload["queries"] if q.get("disease")]
     print(f"{len(cases)} disease-labelled queries to reproduce through Strategy B")
 
+    # Same construction as the Phase 8 notebook, so the queries recorded here are the
+    # ones the deployed pipeline would actually produce.
     print("loading Llama-3.1-8B (about 5 minutes) ...")
-    llm = GroundedGenerator()
-    if hasattr(llm, "load"):
-        llm.load()
-    strategy = LLMMediatedStrategy()
+    llm = GroundedGenerator(
+        model_name="meta-llama/Llama-3.1-8B-Instruct",
+        load_in_4bit=True,
+        temperature=0.2,
+        max_new_tokens=512,
+        seed=42,
+    )
+    llm._ensure_loaded()
+    torch.cuda.empty_cache()
+    strategy = LLMMediatedStrategy(LLMMediatedStrategyConfig())
 
     out = []
     for i, q in enumerate(cases, 1):

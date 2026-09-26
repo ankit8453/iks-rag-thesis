@@ -38,6 +38,9 @@ retrieval number.
 - [ ] **0.3** Score them locally: `python scripts/check_coverage.py data/eval/llama_generated_queries.json llama`
 - [ ] **0.4** `python scripts/compare_query_sources.py` — side by side, per query, with a verdict
 - [ ] **0.5** Write the verdict into `EXPERIMENT_LOG.md` §6o — including which was better and by how much
+- [ ] **0.6** **If Llama wins:** re-measure the 13 disease queries marked `no_coverage`.
+      Their labels rest on the hand-written wording scoring low, and wording alone moves
+      the score up to 17x. They are flagged `label_provisional: true` in the query set.
 
 ---
 
