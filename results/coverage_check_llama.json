@@ -1,280 +1,287 @@
 {
   "n_chunks": 233,
   "n_queries": 17,
-  "distinct_chunks_in_top5": 20,
-  "distinct_rank1_chunks": 10,
+  "distinct_chunks_in_top5": 26,
+  "distinct_rank1_chunks": 7,
   "tiers": {
-    "none": 16,
-    "strong": 1
+    "none": 14,
+    "marginal": 1,
+    "strong": 2
   },
   "colliding_citation_labels": {},
   "chunk_top5_counts": {
-    "56366d9628257cd7c66dc4e5df7ec0d2e6c02725": 13,
-    "78a3d715f91036f0e326ed9cea8af89f41357773": 13,
-    "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1": 9,
-    "826f66438f091b2dd401069fb8de9480c8db0251": 8,
-    "899491e5c3fc46a75403010683f817262412a006": 7,
-    "4564e29f99c018355804908e1c587c237c179377": 4,
-    "6b3483248920c565686483bc1082468f98d0d2dd": 4,
-    "501f728d34cd4d9ead3c5499b070f65ec3ea82d5": 4,
-    "964255569087ef713c70f5e3619b35a88d1e946e": 4,
-    "1b33a4e37ab818b324d328d9962f9be27a932212": 3,
-    "1055d8846f50095ce172372b486be5c743daa426": 3,
-    "626d1b695db297e30104427d3fdab2fc98b45ca1": 3,
-    "067742195fce7496206450faef26166722c05f5f": 2,
-    "9f1d4fb58a199bf90d7bef27e2794771a6914b78": 2,
-    "0f4c2bdbed11d0f23d0626a241286ff2c548ea4c": 1,
-    "f0e82f35816dbd72922b516f2dc8ada352ebe773": 1,
-    "66683a1c3016fc7290d3627607d8ea99ce583556": 1,
-    "91bf8921647f99f633c387ccf6a2df666b0c491c": 1,
-    "c6c6871ed63222fe14aff8621ff2acf35e3ce5b2": 1,
-    "078991b4dbdf4d1dddda8697fd2d1e72dfd1a12e": 1
+    "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1": 16,
+    "899491e5c3fc46a75403010683f817262412a006": 11,
+    "78a3d715f91036f0e326ed9cea8af89f41357773": 11,
+    "56366d9628257cd7c66dc4e5df7ec0d2e6c02725": 8,
+    "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68": 7,
+    "826f66438f091b2dd401069fb8de9480c8db0251": 5,
+    "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d": 3,
+    "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b": 3,
+    "d72fd2f03db4442778cad4aef09580fd95cd58a5": 2,
+    "8d229642cc7a1206f2383a5c70c02a1b8d10fa59": 2,
+    "66a24ca23171f7aa5cf55bb4de572ca3cbb5053b": 2,
+    "bea5eb09cc890545220e16699bb97db8d7cf57c7": 1,
+    "4564e29f99c018355804908e1c587c237c179377": 1,
+    "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f": 1,
+    "32f6f7241300eaed609a66f4b13fbbb7b9c9789e": 1,
+    "e6146bbca41726b9794ad47b1b253960adefc42e": 1,
+    "067742195fce7496206450faef26166722c05f5f": 1,
+    "60f8d5ac4ef66c8589d4801325963492a3b9ca9e": 1,
+    "fd2b1c7d679c55e405e4cf934ffb813ebecf4cad": 1,
+    "9f1d4fb58a199bf90d7bef27e2794771a6914b78": 1,
+    "af2d330e1ebba9b08892ff92791eee81b9bc75df": 1,
+    "623909cb0f6a47d2e550719bc074746f849f3d4c": 1,
+    "e4d29425247ae82df4f50a2e09243c5f1baa9678": 1,
+    "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50": 1,
+    "9460514089d0949d1e369eb1ddd05633833ae22b": 1,
+    "dd7f40ebbef23b46828743a43516aa08d7aabb1e": 1
   },
   "results": [
     {
       "id": "q01",
       "disease": "Apple Scab Leaf",
-      "query": "In loam soil with moderate moisture, where apple plants exhibit dark, rough, corky lesions on their leaves, what are the observable symptoms and underlying causes described in the classical Sanskrit treatises?.",
+      "query": "dark rough corky patches spreading over the leaves of an apple tree.",
       "top5": [
         {
-          "chunk_id": "1b33a4e37ab818b324d328d9962f9be27a932212",
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_38",
-          "rerank_score": 0.0264
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.075
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0188
+          "rerank_score": 0.0293
         },
         {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.015
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0092
+          "chunk_id": "d72fd2f03db4442778cad4aef09580fd95cd58a5",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.27, v.section_1",
+          "rerank_score": 0.0231
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0068
+          "rerank_score": 0.0191
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0138
         }
       ]
     },
     {
       "id": "q02",
       "disease": "Apple rust leaf",
-      "query": "In loam soil with moderate moisture, where apple plants exhibit small, orange-to-brown powdery pustules on their leaves, what are the symptoms and remedies described in the classical Sanskrit treatises?.",
+      "query": "Leaves with orange-to-brown powdery pustules on apple.",
       "top5": [
         {
-          "chunk_id": "1b33a4e37ab818b324d328d9962f9be27a932212",
+          "chunk_id": "bea5eb09cc890545220e16699bb97db8d7cf57c7",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_38",
-          "rerank_score": 0.0356
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_20",
+          "rerank_score": 0.0323
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0114
         },
         {
           "chunk_id": "4564e29f99c018355804908e1c587c237c179377",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_29",
-          "rerank_score": 0.0303
+          "rerank_score": 0.009
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0145
+          "chunk_id": "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_25",
+          "rerank_score": 0.0068
         },
         {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0117
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0094
+          "chunk_id": "32f6f7241300eaed609a66f4b13fbbb7b9c9789e",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_37",
+          "rerank_score": 0.0033
         }
       ]
     },
     {
       "id": "q03",
       "disease": "Corn rust leaf",
-      "query": "In loam soil with moderate moisture, where corn is grown, what plant affliction presents with orange-to-brown powdery pustules on its leaves?.",
+      "query": "Leaves with orange-to-brown powdery pustules on the corn.",
       "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0118
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0099
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.009
+        },
+        {
+          "chunk_id": "e6146bbca41726b9794ad47b1b253960adefc42e",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.29, v.section_1",
+          "rerank_score": 0.0086
+        },
         {
           "chunk_id": "067742195fce7496206450faef26166722c05f5f",
           "book": "brihat_samhita",
           "label": "brihat_samhita, ch.40, v.section_2",
-          "rerank_score": 0.009
-        },
-        {
-          "chunk_id": "1055d8846f50095ce172372b486be5c743daa426",
-          "book": "krishi_parashara",
-          "label": "krishi_parashara, ch.pages_94_119, v.84-103",
-          "rerank_score": 0.004
-        },
-        {
-          "chunk_id": "1b33a4e37ab818b324d328d9962f9be27a932212",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_38",
-          "rerank_score": 0.0031
-        },
-        {
-          "chunk_id": "0f4c2bdbed11d0f23d0626a241286ff2c548ea4c",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_55",
-          "rerank_score": 0.0022
-        },
-        {
-          "chunk_id": "4564e29f99c018355804908e1c587c237c179377",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_29",
-          "rerank_score": 0.0017
+          "rerank_score": 0.003
         }
       ]
     },
     {
       "id": "q04",
       "disease": "Corn leaf blight",
-      "query": "In loam soil with moderate moisture, where corn is grown, what plant affliction presents with spreading brown necrotic patches on its leaves.",
+      "query": "Leaves withering and drying, turning brown with spreading necrotic patches on a corn plant.",
       "top5": [
         {
-          "chunk_id": "1055d8846f50095ce172372b486be5c743daa426",
-          "book": "krishi_parashara",
-          "label": "krishi_parashara, ch.pages_94_119, v.84-103",
-          "rerank_score": 0.0061
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.2001
         },
         {
-          "chunk_id": "4564e29f99c018355804908e1c587c237c179377",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_29",
-          "rerank_score": 0.0032
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.0832
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.003
+          "rerank_score": 0.0827
         },
         {
-          "chunk_id": "6b3483248920c565686483bc1082468f98d0d2dd",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_9",
-          "rerank_score": 0.0022
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.0335
         },
         {
-          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0021
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0276
         }
       ]
     },
     {
       "id": "q05",
       "disease": "Corn Gray leaf spot",
-      "query": "In loam soil with moderate moisture, where corn is grown, what plant affliction presents with small, dark, circular lesions with pale centers, often surrounded by a ring of lighter tissue, and is characterized by a general decline in plant vigor?.",
+      "query": "Leaves with small, circular, dark spots with pale centres on a corn plant.",
       "top5": [
         {
-          "chunk_id": "067742195fce7496206450faef26166722c05f5f",
-          "book": "brihat_samhita",
-          "label": "brihat_samhita, ch.40, v.section_2",
-          "rerank_score": 0.0042
-        },
-        {
-          "chunk_id": "1055d8846f50095ce172372b486be5c743daa426",
-          "book": "krishi_parashara",
-          "label": "krishi_parashara, ch.pages_94_119, v.84-103",
-          "rerank_score": 0.0025
-        },
-        {
-          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
-          "rerank_score": 0.0014
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0413
         },
         {
-          "chunk_id": "6b3483248920c565686483bc1082468f98d0d2dd",
+          "chunk_id": "60f8d5ac4ef66c8589d4801325963492a3b9ca9e",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_28",
+          "rerank_score": 0.0275
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.024
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_9",
-          "rerank_score": 0.001
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0087
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0007
+          "chunk_id": "fd2b1c7d679c55e405e4cf934ffb813ebecf4cad",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_19",
+          "rerank_score": 0.0051
         }
       ]
     },
     {
       "id": "q06",
       "disease": "Potato leaf early blight",
-      "query": "In loam soil with moderate moisture, where the potato plants display spreading brown necrotic patches on their leaves, what are the observable symptoms and underlying causes described in the classical Sanskrit treatises?.",
+      "query": "Leaves with spreading brown necrotic patches on a potato.",
       "top5": [
         {
-          "chunk_id": "9f1d4fb58a199bf90d7bef27e2794771a6914b78",
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_58",
-          "rerank_score": 0.0342
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0261
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.011
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0161
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0128
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0092
+          "rerank_score": 0.0066
         },
         {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "chunk_id": "9f1d4fb58a199bf90d7bef27e2794771a6914b78",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_58",
           "rerank_score": 0.006
-        },
-        {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0046
         }
       ]
     },
     {
       "id": "q07",
       "disease": "Potato leaf late blight",
-      "query": "In loam soil with moderate moisture, where the potato plants display spreading brown necrotic patches on their leaves, what are the observable symptoms and underlying causes described in the classical Sanskrit treatises?.",
+      "query": "Leaves with spreading brown necrotic patches.",
       "top5": [
         {
-          "chunk_id": "9f1d4fb58a199bf90d7bef27e2794771a6914b78",
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_58",
-          "rerank_score": 0.0342
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0111
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0102
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.011
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0092
+          "rerank_score": 0.0084
         },
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
@@ -286,377 +293,377 @@
           "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0046
+          "rerank_score": 0.0037
         }
       ]
     },
     {
       "id": "q08",
       "disease": "Tomato Early blight leaf",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato plant display spreading brown necrotic patches with yellowish tinted edges, what symptoms and remedies are described in the classical Sanskrit treatises?.",
+      "query": "Leaves with spreading brown necrotic patches on a tomato plant.",
       "top5": [
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0225
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0207
+          "rerank_score": 0.0222
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0152
+        },
+        {
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0139
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.0051
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0151
-        },
-        {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0125
-        },
-        {
-          "chunk_id": "501f728d34cd4d9ead3c5499b070f65ec3ea82d5",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2a",
-          "rerank_score": 0.0091
+          "rerank_score": 0.0033
         }
       ]
     },
     {
       "id": "q09",
       "disease": "Tomato leaf late blight",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato plant exhibit spreading brown necrotic patches with a soft, wet, and decaying appearance, what are the described symptoms and their underlying causes?.",
+      "query": "Leaves with spreading brown necrotic patches on a tomato plant.",
       "top5": [
-        {
-          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
-          "rerank_score": 0.043
-        },
-        {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0247
-        },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0211
+          "rerank_score": 0.0222
         },
         {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0209
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0152
         },
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0109
+          "rerank_score": 0.0139
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.0051
+        },
+        {
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.0033
         }
       ]
     },
     {
       "id": "q10",
       "disease": "Tomato Septoria leaf spot",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato exhibit distinct dark spots with pale or ringed centres, what are the symptoms and remedies described in the classical Sanskrit treatises?.",
+      "query": "Distinct dark spots with pale or ringed centres on the leaves of a tomato.",
       "top5": [
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0196
-        },
-        {
-          "chunk_id": "964255569087ef713c70f5e3619b35a88d1e946e",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.4b",
-          "rerank_score": 0.0078
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0046
-        },
-        {
-          "chunk_id": "501f728d34cd4d9ead3c5499b070f65ec3ea82d5",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2a",
-          "rerank_score": 0.0037
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0279
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0031
+          "rerank_score": 0.0092
+        },
+        {
+          "chunk_id": "af2d330e1ebba9b08892ff92791eee81b9bc75df",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_12",
+          "rerank_score": 0.0066
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.0011
+        },
+        {
+          "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_12",
+          "rerank_score": 0.001
         }
       ]
     },
     {
       "id": "q11",
       "disease": "Tomato leaf bacterial spot",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato plant exhibit small, dark spots with pale centres and a fine, dark border, and the soil feels medium in texture.",
+      "query": "Distinct dark spots with pale centres appearing on the leaves of a tomato.",
       "top5": [
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0133
+          "rerank_score": 0.0353
         },
         {
-          "chunk_id": "f0e82f35816dbd72922b516f2dc8ada352ebe773",
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_53",
-          "rerank_score": 0.0063
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.008
         },
         {
-          "chunk_id": "6b3483248920c565686483bc1082468f98d0d2dd",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_9",
-          "rerank_score": 0.0052
+          "chunk_id": "623909cb0f6a47d2e550719bc074746f849f3d4c",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.190-206",
+          "rerank_score": 0.0017
         },
         {
-          "chunk_id": "4564e29f99c018355804908e1c587c237c179377",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_29",
-          "rerank_score": 0.0049
-        },
-        {
-          "chunk_id": "66683a1c3016fc7290d3627607d8ea99ce583556",
-          "book": "kashyapiyakrishisukti",
-          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_16",
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
           "rerank_score": 0.0007
+        },
+        {
+          "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_12",
+          "rerank_score": 0.0006
         }
       ]
     },
     {
       "id": "q12",
       "disease": "Tomato mold leaf",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato plant are covered in a fuzzy, discoloured, and somewhat soft growth, what are the symptoms and remedies described in the classical Sanskrit treatises?.",
+      "query": "fine stippling and bronzing on the leaves of a tomato.",
       "top5": [
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0161
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0123
         },
         {
-          "chunk_id": "91bf8921647f99f633c387ccf6a2df666b0c491c",
-          "book": "brihat_samhita",
-          "label": "brihat_samhita, ch.54, v.section_5",
-          "rerank_score": 0.0141
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0043
         },
         {
-          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0113
+          "chunk_id": "e4d29425247ae82df4f50a2e09243c5f1baa9678",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.59-81",
+          "rerank_score": 0.0015
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0101
+          "rerank_score": 0.0014
         },
         {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.0101
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.0008
         }
       ]
     },
     {
       "id": "q13",
       "disease": "Tomato leaf mosaic virus",
-      "query": "In loam soil with moderate moisture, where the leaves of the tomato plant display mottled yellow-green discoloration and curling, what are the symptoms and remedies described in the classical Sanskrit treatises?.",
+      "query": "leaves turning mottled yellow-green with gradual curling and distortion.",
       "top5": [
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0306
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.016
+          "rerank_score": 0.5243
         },
         {
           "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.0116
+          "rerank_score": 0.3351
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.185
         },
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0099
+          "rerank_score": 0.0255
         },
         {
-          "chunk_id": "964255569087ef713c70f5e3619b35a88d1e946e",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.4b",
-          "rerank_score": 0.0089
+          "chunk_id": "8d229642cc7a1206f2383a5c70c02a1b8d10fa59",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.177-187-188",
+          "rerank_score": 0.0181
         }
       ]
     },
     {
       "id": "q14",
       "disease": "Tomato leaf yellow virus",
-      "query": "In loam soil with moderate moisture, where the medium texture is not visibly affected, and on a plant that is not specified, what are the symptoms described as yellowing of leaves with mottled yellow-green discoloration and curling, resembling a disease that affects the foliage of a tomato.",
+      "query": "leaves turning yellow with excessive paleness and gradual shedding on a tomato plant.",
       "top5": [
         {
           "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.173-189",
-          "rerank_score": 0.418
+          "rerank_score": 0.5824
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.3325
+          "rerank_score": 0.5019
         },
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0482
+          "rerank_score": 0.2863
         },
         {
-          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.016
+          "chunk_id": "8d229642cc7a1206f2383a5c70c02a1b8d10fa59",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.177-187-188",
+          "rerank_score": 0.1376
         },
         {
-          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
+          "chunk_id": "66a24ca23171f7aa5cf55bb4de572ca3cbb5053b",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
-          "rerank_score": 0.0103
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_13",
+          "rerank_score": 0.0226
         }
       ]
     },
     {
       "id": "q16",
       "disease": "Bell_pepper leaf spot",
-      "query": "In loam soil with moderate moisture, where the leaves of the bell pepper exhibit small, dark spots with pale or ringed centres, and a medium texture, what are the described symptoms and their underlying causes?.",
+      "query": "Distinct dark spots with pale centres appearing on the leaves of a bell pepper.",
       "top5": [
         {
           "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0151
-        },
-        {
-          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0132
-        },
-        {
-          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0058
-        },
-        {
-          "chunk_id": "6b3483248920c565686483bc1082468f98d0d2dd",
-          "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_9",
-          "rerank_score": 0.0018
+          "rerank_score": 0.0085
         },
         {
           "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
-          "rerank_score": 0.001
+          "rerank_score": 0.0015
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.0015
+        },
+        {
+          "chunk_id": "2e37635e7b732e01edc96cbf2dcb4bf6b7dfa71b",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_12",
+          "rerank_score": 0.0006
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.0003
         }
       ]
     },
     {
       "id": "q17",
       "disease": "Squash Powdery mildew leaf",
-      "query": "In loam soil with moderate moisture, where the leaves of the squash exhibit a white powdery coating, particularly noticeable on the underside, what symptoms and remedies are described in the classical Sanskrit treatises for this condition?.",
+      "query": "Leaves covered in a white powdery coating on a squash plant.",
       "top5": [
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0069
+          "rerank_score": 0.0134
         },
         {
-          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "chunk_id": "9460514089d0949d1e369eb1ddd05633833ae22b",
           "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2d",
-          "rerank_score": 0.0047
+          "label": "vrikshayurveda, ch.full, v.76-92",
+          "rerank_score": 0.0052
         },
         {
-          "chunk_id": "c6c6871ed63222fe14aff8621ff2acf35e3ce5b2",
+          "chunk_id": "dd7f40ebbef23b46828743a43516aa08d7aabb1e",
           "book": "niti_natural_farming",
-          "label": "niti_natural_farming, ch.pages_36_165, v.section_66",
-          "rerank_score": 0.0037
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_23",
+          "rerank_score": 0.0043
         },
         {
-          "chunk_id": "964255569087ef713c70f5e3619b35a88d1e946e",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.4b",
-          "rerank_score": 0.0031
+          "chunk_id": "899491e5c3fc46a75403010683f817262412a006",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_14",
+          "rerank_score": 0.0038
         },
         {
-          "chunk_id": "501f728d34cd4d9ead3c5499b070f65ec3ea82d5",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2a",
-          "rerank_score": 0.0027
+          "chunk_id": "66a24ca23171f7aa5cf55bb4de572ca3cbb5053b",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_13",
+          "rerank_score": 0.0022
         }
       ]
     },
     {
       "id": "q18",
       "disease": "grape leaf black rot",
-      "query": "In loam soil with moderate moisture, where the grape plants display dark sunken decaying areas on their leaves, what are the observable symptoms and underlying causes described in the classical Sanskrit treatises?.",
+      "query": "dark sunken decaying areas spreading over the leaves of a grape.",
       "top5": [
         {
           "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
           "book": "vrikshayurveda",
           "label": "vrikshayurveda, ch.full, v.1.1d",
-          "rerank_score": 0.0213
+          "rerank_score": 0.0145
         },
         {
-          "chunk_id": "501f728d34cd4d9ead3c5499b070f65ec3ea82d5",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.2a",
-          "rerank_score": 0.0041
-        },
-        {
-          "chunk_id": "964255569087ef713c70f5e3619b35a88d1e946e",
-          "book": "vrikshayurveda",
-          "label": "vrikshayurveda, ch.full, v.1.4b",
-          "rerank_score": 0.0036
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.0112
         },
         {
           "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
           "book": "niti_natural_farming",
           "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
-          "rerank_score": 0.0029
+          "rerank_score": 0.0041
         },
         {
-          "chunk_id": "078991b4dbdf4d1dddda8697fd2d1e72dfd1a12e",
-          "book": "upavanavinoda",
-          "label": "upavanavinoda, ch.pages_77_96, v.116-149",
-          "rerank_score": 0.0016
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.0031
+        },
+        {
+          "chunk_id": "d72fd2f03db4442778cad4aef09580fd95cd58a5",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.27, v.section_1",
+          "rerank_score": 0.0031
         }
       ]
     }

@@ -1195,6 +1195,60 @@ Re-run `capture_llama_queries.py` after each step and compare — the target is 
 
 ---
 
+### Stage 3 round 1 — the prompt rewrite, measured
+
+Same 17 labels, same corpus, same scorer. The prompt rewrite alone:
+
+| | before | after | hand-written ceiling |
+|---|---|---|---|
+| mean top-1 | 0.0445 | **0.0977** | 0.1691 |
+| strong | 1 | **2** | 1 |
+| marginal | 0 | **1** | 5 |
+| none | 16 | **14** | 11 |
+| per-query wins vs hand-written | 0 | **1** | — |
+| ties (within 0.05) | 3 | **5** | — |
+
+**The bridge more than doubled (2.2x) and closed 43% of the gap to the hand-written
+ceiling**, with no retraining and no cost. Compliance with the prompt went from near-zero
+to near-total:
+
+| fault | before | after |
+|---|---|---|
+| opens with a soil/framing clause | 17/17 | **0** |
+| phrased as a question | 14/17 | **0** |
+| mentions the treatises | 13/17 | **0** |
+| modern pathology vocabulary | 7/17 | 5/17 |
+
+Queries now read like the corpus: *"dark rough corky patches spreading over the leaves of
+an apple tree"*, *"Leaves with small, circular, dark spots with pale centres on a corn
+plant"*.
+
+**One fault barely moved, and it was a contradiction I introduced.** Rule 3 hands Llama a
+ready-made phrase per disease family, and one of them read *"blight -> spreading brown
+NECROTIC patches"* while the new WORD CHOICE section bans "necrotic". The prompt told Llama
+to use a word it also told it to avoid, and Llama followed the more specific instruction.
+Rule 3's phrases are now written in the corpus's own vocabulary, and a test asserts rule 3
+can never contain a word WORD CHOICE forbids, so the two sections cannot drift apart again.
+The measurement above does **not** include that fix.
+
+**What the remaining failures are made of.** The two queries that now succeed are both
+*virus* cases — yellowing and mottling — which is precisely the vocabulary the corpus uses
+(*"yellowness", "excessive paleness"*). Everything still failing is a fungal spot, blight or
+scab: the categories §6m established the texts do not contain. So once the bridge stopped
+adding noise, **the residue is largely genuine coverage gap rather than phrasing** — which
+is the separation this whole exercise was for.
+
+**Honest caveat on the ceiling.** The hand-written queries were drafted after reading corpus
+passages in the same session, so part of their 0.1691 is vocabulary leakage rather than
+craft. The true gap between the bridge and a fair human baseline is therefore smaller than
+0.0714, and 0.1691 should be treated as an optimistic ceiling, not a target.
+
+**Next:** re-run after the rule-3 fix, then decide whether two-round retrieval (show Llama
+the retrieved passages, let it rewrite in their words) is still needed.
+
+---
+
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
