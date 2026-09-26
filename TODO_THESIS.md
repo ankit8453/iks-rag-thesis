@@ -143,7 +143,11 @@ In order, cheapest first. Stop as soon as the score is good enough.
 - [ ] **Front-matter prefixes** on 4 Vrikshayurveda chunks (needs another rebuild — bundle
       with a future one)
 - [ ] **Expert gold query set** with passage-level labels (enables Recall@k)
-- [ ] **Vishvavallabha** — blocked, book not obtained. Useful, not urgent
+- [x] **Vishvavallabha — OBTAINED 26 Sep** (archive.org, full AAHF 2004 Sadhale edition,
+      144 pp, all 9 chapters; ch. VIII = 79 verses on diseases and treatment). Local under
+      `newbooks/vishvavallabha/` (gitignored — copyrighted). **Not yet ingested — awaiting go.**
+      Plan: text_layer path, Cyrillic char-map in cleaning, split on 9 headings, then
+      verify → coverage → Phase 11 against the 233-chunk baseline. See §6q.
 - [ ] **Upavanavinoda English Introduction** OCR — blocked, Gemini quota
 
 ---
