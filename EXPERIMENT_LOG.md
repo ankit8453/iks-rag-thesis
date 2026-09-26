@@ -1425,6 +1425,64 @@ hedged non-answers.
 
 ---
 
+## 6q. Vishvavallabha obtained — the sixth text, and the one that covers disease (2026-09-26)
+
+The master plan's sixth treatise, `text_six_tbd` in `books.yaml` since Phase 3, listed as
+"next" in every meeting note and on the seminar slides, and never obtained. Found tonight
+on the Internet Archive while Phase 11 cell 3 ran.
+
+**Source.** `archive.org/details/visvavallabha-nalini-s-ed.` — uploaded 2025-03-04 by
+`sastric.team@gmail.com`, no access restriction. It is the **AAHF edition itself**:
+*Vishvavallabha (Dear to the World: The Science of Plant Life)*, tr. Nalini Sadhale,
+commentaries by Sadhale and Y. L. Nene, Agri-History Bulletin No. 5, 2004 — the same
+series and translator as our Vrikshayurveda and Kashyapiya. Author Chakrapani Mishra,
+c. 1577, under Maharana Pratap of Mewar.
+
+**Completeness, verified locally.** 144 pages (publisher lists 134–140 + covers). All nine
+chapters located in the OCR text by heading, and the book's own verse table reads:
+
+| ch. | topic | verses |
+|---|---|---|
+| I | Groundwater | 57 |
+| II | Water reservoirs | 39 |
+| III | Examination and suitability of ground | 35 |
+| IV | Propagation and plantation | 23 |
+| V | Water management | 6 |
+| VI | Protection and care | 9 |
+| VII | Nourishment and growth | 46 |
+| **VIII** | **Diseases and treatment** | **79** |
+| IX | Botanical wonders | — |
+
+Chapter VIII — the largest — opens: *"Like human beings, trees also suffer from diseases
+due to imbalance in wind, bile, and phlegm. As such, I shall describe hereunder their
+symptoms and remedies."* That is the disease-treatment layer §6m showed the corpus lacks.
+
+**Files** (`newbooks/vishvavallabha/`, local only): the image PDF (16.4 MB, no text
+layer); a text-layer PDF (3.2 MB, text on every sampled page — the `text_layer` ingest path
+already used for NITI); and archive.org's own Tesseract OCR (334 KB, 36,758 words).
+
+**OCR quality, measured.** Tesseract's multi-language model leaks Cyrillic look-alikes: 629 of 4,252 Latin-script lines carry some Cyrillic. But the damage is not where it matters. Lines that are mostly Cyrillic (>50%, i.e. garbage) number 259, distributed 174 in the front matter and Sanskrit text, 1 inside the English translation, 84 in the commentaries and index. The English translation zone (2987 lines) has 47 lines with any Cyrillic at all, and **chapter VIII (640 lines) has 9** - all heading-style swaps such as *"Chapter У"*, fixed by a character map. The Sanskrit pages are unusable as OCR (Devanagari read as Cyrillic) but we do not need them: the translation is the ingest target, and the page images remain in the PDF if the Sanskrit is ever wanted. **No Gemini re-OCR is needed and no API cost is incurred** - the first book to arrive free.
+
+**Copyright.** The translation is © AAHF 2004. As with every other bulletin, the text lives
+under `newbooks/`, now added to `.gitignore`, and travels only via the private HF corpus
+dataset — never the public repo. (Until tonight `newbooks/` was untracked but *not*
+ignored; one careless `git add -A` would have published it.)
+
+**What it changes.** §6m established that 13 of the 22 disease queries fail because the
+classical texts index disorder by Ayurvedic cause, not by lesion appearance. Vishvavallabha
+is a classical text too, so it will not answer "Septoria" by name either — I overstated it
+as "the only route" earlier and corrected that in §6n. But it is the one treatise with a
+dedicated, 79-verse disease-and-treatment chapter, and it will be the honest test of
+whether adding disease *content* moves the grounded-answer rate that no corpus change so
+far has moved.
+
+**Not ingested yet.** Awaiting Ankit's go-ahead. Ingest plan when given: `text_layer` path
+via the text-layer PDF, Cyrillic character map in cleaning, chapter split on the nine
+headings, `source_tier: classical`, then the same verify → coverage → Phase 11 sequence as
+§6n–§6p, reported against the current 233-chunk baseline.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
