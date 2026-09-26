@@ -41,16 +41,19 @@ retrieval number.
 
 ---
 
-## STAGE 1 — Fix the citation labels  ⬜  *(code already done, 422 tests pass)*
+## STAGE 1 — Fix the citation labels  ✅ DONE 26 Sep  *(code already done, 422 tests pass)*
 
 17 chunks share 4 labels, so a citation cannot identify a passage and the 55%
 valid-citation rate cannot be checked.
 
-- [ ] **1.1** Rebuild: `IKS_EMBED_DEVICE=cpu python -m src.rag.corpus.build_corpus`
+- [x] **1.1** Rebuild: `IKS_EMBED_DEVICE=cpu python -m src.rag.corpus.build_corpus`
       *(~74 min, local CPU, no API — the OCR text is already cached)*
-- [ ] **1.2** `python scripts/verify_corpus.py` — **must print PASS.** If it says CHANGED,
+- [x] **1.2** `python scripts/verify_corpus.py` — **must print PASS.** If it says CHANGED,
       stop and restore from `corpus/RESTORE.md`
-- [ ] **1.3** Confirm "every chunk is uniquely citable" in the same output
+- [x] **1.3** Confirm "every chunk is uniquely citable" in the same output
+- [x] **1.4** Prune 17 orphaned ChromaDB vectors (`prune_stale_vectors.py --apply`) — the
+      rebuild added the renamed chunks but left their old ids behind, so the store held 250
+      vectors for 233 chunks. `verify_corpus.py` now checks the store too.
 
 ---
 

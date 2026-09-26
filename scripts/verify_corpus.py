@@ -62,6 +62,51 @@ def label_report(rows: list[dict]) -> tuple[int, dict[str, int]]:
     return len(labels), collisions
 
 
+def check_vector_db(live_ids: set[str]) -> int | None:
+    """Compare ChromaDB against the chunk files. ``None`` if the store is unreadable.
+
+    The chunk files are the source of truth, but *retrieval reads ChromaDB*, and the two
+    can silently disagree: ``embed_chunks`` upserts by id, so a rebuild that renames a
+    chunk ADDS the new id and leaves the old one orphaned. That is how a 233-chunk corpus
+    came to hold 250 vectors after the citation fix (§6n) — 17 passages present twice, the
+    second copy still carrying the ambiguous label the fix existed to remove. Checking only
+    the chunk files reported PASS and missed it entirely.
+
+    chromadb is imported here and torch is not: on Windows the two in one process give a
+    silent 0xC0000005 or a cygrpc DLL failure.
+    """
+    try:
+        import chromadb
+    except Exception as exc:  # noqa: BLE001 - absence is not a corpus failure
+        print(f"\nChromaDB not checked ({exc.__class__.__name__})")
+        return None
+
+    db = ROOT / "corpus" / "vector_db"
+    if not db.is_dir():
+        print("\nno vector store at corpus/vector_db - not checked")
+        return None
+    try:
+        col = chromadb.PersistentClient(path=str(db)).get_collection("iks_corpus")
+        db_ids = set(col.get()["ids"])
+    except Exception as exc:  # noqa: BLE001
+        print(f"\nChromaDB unreadable: {exc}")
+        return None
+
+    orphans = db_ids - live_ids
+    absent = live_ids - db_ids
+    print(f"\nvector store: {len(db_ids)} vectors for {len(live_ids)} chunks")
+    if not orphans and not absent:
+        print("  matches the chunk files exactly")
+        return 0
+    if orphans:
+        print(f"  {len(orphans)} ORPHANED vector(s) - chunks that no longer exist.")
+        print("  Retrieval would return stale duplicates of renamed passages. Fix first:")
+        print("    python scripts/prune_stale_vectors.py --apply")
+    if absent:
+        print(f"  {len(absent)} chunk(s) NOT embedded - rebuild the corpus.")
+    return 1
+
+
 def main() -> int:
     if "--write" in sys.argv:
         idx = sys.argv.index("--write")
@@ -99,9 +144,16 @@ def main() -> int:
     print(f"  total chars : {old['total_chars']:,} -> {now['total_chars']:,}")
     print(f"  text set    : {'IDENTICAL' if same_text else 'CHANGED'}")
 
-    if same_text:
+    db_status = check_vector_db({r["chunk_id"] for r in rows})
+
+    if same_text and db_status in (0, None):
         print("\nPASS -- no chunk text was lost or altered; only metadata moved.")
         return 0
+    if same_text:
+        print("\nFAIL -- chunk text is intact, but the vector store disagrees with the")
+        print("chunk files (see above). Retrieval reads the vector store, not the files,")
+        print("so fix that before running any evaluation.")
+        return 1
 
     # Text changed: say exactly how, so the cause is obvious.
     old_books, new_books = old["per_book"], now["per_book"]
