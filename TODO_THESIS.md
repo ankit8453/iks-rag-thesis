@@ -96,8 +96,8 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ## STAGE 4 — Phase 11, the honest re-run  ⬜
 
-- [ ] **4.1** Push the final corpus: `python scripts/push_corpus_chunks.py`
-- [ ] **4.2** Run **A** — the new domain queries alone (does the corpus answer its own subjects?)
+- [x] **4.1** Push the final corpus: `python scripts/push_corpus_chunks.py`
+- [~] **4.2** Run **A** — the new domain queries alone (does the corpus answer its own subjects?)
 - [ ] **4.3** Run **B** — the whole query set together
 - [ ] **4.4** Report disease queries and domain queries **separately** — they measure
       different things and one number would mislead
@@ -115,6 +115,21 @@ In order, cheapest first. Stop as soon as the score is good enough.
 - [ ] **5.4** Update `RESEARCH_WRITEUP` and rebuild the .docx
 
 ---
+
+## Found during Phase 11 — act on these
+
+- [ ] **Re-run cells 2 and 3** after the citation-format fix — the first trustworthy
+      citation figure. 20.74% and 55% are both artefacts.
+- [ ] **Report retrieval split by query type**, never pooled. The keyword baseline nearly
+      caught up (nDCG 0.842 vs 0.783) because domain queries already use the corpus's
+      vocabulary; the bridge's advantage is specific to modern disease labels.
+- [ ] **Investigate dropping BM25.** dense_only beats the full hybrid on nDCG, MRR and
+      Hit@5 (1.00 vs 0.9167) — third run in a row. The hybrid leg may be a net negative.
+- [ ] **Harden the refusal detector.** q15 was counted as an answer while actually
+      declining ("is not directly addressed. However...") and citing nothing. Honest
+      refusal 93.75% is softer than it looks.
+- [ ] **Correct the research write-up**: its citation figure came from the duplicate-label
+      era and is not defensible.
 
 ## Open / parked
 

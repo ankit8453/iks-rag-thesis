@@ -1307,6 +1307,124 @@ be reported independently.
 
 
 
+## 6p. Phase 11 on the deployed system — and two measurement bugs it exposed (2026-09-26)
+
+The first end-to-end run of the system as it actually behaves: `QUERY_SOURCE="generated"`,
+so the 17 disease queries carry the wording Strategy B really produces rather than a
+hand-written stand-in. Corpus 233 chunks with unique citation labels, pushed to HF before
+the run. Query set 40 (24 answerable, 16 unanswerable).
+
+Two defects surfaced, both in the *measurement* rather than the system. Both are recorded
+in full because each made a headline number look better or worse than the truth.
+
+### Bug 1 — the answer key was copied from the answers (retrieval metrics)
+
+`merge_new_queries.py` set each new query's `relevant_books` to
+`sorted({p["book"] for p in row["top5"][:3]})` — the books retrieval had just returned.
+Precision@5, nDCG and MRR then graded retrieval against its own output.
+
+Visible symptom: `keyword_only` P@5 rose **0.33 → 0.53** purely from adding queries, which
+no change to a retriever can explain. The first retrieval table of this run
+(full P@5 **0.7083**, nDCG 0.888) was inflated throughout.
+
+The original 24 queries were never affected — their labels were authored before any
+retrieval ran. The 16 domain queries were re-labelled from **each treatise's subject
+matter**, the same basis, with the reason recorded per query in `relevant_books_basis`.
+13 of 16 changed, and several now *disagree* with what retrieval returned — the sowing
+calendar goes to Krishi Parashara rather than NITI's banana schedules, watering to
+Vrikshayurveda rather than Brihat Samhita, kunapajala to Vrikshayurveda rather than
+Kashyapiya. Those disagreements are the evidence the labels are no longer derived from the
+ranking.
+
+Generation metrics were never affected: they use `expect_answerable` and citation
+resolution, never `relevant_books`.
+
+### Bug 2 — the prompt collided with itself (citation rate)
+
+Measured valid-citation rate: **20.74%**, against 55.00% in §6m. That reads as a collapse in
+grounding. It is not.
+
+The context block headed each passage `[Source 2] Vrikshayurveda, ch.full, v.1.2d` while
+rule 2 asked for `[Source Text, ch.<chapter>, v.<verse>]`. The word "Source" appears in
+both, so the model merged them and cited `[Source 2, ch.full, v.1.2d]` — **chapter and verse
+correct, the book's name replaced by its position in the retrieved list.** Such a citation
+resolves to nothing even though the right passage was used.
+
+Per-query output settles it. q08 cited `v.1.2d`, a genuinely retrieved chunk, and scored
+invalid purely on the name. Every one of the 6 failures used the `Source N` form. The single
+answer that did resolve cited `[Kashyapiya Krishisukti, ch.pages_1_64, v.section_3]` — by
+name.
+
+Each passage header is now the citation itself, character for character, so the model copies
+rather than assembles; the translator credit sits outside the brackets so it cannot leak
+into the verse field; and rule 2 states that `"Source 2"` is not a citation. Four regression
+tests, including one asserting every header parses as a valid citation — a perfectly
+obedient model must not be able to produce an unresolvable one.
+
+**Note also that §6m's 55% was itself inflated**, for the opposite reason: labels were then
+duplicated, so `v.1.2` matched any of five passages and a vague citation got credit. Neither
+20.74% nor 55% is the real figure; the re-run after this fix is the first trustworthy one.
+
+### Retrieval, with honest labels
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full (hybrid + rerank) | 0.6417 | 0.8423 | 0.8472 | 0.9167 |
+| **dense only** | 0.6250 | **0.8875** | **0.8764** | **1.0000** |
+| hybrid, no rerank | 0.6250 | 0.8115 | 0.7722 | 0.9583 |
+| keyword only (baseline) | 0.5667 | 0.7834 | 0.7562 | 0.9167 |
+
+**Finding A — BM25 is a net negative, and this is the third time it has shown.**
+`dense_only` beats the full hybrid on nDCG, MRR and Hit@5, and finds a relevant book for
+**every** query (Hit@5 1.00) where the full hybrid misses two. §6f saw this at n=22 and it
+was set aside as possible noise; it has now held across three runs, a larger query set and
+independently authored labels. Adding BM25 to dense retrieval pushes relevant passages out
+of the top 5. The "hybrid retrieval" component should be re-examined — dense-only, or a
+reweighted fusion — rather than defended.
+
+**Finding B — the keyword baseline has nearly caught up, and that sharpens the
+contribution claim.** In §6m the gap was nDCG 0.878 vs 0.515; here it is 0.842 vs 0.783.
+The cause is the query set: domain queries such as *"the proper season for sowing"* already
+use the corpus's own vocabulary, so BM25 handles them well. Disease labels such as *"Apple
+Scab"* must be translated first, and that is where semantic retrieval earns its place.
+
+So **the bridge's advantage is specific to modern diagnostic labels, not to retrieval in
+general.** §6f's headline "nDCG 0.94 vs 0.70" was measured only on disease queries and
+therefore overstated the general case. Retrieval must be reported split by query type from
+here on, never pooled.
+
+### Generation — first run, and why it must be repeated
+
+| metric | value |
+|---|---|
+| answerable queries | 24 |
+| grounded answer rate | 16.67% |
+| valid citation rate | 20.74% (*Bug 2 — not a real figure*) |
+| honest refusal | 93.75% (15/16) |
+| over-refusal | 83.33% (20/24) |
+| unfounded citations | **0%** |
+
+**Unfounded citations remain 0%.** With no corpus at all, the model still invents no
+citations. That guarantee has now held across every run and every corpus version.
+
+Grounded answer rate 13.64% (§6m) → 16.67%: 4 of 24 rather than 3 of 22. Still low, and it
+will move once Bug 2 is fixed, because an answer only counts as grounded when at least one
+citation resolves.
+
+**Honest refusal fell below 100% for the first time** — q15 (*"fine pale stippling and
+bronzing of leaves with tiny mites and webbing beneath"*) was answered rather than refused.
+Reading the answer, it opens *"is not directly addressed. However, the texts prescribe
+treatments for similar symptoms"* and cites nothing. So it is not fabrication — the refusal
+detector simply does not recognise a hedge that declines in substance while continuing to
+talk. That is a **detector** gap, not a safety failure, but it means the honest-refusal
+metric is softer than it looks and the refusal classifier needs its own test.
+
+**Deferred:** re-run cells 2 and 3 after the citation fix; split retrieval reporting by
+query type; investigate dense-only against the hybrid; harden the refusal detector against
+hedged non-answers.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
