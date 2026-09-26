@@ -57,16 +57,18 @@ valid-citation rate cannot be checked.
 
 ---
 
-## STAGE 2 — Score the 16 new domain queries  ⬜
+## STAGE 2 — Score the 16 new domain queries  ✅ DONE 26 Sep
 
 These cover what the books actually contain: pests, seed treatment, soil, manure, season,
 rain, water, planting, tree wounds, storage.
 
-- [ ] **2.1** `python scripts/check_coverage.py data/eval/new_queries_draft_2026-09-26.json newq`
-- [ ] **2.2** Read the tier counts (strong / marginal / none)
-- [ ] **2.3** `python scripts/merge_new_queries.py` (dry run — check the plan)
-- [ ] **2.4** `python scripts/merge_new_queries.py --apply`
-- [ ] **2.5** Keep the failures as honest negatives — **do not delete them**
+- [x] **2.1** `python scripts/check_coverage.py data/eval/new_queries_draft_2026-09-26.json newq`
+- [x] **2.2** Read the tier counts (strong / marginal / none)
+- [x] **2.3** `python scripts/merge_new_queries.py` (dry run — check the plan)
+- [x] **2.4** `python scripts/merge_new_queries.py --apply`
+- [x] **2.5** Keep the failures as honest negatives — **do not delete them**
+- [x] **2.6** Grade every candidate by READING its passages. The score said 16/16 strong;
+      reading said 8 answer / 7 partial / 1 no. Score proves absence, not presence.
 
 ---
 

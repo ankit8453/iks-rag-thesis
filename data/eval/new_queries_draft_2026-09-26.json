@@ -4,104 +4,153 @@
     "method": "Written from the DOMAIN, not from the corpus. Each query is something a farmer or gardener would plausibly ask, in the subject areas these treatises are known to cover (pest damage, soil preparation, seed treatment, sowing season, water, manure, planting, physical injury to trees, poor growth). Specific passages were NOT consulted while drafting, because choosing queries to match passages we had already read would make the evaluation circular - we would be testing retrieval on text selected for matching.",
     "honesty": "These are CANDIDATES with no expect_answerable label. The label is assigned only after scripts/check_coverage.py scores each one with the pipeline's own cross-encoder, using the same thresholds as 6m: >=0.35 strong, 0.15-0.35 marginal, <0.15 none. Some are expected to fail, and those are kept as honest negatives rather than deleted.",
     "style": "Symptom-led or task-led phrasing, matching the existing set and the output of the Strategy-B bridge. The crop is deliberately absent or incidental, because the texts are symptom-general (6d.1).",
-    "drafted": "2026-09-26"
+    "drafted": "2026-09-26",
+    "grading": "Each candidate was graded by READING its retrieved passages, not by its cross-encoder score. The score alone proved unsafe here: it marked 16/16 'strong' (up to 0.987) while several top-1 passages were plainly off-topic - n13 'how to plant a sapling' returned text about WHERE to cultivate vegetables (0.985), and n16 'protecting stored grain' returned a materials table about roots and branches (0.625). The score measures vocabulary overlap, so it is reliable evidence of ABSENCE (the 0.06 scores in 6m really do mean nothing matches) but not of PRESENCE. Grades are the author's reading and await expert ratification, like the rest of this silver set."
   },
   "queries": [
     {
       "id": "n01",
       "domain": "insect_pest",
       "query": "small soft insects clustered on new shoots making the leaves curl",
-      "rationale": "aphid-type damage; sap-sucking pests are a major traditional concern"
+      "rationale": "aphid-type damage; sap-sucking pests are a major traditional concern",
+      "human_grade": "partial",
+      "grade_reason": "NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1",
+      "top1_rerank_score": 0.4271
     },
     {
       "id": "n02",
       "domain": "insect_pest",
       "query": "caterpillars chewing holes through the leaves of a young plant",
-      "rationale": "biting and chewing damage, the most visible pest symptom"
+      "rationale": "biting and chewing damage, the most visible pest symptom",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is about raising plants from seed; top-2 only identifies the pest",
+      "top1_rerank_score": 0.915
     },
     {
       "id": "n03",
       "domain": "insect_pest",
       "query": "ants swarming around the roots and base of a tree",
-      "rationale": "ant infestation, a named concern in classical tree-care"
+      "rationale": "ant infestation, a named concern in classical tree-care",
+      "human_grade": "answers",
+      "grade_reason": "Table 1 lists ants with symptoms AND treatment; v.173-189 covers ant damage",
+      "top1_rerank_score": 0.5795
     },
     {
       "id": "n04",
       "domain": "insect_pest",
       "query": "how to prepare a natural spray to keep insects away from crops",
-      "rationale": "preparation-style question rather than symptom-style; tests the recipe content"
+      "rationale": "preparation-style question rather than symptom-style; tests the recipe content",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is layering/propagation; the right section (6.2.8) is only at top-2",
+      "top1_rerank_score": 0.7967
     },
     {
       "id": "n05",
       "domain": "seed_treatment",
       "query": "treating seeds before sowing so that they germinate well and resist disease",
-      "rationale": "seed treatment is standard in these treatises"
+      "rationale": "seed treatment is standard in these treatises",
+      "human_grade": "answers",
+      "grade_reason": "top-1 and top-2 are both the Beejamrit seed-treatment recipe",
+      "top1_rerank_score": 0.9871
     },
     {
       "id": "n06",
       "domain": "soil",
       "query": "how to tell whether a piece of land is suitable for planting trees",
-      "rationale": "land-suitability assessment"
+      "rationale": "land-suitability assessment",
+      "human_grade": "answers",
+      "grade_reason": "Kashyapiya land description + Vrik v.38-58 'land recommended for planting'",
+      "top1_rerank_score": 0.7365
     },
     {
       "id": "n07",
       "domain": "soil_fertility",
       "query": "enriching poor soil with manure before planting",
-      "rationale": "manure and soil enrichment"
+      "rationale": "manure and soil enrichment",
+      "human_grade": "answers",
+      "grade_reason": "Kashyapiya: plough four or five times, then apply cow dung",
+      "top1_rerank_score": 0.4618
     },
     {
       "id": "n08",
       "domain": "soil_fertility",
       "query": "preparing a liquid manure from animal and plant materials to feed the roots",
-      "rationale": "kunapajala-type liquid manure; a well-documented practice"
+      "rationale": "kunapajala-type liquid manure; a well-documented practice",
+      "human_grade": "partial",
+      "grade_reason": "top-1 off-topic; kunapa water appears only as a row in a materials table",
+      "top1_rerank_score": 0.642
     },
     {
       "id": "n09",
       "domain": "season",
       "query": "the proper season and month for sowing different kinds of crops",
-      "rationale": "seasonal agronomy, a core subject of Krishi Parashara"
+      "rationale": "seasonal agronomy, a core subject of Krishi Parashara",
+      "human_grade": "partial",
+      "grade_reason": "NITI gives crop-specific banana/turmeric calendars, not general season guidance",
+      "top1_rerank_score": 0.9671
     },
     {
       "id": "n10",
       "domain": "rain_prediction",
       "query": "natural signs in the sky and in animals that indicate rain is coming",
-      "rationale": "rainfall prognostication, a core subject of Brihat Samhita"
+      "rationale": "rainfall prognostication, a core subject of Brihat Samhita",
+      "human_grade": "answers",
+      "grade_reason": "Brihat ch.28: ants shifting eggs, snakes mating, chameleons gazing up",
+      "top1_rerank_score": 0.9805
     },
     {
       "id": "n11",
       "domain": "water",
       "query": "how much and how often a young tree should be watered",
-      "rationale": "irrigation practice"
+      "rationale": "irrigation practice",
+      "human_grade": "answers",
+      "grade_reason": "Vrik v.110-125 gives an exact schedule by soil type and season",
+      "top1_rerank_score": 0.5795
     },
     {
       "id": "n12",
       "domain": "water",
       "query": "finding underground water before digging a well",
-      "rationale": "water divining; Brihat Samhita chapter 54 was ingested for this"
+      "rationale": "water divining; Brihat Samhita chapter 54 was ingested for this",
+      "human_grade": "partial",
+      "grade_reason": "Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved",
+      "top1_rerank_score": 0.9373
     },
     {
       "id": "n13",
       "domain": "planting",
       "query": "the right way to plant and transplant a sapling so it survives",
-      "rationale": "planting and transplanting method"
+      "rationale": "planting and transplanting method",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is WHERE to cultivate, not HOW to plant or transplant",
+      "top1_rerank_score": 0.9851
     },
     {
       "id": "n14",
       "domain": "physical_injury",
       "query": "a tree branch broken by strong wind and how to treat the wound",
-      "rationale": "physical injury; the texts treat wounds explicitly"
+      "rationale": "physical injury; the texts treat wounds explicitly",
+      "human_grade": "answers",
+      "grade_reason": "Table 1: if branches fall off, dress the spot with honey and ghee",
+      "top1_rerank_score": 0.8484
     },
     {
       "id": "n15",
       "domain": "poor_growth",
       "query": "a tree that does not flower or bear fruit even though it looks healthy",
-      "rationale": "unproductiveness, distinct from visible disease"
+      "rationale": "unproductiveness, distinct from visible disease",
+      "human_grade": "answers",
+      "grade_reason": "Upavanavinoda 177: windy-humour trees 'do not bear flowers and fruits'",
+      "top1_rerank_score": 0.9346
     },
     {
       "id": "n16",
       "domain": "storage",
       "query": "protecting harvested grain from insects during storage",
-      "rationale": "post-harvest storage; included expecting it may fail, as a fair negative"
+      "rationale": "post-harvest storage; included expecting it may fail, as a fair negative",
+      "human_grade": "no",
+      "grade_reason": "top-1 is a materials table about roots/branches; top-2 is threshing, not storage",
+      "top1_rerank_score": 0.6254
     }
   ]
 }

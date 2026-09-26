@@ -1,0 +1,665 @@
+{
+  "n_chunks": 233,
+  "n_queries": 16,
+  "distinct_chunks_in_top5": 59,
+  "distinct_rank1_chunks": 14,
+  "tiers": {
+    "strong": 16
+  },
+  "colliding_citation_labels": {},
+  "chunk_top5_counts": {
+    "3acb6be5723f955f985cc7caac8b9266415050a6": 4,
+    "56366d9628257cd7c66dc4e5df7ec0d2e6c02725": 3,
+    "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50": 3,
+    "aad03b5e5338dc0608bd231414ec52e5f226d195": 3,
+    "975c0f4a9978c28ea207d5491a598918b0dfd4ce": 3,
+    "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1": 2,
+    "8e3149e127881997f9ab14ecc9bfccf1991b13bd": 2,
+    "826f66438f091b2dd401069fb8de9480c8db0251": 2,
+    "968795d3723ae0640d7bcb69d7cd3535ae258d65": 2,
+    "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e": 2,
+    "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f": 2,
+    "626d1b695db297e30104427d3fdab2fc98b45ca1": 2,
+    "921d2df1604ffe3698d82d3f5e6bb2113b8db2ed": 2,
+    "241422b16e78c57b10a451127bc024442b3ad310": 2,
+    "623909cb0f6a47d2e550719bc074746f849f3d4c": 2,
+    "af2d330e1ebba9b08892ff92791eee81b9bc75df": 1,
+    "db51551fc05a690f9f426bf0280662c415d12f44": 1,
+    "78a3d715f91036f0e326ed9cea8af89f41357773": 1,
+    "d43b57d7f98a8424ce8285402fa4b44d399ccb17": 1,
+    "55f50e7d31f70d8a5c8f6faa334c969f7763affd": 1,
+    "a3bb9a63fc7ae3a8544a859bb29e45200b8050d4": 1,
+    "d4ae0e06a408ea243d6e6d74671f8e85d161efa1": 1,
+    "dd7f40ebbef23b46828743a43516aa08d7aabb1e": 1,
+    "1bc294d3af3485f6db1304d85fb92d6325083605": 1,
+    "59e7a15a40af3c7e6c9185024f7379b2ee653b84": 1,
+    "964255569087ef713c70f5e3619b35a88d1e946e": 1,
+    "d8256f25b2242b4deee7a24a01e115be16c2e86d": 1,
+    "63e40597ba3d61915bc8d5c6dab3cd01c868ecd4": 1,
+    "5b6f82ebdcc1dbb2592d2939c12afe3f24de278d": 1,
+    "4840f7c333a656c88d0015ae740772a352d86966": 1,
+    "d80f2f3938dbb81542b1e8d1d4005ba42e06f4bc": 1,
+    "c3f56817723ad9edca35fc1b2dbeeefd51d018d1": 1,
+    "01bd6bbecaa199d88d3a63141baa0c435773dabb": 1,
+    "56c4b23b5143e76361913a2485c9a15457f02905": 1,
+    "7d4c52205de7c40ea7b1e0a03e5c72d41c8c195d": 1,
+    "a70052e16134050bea9e6407e0a483d79f4898ba": 1,
+    "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68": 1,
+    "73c0fca2c2b89f65f43c57bac671008a0cedf754": 1,
+    "22c29ca55c8795780dcb0fb23322dd3881c0037d": 1,
+    "5c88548a1c1bd04e0bba6290fcd22781353672a2": 1,
+    "4bc58ca5927969a8df8258f62b1b6f76a089fd5e": 1,
+    "f12c0118ee4597cdf8620d733f5424107f526386": 1,
+    "ac19dd5f0ddfa97268c618cf1eedbbc553b11700": 1,
+    "c68a61582c7a9819a356584236fbf5b0261786bb": 1,
+    "e4d29425247ae82df4f50a2e09243c5f1baa9678": 1,
+    "26d6df7070a2f96d723d13e52b70cde19ddf213a": 1,
+    "e641c330d6b6cacb1de18a4dcd78532159b9a0be": 1,
+    "fe57857944f57f773f6504a1e442cb07f758293b": 1,
+    "2cf13a7987d135c0ee17f2b99da41f225f11c986": 1,
+    "155a61102728970c0b143225d3ec8399133ab043": 1,
+    "b0dda2bcd55f160e0470470c29a9def7a89160f4": 1,
+    "9460514089d0949d1e369eb1ddd05633833ae22b": 1,
+    "4b92e3584e1cca1817578f720f48dc60939e24a6": 1,
+    "8d229642cc7a1206f2383a5c70c02a1b8d10fa59": 1,
+    "9385ce6235540477da60ce1ffb1772c245821b98": 1,
+    "68a3d9295ba4b8065f69ccefcc76f4766c01fe4a": 1,
+    "08b937fde4f3d1cc1c9b4004a865bafca901b7e1": 1,
+    "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d": 1,
+    "d443970c639947c9345dae761afc5ff03b8d61fe": 1
+  },
+  "results": [
+    {
+      "id": "n01",
+      "disease": "(unlabelled)",
+      "query": "small soft insects clustered on new shoots making the leaves curl",
+      "top5": [
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.4271
+        },
+        {
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.172
+        },
+        {
+          "chunk_id": "af2d330e1ebba9b08892ff92791eee81b9bc75df",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_12",
+          "rerank_score": 0.1347
+        },
+        {
+          "chunk_id": "db51551fc05a690f9f426bf0280662c415d12f44",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_30",
+          "rerank_score": 0.0649
+        },
+        {
+          "chunk_id": "78a3d715f91036f0e326ed9cea8af89f41357773",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.1d",
+          "rerank_score": 0.0282
+        }
+      ]
+    },
+    {
+      "id": "n02",
+      "disease": "(unlabelled)",
+      "query": "caterpillars chewing holes through the leaves of a young plant",
+      "top5": [
+        {
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.915
+        },
+        {
+          "chunk_id": "e659591aa65b7e4cce06ebb9ace8a9c7ef1736b1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_10",
+          "rerank_score": 0.3665
+        },
+        {
+          "chunk_id": "8e3149e127881997f9ab14ecc9bfccf1991b13bd",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_21",
+          "rerank_score": 0.0348
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.0325
+        },
+        {
+          "chunk_id": "d43b57d7f98a8424ce8285402fa4b44d399ccb17",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_46",
+          "rerank_score": 0.0195
+        }
+      ]
+    },
+    {
+      "id": "n03",
+      "disease": "(unlabelled)",
+      "query": "ants swarming around the roots and base of a tree",
+      "top5": [
+        {
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.5795
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.304
+        },
+        {
+          "chunk_id": "968795d3723ae0640d7bcb69d7cd3535ae258d65",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.189-207",
+          "rerank_score": 0.2739
+        },
+        {
+          "chunk_id": "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.82-103",
+          "rerank_score": 0.1072
+        },
+        {
+          "chunk_id": "55f50e7d31f70d8a5c8f6faa334c969f7763affd",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_4",
+          "rerank_score": 0.0785
+        }
+      ]
+    },
+    {
+      "id": "n04",
+      "disease": "(unlabelled)",
+      "query": "how to prepare a natural spray to keep insects away from crops",
+      "top5": [
+        {
+          "chunk_id": "a3bb9a63fc7ae3a8544a859bb29e45200b8050d4",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_44",
+          "rerank_score": 0.7967
+        },
+        {
+          "chunk_id": "d4ae0e06a408ea243d6e6d74671f8e85d161efa1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_24",
+          "rerank_score": 0.751
+        },
+        {
+          "chunk_id": "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_25",
+          "rerank_score": 0.6372
+        },
+        {
+          "chunk_id": "8e3149e127881997f9ab14ecc9bfccf1991b13bd",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_21",
+          "rerank_score": 0.6127
+        },
+        {
+          "chunk_id": "dd7f40ebbef23b46828743a43516aa08d7aabb1e",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_23",
+          "rerank_score": 0.5368
+        }
+      ]
+    },
+    {
+      "id": "n05",
+      "disease": "(unlabelled)",
+      "query": "treating seeds before sowing so that they germinate well and resist disease",
+      "top5": [
+        {
+          "chunk_id": "1bc294d3af3485f6db1304d85fb92d6325083605",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_3",
+          "rerank_score": 0.9871
+        },
+        {
+          "chunk_id": "59e7a15a40af3c7e6c9185024f7379b2ee653b84",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_41",
+          "rerank_score": 0.9711
+        },
+        {
+          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
+          "rerank_score": 0.9182
+        },
+        {
+          "chunk_id": "964255569087ef713c70f5e3619b35a88d1e946e",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.4b",
+          "rerank_score": 0.8866
+        },
+        {
+          "chunk_id": "975c0f4a9978c28ea207d5491a598918b0dfd4ce",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.55, v.section_3",
+          "rerank_score": 0.8866
+        }
+      ]
+    },
+    {
+      "id": "n06",
+      "disease": "(unlabelled)",
+      "query": "how to tell whether a piece of land is suitable for planting trees",
+      "top5": [
+        {
+          "chunk_id": "d8256f25b2242b4deee7a24a01e115be16c2e86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_3",
+          "rerank_score": 0.7365
+        },
+        {
+          "chunk_id": "63e40597ba3d61915bc8d5c6dab3cd01c868ecd4",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.38-58",
+          "rerank_score": 0.6391
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.2059
+        },
+        {
+          "chunk_id": "921d2df1604ffe3698d82d3f5e6bb2113b8db2ed",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_20",
+          "rerank_score": 0.1704
+        },
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.1471
+        }
+      ]
+    },
+    {
+      "id": "n07",
+      "disease": "(unlabelled)",
+      "query": "enriching poor soil with manure before planting",
+      "top5": [
+        {
+          "chunk_id": "5b6f82ebdcc1dbb2592d2939c12afe3f24de278d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_13",
+          "rerank_score": 0.4618
+        },
+        {
+          "chunk_id": "4840f7c333a656c88d0015ae740772a352d86966",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_5",
+          "rerank_score": 0.4553
+        },
+        {
+          "chunk_id": "d80f2f3938dbb81542b1e8d1d4005ba42e06f4bc",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_16",
+          "rerank_score": 0.3605
+        },
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.3326
+        },
+        {
+          "chunk_id": "c3f56817723ad9edca35fc1b2dbeeefd51d018d1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_8",
+          "rerank_score": 0.2277
+        }
+      ]
+    },
+    {
+      "id": "n08",
+      "disease": "(unlabelled)",
+      "query": "preparing a liquid manure from animal and plant materials to feed the roots",
+      "top5": [
+        {
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.642
+        },
+        {
+          "chunk_id": "241422b16e78c57b10a451127bc024442b3ad310",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.3d",
+          "rerank_score": 0.2882
+        },
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.1578
+        },
+        {
+          "chunk_id": "01bd6bbecaa199d88d3a63141baa0c435773dabb",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_18",
+          "rerank_score": 0.1549
+        },
+        {
+          "chunk_id": "9e59a0dc9be4b04b64cb9b92a195772de2f8ef7f",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_25",
+          "rerank_score": 0.1273
+        }
+      ]
+    },
+    {
+      "id": "n09",
+      "disease": "(unlabelled)",
+      "query": "the proper season and month for sowing different kinds of crops",
+      "top5": [
+        {
+          "chunk_id": "56c4b23b5143e76361913a2485c9a15457f02905",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_31",
+          "rerank_score": 0.9671
+        },
+        {
+          "chunk_id": "7d4c52205de7c40ea7b1e0a03e5c72d41c8c195d",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_62",
+          "rerank_score": 0.961
+        },
+        {
+          "chunk_id": "a70052e16134050bea9e6407e0a483d79f4898ba",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_49",
+          "rerank_score": 0.9438
+        },
+        {
+          "chunk_id": "9bce85ebc97831f7a9a9f5c8e3b6af70e760ec68",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_30",
+          "rerank_score": 0.9282
+        },
+        {
+          "chunk_id": "73c0fca2c2b89f65f43c57bac671008a0cedf754",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_67",
+          "rerank_score": 0.8266
+        }
+      ]
+    },
+    {
+      "id": "n10",
+      "disease": "(unlabelled)",
+      "query": "natural signs in the sky and in animals that indicate rain is coming",
+      "top5": [
+        {
+          "chunk_id": "22c29ca55c8795780dcb0fb23322dd3881c0037d",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.28, v.section_2",
+          "rerank_score": 0.9805
+        },
+        {
+          "chunk_id": "5c88548a1c1bd04e0bba6290fcd22781353672a2",
+          "book": "krishi_parashara",
+          "label": "krishi_parashara, ch.pages_94_119, v.61-83",
+          "rerank_score": 0.9589
+        },
+        {
+          "chunk_id": "4bc58ca5927969a8df8258f62b1b6f76a089fd5e",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.28, v.section_1",
+          "rerank_score": 0.9187
+        },
+        {
+          "chunk_id": "f12c0118ee4597cdf8620d733f5424107f526386",
+          "book": "krishi_parashara",
+          "label": "krishi_parashara, ch.pages_94_119, v.36-47",
+          "rerank_score": 0.9146
+        },
+        {
+          "chunk_id": "ac19dd5f0ddfa97268c618cf1eedbbc553b11700",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.21, v.section_2",
+          "rerank_score": 0.8923
+        }
+      ]
+    },
+    {
+      "id": "n11",
+      "disease": "(unlabelled)",
+      "query": "how much and how often a young tree should be watered",
+      "top5": [
+        {
+          "chunk_id": "c68a61582c7a9819a356584236fbf5b0261786bb",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.110-125",
+          "rerank_score": 0.5795
+        },
+        {
+          "chunk_id": "623909cb0f6a47d2e550719bc074746f849f3d4c",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.190-206",
+          "rerank_score": 0.1622
+        },
+        {
+          "chunk_id": "975c0f4a9978c28ea207d5491a598918b0dfd4ce",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.55, v.section_3",
+          "rerank_score": 0.1541
+        },
+        {
+          "chunk_id": "e4d29425247ae82df4f50a2e09243c5f1baa9678",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.59-81",
+          "rerank_score": 0.1428
+        },
+        {
+          "chunk_id": "26d6df7070a2f96d723d13e52b70cde19ddf213a",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_32",
+          "rerank_score": 0.1144
+        }
+      ]
+    },
+    {
+      "id": "n12",
+      "disease": "(unlabelled)",
+      "query": "finding underground water before digging a well",
+      "top5": [
+        {
+          "chunk_id": "e641c330d6b6cacb1de18a4dcd78532159b9a0be",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_8",
+          "rerank_score": 0.9373
+        },
+        {
+          "chunk_id": "f3cb59f84b941c24d0896f2977fdbf49e4ff0d4e",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.82-103",
+          "rerank_score": 0.6045
+        },
+        {
+          "chunk_id": "fe57857944f57f773f6504a1e442cb07f758293b",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_3",
+          "rerank_score": 0.596
+        },
+        {
+          "chunk_id": "2cf13a7987d135c0ee17f2b99da41f225f11c986",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_7",
+          "rerank_score": 0.3269
+        },
+        {
+          "chunk_id": "155a61102728970c0b143225d3ec8399133ab043",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_9",
+          "rerank_score": 0.2707
+        }
+      ]
+    },
+    {
+      "id": "n13",
+      "disease": "(unlabelled)",
+      "query": "the right way to plant and transplant a sapling so it survives",
+      "top5": [
+        {
+          "chunk_id": "3acb6be5723f955f985cc7caac8b9266415050a6",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_29",
+          "rerank_score": 0.9851
+        },
+        {
+          "chunk_id": "1904b642ab2c7d2a42fa7bbcc5671ccb12aaae50",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2c",
+          "rerank_score": 0.9687
+        },
+        {
+          "chunk_id": "921d2df1604ffe3698d82d3f5e6bb2113b8db2ed",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_20",
+          "rerank_score": 0.3325
+        },
+        {
+          "chunk_id": "b0dda2bcd55f160e0470470c29a9def7a89160f4",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.55, v.section_2",
+          "rerank_score": 0.3026
+        },
+        {
+          "chunk_id": "9460514089d0949d1e369eb1ddd05633833ae22b",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.76-92",
+          "rerank_score": 0.1525
+        }
+      ]
+    },
+    {
+      "id": "n14",
+      "disease": "(unlabelled)",
+      "query": "a tree branch broken by strong wind and how to treat the wound",
+      "top5": [
+        {
+          "chunk_id": "56366d9628257cd7c66dc4e5df7ec0d2e6c02725",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.2d",
+          "rerank_score": 0.8484
+        },
+        {
+          "chunk_id": "623909cb0f6a47d2e550719bc074746f849f3d4c",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.190-206",
+          "rerank_score": 0.513
+        },
+        {
+          "chunk_id": "4b92e3584e1cca1817578f720f48dc60939e24a6",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.207-222",
+          "rerank_score": 0.5094
+        },
+        {
+          "chunk_id": "826f66438f091b2dd401069fb8de9480c8db0251",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.173-189",
+          "rerank_score": 0.4391
+        },
+        {
+          "chunk_id": "975c0f4a9978c28ea207d5491a598918b0dfd4ce",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.55, v.section_3",
+          "rerank_score": 0.157
+        }
+      ]
+    },
+    {
+      "id": "n15",
+      "disease": "(unlabelled)",
+      "query": "a tree that does not flower or bear fruit even though it looks healthy",
+      "top5": [
+        {
+          "chunk_id": "8d229642cc7a1206f2383a5c70c02a1b8d10fa59",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.177-187-188",
+          "rerank_score": 0.9346
+        },
+        {
+          "chunk_id": "9385ce6235540477da60ce1ffb1772c245821b98",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.322-15",
+          "rerank_score": 0.922
+        },
+        {
+          "chunk_id": "968795d3723ae0640d7bcb69d7cd3535ae258d65",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.189-207",
+          "rerank_score": 0.7525
+        },
+        {
+          "chunk_id": "aad03b5e5338dc0608bd231414ec52e5f226d195",
+          "book": "brihat_samhita",
+          "label": "brihat_samhita, ch.54, v.section_6",
+          "rerank_score": 0.5266
+        },
+        {
+          "chunk_id": "68a3d9295ba4b8065f69ccefcc76f4766c01fe4a",
+          "book": "upavanavinoda",
+          "label": "upavanavinoda, ch.pages_77_96, v.161-176",
+          "rerank_score": 0.4031
+        }
+      ]
+    },
+    {
+      "id": "n16",
+      "disease": "(unlabelled)",
+      "query": "protecting harvested grain from insects during storage",
+      "top5": [
+        {
+          "chunk_id": "241422b16e78c57b10a451127bc024442b3ad310",
+          "book": "vrikshayurveda",
+          "label": "vrikshayurveda, ch.full, v.1.3d",
+          "rerank_score": 0.6254
+        },
+        {
+          "chunk_id": "08b937fde4f3d1cc1c9b4004a865bafca901b7e1",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_23",
+          "rerank_score": 0.1474
+        },
+        {
+          "chunk_id": "03e5dcfcda7133f3ebe98abe16d08b5b400ed86d",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_26",
+          "rerank_score": 0.1267
+        },
+        {
+          "chunk_id": "626d1b695db297e30104427d3fdab2fc98b45ca1",
+          "book": "niti_natural_farming",
+          "label": "niti_natural_farming, ch.pages_36_165, v.section_2",
+          "rerank_score": 0.1234
+        },
+        {
+          "chunk_id": "d443970c639947c9345dae761afc5ff03b8d61fe",
+          "book": "kashyapiyakrishisukti",
+          "label": "kashyapiyakrishisukti, ch.pages_1_64, v.section_21",
+          "rerank_score": 0.1148
+        }
+      ]
+    }
+  ]
+}

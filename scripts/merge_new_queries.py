@@ -40,8 +40,21 @@ SCORES = ROOT / "results" / "coverage_check_newq.json"
 
 STRONG, MARGINAL = 0.35, 0.15
 
+#: How a reading-based grade becomes an evaluation label.
+#:
+#: The grade, not the cross-encoder score, decides this. The score marked all 16 candidates
+#: "strong" (up to 0.987) while several top-1 passages were plainly off-topic, because it
+#: measures vocabulary overlap: good evidence of ABSENCE, unreliable evidence of PRESENCE.
+#: "partial" is kept answerable but flagged, so a refusal there is not scored as an error.
+GRADE_TO_LABEL = {
+    "answers": ("strong", True),
+    "partial": ("marginal", True),
+    "no": ("none", False),
+}
+
 
 def tier_of(score: float) -> str:
+    """Score-only tier. Retained for reporting the score/grade disagreement."""
     return "strong" if score >= STRONG else ("marginal" if score >= MARGINAL else "none")
 
 
@@ -72,7 +85,13 @@ def main() -> int:
             print(f"  {qid}: NOT SCORED — excluded (never add an unmeasured query)")
             continue
         score = row["top5"][0]["rerank_score"]
-        tier = tier_of(score)
+        grade = cand.get("human_grade")
+        if grade not in GRADE_TO_LABEL:
+            print(f"  {qid}: no human_grade — excluded. Grade it by reading the passages "
+                  f"in results/coverage_passages_newq.md first.")
+            continue
+        tier, answerable = GRADE_TO_LABEL[grade]
+        score_tier = tier_of(score)
         tally[tier] += 1
         books = sorted({p["book"] for p in row["top5"][:3]})
         q = {
@@ -83,24 +102,28 @@ def main() -> int:
             "query": cand["query"],
             "relevant_books": books,
             "relevant_chunk_ids": [],
-            "expect_answerable": tier != "none",
+            "expect_answerable": answerable,
             "coverage_tier": tier,
+            "human_grade": grade,
+            "grade_reason": cand.get("grade_reason", ""),
             "top1_rerank_score": score,
+            "score_only_tier": score_tier,
             "added": "2026-09-26",
         }
         if tier == "none":
             q["unanswerable_kind"] = "no_coverage"
             q["note"] = (
-                f"Added as a measured negative. Top-1 cross-encoder score {score:.4f} — "
-                "nothing in the 233-passage corpus addresses this, even though the topic "
-                "is within the treatises' general subject area. Kept rather than deleted "
-                "so the query set is not biased toward what the corpus happens to hold. "
-                "See EXPERIMENT_LOG.md §6n."
+                "Graded unanswerable by reading the retrieved passages: "
+                f"{cand.get('grade_reason','')}. The cross-encoder scored it {score:.4f}, "
+                "which illustrates why the score cannot be trusted as evidence of presence. "
+                "Kept rather than deleted so the query set is not biased toward what the "
+                "corpus happens to hold. See EXPERIMENT_LOG.md §6n."
             )
         elif tier == "marginal":
             q["note"] = (
-                f"Marginal support (top-1 {score:.4f}). Counted as answerable, but a "
-                "refusal here is defensible rather than a clear error."
+                f"Partial support: {cand.get('grade_reason','')}. Counted as answerable, but "
+                "a refusal here is defensible rather than a clear error. Cross-encoder "
+                f"score {score:.4f}."
             )
         plan.append(q)
 

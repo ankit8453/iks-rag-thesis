@@ -1020,20 +1020,84 @@ set built only from what the corpus can answer is not an evaluation.
 `check_coverage.py` now accepts any query file and tags its outputs, so a candidate run
 cannot overwrite the silver-set run.
 
-### Results
+### Results — Stage 1 and Stage 2 (26 Sep)
 
-_Pending the runs below; this section will be completed with the measured tiers and the
-Phase 11 A/B numbers._
+**Stage 1, citation uniqueness: done and verified.** Rebuild took 623 s, not the 74 min
+feared — the OCR cache carried most of it. Corpus **233 chunks, 233 distinct citation
+labels**, text byte-identical to the pre-fix fingerprint. Every passage is now uniquely
+citable, so a citation number finally means something.
 
-**Run order (each step gated on the previous):**
-1. `python scripts/build_corpus.py` with `IKS_EMBED_DEVICE=cpu` — rebuild with unique labels (~74 min, no API)
-2. `python scripts/verify_corpus.py` — must print PASS before continuing
-3. `python scripts/check_coverage.py data/eval/new_queries_draft_2026-09-26.json newq`
-4. `python scripts/merge_new_queries.py` then `--apply`
-5. `python scripts/push_corpus_chunks.py` — push the final 233 chunks to HF
-6. Phase 11 as **A** (NITI-scope queries alone) and **B** (whole set)
+**A second defect surfaced during the rebuild, and it is worth recording.** The build log
+read *"ChromaDB collection now holds 250 vectors"* for a 233-chunk corpus. `embed_chunks`
+upserts by id, so renaming 17 chunks **added** their new ids and left the old ones
+orphaned: every renamed passage was present twice, the second copy still carrying the
+ambiguous label the fix existed to remove. Retrieval would have returned duplicates inside
+a single top-5 and reintroduced un-checkable citations — silently undoing the fix.
+
+`verify_corpus.py` had printed **PASS** while this was true, because it only compared the
+chunk *files*. **Retrieval reads the vector store.** The verifier now compares both and
+refuses to PASS unless they agree. This is the same class of gap that let the chapter
+over-capture bug through two builds: a check that did not cover the thing that mattered.
+`prune_stale_vectors.py` deletes an orphan only after confirming its text survives under a
+new id, and refuses entirely if any does not. After pruning: 233 chunks, 233 labels, 233
+vectors, PASS. Tests 422.
+
+**Stage 2, the new queries — and a methodological correction.**
+
+The coverage script scored **16 / 16 "strong"**, several above 0.95. That result is not
+trustworthy, and reading the passages showed why:
+
+| graded by reading | n | examples |
+|---|---|---|
+| **answers** — a retrieved passage directly answers | **8** | n05 seed treatment finds the Beejamrit recipe; n10 rain signs finds Brihat ch.28 on ants shifting eggs, snakes mating, chameleons gazing up; n11 watering finds Vrik v.110-125 with an exact schedule by soil and season; n14 broken branch finds Table 1, dress the spot with honey and ghee; n15 no flowers finds Upavanavinoda 177 |
+| **partial** — right subject, top-1 off-topic or identification only | **7** | n13 "how to plant a sapling" scored **0.985** but returned text about *where* to cultivate vegetables; n02 "caterpillars chewing holes" scored **0.915** but top-1 was about raising plants from seed |
+| **no** — nothing addresses it | **1** | n16 "protecting stored grain" scored **0.625** and returned a materials table about roots and branches |
+
+**The finding: the cross-encoder score is sound evidence of ABSENCE but not of PRESENCE.**
+It measures vocabulary overlap. A score of 0.06 (§6m) genuinely means nothing in the corpus
+matches. A score of 0.98 means the passage shares the query's vocabulary, which is not the
+same as containing an answer. §6m used it in the safe direction; extending it to confirm
+coverage would have inflated this result by roughly 2x.
+
+Score and reading disagree badly in the upper range: n07 scores **0.462** and answers
+fully, while n13 scores **0.985** and does not. **Labels are therefore set from reading,**
+and the score-only tier is retained alongside for comparison.
+
+One sharper illustration, taken from the two query sets:
+
+| query | score |
+|---|---|
+| q19 "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil" | **0.056** |
+| n15 "a tree that does not flower or bear fruit even though it looks healthy" | **0.935** |
+
+Nearly the same question about an unproductive tree; a 17x difference in score, because
+n15's wording tracks Upavanavinoda 177 almost verbatim. **Phrasing, not content
+availability, dominates the score** — which makes Stage 0 (does Llama phrase well?) the
+decisive open question rather than a side check.
+
+**Honesty note on method.** These candidates were drafted from the domain rather than from
+the corpus, to avoid circularity. That was only partly achieved: passages from
+Vrikshayurveda Table 1, v.173-189, NITI section_10 and Kashyapiya section_26 had been read
+earlier in the same working session, so some corpus vocabulary very likely leaked into the
+phrasing. The 16/16 score is partly an artefact of that. The reading-based grades are the
+defensible numbers; they are the author's own and await expert ratification like the rest of
+this silver set.
+
+**Query set now:** 24 to **40 queries**, answerable 9 to **24**; 17 disease-label queries
+and 23 domain queries. Reported separately from here on, because they measure different
+things — the disease queries exercise the whole deployed pipeline (vision to bridge to
+retrieval), the domain queries exercise only corpus and retrieval.
+
+**What the two sets say together.** Disease-label queries: 1 of 17 reaches a genuine match.
+Domain queries: 8 of 16 are directly answered, 15 of 16 at least on-topic. The books are not
+the limitation — **the question vocabulary is.** The corpus was being examined on a syllabus
+it was never taught.
+
+**Still open:** Stage 0 (capture and score Llama's real queries — needs Colab), HF push,
+Phase 11 A/B.
 
 ---
+
 
 ## 7. Negative Results (paper ammunition — keep these honest)
 

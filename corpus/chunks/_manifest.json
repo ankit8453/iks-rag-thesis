@@ -1,8 +1,8 @@
 {
   "config_path": "configs\\corpus\\books.yaml",
   "config_sha1": "561b8950a5d850be357950ee549950d473482e97",
-  "generated_at": "2026-09-15T07:50:10.967627+00:00",
-  "elapsed_seconds": 4418.656000000003,
+  "generated_at": "2026-09-26T11:26:11.945745+00:00",
+  "elapsed_seconds": 622.9679999999935,
   "ready_books": [
     "vrikshayurveda",
     "brihat_samhita",
@@ -96,5 +96,5 @@
     }
   ],
   "total_chunks_embedded": 233,
-  "vector_db_count": 233
+  "vector_db_count": 250
 }

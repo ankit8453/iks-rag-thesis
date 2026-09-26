@@ -1,0 +1,383 @@
+{
+  "n_chunks": 259,
+  "per_book": {
+    "brihat_samhita": 140,
+    "kashyapiyakrishisukti": 39,
+    "krishi_parashara": 13,
+    "upavanavinoda": 15,
+    "vrikshayurveda": 52
+  },
+  "variants": {
+    "full": {
+      "k": 5,
+      "n": 22,
+      "P@5": 0.7636,
+      "R@5": 0.0507,
+      "nDCG@5": 0.7961,
+      "MRR": 0.9773,
+      "Hit@5": 1.0
+    },
+    "keyword_only": {
+      "k": 5,
+      "n": 22,
+      "P@5": 0.4273,
+      "R@5": 0.0254,
+      "nDCG@5": 0.4243,
+      "MRR": 0.5886,
+      "Hit@5": 0.8636
+    },
+    "dense_only": {
+      "k": 5,
+      "n": 22,
+      "P@5": 0.8,
+      "R@5": 0.0538,
+      "nDCG@5": 0.8262,
+      "MRR": 0.947,
+      "Hit@5": 1.0
+    },
+    "hybrid_no_rerank": {
+      "k": 5,
+      "n": 22,
+      "P@5": 0.6727,
+      "R@5": 0.0442,
+      "nDCG@5": 0.6645,
+      "MRR": 0.7667,
+      "Hit@5": 1.0
+    }
+  },
+  "coverage": {
+    "q01": {
+      "query": "dark rough corky lesions and scabby patches spreading o",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q02": {
+      "query": "orange to brown powdery pustules raised on the surface ",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita"
+      ],
+      "hit": true
+    },
+    "q03": {
+      "query": "rust-coloured powdery eruptions scattered along the lea",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "hit": true
+    },
+    "q04": {
+      "query": "long brown withering patches spreading and drying the l",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q05": {
+      "query": "greyish rectangular dead spots forming between the vein",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "brihat_samhita"
+      ],
+      "hit": true
+    },
+    "q06": {
+      "query": "dark brown spots with concentric rings appearing first ",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti"
+      ],
+      "hit": true
+    },
+    "q07": {
+      "query": "rapidly spreading water-soaked blackening patches rotti",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda",
+        "brihat_samhita"
+      ],
+      "top_books": [
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q08": {
+      "query": "ringed brown lesions enlarging on the leaves and causin",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "brihat_samhita",
+        "kashyapiyakrishisukti"
+      ],
+      "hit": true
+    },
+    "q09": {
+      "query": "dark decaying blotches with pale mould at the leaf marg",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda",
+        "brihat_samhita"
+      ],
+      "top_books": [
+        "brihat_samhita",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q10": {
+      "query": "numerous small dark spots with pale centres covering th",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "hit": true
+    },
+    "q11": {
+      "query": "small greasy dark specks on leaves that later dry and t",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q12": {
+      "query": "fuzzy discoloured mould growing on the underside of the",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q13": {
+      "query": "mottled light and dark green patches with puckering and",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q14": {
+      "query": "leaves turning yellow, cupping upward and the plant rem",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q15": {
+      "query": "fine pale stippling and bronzing of leaves with tiny mi",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "upavanavinoda",
+        "upavanavinoda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q16": {
+      "query": "dark sunken spots scattered across the leaves that late",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "brihat_samhita",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q17": {
+      "query": "white powdery coating spreading over the surface of the",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q18": {
+      "query": "dark sunken decaying areas on leaves and shrivelling of",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q19": {
+      "query": "a tree that is weak and poorly nourished with pale droo",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "brihat_samhita",
+        "vrikshayurveda",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q20": {
+      "query": "insects boring into the trunk and eating the leaves of ",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "top_books": [
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "hit": true
+    },
+    "q21": {
+      "query": "preparing and enriching the soil before planting a youn",
+      "relevant_books": [
+        "upavanavinoda",
+        "vrikshayurveda",
+        "krishi_parashara"
+      ],
+      "top_books": [
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "kashyapiyakrishisukti",
+        "vrikshayurveda"
+      ],
+      "hit": true
+    },
+    "q22": {
+      "query": "signs that foretell the coming of rain and the right ti",
+      "relevant_books": [
+        "brihat_samhita",
+        "krishi_parashara"
+      ],
+      "top_books": [
+        "krishi_parashara",
+        "kashyapiyakrishisukti",
+        "krishi_parashara",
+        "brihat_samhita",
+        "brihat_samhita"
+      ],
+      "hit": true
+    }
+  }
+}
