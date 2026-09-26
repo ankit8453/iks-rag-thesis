@@ -13,8 +13,7 @@
     "coverage_relabel_2026_09_15": "expect_answerable was originally true for all 22 non-negative queries — an ASSUMPTION, never verified against the corpus. Coverage check (§6m, scripts/check_coverage.py) scored every query with the pipeline's own cross-encoder: 4 strong (>=0.35), 5 marginal (0.15-0.35), 13 no match (<0.15). The 13 are now expect_answerable=false with the score recorded. Over-refusal must be reported on the answerable subset; the original file is preserved as silver_queries.pre_coverage.json. This is a finding, not a patch: it quantifies the gap between classical IKS aetiology and modern lesion-based disease labels.",
     "extension_2026_09_26": "Extended with 16 domain-derived queries covering pest damage, soil, seed treatment, season, water, planting and physical injury — the subject areas these treatises actually cover. The original 22 queries were almost entirely modern fungal leaf diseases, which §6m showed the texts cannot address, so the evaluation was measuring the system against unanswerable questions. Candidates were written from the domain WITHOUT consulting the corpus (to avoid circularity), then labelled from measured cross-encoder scores: 8 strong, 7 marginal, 1 no-coverage. Queries scoring 'none' were kept as honest negatives, not deleted.",
     "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline.",
-    "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting.",
-    "relevant_books_relabel_2026_09_26": "The 16 domain queries added on 2026-09-26 initially took relevant_books from the top-3 books of their own retrieval run, which made Precision@5, nDCG and MRR circular - retrieval graded against its own output. Symptom: keyword_only P@5 rose 0.33 -> 0.53 purely from adding queries. They are now labelled from each treatise's subject matter, the same basis as the original 24, with the reason recorded per query in relevant_books_basis. Author-assigned, pending expert ratification. Generation metrics were never affected: they use expect_answerable and citation resolution, never relevant_books."
+    "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting."
   },
   "queries": [
     {
@@ -433,8 +432,7 @@
       "top1_rerank_score": 0.4271,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.4271.",
-      "relevant_books_basis": "sucking-insect damage: NITI covers pest identification and sprays; Vrikshayurveda treats insect attack on trees"
+      "note": "Partial support: NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.4271."
     },
     {
       "id": "n02",
@@ -454,8 +452,7 @@
       "top1_rerank_score": 0.915,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: top-1 is about raising plants from seed; top-2 only identifies the pest. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9150.",
-      "relevant_books_basis": "chewing-insect damage: same two sources cover insect attack"
+      "note": "Partial support: top-1 is about raising plants from seed; top-2 only identifies the pest. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9150."
     },
     {
       "id": "n03",
@@ -464,8 +461,8 @@
       "domain": "insect_pest",
       "query": "ants swarming around the roots and base of a tree",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda"
+        "upavanavinoda",
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -474,8 +471,7 @@
       "grade_reason": "Table 1 lists ants with symptoms AND treatment; v.173-189 covers ant damage",
       "top1_rerank_score": 0.5795,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "ants are named explicitly among Vrikshayurveda's tree disorders; Upavanavinoda covers the same arbori-horticultural ground"
+      "added": "2026-09-26"
     },
     {
       "id": "n04",
@@ -484,8 +480,7 @@
       "domain": "insect_pest",
       "query": "how to prepare a natural spray to keep insects away from crops",
       "relevant_books": [
-        "niti_natural_farming",
-        "vrikshayurveda"
+        "niti_natural_farming"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -495,8 +490,7 @@
       "top1_rerank_score": 0.7967,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: top-1 is layering/propagation; the right section (6.2.8) is only at top-2. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.7967.",
-      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies"
+      "note": "Partial support: top-1 is layering/propagation; the right section (6.2.8) is only at top-2. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.7967."
     },
     {
       "id": "n05",
@@ -505,9 +499,7 @@
       "domain": "seed_treatment",
       "query": "treating seeds before sowing so that they germinate well and resist disease",
       "relevant_books": [
-        "kashyapiyakrishisukti",
-        "niti_natural_farming",
-        "vrikshayurveda"
+        "niti_natural_farming"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -516,8 +508,7 @@
       "grade_reason": "top-1 and top-2 are both the Beejamrit seed-treatment recipe",
       "top1_rerank_score": 0.9871,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "seed treatment before sowing is covered by all three: Kashyapiya on seeds and sowing, NITI's Beejamrit, Vrikshayurveda's seed-treatment verses"
+      "added": "2026-09-26"
     },
     {
       "id": "n06",
@@ -526,9 +517,9 @@
       "domain": "soil",
       "query": "how to tell whether a piece of land is suitable for planting trees",
       "relevant_books": [
-        "vrikshayurveda",
+        "brihat_samhita",
         "kashyapiyakrishisukti",
-        "upavanavinoda"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -537,8 +528,7 @@
       "grade_reason": "Kashyapiya land description + Vrik v.38-58 'land recommended for planting'",
       "top1_rerank_score": 0.7365,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "land suitability for planting: Vrikshayurveda describes land recommended for planting, Kashyapiya land selection, Upavanavinoda garden siting"
+      "added": "2026-09-26"
     },
     {
       "id": "n07",
@@ -548,7 +538,6 @@
       "query": "enriching poor soil with manure before planting",
       "relevant_books": [
         "kashyapiyakrishisukti",
-        "vrikshayurveda",
         "niti_natural_farming"
       ],
       "relevant_chunk_ids": [],
@@ -558,8 +547,7 @@
       "grade_reason": "Kashyapiya: plough four or five times, then apply cow dung",
       "top1_rerank_score": 0.4618,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "soil enrichment before planting: Kashyapiya ploughing and cow dung, Vrikshayurveda manuring, NITI soil-health management"
+      "added": "2026-09-26"
     },
     {
       "id": "n08",
@@ -568,8 +556,8 @@
       "domain": "soil_fertility",
       "query": "preparing a liquid manure from animal and plant materials to feed the roots",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda"
+        "kashyapiyakrishisukti",
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -579,8 +567,7 @@
       "top1_rerank_score": 0.642,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: top-1 off-topic; kunapa water appears only as a row in a materials table. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.6420.",
-      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda"
+      "note": "Partial support: top-1 off-topic; kunapa water appears only as a row in a materials table. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.6420."
     },
     {
       "id": "n09",
@@ -589,8 +576,7 @@
       "domain": "season",
       "query": "the proper season and month for sowing different kinds of crops",
       "relevant_books": [
-        "krishi_parashara",
-        "kashyapiyakrishisukti"
+        "niti_natural_farming"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -600,8 +586,7 @@
       "top1_rerank_score": 0.9671,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: NITI gives crop-specific banana/turmeric calendars, not general season guidance. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9671.",
-      "relevant_books_basis": "the sowing calendar is core Krishi Parashara; Kashyapiya covers seasonal cultivation"
+      "note": "Partial support: NITI gives crop-specific banana/turmeric calendars, not general season guidance. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9671."
     },
     {
       "id": "n10",
@@ -620,8 +605,7 @@
       "grade_reason": "Brihat ch.28: ants shifting eggs, snakes mating, chameleons gazing up",
       "top1_rerank_score": 0.9805,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "rainfall prognostication from natural signs is the subject of Brihat Samhita ch.21-28 and of Krishi Parashara's rain chapters"
+      "added": "2026-09-26"
     },
     {
       "id": "n11",
@@ -630,8 +614,8 @@
       "domain": "water",
       "query": "how much and how often a young tree should be watered",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda"
+        "brihat_samhita",
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -640,8 +624,7 @@
       "grade_reason": "Vrik v.110-125 gives an exact schedule by soil type and season",
       "top1_rerank_score": 0.5795,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "watering schedules for young trees are a Vrikshayurveda subject; Upavanavinoda covers the same care regime"
+      "added": "2026-09-26"
     },
     {
       "id": "n12",
@@ -651,7 +634,8 @@
       "query": "finding underground water before digging a well",
       "relevant_books": [
         "brihat_samhita",
-        "kashyapiyakrishisukti"
+        "kashyapiyakrishisukti",
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -661,8 +645,7 @@
       "top1_rerank_score": 0.9373,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9373.",
-      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management"
+      "note": "Partial support: Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9373."
     },
     {
       "id": "n13",
@@ -671,9 +654,8 @@
       "domain": "planting",
       "query": "the right way to plant and transplant a sapling so it survives",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda",
-        "kashyapiyakrishisukti"
+        "kashyapiyakrishisukti",
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -683,8 +665,7 @@
       "top1_rerank_score": 0.9851,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Partial support: top-1 is WHERE to cultivate, not HOW to plant or transplant. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9851.",
-      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice"
+      "note": "Partial support: top-1 is WHERE to cultivate, not HOW to plant or transplant. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9851."
     },
     {
       "id": "n14",
@@ -693,8 +674,7 @@
       "domain": "physical_injury",
       "query": "a tree branch broken by strong wind and how to treat the wound",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -703,8 +683,7 @@
       "grade_reason": "Table 1: if branches fall off, dress the spot with honey and ghee",
       "top1_rerank_score": 0.8484,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "physical wounds and broken branches are treated explicitly in Vrikshayurveda; Brihat ch.55 and Upavanavinoda cover tree treatment"
+      "added": "2026-09-26"
     },
     {
       "id": "n15",
@@ -713,8 +692,8 @@
       "domain": "poor_growth",
       "query": "a tree that does not flower or bear fruit even though it looks healthy",
       "relevant_books": [
-        "vrikshayurveda",
-        "upavanavinoda"
+        "upavanavinoda",
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -723,8 +702,7 @@
       "grade_reason": "Upavanavinoda 177: windy-humour trees 'do not bear flowers and fruits'",
       "top1_rerank_score": 0.9346,
       "score_only_tier": "strong",
-      "added": "2026-09-26",
-      "relevant_books_basis": "unproductiveness — trees that do not flower or fruit — is a named disorder in both"
+      "added": "2026-09-26"
     },
     {
       "id": "n16",
@@ -734,7 +712,7 @@
       "query": "protecting harvested grain from insects during storage",
       "relevant_books": [
         "kashyapiyakrishisukti",
-        "krishi_parashara"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": false,
@@ -745,8 +723,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "unanswerable_kind": "no_coverage",
-      "note": "Graded unanswerable by reading the retrieved passages: top-1 is a materials table about roots/branches; top-2 is threshing, not storage. The cross-encoder scored it 0.6254, which illustrates why the score cannot be trusted as evidence of presence. Kept rather than deleted so the query set is not biased toward what the corpus happens to hold. See EXPERIMENT_LOG.md §6n.",
-      "relevant_books_basis": "post-harvest handling and storage would belong to the two cultivation treatises; graded 'no' because neither in fact addresses it"
+      "note": "Graded unanswerable by reading the retrieved passages: top-1 is a materials table about roots/branches; top-2 is threshing, not storage. The cross-encoder scored it 0.6254, which illustrates why the score cannot be trusted as evidence of presence. Kept rather than deleted so the query set is not biased toward what the corpus happens to hold. See EXPERIMENT_LOG.md §6n."
     }
   ]
 }

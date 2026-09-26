@@ -83,9 +83,26 @@ if r.returncode != 0:
 # These imports happen BEFORE any langchain import in this notebook, so no
 # runtime restart is needed on a clean run. RAGAS stays optional — if this fails
 # the harness still reports every other metric and records that RAGAS was skipped.
-subprocess.run([sys.executable, "-m", "pip", "install", "-q",
-                "ragas==0.1.21", "langchain==0.2.16", "langchain-community==0.2.17",
-                "langchain-openai==0.1.25", "langchain-core<0.3"])
+# RAGAS is OPT-IN, and off by default, because this pin set is built against numpy 1.x
+# while Colab now runs Python 3.13 with numpy 2.x. Installing it breaks `datasets` at
+# import time with "numpy.dtype size changed, may indicate binary incompatibility"
+# (expected 96 from C header, got 88) - which surfaces three cells later as a failure in
+# load_chunks_from_hf, nowhere near its cause.
+#
+# Nothing in the core evaluation needs it: retrieval metrics, grounded-answer rate,
+# citation validity, refusal behaviour and the ungrounded control are all computed
+# locally. RAGAS only adds LLM-judged faithfulness/relevancy, which 6f already showed to
+# be dominated by refusal strings scoring ~0. Turn it on only when that judgement is
+# specifically wanted, and expect to restart the runtime afterwards.
+INSTALL_RAGAS = False
+
+if INSTALL_RAGAS:
+    subprocess.run([sys.executable, "-m", "pip", "install", "-q",
+                    "ragas==0.1.21", "langchain==0.2.16", "langchain-community==0.2.17",
+                    "langchain-openai==0.1.25", "langchain-core<0.3"])
+    print("RAGAS stack installed - RESTART THE RUNTIME before running further cells")
+else:
+    print("RAGAS skipped (INSTALL_RAGAS=False); every other metric is unaffected")
 print("deps installed")
 
 from huggingface_hub import login

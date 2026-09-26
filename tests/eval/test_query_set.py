@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from src.eval.query_set import (
+    DEFAULT_QUERY_SET,
     QueryCase,
     aggregate,
     answerable_cases,
@@ -179,3 +182,24 @@ def test_every_disease_query_has_a_generated_form() -> None:
     authored wording and quietly inflate a 'real system' run."""
     missing = [c.id for c in load_query_set() if c.disease and not c.generated_query]
     assert not missing, f"disease queries with no recorded Strategy-B output: {missing}"
+
+
+def test_relevant_books_are_not_copied_from_retrieval_output() -> None:
+    """Labels must be authored independently, or Precision@5 grades retrieval against
+    its own output.
+
+    The 16 domain queries added 2026-09-26 originally took relevant_books from the top-3
+    books of their own retrieval run. Every retrieval variant was inflated; keyword_only
+    P@5 rising 0.33 -> 0.53 purely from adding queries was the visible symptom. They were
+    re-labelled from each treatise's subject matter, and each must record the basis so
+    the provenance of the label is auditable rather than assumed.
+    """
+    added = [q for q in json.loads(DEFAULT_QUERY_SET.read_text(encoding="utf-8"))["queries"]
+             if q.get("added") == "2026-09-26"]
+    assert added, "expected the domain queries added on 2026-09-26"
+    for q in added:
+        assert q.get("relevant_books"), f"{q['id']} has no relevant_books"
+        assert q.get("relevant_books_basis"), (
+            f"{q['id']} has no recorded basis for its relevant_books — an unexplained "
+            "label cannot be distinguished from one copied out of a ranking"
+        )
