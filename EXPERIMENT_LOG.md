@@ -1557,6 +1557,22 @@ Table 1 causes) are by design, since the system and the texts work by symptom.
 
 ---
 
+### Vishvavallabha checked against the page images before building (2026-09-27)
+
+Three PDF pages rendered and compared line by line with the prepared text (chapter 8
+start, mid chapter 8, a chapter 7 page): word-for-word match on every verse checked.
+Verse coverage against the book's own verse table is now complete — **every chapter full**,
+chapter 8 **79/79** — except chapter 7 verses 10–15, which the manuscript itself lacks
+(translator's note, p.77: "Six verses (nos. 10–15) are missing").
+
+Verse boundaries the chunker would have lost, each found on the page and fixed narrowly in
+`prepare_vishvavallabha.py`: "1." read as "l." (3 sections), "1," for "1." (ch.5),
+"4]." for "41." (ch.8), "29... ." defective verse and "50-51?" uncertain numbering (ch.9,
+the "?" kept), and two ch.8 verses glued to a preceding editorial note because no blank
+line separated them. Combined verses ("30-31.", "2-3.") were already handled.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.

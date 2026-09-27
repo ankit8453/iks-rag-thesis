@@ -83,6 +83,20 @@ def main() -> int:
 
     for raw in lines[start:end]:
         line = raw.translate(CYR).strip()
+        # OCR read verse "1." as the letter "l." at the start of three sections (1B, 1C,
+        # chapter 7), found by comparing against the page images. Without this the verse
+        # loses its number and its text is attached to no verse.
+        line = re.sub(r"^l\.(?=\s+[A-Z])", "1.", line)
+        # Three more verse starts the chunker would miss, each checked against the page:
+        #   ch.5  "1, A newly..."       OCR comma for the full stop
+        #   ch.9  "29... . Sprinkle..." a defective verse, printed with an ellipsis
+        #   ch.9  "50-51? I have..."    translator's uncertain combined numbering (kept
+        #                               as "(?)" so the doubt is not erased)
+        line = re.sub(r"^(\d{1,3}),\s+(?=[A-Z])", r"\1. ", line)
+        line = re.sub(r"^(\d{1,3})\.{3}\s*\.\s*", r"\1. ... ", line)
+        line = re.sub(r"^(\d{1,3}-\d{1,3})\?\s+", r"\1. (?) ", line)
+        #   ch.8  "4]. Fumigation..."   OCR read the "1" of 41 as "]"
+        line = re.sub(r"^(\d)\]\.\s+", r"\g<1>1. ", line)
         m = _CHAPTER.match(line)
         if m:
             chapter = ROMAN.get(m.group(1), m.group(1))
@@ -116,8 +130,13 @@ def main() -> int:
                 continue
             else:
                 skipping_title_tail = False
-        if _VERSE.match(line) and stats:
-            stats[list(stats)[-1]] += 1
+        if _VERSE.match(line):
+            if stats:
+                stats[list(stats)[-1]] += 1
+            # The chunker splits verses on blank lines. Two chapter-8 verses followed an
+            # editorial note with only a line break between them, so they were glued to
+            # the note and lost their verse boundary. A verse always starts a paragraph.
+            out.append("")
         out.append(line)
 
     text = re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip() + "\n"
