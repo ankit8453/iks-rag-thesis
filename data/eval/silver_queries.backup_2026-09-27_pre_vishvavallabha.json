@@ -1,0 +1,752 @@
+{
+  "_about": {
+    "purpose": "Phase 11 evaluation query set. SILVER (provisional) labels — authored by the project, not yet expert-validated. Numbers computed against it must be reported as preliminary until Dr. Sunita T. Pandey / the expert gold-set replaces or ratifies these labels.",
+    "labelling": "Two levels. BOOK level (available now): `relevant_books` marks which treatise(s) plausibly address the condition — supports Precision@k, nDCG, MRR, Hit@k. PASSAGE level (added later): `relevant_chunk_ids`, once populated, additionally makes Recall@k well-defined, since only then is the true number of relevant passages known.",
+    "query_style": "Queries are SYMPTOM-led, not crop-led, because the classical texts are general and symptom-based rather than crop-indexed. The crop is recorded separately as context only.",
+    "book_ids": [
+      "vrikshayurveda",
+      "brihat_samhita",
+      "krishi_parashara",
+      "upavanavinoda"
+    ],
+    "created": "2026-06-28",
+    "coverage_relabel_2026_09_15": "expect_answerable was originally true for all 22 non-negative queries — an ASSUMPTION, never verified against the corpus. Coverage check (§6m, scripts/check_coverage.py) scored every query with the pipeline's own cross-encoder: 4 strong (>=0.35), 5 marginal (0.15-0.35), 13 no match (<0.15). The 13 are now expect_answerable=false with the score recorded. Over-refusal must be reported on the answerable subset; the original file is preserved as silver_queries.pre_coverage.json. This is a finding, not a patch: it quantifies the gap between classical IKS aetiology and modern lesion-based disease labels.",
+    "extension_2026_09_26": "Extended with 16 domain-derived queries covering pest damage, soil, seed treatment, season, water, planting and physical injury — the subject areas these treatises actually cover. The original 22 queries were almost entirely modern fungal leaf diseases, which §6m showed the texts cannot address, so the evaluation was measuring the system against unanswerable questions. Candidates were written from the domain WITHOUT consulting the corpus (to avoid circularity), then labelled from measured cross-encoder scores: 8 strong, 7 marginal, 1 no-coverage. Queries scoring 'none' were kept as honest negatives, not deleted.",
+    "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline.",
+    "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting.",
+    "relevant_books_relabel_2026_09_26": "The 16 domain queries added on 2026-09-26 initially took relevant_books from the top-3 books of their own retrieval run, which made Precision@5, nDCG and MRR circular - retrieval graded against its own output. Symptom: keyword_only P@5 rose 0.33 -> 0.53 purely from adding queries. They are now labelled from each treatise's subject matter, the same basis as the original 24, with the reason recorded per query in relevant_books_basis. Author-assigned, pending expert ratification. Generation metrics were never affected: they use expect_answerable and citation resolution, never relevant_books."
+  },
+  "queries": [
+    {
+      "id": "q01",
+      "crop": "apple",
+      "disease": "Apple Scab Leaf",
+      "query": "dark rough corky lesions and scabby patches spreading over the leaves of a tree",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1039,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1039). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "dark rough corky patches spreading over the leaves of an apple tree."
+    },
+    {
+      "id": "q02",
+      "crop": "apple",
+      "disease": "Apple rust leaf",
+      "query": "orange to brown powdery pustules raised on the surface of tree leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2239,
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves with orange-to-brown powdery pustules on apple."
+    },
+    {
+      "id": "q03",
+      "crop": "corn",
+      "disease": "Corn rust leaf",
+      "query": "rust-coloured powdery eruptions scattered along the leaf blade",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0828,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0828). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves with orange-to-brown powdery pustules on corn."
+    },
+    {
+      "id": "q04",
+      "crop": "corn",
+      "disease": "Corn leaf blight",
+      "query": "long brown withering patches spreading and drying the leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.1669,
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves drying and withering on a corn tree."
+    },
+    {
+      "id": "q05",
+      "crop": "corn",
+      "disease": "Corn Gray leaf spot",
+      "query": "greyish rectangular dead spots forming between the veins of the leaf",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1175,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1175). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale centres spreading over the leaves of a corn plant."
+    },
+    {
+      "id": "q06",
+      "crop": "potato",
+      "disease": "Potato leaf early blight",
+      "query": "dark brown spots with concentric rings appearing first on the older lower leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0765,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0765). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves with dark brown patches spreading until they dry and wither on a potato."
+    },
+    {
+      "id": "q07",
+      "crop": "potato",
+      "disease": "Potato leaf late blight",
+      "query": "rapidly spreading water-soaked blackening patches rotting the leaves in damp weather",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda",
+        "brihat_samhita"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1493,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1493). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "brown patches spreading over the leaves of a potato."
+    },
+    {
+      "id": "q08",
+      "crop": "tomato",
+      "disease": "Tomato Early blight leaf",
+      "query": "ringed brown lesions enlarging on the leaves and causing them to fall",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0669,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0669). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant."
+    },
+    {
+      "id": "q09",
+      "crop": "tomato",
+      "disease": "Tomato leaf late blight",
+      "query": "dark decaying blotches with pale mould at the leaf margins during wet weather",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda",
+        "brihat_samhita"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0617,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0617). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves drying and withering on a tomato plant."
+    },
+    {
+      "id": "q10",
+      "crop": "tomato",
+      "disease": "Tomato Septoria leaf spot",
+      "query": "numerous small dark spots with pale centres covering the leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1043,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1043). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
+    },
+    {
+      "id": "q11",
+      "crop": "tomato",
+      "disease": "Tomato leaf bacterial spot",
+      "query": "small greasy dark specks on leaves that later dry and tear",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1361,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1361). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
+    },
+    {
+      "id": "q12",
+      "crop": "tomato",
+      "disease": "Tomato mold leaf",
+      "query": "fuzzy discoloured mould growing on the underside of the leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0983,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0983). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "fuzzy discoloured patches spreading over the surface of the leaves of a tomato."
+    },
+    {
+      "id": "q13",
+      "crop": "tomato",
+      "disease": "Tomato leaf mosaic virus",
+      "query": "mottled light and dark green patches with puckering and curling of the leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2706,
+      "coverage_tier": "marginal",
+      "generated_query": "leaves turning mottled yellow-green with curling and gradual withering on a tomato plant."
+    },
+    {
+      "id": "q14",
+      "crop": "tomato",
+      "disease": "Tomato leaf yellow virus",
+      "query": "leaves turning yellow, cupping upward and the plant remaining stunted",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.5755,
+      "coverage_tier": "strong",
+      "generated_query": "leaves turning yellow with excessive paleness and gradual shedding on a tomato plant."
+    },
+    {
+      "id": "q15",
+      "crop": "tomato",
+      "disease": null,
+      "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing beneath",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0613,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0613). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage"
+    },
+    {
+      "id": "q16",
+      "crop": "bell pepper",
+      "disease": "Bell_pepper leaf spot",
+      "query": "dark sunken spots scattered across the leaves that later dry out",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2258,
+      "coverage_tier": "marginal",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a bell pepper."
+    },
+    {
+      "id": "q17",
+      "crop": "squash",
+      "disease": "Squash Powdery mildew leaf",
+      "query": "white powdery coating spreading over the surface of the leaves",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2927,
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves covered in a white powdery coating on a squash plant."
+    },
+    {
+      "id": "q18",
+      "crop": "grape",
+      "disease": "grape leaf black rot",
+      "query": "dark sunken decaying areas on leaves and shrivelling of the fruit on a climbing vine",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "top1_rerank_score": 0.1218,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1218). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "dark sunken decaying areas spreading over the leaves of a grape."
+    },
+    {
+      "id": "q19",
+      "crop": "general",
+      "disease": null,
+      "query": "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.0562,
+      "coverage_tier": "marginal",
+      "note": "Re-labelled 2026-09-27. Was no_coverage from a top-1 score of 0.056, but the relevant passage sat at rank 2 behind an irrelevant rank-1 chunk; the generator cited it. A low top-1 score is not safe proof of absence.",
+      "human_grade": "partial",
+      "grade_reason": "Vrikshayurveda v.173: 'drying, yellowness, and excessive paleness of leaves' - matches pale, drooping foliage; exhausted soil is covered only generally"
+    },
+    {
+      "id": "q20",
+      "crop": "general",
+      "disease": null,
+      "query": "insects boring into the trunk and eating the leaves of a tree",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.6957,
+      "coverage_tier": "strong"
+    },
+    {
+      "id": "q21",
+      "crop": "general",
+      "disease": null,
+      "query": "preparing and enriching the soil before planting a young sapling",
+      "relevant_books": [
+        "upavanavinoda",
+        "vrikshayurveda",
+        "krishi_parashara"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.6336,
+      "coverage_tier": "strong"
+    },
+    {
+      "id": "q22",
+      "crop": "general",
+      "disease": null,
+      "query": "signs that foretell the coming of rain and the right time for sowing",
+      "relevant_books": [
+        "brihat_samhita",
+        "krishi_parashara"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "top1_rerank_score": 0.7192,
+      "coverage_tier": "strong"
+    },
+    {
+      "id": "q23",
+      "crop": "general",
+      "disease": null,
+      "query": "the exact nitrogen phosphorus and potassium percentages required in the soil, expressed numerically",
+      "relevant_books": [],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "note": "Deliberate negative: modern quantitative agronomy is absent from the classical texts. The system should REFUSE rather than fabricate.",
+      "unanswerable_kind": "out_of_scope"
+    },
+    {
+      "id": "q24",
+      "crop": "general",
+      "disease": null,
+      "query": "which synthetic fungicide spray and dosage in millilitres per litre should be applied",
+      "relevant_books": [],
+      "relevant_chunk_ids": [],
+      "expect_answerable": false,
+      "note": "Deliberate negative: modern agrochemicals are outside the corpus; an honest refusal is the correct behaviour.",
+      "unanswerable_kind": "out_of_scope"
+    },
+    {
+      "id": "n01",
+      "crop": "general",
+      "disease": null,
+      "domain": "insect_pest",
+      "query": "small soft insects clustered on new shoots making the leaves curl",
+      "relevant_books": [
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1",
+      "top1_rerank_score": 0.4271,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.4271.",
+      "relevant_books_basis": "sucking-insect damage: NITI covers pest identification and sprays; Vrikshayurveda treats insect attack on trees"
+    },
+    {
+      "id": "n02",
+      "crop": "general",
+      "disease": null,
+      "domain": "insect_pest",
+      "query": "caterpillars chewing holes through the leaves of a young plant",
+      "relevant_books": [
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is about raising plants from seed; top-2 only identifies the pest",
+      "top1_rerank_score": 0.915,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: top-1 is about raising plants from seed; top-2 only identifies the pest. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9150.",
+      "relevant_books_basis": "chewing-insect damage: same two sources cover insect attack"
+    },
+    {
+      "id": "n03",
+      "crop": "general",
+      "disease": null,
+      "domain": "insect_pest",
+      "query": "ants swarming around the roots and base of a tree",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Table 1 lists ants with symptoms AND treatment; v.173-189 covers ant damage",
+      "top1_rerank_score": 0.5795,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "ants are named explicitly among Vrikshayurveda's tree disorders; Upavanavinoda covers the same arbori-horticultural ground"
+    },
+    {
+      "id": "n04",
+      "crop": "general",
+      "disease": null,
+      "domain": "insect_pest",
+      "query": "how to prepare a natural spray to keep insects away from crops",
+      "relevant_books": [
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is layering/propagation; the right section (6.2.8) is only at top-2",
+      "top1_rerank_score": 0.7967,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: top-1 is layering/propagation; the right section (6.2.8) is only at top-2. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.7967.",
+      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies"
+    },
+    {
+      "id": "n05",
+      "crop": "general",
+      "disease": null,
+      "domain": "seed_treatment",
+      "query": "treating seeds before sowing so that they germinate well and resist disease",
+      "relevant_books": [
+        "kashyapiyakrishisukti",
+        "niti_natural_farming",
+        "vrikshayurveda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "top-1 and top-2 are both the Beejamrit seed-treatment recipe",
+      "top1_rerank_score": 0.9871,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "seed treatment before sowing is covered by all three: Kashyapiya on seeds and sowing, NITI's Beejamrit, Vrikshayurveda's seed-treatment verses"
+    },
+    {
+      "id": "n06",
+      "crop": "general",
+      "disease": null,
+      "domain": "soil",
+      "query": "how to tell whether a piece of land is suitable for planting trees",
+      "relevant_books": [
+        "vrikshayurveda",
+        "kashyapiyakrishisukti",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Kashyapiya land description + Vrik v.38-58 'land recommended for planting'",
+      "top1_rerank_score": 0.7365,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "land suitability for planting: Vrikshayurveda describes land recommended for planting, Kashyapiya land selection, Upavanavinoda garden siting"
+    },
+    {
+      "id": "n07",
+      "crop": "general",
+      "disease": null,
+      "domain": "soil_fertility",
+      "query": "enriching poor soil with manure before planting",
+      "relevant_books": [
+        "kashyapiyakrishisukti",
+        "vrikshayurveda",
+        "niti_natural_farming"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Kashyapiya: plough four or five times, then apply cow dung",
+      "top1_rerank_score": 0.4618,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "soil enrichment before planting: Kashyapiya ploughing and cow dung, Vrikshayurveda manuring, NITI soil-health management"
+    },
+    {
+      "id": "n08",
+      "crop": "general",
+      "disease": null,
+      "domain": "soil_fertility",
+      "query": "preparing a liquid manure from animal and plant materials to feed the roots",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 off-topic; kunapa water appears only as a row in a materials table",
+      "top1_rerank_score": 0.642,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: top-1 off-topic; kunapa water appears only as a row in a materials table. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.6420.",
+      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda"
+    },
+    {
+      "id": "n09",
+      "crop": "general",
+      "disease": null,
+      "domain": "season",
+      "query": "the proper season and month for sowing different kinds of crops",
+      "relevant_books": [
+        "krishi_parashara",
+        "kashyapiyakrishisukti"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "NITI gives crop-specific banana/turmeric calendars, not general season guidance",
+      "top1_rerank_score": 0.9671,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: NITI gives crop-specific banana/turmeric calendars, not general season guidance. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9671.",
+      "relevant_books_basis": "the sowing calendar is core Krishi Parashara; Kashyapiya covers seasonal cultivation"
+    },
+    {
+      "id": "n10",
+      "crop": "general",
+      "disease": null,
+      "domain": "rain_prediction",
+      "query": "natural signs in the sky and in animals that indicate rain is coming",
+      "relevant_books": [
+        "brihat_samhita",
+        "krishi_parashara"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Brihat ch.28: ants shifting eggs, snakes mating, chameleons gazing up",
+      "top1_rerank_score": 0.9805,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "rainfall prognostication from natural signs is the subject of Brihat Samhita ch.21-28 and of Krishi Parashara's rain chapters"
+    },
+    {
+      "id": "n11",
+      "crop": "general",
+      "disease": null,
+      "domain": "water",
+      "query": "how much and how often a young tree should be watered",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Vrik v.110-125 gives an exact schedule by soil type and season",
+      "top1_rerank_score": 0.5795,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "watering schedules for young trees are a Vrikshayurveda subject; Upavanavinoda covers the same care regime"
+    },
+    {
+      "id": "n12",
+      "crop": "general",
+      "disease": null,
+      "domain": "water",
+      "query": "finding underground water before digging a well",
+      "relevant_books": [
+        "brihat_samhita",
+        "kashyapiyakrishisukti"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved",
+      "top1_rerank_score": 0.9373,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9373.",
+      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management"
+    },
+    {
+      "id": "n13",
+      "crop": "general",
+      "disease": null,
+      "domain": "planting",
+      "query": "the right way to plant and transplant a sapling so it survives",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda",
+        "kashyapiyakrishisukti"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is WHERE to cultivate, not HOW to plant or transplant",
+      "top1_rerank_score": 0.9851,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Partial support: top-1 is WHERE to cultivate, not HOW to plant or transplant. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9851.",
+      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice"
+    },
+    {
+      "id": "n14",
+      "crop": "general",
+      "disease": null,
+      "domain": "physical_injury",
+      "query": "a tree branch broken by strong wind and how to treat the wound",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Table 1: if branches fall off, dress the spot with honey and ghee",
+      "top1_rerank_score": 0.8484,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "physical wounds and broken branches are treated explicitly in Vrikshayurveda; Brihat ch.55 and Upavanavinoda cover tree treatment"
+    },
+    {
+      "id": "n15",
+      "crop": "general",
+      "disease": null,
+      "domain": "poor_growth",
+      "query": "a tree that does not flower or bear fruit even though it looks healthy",
+      "relevant_books": [
+        "vrikshayurveda",
+        "upavanavinoda"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Upavanavinoda 177: windy-humour trees 'do not bear flowers and fruits'",
+      "top1_rerank_score": 0.9346,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "relevant_books_basis": "unproductiveness — trees that do not flower or fruit — is a named disorder in both"
+    },
+    {
+      "id": "n16",
+      "crop": "general",
+      "disease": null,
+      "domain": "storage",
+      "query": "protecting harvested grain from insects during storage",
+      "relevant_books": [
+        "kashyapiyakrishisukti",
+        "krishi_parashara"
+      ],
+      "relevant_chunk_ids": [],
+      "expect_answerable": true,
+      "coverage_tier": "strong",
+      "human_grade": "answers",
+      "grade_reason": "Kashyapiya section_23 (full text): store grain in well-baked earthen pots, wooden bins, rope containers or a storage pit in firm ground, protected from damp, mice and parrots",
+      "top1_rerank_score": 0.6254,
+      "score_only_tier": "strong",
+      "added": "2026-09-26",
+      "note": "Re-graded 2026-09-27 on the FULL passage. The 2026-09-26 'no' grade came from a ~290-char preview that showed only the threshing text preceding the storage passage. The system found the answer; the grader missed it.",
+      "relevant_books_basis": "post-harvest handling and storage would belong to the two cultivation treatises; graded 'no' because neither in fact addresses it"
+    }
+  ]
+}

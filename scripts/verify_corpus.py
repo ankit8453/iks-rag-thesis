@@ -29,7 +29,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CHUNKS_DIR = ROOT / "corpus" / "chunks"
-DEFAULT_FP = ROOT / "corpus" / "_fingerprint_pre_citationfix.json"
+#: The baseline is the most recent stored fingerprint that carries per-book hashes, so
+#: a corpus change is always checked against the last verified state.
+_FP_ORDER = ["_fingerprint_pre_vishvavallabha.json", "_fingerprint_pre_citationfix.json"]
+DEFAULT_FP = next((ROOT / "corpus" / n for n in _FP_ORDER
+                   if (ROOT / "corpus" / n).is_file()),
+                  ROOT / "corpus" / _FP_ORDER[-1])
 
 #: joined with a character that cannot occur in the text, so concatenation is unambiguous
 _SEP = "␞"
@@ -51,6 +56,12 @@ def fingerprint(rows: list[dict]) -> dict:
                      for b in sorted({r["book_id"] for r in rows})},
         "text_set_sha256": hashlib.sha256(_SEP.join(texts).encode()).hexdigest(),
         "total_chars": sum(len(t) for t in texts),
+        # per book, so adding a new book can be told apart from changing an old one
+        "per_book_sha256": {
+            b: hashlib.sha256(_SEP.join(sorted(r["text"] for r in rows
+                                               if r["book_id"] == b)).encode()).hexdigest()
+            for b in sorted({r["book_id"] for r in rows})
+        },
     }
 
 
@@ -138,32 +149,45 @@ def main() -> int:
         return 0
 
     old = json.loads(DEFAULT_FP.read_text(encoding="utf-8"))
-    same_text = old["text_set_sha256"] == now["text_set_sha256"]
     print(f"\ncompared against {DEFAULT_FP.name}")
     print(f"  chunk count : {old['n_chunks']} -> {now['n_chunks']}")
     print(f"  total chars : {old['total_chars']:,} -> {now['total_chars']:,}")
-    print(f"  text set    : {'IDENTICAL' if same_text else 'CHANGED'}")
 
     db_status = check_vector_db({r["chunk_id"] for r in rows})
 
-    if same_text and db_status in (0, None):
-        print("\nPASS -- no chunk text was lost or altered; only metadata moved.")
+    if "per_book_sha256" in old:
+        # Per book: every book in the baseline must be byte-identical; books not in the
+        # baseline are ADDITIONS and are reported, not failed. This is what lets a new
+        # treatise be ingested while proving the existing ones were not touched.
+        changed, removed = [], []
+        for b, h in old["per_book_sha256"].items():
+            if b not in now["per_book_sha256"]:
+                removed.append(b)
+            elif now["per_book_sha256"][b] != h:
+                changed.append(b)
+        added = sorted(set(now["per_book_sha256"]) - set(old["per_book_sha256"]))
+        for b in old["per_book_sha256"]:
+            state = ("REMOVED" if b in removed else "CHANGED" if b in changed
+                     else "identical")
+            print(f"  {b:24} {state}")
+        for b in added:
+            print(f"  {b:24} ADDED ({now['per_book'][b]} chunks)")
+        text_ok = not changed and not removed
+    else:
+        text_ok = old["text_set_sha256"] == now["text_set_sha256"]
+        print(f"  text set    : {'IDENTICAL' if text_ok else 'CHANGED'}")
+
+    if text_ok and db_status in (0, None):
+        print("\nPASS -- no existing chunk text was lost or altered.")
         return 0
-    if same_text:
+    if text_ok:
         print("\nFAIL -- chunk text is intact, but the vector store disagrees with the")
         print("chunk files (see above). Retrieval reads the vector store, not the files,")
         print("so fix that before running any evaluation.")
         return 1
-
-    # Text changed: say exactly how, so the cause is obvious.
-    old_books, new_books = old["per_book"], now["per_book"]
-    for b in sorted(set(old_books) | set(new_books)):
-        o, n = old_books.get(b, 0), new_books.get(b, 0)
-        if o != n:
-            print(f"    {b}: {o} -> {n}")
-    print("\nFAIL -- chunk text changed. If this was NOT intended, restore from backup:")
+    print("\nFAIL -- existing chunk text changed. If this was NOT intended, restore:")
     print("  see corpus/RESTORE.md")
-    print("If it WAS intended (e.g. front-matter stripping), store a new fingerprint:")
+    print("If it WAS intended, store a new fingerprint:")
     print("  python scripts/verify_corpus.py --write <name>")
     return 1
 

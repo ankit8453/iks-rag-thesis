@@ -1,0 +1,21 @@
+{
+  "n_chunks": 233,
+  "per_book": {
+    "brihat_samhita": 46,
+    "kashyapiyakrishisukti": 39,
+    "krishi_parashara": 13,
+    "niti_natural_farming": 68,
+    "upavanavinoda": 15,
+    "vrikshayurveda": 52
+  },
+  "text_set_sha256": "c1c2edd208c76476c5c753e993bdf6b27d19aeb579d709aadb03fd306662fdd6",
+  "total_chars": 599263,
+  "per_book_sha256": {
+    "brihat_samhita": "5649e518e032622181714cc58c2ecd02727639560133bbc4b193e9a3e7a36a2e",
+    "kashyapiyakrishisukti": "96609e10767532522eb5e927861826e1d95797f6cd3c38e3aa2b20292f6e35c5",
+    "krishi_parashara": "bbabbf3f882ec829e0608d6be7ba27721340943e373b75914dc5bf73cfc70c44",
+    "niti_natural_farming": "bd87be9ce1fdbcdb89e6a035ec0e54f6794a7ab0e5e17300fbe3fd43f2590717",
+    "upavanavinoda": "d50b3806a62d6b2cf6de4b3e18154bc66cf86eed4fd1d7d30d7663871ce83439",
+    "vrikshayurveda": "625fc656bd7f5cf7ca4bf62c49b8fbe826f95d27f90acc9030529699c185811c"
+  }
+}
