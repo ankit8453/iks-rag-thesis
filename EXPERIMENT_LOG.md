@@ -1483,6 +1483,47 @@ headings, `source_tier: classical`, then the same verify → coverage → Phase 
 
 ---
 
+### Re-run after the citation-format fix (2026-09-27)
+
+Same corpus, same 40 queries, generated queries for the disease half. Only change: passage
+headers are now the citation itself (`[Vrikshayurveda, ch.full, v.1.2d]`).
+
+| metric | before fix | **after fix** |
+|---|---|---|
+| grounded answer rate | 16.67% | **37.50%** (9/24) |
+| valid citation rate | 20.74% | **52.58%** |
+| honest refusal (16 unanswerable) | 93.75% | **81.25%** (13/16) |
+| over-refusal (24 answerable) | 83.33% | **70.83%** (17/24) |
+| unfounded citations (no-corpus control) | 0% | **0%** |
+
+Retrieval (cell 2) identical to the previous run, as expected — the fix touches generation only.
+
+**Grounded answers more than doubled, from one line of formatting.** The model was using the
+right passages all along; it now names them in a form that resolves. 52.58% is the first
+citation figure that is not an artefact — 20.74% was the collision, and §6m's 55% was
+inflated by duplicate labels. That 55% ≈ 52.58% is coincidence, not confirmation.
+
+**Honest refusal fell 93.75% → 81.25%: 3 of the 16 unanswerable queries were now answered.**
+The model got more willing to answer once citing became easy. Of the 16, 14 are
+`no_coverage` (topically relevant books, no matching passage) — so an answer there may be a
+reasonable partial answer from a general passage, or an overreach. **Not yet known which:
+per-query inspection required before this is reported either way.**
+
+**A measurement inconsistency surfaced.** Grounded rate counts 9/24 answers with a valid
+citation, but over-refusal says only 7/24 were *not* refused. So at least 2 answers were
+classified as refusals *and* cited a genuine passage — hedged partial answers ("not directly
+addressed; however the texts prescribe..."). Same detector gap as q15 in the previous run:
+the refusal classifier treats a hedge as a refusal even when the answer goes on to cite.
+Grounded and over-refusal therefore overlap and must not be added together. Needs its own fix.
+
+**Unfounded citations 0% again** — across every run and corpus version, the model has never
+invented a citation.
+
+Run time was ~1 h 40 min on a free T4: cell 3 re-runs all four retrieval variants (duplicate
+of cell 2), and query embedding + reranking run on 2 CPU cores. Notebook fixes queued.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
