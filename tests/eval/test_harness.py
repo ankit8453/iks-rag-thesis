@@ -208,3 +208,84 @@ def test_format_table_renders_rows() -> None:
     txt = format_table([{"variant": "full", "P@5": 0.8}])
     assert "variant" in txt and "full" in txt
     assert len(txt.splitlines()) == 3           # header, separator, one row
+
+
+# ------------------------------------------------------------------ #
+# Three-way outcome (6p). A substring test for the refusal phrase scored full,
+# cited answers that ended with one caveat as refusals, inflating over-refusal
+# from 58.3% to 70.8% on the 2026-09-27 run.
+# ------------------------------------------------------------------ #
+
+
+@dataclass
+class _CitedAnswer:
+    answer: str
+    retrieved: list
+    citations: list = field(default_factory=list)
+    used_chunk_ids: list = field(default_factory=list)
+
+
+_REFUSAL = ("The retrieved classical-text passages do not contain enough "
+            "information to answer this question.")
+
+
+class _Fixed:
+    def __init__(self, ans):
+        self.ans = ans
+
+    def answer(self, query, k=5):
+        return self.ans
+
+
+def test_classify_answer_three_ways() -> None:
+    from src.eval.baselines import classify_answer
+    assert classify_answer("Apply kunapa water.", 1) == "answered"
+    assert classify_answer("1. Plough. " + _REFUSAL, 2) == "partial"
+    assert classify_answer(_REFUSAL, 0) == "refused"
+
+
+def test_cited_answer_with_a_caveat_is_partial_not_over_refusal() -> None:
+    """n07/n08/n13 shape: full cited steps, then one caveat."""
+    ans = _CitedAnswer("1. Apply cow dung [Kashyapiya, ch.x, v.13]. " + _REFUSAL,
+                       [_Chunk("c1")], citations=["k"], used_chunk_ids=["c1"])
+    run = run_generation_eval([_cases()[0]], _Fixed(ans), k=5, progress=False)
+    assert run.per_query[0]["outcome"] == "partial"
+    assert run.over_refusal_rate == pytest.approx(0.0)
+    assert run.partial_rate == pytest.approx(1.0)
+    assert run.grounded_answer_rate == pytest.approx(1.0)
+
+
+def test_uncited_refusal_still_counts_as_over_refusal() -> None:
+    ans = _CitedAnswer(_REFUSAL, [_Chunk("c1")])
+    run = run_generation_eval([_cases()[0]], _Fixed(ans), k=5, progress=False)
+    assert run.per_query[0]["outcome"] == "refused"
+    assert run.over_refusal_rate == pytest.approx(1.0)
+
+
+def test_partial_on_an_unanswerable_query_counts_as_declining() -> None:
+    """Declining the core question while citing a general passage is the right
+    behaviour on an unanswerable query."""
+    ans = _CitedAnswer("Not directly covered. " + _REFUSAL, [_Chunk("c1")],
+                       citations=["v"], used_chunk_ids=["c1"])
+    run = run_generation_eval([_cases()[1]], _Fixed(ans), k=5, progress=False)
+    assert run.honest_refusal_rate == pytest.approx(1.0)
+    assert run.outcomes_unanswerable == {"partial": 1}
+
+
+def test_answers_are_saved_in_full_as_they_are_generated(tmp_path) -> None:
+    long = "x" * 1200
+    ans = _CitedAnswer(long, [_Chunk("c1")])
+    out = tmp_path / "answers.jsonl"
+    run_generation_eval(_cases(), _Fixed(ans), k=5, progress=False, save_path=str(out))
+    lines = out.read_text(encoding="utf-8").splitlines()
+    import json
+    assert len(lines) == 2
+    assert len(json.loads(lines[0])["answer"]) == 1200   # not truncated
+
+
+def test_full_evaluation_can_skip_the_duplicate_retrieval_pass() -> None:
+    ans = _CitedAnswer(_REFUSAL, [_Chunk("c1")])
+    out = run_full_evaluation(_cases(), collection=None, pipeline=_Fixed(ans),
+                              run_retrieval=False, progress=False)
+    assert out["retrieval"] == []
+    assert out["generation"].n_answerable == 1

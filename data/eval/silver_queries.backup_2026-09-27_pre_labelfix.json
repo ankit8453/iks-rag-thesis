@@ -344,12 +344,11 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
+      "expect_answerable": false,
       "top1_rerank_score": 0.0562,
-      "coverage_tier": "marginal",
-      "note": "Re-labelled 2026-09-27. Was no_coverage from a top-1 score of 0.056, but the relevant passage sat at rank 2 behind an irrelevant rank-1 chunk; the generator cited it. A low top-1 score is not safe proof of absence.",
-      "human_grade": "partial",
-      "grade_reason": "Vrikshayurveda v.173: 'drying, yellowness, and excessive paleness of leaves' - matches pale, drooping foliage; exhausted soil is covered only generally"
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0562). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage"
     },
     {
       "id": "q20",
@@ -738,14 +737,15 @@
         "krishi_parashara"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "Kashyapiya section_23 (full text): store grain in well-baked earthen pots, wooden bins, rope containers or a storage pit in firm ground, protected from damp, mice and parrots",
+      "expect_answerable": false,
+      "coverage_tier": "none",
+      "human_grade": "no",
+      "grade_reason": "top-1 is a materials table about roots/branches; top-2 is threshing, not storage",
       "top1_rerank_score": 0.6254,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Re-graded 2026-09-27 on the FULL passage. The 2026-09-26 'no' grade came from a ~290-char preview that showed only the threshing text preceding the storage passage. The system found the answer; the grader missed it.",
+      "unanswerable_kind": "no_coverage",
+      "note": "Graded unanswerable by reading the retrieved passages: top-1 is a materials table about roots/branches; top-2 is threshing, not storage. The cross-encoder scored it 0.6254, which illustrates why the score cannot be trusted as evidence of presence. Kept rather than deleted so the query set is not biased toward what the corpus happens to hold. See EXPERIMENT_LOG.md §6n.",
       "relevant_books_basis": "post-harvest handling and storage would belong to the two cultivation treatises; graded 'no' because neither in fact addresses it"
     }
   ]

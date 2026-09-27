@@ -115,3 +115,5 @@ corpus/chunks_backup_*/
 
 # Copyrighted source PDFs and OCR (AAHF bulletins etc.) - local only, never public
 newbooks/
+
+data/eval/_label_review_queries.json
