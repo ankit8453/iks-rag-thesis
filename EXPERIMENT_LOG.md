@@ -1581,6 +1581,35 @@ existing books byte-identical, vishvavallabha ADDED (37), 270 unique citation la
 
 ---
 
+### Full-text label review after Vishvavallabha (2026-09-27)
+
+Every doubtful label re-read on **full** passages of the 270-chunk corpus, using the wording
+the deployed system sends. 7 flips; query set now **27 answerable / 40** (11 no_coverage,
+2 out_of_scope).
+
+**Finding: Vishvavallabha confirms §6m from a second, independent text.** Its chapter 8 —
+the disease chapter, 79 verses — is organised by cause exactly like Vrikshayurveda (wind,
+bile, phlegm, over-watering, over-manuring, over-medication, insects, unhealthy soil, season)
+and describes symptoms as paleness, dry branches, drying leaves, dieback, falling bark. It
+never describes spots, pustules, powdery coatings, corky patches or mould. **Adding the one
+classical text devoted to plant disease did not create coverage for lesion-appearance
+queries** — the gap is in the tradition, not in our choice of books.
+
+Rule applied consistently: a query centred on a lesion's *appearance* is no_coverage; a
+query centred on drying, paleness, soil, insects or manure is answerable, fully or in part.
+- to no_coverage: q02 (pustules), q16 (spots), q17 (powdery coating) — their earlier
+  "answerable" came from a hand-written wording's score and had never been read.
+- to answerable (partial): q06, q08, q09 (their generated wording centres on drying and
+  withering — q09's is identical to q04's), q15 (mites: NITI identification + Vishvavallabha
+  8.36-39 remedy for insects on leaves).
+- upgraded to full answers: q19 (Vishvavallabha 8.61, 8.67-68), n08 (Vishvavallabha ch.7
+  kunapa recipe), n04, n12, n13.
+
+Vishvavallabha reached rank 1 for q19 and n08 and the top 5 for 15 of the 27 doubtful
+queries.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
