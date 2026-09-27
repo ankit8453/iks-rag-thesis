@@ -118,18 +118,24 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ## Found during Phase 11 — act on these
 
-- [ ] **Re-run cells 2 and 3** after the citation-format fix — the first trustworthy
+- [x] **Re-run cells 2 and 3** after the citation-format fix — DONE, grounded 37.5% — the first trustworthy
       citation figure. 20.74% and 55% are both artefacts.
 - [ ] **Report retrieval split by query type**, never pooled. The keyword baseline nearly
       caught up (nDCG 0.842 vs 0.783) because domain queries already use the corpus's
       vocabulary; the bridge's advantage is specific to modern disease labels.
 - [ ] **Investigate dropping BM25.** dense_only beats the full hybrid on nDCG, MRR and
       Hit@5 (1.00 vs 0.9167) — third run in a row. The hybrid leg may be a net negative.
-- [ ] **Harden the refusal detector.** q15 was counted as an answer while actually
+- [x] **Harden the refusal detector.** DONE 27 Sep — answered/partial/refused. q15 was counted as an answer while actually
       declining ("is not directly addressed. However...") and citing nothing. Honest
       refusal 93.75% is softer than it looks.
 - [ ] **Correct the research write-up**: its citation figure came from the duplicate-label
       era and is not defensible.
+
+## Final sequence (agreed 27 Sep)
+
+- [ ] Ingest Vishvavallabha → rebuild → verify_corpus PASS → push to HF
+- [ ] `review_labels.py` + full-text read of every doubtful label
+- [ ] Final Phase 11 run (generated queries) — the numbers for the thesis and chapter
 
 ## Open / parked
 

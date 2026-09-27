@@ -1543,6 +1543,20 @@ Table 1 causes) are by design, since the system and the texts work by symptom.
 
 ---
 
+### Fixes applied before the final run (2026-09-27)
+
+- **Scoring:** answers classed answered / partial / refused. Over-refusal = refused with no
+  valid citation; partial reported separately; on unanswerable queries both refused and
+  partial count as declining. Earlier over-refusal figures (§6m 81.8%, §6p 83.3% / 70.8%) used
+  the old substring test and are not comparable.
+- **Labels:** n16 → answerable, q19 → partial. Query set now **26 answerable / 40**
+  (12 no_coverage, 2 out_of_scope). Remaining doubtful labels get a full-text review after
+  Vishvavallabha (`review_labels.py`).
+- **Notebook:** no duplicate retrieval pass, per-question progress, answers saved as generated,
+  RAGAS off by default.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
