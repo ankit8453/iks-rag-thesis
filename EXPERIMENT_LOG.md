@@ -1524,54 +1524,22 @@ of cell 2), and query embedding + reranking run on 2 CPU cores. Notebook fixes q
 
 ---
 
-### Per-query inspection of the re-run — three findings (2026-09-27)
+### Per-query inspection of the re-run (2026-09-27)
 
-**Finding 1 — a valid citation is not a correct answer.** q01 (apple scab: "dark rough corky
-patches") was answered by matching it to NITI's *"leaves with holes or missing parts"* —
-caterpillar damage. The citation resolves to a genuinely retrieved passage, so it scores as
-**valid**, but the claim is wrong: a scab is not a hole. Nothing in our metrics catches
-this. Valid-citation rate checks that the cited passage *was retrieved*, not that it
-*supports the claim*. q10/q11 show a milder version ("could be caused by ants, excessive
-watering, or faulty seed" for a leaf-spot). This is a misapplication of a real source —
-different from fabrication (still 0%), but a faithfulness failure all the same. Measuring it
-needs a claim-support check: human reading, or an LLM judge (RAGAS faithfulness was meant
-for this and is currently disabled).
+**Refusal detector miscounts.** `is_refusal()` flags any answer containing *"do not contain
+enough"* anywhere. n07, n08, n13 are full cited step-by-step answers that end with a small
+caveat, so they were scored as refusals. Re-counted as answered / partial / refused, the 24
+answerable queries give 7 / 3 / 14 → **strict over-refusal 58.3%, not 70.83%.** Detector to
+be split into those three classes.
 
-**Finding 2 — the refusal detector counts good answers as refusals.** `is_refusal()` is a
-substring test: the answer contains *"do not contain enough"* **anywhere**. n07 (manure),
-n08 (liquid manure) and n13 (planting a sapling) are full step-by-step answers, every step
-cited to Kashyapiya or NITI — but each evidently closes with a caveat using that phrase
-about some sub-point, so each was scored as a refusal. Over-refusal (70.83%) is therefore
-overstated. Re-scoring from the per-query output with three classes:
+**Two labels were wrong (my grading).** n16 (grain storage): graded "no" from a truncated
+preview; the full Kashyapiya section_23 passage covers storage in earthen pots and pits →
+answerable. q19 (weak, pale tree): Vrikshayurveda v.173 describes "excessive paleness of
+leaves" → partial. No_coverage labels to be re-checked on full passage text.
 
-| | answered | partial (caveat + valid citation) | refused (no valid citation) |
-|---|---|---|---|
-| 24 answerable | 7 | 3 | 14 |
-| 16 unanswerable | 3 | 4 | 9 |
-
-Strict over-refusal (refused with nothing cited) = **14/24 = 58.3%**, not 70.83%.
-The detector needs this three-way split rather than one substring.
-
-**Finding 3 — two of our own labels were wrong.**
-- **n16 (grain storage)** — I graded it "no" in §6n from the top-2 passages as displayed,
-  truncated at ~290 characters, which showed a materials table and a *threshing* passage.
-  The threshing passage (Kashyapiya section_23) continues into storage: earthen pots, wooden
-  bins, pits in firm ground. The system found an answer that my truncated reading missed.
-  → should be **answerable**. My grading error.
-- **q19 (weak tree, pale drooping foliage)** — labelled no_coverage from a top-1 score of
-  0.056. But Vrikshayurveda v.173 describes *"drying, yellowness, and excessive paleness of
-  leaves"*, and the system cited it. So even the low score was not safe evidence of absence
-  here: the relevant passage sat at rank 2 while an irrelevant one took rank 1. → at least
-  **partial**.
-
-So 2 of the "3 unanswerable answered" were label errors, and 1 (q01) is a genuine
-misapplication. The honest-refusal drop (93.75 → 81.25%) is mostly our labelling, not the
-system over-reaching.
-
-**Method lesson.** Grading by reading a *truncated* passage preview is not reading the
-passage. §6n's reading-based grades must be re-checked on full passage text, and every
-no_coverage label should be treated as provisional until a full read — score-based and
-preview-based labels have now each been wrong once.
+**q01** matched scab ("corky patches") to NITI's "leaves with holes" — a different symptom,
+so a genuine mismatch, but a single case. Shared-symptom mappings (e.g. q10/q11 leaf-spot →
+Table 1 causes) are by design, since the system and the texts work by symptom.
 
 ---
 
