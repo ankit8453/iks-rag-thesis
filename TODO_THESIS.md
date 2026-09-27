@@ -133,7 +133,8 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ## Final sequence (agreed 27 Sep)
 
-- [ ] Ingest Vishvavallabha → rebuild → verify_corpus PASS → push to HF
+- [x] Ingest Vishvavallabha → rebuild → verify_corpus PASS (270 chunks) — DONE 27 Sep
+- [ ] Push 270 chunks to HF
 - [ ] `review_labels.py` + full-text read of every doubtful label
 - [ ] Final Phase 11 run (generated queries) — the numbers for the thesis and chapter
 

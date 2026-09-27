@@ -1573,6 +1573,14 @@ line separated them. Combined verses ("30-31.", "2-3.") were already handled.
 
 ---
 
+### Vishvavallabha ingested (2026-09-27)
+
+Corpus **233 → 270 chunks, 7 sources** (6 classical + NITI). verify_corpus PASS: the six
+existing books byte-identical, vishvavallabha ADDED (37), 270 unique citation labels,
+270 vectors matching the chunk files exactly. Build 1,539 s on CPU, no API cost.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
