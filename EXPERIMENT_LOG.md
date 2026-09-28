@@ -1610,6 +1610,28 @@ queries.
 
 ---
 
+### Final run, Cell 2 — retrieval numbers invalid: labels predate Vishvavallabha (2026-09-28)
+
+270-chunk corpus, 27 answerable, generated queries:
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full | 0.563 | 0.7699 | 0.7099 | 0.963 |
+| keyword_only | 0.5111 | 0.7383 | 0.737 | 0.8519 |
+| dense_only | 0.4519 | 0.689 | 0.6383 | 0.8889 |
+| hybrid_no_rerank | 0.4815 | 0.6911 | 0.6167 | 0.9259 |
+
+**Not reportable.** Book-level `relevant_books` were written before Vishvavallabha was
+ingested, so every Vishvavallabha passage in a top-5 scores as irrelevant — the §6j
+artifact again. Vishvavallabha reaches the top 5 for 15 of the 27 doubtful queries, which is
+why every variant fell and dense_only (which surfaces it most) fell furthest. The pre-flight
+check confirmed every query *had* labels, not that the labels *covered the new book* — a gap
+in the check. Fix: add Vishvavallabha to relevant_books by subject matter (same basis as the
+other books), then re-run Cell 2 only. Cell 3 is unaffected: generation never reads
+relevant_books.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
