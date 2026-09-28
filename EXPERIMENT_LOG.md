@@ -1632,6 +1632,27 @@ relevant_books.
 
 ---
 
+### Final run, Cell 2 re-scored with Vishvavallabha labelled (2026-09-28) — REPORTABLE
+
+270 chunks, 27 answerable, generated queries, relevant_books incl. Vishvavallabha:
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| **full** (hybrid + rerank) | **0.800** | 0.8918 | 0.8704 | 0.963 |
+| **dense_only** | 0.763 | **0.9284** | **0.9167** | **1.000** |
+| hybrid_no_rerank | 0.763 | 0.8926 | 0.8642 | 1.000 |
+| keyword_only (baseline) | 0.711 | 0.8646 | 0.8481 | 0.963 |
+
+- **Full system beats the keyword baseline on every measure** (P@5 +0.09, nDCG +0.03).
+- **Dense-only again ranks best** (nDCG, MRR, Hit@5 = 1.00; full misses 1 of 27). Fourth
+  consecutive run with this pattern — BM25 fusion lowers ranking quality, while the reranker
+  lifts precision (full has the best P@5). Worth testing dense + rerank without BM25.
+- The keyword gap is small because 23 of 40 queries are domain questions phrased in the
+  corpus's own vocabulary; must be split by query type before reporting the bridge's value.
+- Caveat: book-level labels, several books per query — P@5 is generous; Recall undefined.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
