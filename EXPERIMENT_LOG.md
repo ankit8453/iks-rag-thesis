@@ -1653,6 +1653,29 @@ relevant_books.
 
 ---
 
+### Final run, Cell 3 — generation on the deployed system (2026-09-29)
+
+270 chunks, 7 sources, 40 queries (27 answerable / 13 unanswerable), generated queries,
+three-way scoring. 76 min grounded + control on a free T4.
+
+| metric | §6m baseline (233, authored) | previous (233, generated) | **final (270)** |
+|---|---|---|---|
+| grounded answer rate | 13.64% | 37.50% | **51.85%** (14/27) |
+| valid citation rate | 55.00%* | 52.58% | **39.55%** |
+| honest refusal (unanswerable) | 100% | 81.25% | **92.31%** (12/13) |
+| over-refusal (strict: refused, nothing cited) | 81.82%* | 58.3%** | **40.74%** (11/27) |
+| unfounded citations (no-corpus control) | 0% | 0% | **0%** |
+
+\* duplicate-label / substring-detector era, not comparable. \*\* re-scored by hand.
+
+- **Grounded answers 13.6% → 51.9%** across the project; over-refusal 81.8% → 40.7%.
+- **Unfounded citations still 0%** in every run, every corpus version.
+- **Valid citation rate fell 52.6% → 39.6% — unexplained so far.** More answers now cite
+  more passages, and some citations do not resolve. Needs the per-query file
+  (`results/phase11_answers_generated.jsonl`) before it is interpreted or reported.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.
