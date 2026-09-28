@@ -14,8 +14,7 @@
     "extension_2026_09_26": "Extended with 16 domain-derived queries covering pest damage, soil, seed treatment, season, water, planting and physical injury — the subject areas these treatises actually cover. The original 22 queries were almost entirely modern fungal leaf diseases, which §6m showed the texts cannot address, so the evaluation was measuring the system against unanswerable questions. Candidates were written from the domain WITHOUT consulting the corpus (to avoid circularity), then labelled from measured cross-encoder scores: 8 strong, 7 marginal, 1 no-coverage. Queries scoring 'none' were kept as honest negatives, not deleted.",
     "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline.",
     "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting.",
-    "relevant_books_relabel_2026_09_26": "The 16 domain queries added on 2026-09-26 initially took relevant_books from the top-3 books of their own retrieval run, which made Precision@5, nDCG and MRR circular - retrieval graded against its own output. Symptom: keyword_only P@5 rose 0.33 -> 0.53 purely from adding queries. They are now labelled from each treatise's subject matter, the same basis as the original 24, with the reason recorded per query in relevant_books_basis. Author-assigned, pending expert ratification. Generation metrics were never affected: they use expect_answerable and citation resolution, never relevant_books.",
-    "full_text_review_2026_09_27": "All doubtful labels re-read on FULL passages of the 270-chunk corpus (with Vishvavallabha), using the deployed (generated) wording. Rule applied: a query centred on a lesion's appearance (spots, pustules, powdery coating, corky patches, mould, sunken areas) is no_coverage - no source describes lesions; a query centred on drying, paleness, soil, insects or manure is answerable, fully or in part."
+    "relevant_books_relabel_2026_09_26": "The 16 domain queries added on 2026-09-26 initially took relevant_books from the top-3 books of their own retrieval run, which made Precision@5, nDCG and MRR circular - retrieval graded against its own output. Symptom: keyword_only P@5 rose 0.33 -> 0.53 purely from adding queries. They are now labelled from each treatise's subject matter, the same basis as the original 24, with the reason recorded per query in relevant_books_basis. Author-assigned, pending expert ratification. Generation metrics were never affected: they use expect_answerable and citation resolution, never relevant_books."
   },
   "queries": [
     {
@@ -33,6 +32,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1039). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "dark rough corky patches spreading over the leaves of an apple tree."
     },
     {
@@ -45,15 +46,10 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0323,
-      "coverage_tier": "none",
-      "generated_query": "Leaves with orange-to-brown powdery pustules on apple.",
-      "human_grade": "no",
-      "grade_reason": "pustules: no passage in any of the 7 sources describes pustules or rust-like eruptions",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "unanswerable_kind": "no_coverage",
-      "note": "Full-text review 2026-09-27 (after Vishvavallabha): pustules: no passage in any of the 7 sources describes pustules or rust-like eruptions. Earlier 'answerable' came from a hand-written wording's score, never read."
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2239,
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves with orange-to-brown powdery pustules on apple."
     },
     {
       "id": "q03",
@@ -70,6 +66,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0828). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "Leaves with orange-to-brown powdery pustules on corn."
     },
     {
@@ -102,6 +100,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1175). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "Small dark spots with pale centres spreading over the leaves of a corn plant."
     },
     {
@@ -114,14 +114,14 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.1732,
-      "coverage_tier": "marginal",
-      "note": "Full-text review 2026-09-27: generated query ends in drying/withering; Vishvavallabha 8.25-28, 8.35 and Vrikshayurveda v.173 treat drying foliage, not the brown patch itself",
-      "generated_query": "Leaves with dark brown patches spreading until they dry and wither on a potato.",
-      "human_grade": "partial",
-      "grade_reason": "generated query ends in drying/withering; Vishvavallabha 8.25-28, 8.35 and Vrikshayurveda v.173 treat drying foliage, not the brown patch itself",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0765,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0765). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves with dark brown patches spreading until they dry and wither on a potato."
     },
     {
       "id": "q07",
@@ -139,6 +139,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1493). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "brown patches spreading over the leaves of a potato."
     },
     {
@@ -151,14 +153,14 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.2181,
-      "coverage_tier": "marginal",
-      "note": "Full-text review 2026-09-27: same generated wording as q06 - drying/withering is treated, the brown patch is not",
-      "generated_query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant.",
-      "human_grade": "partial",
-      "grade_reason": "same generated wording as q06 - drying/withering is treated, the brown patch is not",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0669,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0669). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant."
     },
     {
       "id": "q09",
@@ -171,14 +173,14 @@
         "brihat_samhita"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.1588,
-      "coverage_tier": "marginal",
-      "note": "Full-text review 2026-09-27: generated query 'Leaves drying and withering' is identical to q04's, which is answerable; Vishvavallabha 8.28 'leaves become dry', 8.35 dieback",
-      "generated_query": "Leaves drying and withering on a tomato plant.",
-      "human_grade": "partial",
-      "grade_reason": "generated query 'Leaves drying and withering' is identical to q04's, which is answerable; Vishvavallabha 8.28 'leaves become dry', 8.35 dieback",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0617,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0617). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
+      "generated_query": "Leaves drying and withering on a tomato plant."
     },
     {
       "id": "q10",
@@ -195,6 +197,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1043). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
     },
     {
@@ -212,6 +216,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1361). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "Small dark spots with pale or ringed centres on the leaves of a tomato."
     },
     {
@@ -229,6 +235,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0983). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "fuzzy discoloured patches spreading over the surface of the leaves of a tomato."
     },
     {
@@ -271,13 +279,11 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
+      "expect_answerable": false,
       "top1_rerank_score": 0.0613,
-      "coverage_tier": "marginal",
-      "note": "Full-text review 2026-09-27: mites: NITI section_10 identifies mite damage (yellowish leaves); Vishvavallabha 8.36-39 gives a remedy for external insects living on leaves",
-      "human_grade": "partial",
-      "grade_reason": "mites: NITI section_10 identifies mite damage (yellowish leaves); Vishvavallabha 8.36-39 gives a remedy for external insects living on leaves",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0613). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage"
     },
     {
       "id": "q16",
@@ -289,15 +295,10 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0136,
-      "coverage_tier": "none",
-      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a bell pepper.",
-      "human_grade": "no",
-      "grade_reason": "spots with pale/ringed centres: no lesion-spot description in any source",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "unanswerable_kind": "no_coverage",
-      "note": "Full-text review 2026-09-27 (after Vishvavallabha): spots with pale/ringed centres: no lesion-spot description in any source. Earlier 'answerable' came from a hand-written wording's score, never read."
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2258,
+      "coverage_tier": "marginal",
+      "generated_query": "Small dark spots with pale or ringed centres on the leaves of a bell pepper."
     },
     {
       "id": "q17",
@@ -309,15 +310,10 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": false,
-      "top1_rerank_score": 0.0134,
-      "coverage_tier": "none",
-      "generated_query": "Leaves covered in a white powdery coating on a squash plant.",
-      "human_grade": "no",
-      "grade_reason": "white powdery coating: nearest is Vishvavallabha 8.19 'whitish, undersized flowers' (phlegm) - not a coating",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "unanswerable_kind": "no_coverage",
-      "note": "Full-text review 2026-09-27 (after Vishvavallabha): white powdery coating: nearest is Vishvavallabha 8.19 'whitish, undersized flowers' (phlegm) - not a coating. Earlier 'answerable' came from a hand-written wording's score, never read."
+      "expect_answerable": true,
+      "top1_rerank_score": 0.2927,
+      "coverage_tier": "marginal",
+      "generated_query": "Leaves covered in a white powdery coating on a squash plant."
     },
     {
       "id": "q18",
@@ -334,6 +330,8 @@
       "coverage_tier": "none",
       "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.1218). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
       "unanswerable_kind": "no_coverage",
+      "label_provisional": true,
+      "label_provisional_reason": "This label rests on the HAND-WRITTEN wording of the query scoring low. The deployed system does not use that wording - Strategy B (Llama) writes the query. Wording alone moves the score by up to 17x (q19 0.056 vs n15 0.935), so if Stage 0 shows Llama phrases these better, this label must be re-measured. See EXPERIMENT_LOG.md 6o.",
       "generated_query": "dark sunken decaying areas spreading over the leaves of a grape."
     },
     {
@@ -346,13 +344,11 @@
         "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "top1_rerank_score": 0.1386,
-      "coverage_tier": "strong",
-      "note": "Full-text review 2026-09-27: Vishvavallabha 8.61 'a tree afflicted by unhealthy soil should be replanted', 8.67-68 sickly pale falling leaves with remedy - direct answer",
-      "human_grade": "answers",
-      "grade_reason": "Vishvavallabha 8.61 'a tree afflicted by unhealthy soil should be replanted', 8.67-68 sickly pale falling leaves with remedy - direct answer",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "expect_answerable": false,
+      "top1_rerank_score": 0.0562,
+      "coverage_tier": "none",
+      "note": "No passage in the 233-chunk corpus matches this lesion description (top-1 cross-encoder score 0.0562). The classical texts index plant disease by Ayurvedic cause (vata/pitta/kafa, fire, wound, ants), not by lesion appearance, so no mapping exists. See EXPERIMENT_LOG.md §6m.",
+      "unanswerable_kind": "no_coverage"
     },
     {
       "id": "q20",
@@ -493,15 +489,14 @@
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "NITI sections 21-25: pest-control formulations with preparation steps",
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is layering/propagation; the right section (6.2.8) is only at top-2",
       "top1_rerank_score": 0.7967,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Full-text review 2026-09-27: NITI sections 21-25: pest-control formulations with preparation steps",
-      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "note": "Partial support: top-1 is layering/propagation; the right section (6.2.8) is only at top-2. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.7967.",
+      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies"
     },
     {
       "id": "n05",
@@ -578,15 +573,14 @@
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "Vishvavallabha ch.7 v.2-3: kunapa, the liquid manure - fat, marrow, blood cooked, milk added, kept a fortnight (checked on the page image)",
-      "top1_rerank_score": 0.7516,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 off-topic; kunapa water appears only as a row in a materials table",
+      "top1_rerank_score": 0.642,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Full-text review 2026-09-27: Vishvavallabha ch.7 v.2-3: kunapa, the liquid manure - fat, marrow, blood cooked, milk added, kept a fortnight (checked on the page image)",
-      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "note": "Partial support: top-1 off-topic; kunapa water appears only as a row in a materials table. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.6420.",
+      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda"
     },
     {
       "id": "n09",
@@ -661,15 +655,14 @@
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "Brihat Samhita ch.54 (Exploration of Water Springs) now in top-5; Kashyapiya section_8 on well digging",
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved",
       "top1_rerank_score": 0.9373,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Full-text review 2026-09-27: Brihat Samhita ch.54 (Exploration of Water Springs) now in top-5; Kashyapiya section_8 on well digging",
-      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "note": "Partial support: Kashyapiya covers WHEN to dig, not how to locate water; Brihat ch.54 not retrieved. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9373.",
+      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management"
     },
     {
       "id": "n13",
@@ -684,15 +677,14 @@
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "Kashyapiya section_20 planting steps; Vishvavallabha ch.4 propagation and plantation",
-      "top1_rerank_score": 0.9687,
+      "coverage_tier": "marginal",
+      "human_grade": "partial",
+      "grade_reason": "top-1 is WHERE to cultivate, not HOW to plant or transplant",
+      "top1_rerank_score": 0.9851,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Full-text review 2026-09-27: Kashyapiya section_20 planting steps; Vishvavallabha ch.4 propagation and plantation",
-      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
+      "note": "Partial support: top-1 is WHERE to cultivate, not HOW to plant or transplant. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9851.",
+      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice"
     },
     {
       "id": "n14",
@@ -745,14 +737,15 @@
         "krishi_parashara"
       ],
       "relevant_chunk_ids": [],
-      "expect_answerable": true,
-      "coverage_tier": "strong",
-      "human_grade": "answers",
-      "grade_reason": "Kashyapiya section_23 (full text): store grain in well-baked earthen pots, wooden bins, rope containers or a storage pit in firm ground, protected from damp, mice and parrots",
+      "expect_answerable": false,
+      "coverage_tier": "none",
+      "human_grade": "no",
+      "grade_reason": "top-1 is a materials table about roots/branches; top-2 is threshing, not storage",
       "top1_rerank_score": 0.6254,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "note": "Re-graded 2026-09-27 on the FULL passage. The 2026-09-26 'no' grade came from a ~290-char preview that showed only the threshing text preceding the storage passage. The system found the answer; the grader missed it.",
+      "unanswerable_kind": "no_coverage",
+      "note": "Graded unanswerable by reading the retrieved passages: top-1 is a materials table about roots/branches; top-2 is threshing, not storage. The cross-encoder scored it 0.6254, which illustrates why the score cannot be trusted as evidence of presence. Kept rather than deleted so the query set is not biased toward what the corpus happens to hold. See EXPERIMENT_LOG.md §6n.",
       "relevant_books_basis": "post-harvest handling and storage would belong to the two cultivation treatises; graded 'no' because neither in fact addresses it"
     }
   ]

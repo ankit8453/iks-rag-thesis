@@ -96,8 +96,8 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ## STAGE 4 — Phase 11, the honest re-run  ⬜
 
-- [ ] **4.1** Push the final corpus: `python scripts/push_corpus_chunks.py`
-- [ ] **4.2** Run **A** — the new domain queries alone (does the corpus answer its own subjects?)
+- [x] **4.1** Push the final corpus: `python scripts/push_corpus_chunks.py`
+- [~] **4.2** Run **A** — the new domain queries alone (does the corpus answer its own subjects?)
 - [ ] **4.3** Run **B** — the whole query set together
 - [ ] **4.4** Report disease queries and domain queries **separately** — they measure
       different things and one number would mislead
@@ -116,6 +116,28 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ---
 
+## Found during Phase 11 — act on these
+
+- [x] **Re-run cells 2 and 3** after the citation-format fix — DONE, grounded 37.5% — the first trustworthy
+      citation figure. 20.74% and 55% are both artefacts.
+- [ ] **Report retrieval split by query type**, never pooled. The keyword baseline nearly
+      caught up (nDCG 0.842 vs 0.783) because domain queries already use the corpus's
+      vocabulary; the bridge's advantage is specific to modern disease labels.
+- [ ] **Investigate dropping BM25.** dense_only beats the full hybrid on nDCG, MRR and
+      Hit@5 (1.00 vs 0.9167) — third run in a row. The hybrid leg may be a net negative.
+- [x] **Harden the refusal detector.** DONE 27 Sep — answered/partial/refused. q15 was counted as an answer while actually
+      declining ("is not directly addressed. However...") and citing nothing. Honest
+      refusal 93.75% is softer than it looks.
+- [ ] **Correct the research write-up**: its citation figure came from the duplicate-label
+      era and is not defensible.
+
+## Final sequence (agreed 27 Sep)
+
+- [x] Ingest Vishvavallabha → rebuild → verify_corpus PASS (270 chunks) — DONE 27 Sep
+- [ ] Push 270 chunks to HF
+- [ ] `review_labels.py` + full-text read of every doubtful label
+- [ ] Final Phase 11 run (generated queries) — the numbers for the thesis and chapter
+
 ## Open / parked
 
 - [ ] **Evaluate the soil advisory path.** The soil model outputs (type, moisture, texture)
@@ -128,7 +150,11 @@ In order, cheapest first. Stop as soon as the score is good enough.
 - [ ] **Front-matter prefixes** on 4 Vrikshayurveda chunks (needs another rebuild — bundle
       with a future one)
 - [ ] **Expert gold query set** with passage-level labels (enables Recall@k)
-- [ ] **Vishvavallabha** — blocked, book not obtained. Useful, not urgent
+- [x] **Vishvavallabha — OBTAINED 26 Sep** (archive.org, full AAHF 2004 Sadhale edition,
+      144 pp, all 9 chapters; ch. VIII = 79 verses on diseases and treatment). Local under
+      `newbooks/vishvavallabha/` (gitignored — copyrighted). **Not yet ingested — awaiting go.**
+      Plan: text_layer path, Cyrillic char-map in cleaning, split on 9 headings, then
+      verify → coverage → Phase 11 against the 233-chunk baseline. See §6q.
 - [ ] **Upavanavinoda English Introduction** OCR — blocked, Gemini quota
 
 ---

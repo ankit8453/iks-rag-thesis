@@ -26,6 +26,9 @@ from src.eval.baselines import (
     RetrievalVariant,
     answer_without_grounding,
     chunks_to_pairs,
+    PARTIAL,
+    REFUSED,
+    classify_answer,
     is_refusal,
 )
 from src.eval.citation_verification import verify_citations_in_context
@@ -72,10 +75,17 @@ class GenerationRun:
     grounded_answer_rate: float = 0.0
     #: fraction of citations that pointed at a passage actually retrieved
     valid_citation_rate: float = 0.0
-    #: on the deliberate negatives, how often the system honestly refused
+    #: on the unanswerable queries, how often it did NOT give a full answer
+    #: (refused, or answered only in part with a caveat)
     honest_refusal_rate: float = 0.0
-    #: on answerable queries, how often it refused anyway (over-refusal)
+    #: on answerable queries, how often it refused outright - declined and cited nothing.
+    #: A cited answer with a trailing caveat is "partial", not a refusal (6p).
     over_refusal_rate: float = 0.0
+    #: on answerable queries, how often it answered part and declined part
+    partial_rate: float = 0.0
+    #: outcome counts, so the three classes can be reported rather than inferred
+    outcomes_answerable: dict[str, int] = field(default_factory=dict)
+    outcomes_unanswerable: dict[str, int] = field(default_factory=dict)
     per_query: list[dict[str, Any]] = field(default_factory=list)
 
 
@@ -106,6 +116,9 @@ def run_generation_eval(
     cases: list[QueryCase],
     pipeline: Any,
     k: int = 5,
+    *,
+    progress: bool = True,
+    save_path: str | None = None,
 ) -> GenerationRun:
     """Measure grounding + refusal behaviour of the full system.
 
@@ -113,15 +126,22 @@ def run_generation_eval(
     directly answers "is this recommendation traceable to a real passage?",
     which is the project's central claim.
     """
-    run = GenerationRun()
-    grounded_hits, citation_rates, refusals_neg, refusals_pos = [], [], [], []
+    import json as _json  # noqa: PLC0415
+    import time as _time  # noqa: PLC0415
 
-    for case in cases:
+    run = GenerationRun()
+    grounded_hits, citation_rates, refusals_neg, refusals_pos, partial_pos = [], [], [], [], []
+    out_ans: dict[str, int] = {}
+    out_neg: dict[str, int] = {}
+    # Each answer is appended to disk the moment it exists, so a Colab disconnect late in
+    # a ~90-minute run loses nothing already generated.
+    sink = open(save_path, "a", encoding="utf-8") if save_path else None  # noqa: SIM115
+    t0 = _time.time()
+
+    for n, case in enumerate(cases, 1):
         result = pipeline.answer(case.query, k=k)
         answer = getattr(result, "answer", "") or ""
         retrieved_ids = [c.chunk_id for c in getattr(result, "retrieved", [])]
-        refused = is_refusal(answer)
-
         # The generator cites as "[Source, ch.X, v.Y]" and RESOLVES those to
         # chunk_ids itself (RAGAnswer.citations / .used_chunk_ids). Prefer that
         # over re-parsing the text: the chunk-id regex in citation_verification
@@ -136,36 +156,67 @@ def run_generation_eval(
         # a citation is "valid" when it resolved to a genuinely retrieved chunk
         valid_ids = [cid for cid in used_ids if cid in set(retrieved_ids)]
 
+        outcome = classify_answer(answer, len(valid_ids))
+        refused = outcome == REFUSED
+
         if case.expect_answerable:
             run.n_answerable += 1
+            out_ans[outcome] = out_ans.get(outcome, 0) + 1
             grounded_hits.append(1.0 if valid_ids else 0.0)
             if cited:
                 citation_rates.append(min(1.0, len(valid_ids) / len(cited)))
             refusals_pos.append(1.0 if refused else 0.0)
+            partial_pos.append(1.0 if outcome == PARTIAL else 0.0)
         else:
             run.n_negative += 1
-            refusals_neg.append(1.0 if refused else 0.0)
+            out_neg[outcome] = out_neg.get(outcome, 0) + 1
+            # on an unanswerable query, declining the core question is the right call
+            # whether it cites nothing or cites a general passage with a caveat
+            refusals_neg.append(1.0 if outcome in (REFUSED, PARTIAL) else 0.0)
 
-        run.per_query.append({
+        row = {
             "id": case.id, "expect_answerable": case.expect_answerable,
-            "refused": refused, "n_cited": len(cited),
-            "n_valid": len(valid_ids),
+            "outcome": outcome, "refused": refused,
+            "n_cited": len(cited), "n_valid": len(valid_ids),
             "n_invalid": max(0, len(cited) - len(valid_ids)),
-            # keep the text so a surprising score can actually be diagnosed
-            "answer": answer[:400],
-        })
+            "query": case.query,
+            "retrieved_ids": retrieved_ids,
+            # full text: 6p showed a truncated preview can hide the part that matters
+            "answer": answer,
+        }
+        run.per_query.append(row)
+        if sink is not None:
+            sink.write(_json.dumps(row, ensure_ascii=False) + "\n")
+            sink.flush()
+        if progress:
+            el = _time.time() - t0
+            eta = el / n * (len(cases) - n)
+            print(f"  [{n:2}/{len(cases)}] {case.id:5} {outcome:8} "
+                  f"valid {len(valid_ids)}/{len(cited)}  "
+                  f"elapsed {el/60:5.1f} min  eta {eta/60:5.1f} min", flush=True)
 
+    if sink is not None:
+        sink.close()
     mean = lambda xs: (sum(xs) / len(xs)) if xs else 0.0  # noqa: E731
     run.grounded_answer_rate = mean(grounded_hits)
     run.valid_citation_rate = mean(citation_rates)
     run.honest_refusal_rate = mean(refusals_neg)
     run.over_refusal_rate = mean(refusals_pos)
+    run.partial_rate = mean(partial_pos)
+    run.outcomes_answerable = out_ans
+    run.outcomes_unanswerable = out_neg
     return run
 
 
-def run_ungrounded_control(cases: list[QueryCase], llm: Any) -> dict[str, Any]:
+def run_ungrounded_control(
+    cases: list[QueryCase], llm: Any, *, progress: bool = True,
+) -> dict[str, Any]:
     """The 'do we need the corpus?' control — same LLM, no retrieved passages."""
-    answers = [answer_without_grounding(llm, c.query) for c in cases]
+    answers = []
+    for n, c in enumerate(cases, 1):
+        answers.append(answer_without_grounding(llm, c.query))
+        if progress:
+            print(f"  [control {n:2}/{len(cases)}] {c.id}", flush=True)
     cited = sum(1 for a in answers if verify_citations_in_context(a, []).cited_ids)
     return {
         "n": len(answers),
@@ -198,11 +249,20 @@ def run_full_evaluation(
     k: int = 5,
     variants: tuple[RetrievalVariant, ...] = RETRIEVAL_VARIANTS,
     shared_models: dict[str, Any] | None = None,
+    run_retrieval: bool = True,
+    save_path: str | None = None,
+    progress: bool = True,
 ) -> dict[str, Any]:
     """Run every retrieval variant, plus generation + the ungrounded control.
 
     ``pipeline`` and ``llm`` are optional so the retrieval half can be run on
     its own (it needs no GPU generation).
+
+    ``run_retrieval=False`` skips the retrieval variants. The Phase 11 notebook scores
+    retrieval in its own cell first; repeating all four variants inside the generation cell
+    cost ~10 minutes of CPU per run for identical numbers.
+
+    ``save_path`` appends each generated answer to a JSONL file as soon as it exists.
     """
     from src.eval.baselines import build_retriever  # noqa: PLC0415
 
@@ -212,7 +272,7 @@ def run_full_evaluation(
     negatives = [c for c in cases if not c.expect_answerable]
 
     retrieval: list[RetrievalRun] = []
-    for variant in variants:
+    for variant in (variants if run_retrieval else ()):
         try:
             retriever = build_retriever(collection, variant, **(shared_models or {}))
             retrieval.append(run_retrieval_eval(answerable, retriever, variant, k=k))
@@ -227,9 +287,10 @@ def run_full_evaluation(
         "retrieval_table": format_table([r.as_row(k) for r in retrieval]),
     }
     if pipeline is not None:
-        out["generation"] = run_generation_eval(cases, pipeline, k=k)
+        out["generation"] = run_generation_eval(
+            cases, pipeline, k=k, progress=progress, save_path=save_path)
     if llm is not None:
-        out["ungrounded"] = run_ungrounded_control(answerable, llm)
+        out["ungrounded"] = run_ungrounded_control(answerable, llm, progress=progress)
     return out
 
 

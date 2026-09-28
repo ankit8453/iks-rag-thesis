@@ -160,6 +160,33 @@ books:
     note: "Modern government publication, not a classical treatise -- tiered as modern_iks. Sections are emitted one per block so formulations (Jeevamrit, Beejamrit, Neemastra, Brahmastra, Agniastra, Dashaparni) stay intact through chunking."
     default_topic_tags: [pest_control, disease_management, bio_inputs, seed_treatment, soil_health, natural_farming]
 
-  - id: text_six_tbd
-    title: "TBD (sixth text)"
-    status: pending
+  - id: vishvavallabha
+    title: Vishvavallabha
+    author: Chakrapani Mishra (c. 1577, court of Maharana Pratap, Mewar)
+    translator: Nalini Sadhale
+    edition: "Asian Agri-History Foundation, Agri-History Bulletin No. 5, 2004 (commentaries by N. Sadhale and Y. L. Nene)"
+    original_language: Sanskrit
+    pdf: newbooks/vishvavallabha/Vishvavallabha_Sadhale_AAHF2004.pdf
+    status: ready_external
+    ocr_method: text_layer
+    source_tier: classical
+    scope: pages
+    page_range: [55, 92]
+    text_source: corpus/ocr_external/vishvavallabha.md
+    split_chapters: true
+    note: >-
+      The sixth treatise of the master plan (was text_six_tbd). Obtained 2026-09-26 from the
+      Internet Archive (item visvavallabha-nalini-s-ed.), the AAHF edition itself. English
+      translation only, prepared from archive.org's OCR by scripts/prepare_vishvavallabha.py
+      - no Gemini, no cost. Chapters split 1A-1E (chapter I's five parts) and 2-9 because
+      verse numbering restarts in each. Chapter 8, Diseases and treatment, is 79 verses - the
+      largest in the book and the disease layer the other treatises lack. See 6q.
+    default_topic_tags:
+      - groundwater
+      - water_reservoirs
+      - soil_examination
+      - propagation
+      - plant_care
+      - nourishment
+      - plant_disease
+      - treatment

@@ -1307,6 +1307,309 @@ be reported independently.
 
 
 
+## 6p. Phase 11 on the deployed system — and two measurement bugs it exposed (2026-09-26)
+
+The first end-to-end run of the system as it actually behaves: `QUERY_SOURCE="generated"`,
+so the 17 disease queries carry the wording Strategy B really produces rather than a
+hand-written stand-in. Corpus 233 chunks with unique citation labels, pushed to HF before
+the run. Query set 40 (24 answerable, 16 unanswerable).
+
+Two defects surfaced, both in the *measurement* rather than the system. Both are recorded
+in full because each made a headline number look better or worse than the truth.
+
+### Bug 1 — the answer key was copied from the answers (retrieval metrics)
+
+`merge_new_queries.py` set each new query's `relevant_books` to
+`sorted({p["book"] for p in row["top5"][:3]})` — the books retrieval had just returned.
+Precision@5, nDCG and MRR then graded retrieval against its own output.
+
+Visible symptom: `keyword_only` P@5 rose **0.33 → 0.53** purely from adding queries, which
+no change to a retriever can explain. The first retrieval table of this run
+(full P@5 **0.7083**, nDCG 0.888) was inflated throughout.
+
+The original 24 queries were never affected — their labels were authored before any
+retrieval ran. The 16 domain queries were re-labelled from **each treatise's subject
+matter**, the same basis, with the reason recorded per query in `relevant_books_basis`.
+13 of 16 changed, and several now *disagree* with what retrieval returned — the sowing
+calendar goes to Krishi Parashara rather than NITI's banana schedules, watering to
+Vrikshayurveda rather than Brihat Samhita, kunapajala to Vrikshayurveda rather than
+Kashyapiya. Those disagreements are the evidence the labels are no longer derived from the
+ranking.
+
+Generation metrics were never affected: they use `expect_answerable` and citation
+resolution, never `relevant_books`.
+
+### Bug 2 — the prompt collided with itself (citation rate)
+
+Measured valid-citation rate: **20.74%**, against 55.00% in §6m. That reads as a collapse in
+grounding. It is not.
+
+The context block headed each passage `[Source 2] Vrikshayurveda, ch.full, v.1.2d` while
+rule 2 asked for `[Source Text, ch.<chapter>, v.<verse>]`. The word "Source" appears in
+both, so the model merged them and cited `[Source 2, ch.full, v.1.2d]` — **chapter and verse
+correct, the book's name replaced by its position in the retrieved list.** Such a citation
+resolves to nothing even though the right passage was used.
+
+Per-query output settles it. q08 cited `v.1.2d`, a genuinely retrieved chunk, and scored
+invalid purely on the name. Every one of the 6 failures used the `Source N` form. The single
+answer that did resolve cited `[Kashyapiya Krishisukti, ch.pages_1_64, v.section_3]` — by
+name.
+
+Each passage header is now the citation itself, character for character, so the model copies
+rather than assembles; the translator credit sits outside the brackets so it cannot leak
+into the verse field; and rule 2 states that `"Source 2"` is not a citation. Four regression
+tests, including one asserting every header parses as a valid citation — a perfectly
+obedient model must not be able to produce an unresolvable one.
+
+**Note also that §6m's 55% was itself inflated**, for the opposite reason: labels were then
+duplicated, so `v.1.2` matched any of five passages and a vague citation got credit. Neither
+20.74% nor 55% is the real figure; the re-run after this fix is the first trustworthy one.
+
+### Retrieval, with honest labels
+
+| variant | P@5 | nDCG@5 | MRR | Hit@5 |
+|---|---|---|---|---|
+| full (hybrid + rerank) | 0.6417 | 0.8423 | 0.8472 | 0.9167 |
+| **dense only** | 0.6250 | **0.8875** | **0.8764** | **1.0000** |
+| hybrid, no rerank | 0.6250 | 0.8115 | 0.7722 | 0.9583 |
+| keyword only (baseline) | 0.5667 | 0.7834 | 0.7562 | 0.9167 |
+
+**Finding A — BM25 is a net negative, and this is the third time it has shown.**
+`dense_only` beats the full hybrid on nDCG, MRR and Hit@5, and finds a relevant book for
+**every** query (Hit@5 1.00) where the full hybrid misses two. §6f saw this at n=22 and it
+was set aside as possible noise; it has now held across three runs, a larger query set and
+independently authored labels. Adding BM25 to dense retrieval pushes relevant passages out
+of the top 5. The "hybrid retrieval" component should be re-examined — dense-only, or a
+reweighted fusion — rather than defended.
+
+**Finding B — the keyword baseline has nearly caught up, and that sharpens the
+contribution claim.** In §6m the gap was nDCG 0.878 vs 0.515; here it is 0.842 vs 0.783.
+The cause is the query set: domain queries such as *"the proper season for sowing"* already
+use the corpus's own vocabulary, so BM25 handles them well. Disease labels such as *"Apple
+Scab"* must be translated first, and that is where semantic retrieval earns its place.
+
+So **the bridge's advantage is specific to modern diagnostic labels, not to retrieval in
+general.** §6f's headline "nDCG 0.94 vs 0.70" was measured only on disease queries and
+therefore overstated the general case. Retrieval must be reported split by query type from
+here on, never pooled.
+
+### Generation — first run, and why it must be repeated
+
+| metric | value |
+|---|---|
+| answerable queries | 24 |
+| grounded answer rate | 16.67% |
+| valid citation rate | 20.74% (*Bug 2 — not a real figure*) |
+| honest refusal | 93.75% (15/16) |
+| over-refusal | 83.33% (20/24) |
+| unfounded citations | **0%** |
+
+**Unfounded citations remain 0%.** With no corpus at all, the model still invents no
+citations. That guarantee has now held across every run and every corpus version.
+
+Grounded answer rate 13.64% (§6m) → 16.67%: 4 of 24 rather than 3 of 22. Still low, and it
+will move once Bug 2 is fixed, because an answer only counts as grounded when at least one
+citation resolves.
+
+**Honest refusal fell below 100% for the first time** — q15 (*"fine pale stippling and
+bronzing of leaves with tiny mites and webbing beneath"*) was answered rather than refused.
+Reading the answer, it opens *"is not directly addressed. However, the texts prescribe
+treatments for similar symptoms"* and cites nothing. So it is not fabrication — the refusal
+detector simply does not recognise a hedge that declines in substance while continuing to
+talk. That is a **detector** gap, not a safety failure, but it means the honest-refusal
+metric is softer than it looks and the refusal classifier needs its own test.
+
+**Deferred:** re-run cells 2 and 3 after the citation fix; split retrieval reporting by
+query type; investigate dense-only against the hybrid; harden the refusal detector against
+hedged non-answers.
+
+---
+
+## 6q. Vishvavallabha obtained — the sixth text, and the one that covers disease (2026-09-26)
+
+The master plan's sixth treatise, `text_six_tbd` in `books.yaml` since Phase 3, listed as
+"next" in every meeting note and on the seminar slides, and never obtained. Found tonight
+on the Internet Archive while Phase 11 cell 3 ran.
+
+**Source.** `archive.org/details/visvavallabha-nalini-s-ed.` — uploaded 2025-03-04 by
+`sastric.team@gmail.com`, no access restriction. It is the **AAHF edition itself**:
+*Vishvavallabha (Dear to the World: The Science of Plant Life)*, tr. Nalini Sadhale,
+commentaries by Sadhale and Y. L. Nene, Agri-History Bulletin No. 5, 2004 — the same
+series and translator as our Vrikshayurveda and Kashyapiya. Author Chakrapani Mishra,
+c. 1577, under Maharana Pratap of Mewar.
+
+**Completeness, verified locally.** 144 pages (publisher lists 134–140 + covers). All nine
+chapters located in the OCR text by heading, and the book's own verse table reads:
+
+| ch. | topic | verses |
+|---|---|---|
+| I | Groundwater | 57 |
+| II | Water reservoirs | 39 |
+| III | Examination and suitability of ground | 35 |
+| IV | Propagation and plantation | 23 |
+| V | Water management | 6 |
+| VI | Protection and care | 9 |
+| VII | Nourishment and growth | 46 |
+| **VIII** | **Diseases and treatment** | **79** |
+| IX | Botanical wonders | — |
+
+Chapter VIII — the largest — opens: *"Like human beings, trees also suffer from diseases
+due to imbalance in wind, bile, and phlegm. As such, I shall describe hereunder their
+symptoms and remedies."* That is the disease-treatment layer §6m showed the corpus lacks.
+
+**Files** (`newbooks/vishvavallabha/`, local only): the image PDF (16.4 MB, no text
+layer); a text-layer PDF (3.2 MB, text on every sampled page — the `text_layer` ingest path
+already used for NITI); and archive.org's own Tesseract OCR (334 KB, 36,758 words).
+
+**OCR quality, measured.** Tesseract's multi-language model leaks Cyrillic look-alikes: 629 of 4,252 Latin-script lines carry some Cyrillic. But the damage is not where it matters. Lines that are mostly Cyrillic (>50%, i.e. garbage) number 259, distributed 174 in the front matter and Sanskrit text, 1 inside the English translation, 84 in the commentaries and index. The English translation zone (2987 lines) has 47 lines with any Cyrillic at all, and **chapter VIII (640 lines) has 9** - all heading-style swaps such as *"Chapter У"*, fixed by a character map. The Sanskrit pages are unusable as OCR (Devanagari read as Cyrillic) but we do not need them: the translation is the ingest target, and the page images remain in the PDF if the Sanskrit is ever wanted. **No Gemini re-OCR is needed and no API cost is incurred** - the first book to arrive free.
+
+**Copyright.** The translation is © AAHF 2004. As with every other bulletin, the text lives
+under `newbooks/`, now added to `.gitignore`, and travels only via the private HF corpus
+dataset — never the public repo. (Until tonight `newbooks/` was untracked but *not*
+ignored; one careless `git add -A` would have published it.)
+
+**What it changes.** §6m established that 13 of the 22 disease queries fail because the
+classical texts index disorder by Ayurvedic cause, not by lesion appearance. Vishvavallabha
+is a classical text too, so it will not answer "Septoria" by name either — I overstated it
+as "the only route" earlier and corrected that in §6n. But it is the one treatise with a
+dedicated, 79-verse disease-and-treatment chapter, and it will be the honest test of
+whether adding disease *content* moves the grounded-answer rate that no corpus change so
+far has moved.
+
+**Not ingested yet.** Awaiting Ankit's go-ahead. Ingest plan when given: `text_layer` path
+via the text-layer PDF, Cyrillic character map in cleaning, chapter split on the nine
+headings, `source_tier: classical`, then the same verify → coverage → Phase 11 sequence as
+§6n–§6p, reported against the current 233-chunk baseline.
+
+---
+
+### Re-run after the citation-format fix (2026-09-27)
+
+Same corpus, same 40 queries, generated queries for the disease half. Only change: passage
+headers are now the citation itself (`[Vrikshayurveda, ch.full, v.1.2d]`).
+
+| metric | before fix | **after fix** |
+|---|---|---|
+| grounded answer rate | 16.67% | **37.50%** (9/24) |
+| valid citation rate | 20.74% | **52.58%** |
+| honest refusal (16 unanswerable) | 93.75% | **81.25%** (13/16) |
+| over-refusal (24 answerable) | 83.33% | **70.83%** (17/24) |
+| unfounded citations (no-corpus control) | 0% | **0%** |
+
+Retrieval (cell 2) identical to the previous run, as expected — the fix touches generation only.
+
+**Grounded answers more than doubled, from one line of formatting.** The model was using the
+right passages all along; it now names them in a form that resolves. 52.58% is the first
+citation figure that is not an artefact — 20.74% was the collision, and §6m's 55% was
+inflated by duplicate labels. That 55% ≈ 52.58% is coincidence, not confirmation.
+
+**Honest refusal fell 93.75% → 81.25%: 3 of the 16 unanswerable queries were now answered.**
+The model got more willing to answer once citing became easy. Of the 16, 14 are
+`no_coverage` (topically relevant books, no matching passage) — so an answer there may be a
+reasonable partial answer from a general passage, or an overreach. **Not yet known which:
+per-query inspection required before this is reported either way.**
+
+**A measurement inconsistency surfaced.** Grounded rate counts 9/24 answers with a valid
+citation, but over-refusal says only 7/24 were *not* refused. So at least 2 answers were
+classified as refusals *and* cited a genuine passage — hedged partial answers ("not directly
+addressed; however the texts prescribe..."). Same detector gap as q15 in the previous run:
+the refusal classifier treats a hedge as a refusal even when the answer goes on to cite.
+Grounded and over-refusal therefore overlap and must not be added together. Needs its own fix.
+
+**Unfounded citations 0% again** — across every run and corpus version, the model has never
+invented a citation.
+
+Run time was ~1 h 40 min on a free T4: cell 3 re-runs all four retrieval variants (duplicate
+of cell 2), and query embedding + reranking run on 2 CPU cores. Notebook fixes queued.
+
+---
+
+### Per-query inspection of the re-run (2026-09-27)
+
+**Refusal detector miscounts.** `is_refusal()` flags any answer containing *"do not contain
+enough"* anywhere. n07, n08, n13 are full cited step-by-step answers that end with a small
+caveat, so they were scored as refusals. Re-counted as answered / partial / refused, the 24
+answerable queries give 7 / 3 / 14 → **strict over-refusal 58.3%, not 70.83%.** Detector to
+be split into those three classes.
+
+**Two labels were wrong (my grading).** n16 (grain storage): graded "no" from a truncated
+preview; the full Kashyapiya section_23 passage covers storage in earthen pots and pits →
+answerable. q19 (weak, pale tree): Vrikshayurveda v.173 describes "excessive paleness of
+leaves" → partial. No_coverage labels to be re-checked on full passage text.
+
+**q01** matched scab ("corky patches") to NITI's "leaves with holes" — a different symptom,
+so a genuine mismatch, but a single case. Shared-symptom mappings (e.g. q10/q11 leaf-spot →
+Table 1 causes) are by design, since the system and the texts work by symptom.
+
+---
+
+### Fixes applied before the final run (2026-09-27)
+
+- **Scoring:** answers classed answered / partial / refused. Over-refusal = refused with no
+  valid citation; partial reported separately; on unanswerable queries both refused and
+  partial count as declining. Earlier over-refusal figures (§6m 81.8%, §6p 83.3% / 70.8%) used
+  the old substring test and are not comparable.
+- **Labels:** n16 → answerable, q19 → partial. Query set now **26 answerable / 40**
+  (12 no_coverage, 2 out_of_scope). Remaining doubtful labels get a full-text review after
+  Vishvavallabha (`review_labels.py`).
+- **Notebook:** no duplicate retrieval pass, per-question progress, answers saved as generated,
+  RAGAS off by default.
+
+---
+
+### Vishvavallabha checked against the page images before building (2026-09-27)
+
+Three PDF pages rendered and compared line by line with the prepared text (chapter 8
+start, mid chapter 8, a chapter 7 page): word-for-word match on every verse checked.
+Verse coverage against the book's own verse table is now complete — **every chapter full**,
+chapter 8 **79/79** — except chapter 7 verses 10–15, which the manuscript itself lacks
+(translator's note, p.77: "Six verses (nos. 10–15) are missing").
+
+Verse boundaries the chunker would have lost, each found on the page and fixed narrowly in
+`prepare_vishvavallabha.py`: "1." read as "l." (3 sections), "1," for "1." (ch.5),
+"4]." for "41." (ch.8), "29... ." defective verse and "50-51?" uncertain numbering (ch.9,
+the "?" kept), and two ch.8 verses glued to a preceding editorial note because no blank
+line separated them. Combined verses ("30-31.", "2-3.") were already handled.
+
+---
+
+### Vishvavallabha ingested (2026-09-27)
+
+Corpus **233 → 270 chunks, 7 sources** (6 classical + NITI). verify_corpus PASS: the six
+existing books byte-identical, vishvavallabha ADDED (37), 270 unique citation labels,
+270 vectors matching the chunk files exactly. Build 1,539 s on CPU, no API cost.
+
+---
+
+### Full-text label review after Vishvavallabha (2026-09-27)
+
+Every doubtful label re-read on **full** passages of the 270-chunk corpus, using the wording
+the deployed system sends. 7 flips; query set now **27 answerable / 40** (11 no_coverage,
+2 out_of_scope).
+
+**Finding: Vishvavallabha confirms §6m from a second, independent text.** Its chapter 8 —
+the disease chapter, 79 verses — is organised by cause exactly like Vrikshayurveda (wind,
+bile, phlegm, over-watering, over-manuring, over-medication, insects, unhealthy soil, season)
+and describes symptoms as paleness, dry branches, drying leaves, dieback, falling bark. It
+never describes spots, pustules, powdery coatings, corky patches or mould. **Adding the one
+classical text devoted to plant disease did not create coverage for lesion-appearance
+queries** — the gap is in the tradition, not in our choice of books.
+
+Rule applied consistently: a query centred on a lesion's *appearance* is no_coverage; a
+query centred on drying, paleness, soil, insects or manure is answerable, fully or in part.
+- to no_coverage: q02 (pustules), q16 (spots), q17 (powdery coating) — their earlier
+  "answerable" came from a hand-written wording's score and had never been read.
+- to answerable (partial): q06, q08, q09 (their generated wording centres on drying and
+  withering — q09's is identical to q04's), q15 (mites: NITI identification + Vishvavallabha
+  8.36-39 remedy for insects on leaves).
+- upgraded to full answers: q19 (Vishvavallabha 8.61, 8.67-68), n08 (Vishvavallabha ch.7
+  kunapa recipe), n04, n12, n13.
+
+Vishvavallabha reached rank 1 for q19 and n08 and the top 5 for 15 of the 27 doubtful
+queries.
+
+---
+
 ## 7. Negative Results (paper ammunition — keep these honest)
 
 A thesis is stronger for documenting what *didn't* work and why.

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 import time
 from dataclasses import asdict
@@ -143,7 +144,38 @@ def _chunks_for_external_book(book: dict) -> list[Chunk] | None:
             "page_range": page_range,
         },
     }
+    if book.get("split_chapters"):
+        return split_external_chapters(full_text, meta)
     return chunk_chapter(full_text, meta)
+
+
+#: A chapter marker in a prepared external text: "## Chapter 8: Diseases and treatment".
+_EXTERNAL_CHAPTER_RE = re.compile(r"^## Chapter (\S+):\s*(.+?)\s*$", re.MULTILINE)
+
+
+def split_external_chapters(full_text: str, meta: dict) -> list[Chunk]:
+    """Chunk a prepared external text chapter by chapter.
+
+    Needed when a book restarts its verse numbering in every chapter — Vishvavallabha does,
+    and in each of chapter I's five parts. Chunked as one block, verse 9 of chapter I and
+    verse 9 of chapter VIII would share one citation. Each ``## Chapter <label>: <title>``
+    section is chunked on its own with ``chapter=<label>``, so citations read
+    ``[Vishvavallabha, ch.8, v.9-12]``. Text before the first marker is ignored. If the
+    file has no markers at all, it is chunked as one block, as before.
+    """
+    marks = list(_EXTERNAL_CHAPTER_RE.finditer(full_text))
+    if not marks:
+        return chunk_chapter(full_text, meta)
+    chunks: list[Chunk] = []
+    for i, m in enumerate(marks):
+        body_end = marks[i + 1].start() if i + 1 < len(marks) else len(full_text)
+        body = full_text[m.end():body_end]
+        part_meta = dict(meta)
+        part_meta["chapter"] = m.group(1)
+        part_meta["metadata_extras"] = {**meta.get("metadata_extras", {}),
+                                        "chapter_title": m.group(2)}
+        chunks.extend(chunk_chapter(body, part_meta))
+    return chunks
 
 
 def _chunks_for_scoped_book(book: dict, cleaned_pages: list[str]) -> tuple[list[Chunk], dict[int, int]]:

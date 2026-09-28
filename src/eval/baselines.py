@@ -132,6 +132,28 @@ def is_refusal(answer: str) -> bool:
     return REFUSAL_MARKER.lower() in (answer or "").lower()
 
 
+#: Outcome classes for one generated answer.
+ANSWERED, PARTIAL, REFUSED = "answered", "partial", "refused"
+
+
+def classify_answer(answer: str, n_valid_citations: int) -> str:
+    """Three-way outcome: ``answered``, ``partial`` or ``refused``.
+
+    ``is_refusal`` alone is a substring test, so a full step-by-step answer that ends with
+    one caveat ("...the texts do not contain enough detail on X") was scored as a refusal.
+    On 2026-09-27 that turned n07, n08 and n13 — complete, cited answers — into refusals and
+    inflated over-refusal from 58.3% to 70.8% (EXPERIMENT_LOG.md 6p).
+
+    - ``refused``  — the refusal phrase is present and nothing valid is cited.
+    - ``partial``  — the refusal phrase is present, but the answer still cites at least one
+      genuinely retrieved passage: it answered part and declined part.
+    - ``answered`` — no refusal phrase.
+    """
+    if not is_refusal(answer):
+        return ANSWERED
+    return PARTIAL if n_valid_citations > 0 else REFUSED
+
+
 def refusal_rate(answers: list[str]) -> float:
     """Fraction of answers that were honest refusals."""
     if not answers:
@@ -147,6 +169,10 @@ __all__ = [
     "build_retriever",
     "chunks_to_pairs",
     "get_variant",
+    "ANSWERED",
+    "PARTIAL",
+    "REFUSED",
+    "classify_answer",
     "is_refusal",
     "refusal_rate",
 ]

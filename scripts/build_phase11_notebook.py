@@ -210,14 +210,25 @@ if torch.cuda.is_available():
     free, total = torch.cuda.mem_get_info()
     print(f"VRAM free {free/1024**3:.2f} / {total/1024**3:.2f} GiB")
 
+import pathlib
+pathlib.Path("results").mkdir(exist_ok=True)
+ANSWERS_FILE = f"results/phase11_answers_{QUERY_SOURCE}.jsonl"
+pathlib.Path(ANSWERS_FILE).unlink(missing_ok=True)   # fresh file per run
+
+# Progress prints one line per question with an ETA. Every answer is appended to
+# ANSWERS_FILE the moment it exists, so a disconnect loses nothing already done.
+# Retrieval was scored in Cell 2; repeating it here cost ~10 min for identical numbers.
 full_eval = run_full_evaluation(
     cases, collection=collection,
     pipeline=pipeline,                # grounded system
     llm=generator,                    # same model, ungrounded, as the control
     k=K, shared_models=SHARED,
+    run_retrieval=False,
+    save_path=ANSWERS_FILE,
 )
 
 g = full_eval["generation"]
+print()
 print(f"answerable queries      : {g.n_answerable}")
 print(f"grounded answer rate    : {g.grounded_answer_rate:.2%}   "
       f"(answers citing a genuinely retrieved passage)")
@@ -226,7 +237,12 @@ print(f"valid citation rate     : {g.valid_citation_rate:.2%}   "
 print(f"honest refusal rate     : {g.honest_refusal_rate:.2%}   "
       f"(on the {g.n_negative} unanswerable queries - higher is better)")
 print(f"over-refusal rate       : {g.over_refusal_rate:.2%}   "
-      f"(refusing answerable queries - LOWER is better)")
+      f"(refused an answerable query and cited nothing - LOWER is better)")
+print(f"partial answers         : {g.partial_rate:.2%}   "
+      f"(answered part, declined part, with a valid citation)")
+print(f"outcomes, answerable    : {g.outcomes_answerable}")
+print(f"outcomes, unanswerable  : {g.outcomes_unanswerable}")
+print(f"all answers saved in full -> {ANSWERS_FILE}")
 
 u = full_eval["ungrounded"]
 print(f"\\nungrounded control      : {u['n']} answers with no corpus at all; "
@@ -234,6 +250,10 @@ print(f"\\nungrounded control      : {u['n']} answers with no corpus at all; "
 
     md("## Cell 4 — RAGAS faithfulness (judged by the local Llama, no API cost)"),
     code("""\
+if not INSTALL_RAGAS:
+    raise SystemExit("Cell 4 skipped: RAGAS is off (INSTALL_RAGAS=False in Cell 1). "
+                     "Go straight to Cell 5 - it records that RAGAS was not run.")
+
 from src.eval.config import EvalConfig, RAGASConfig
 from src.eval.ragas_eval import RAGEvalSample, run_ragas_evaluation
 
@@ -309,14 +329,19 @@ out = {
     "status": "PRELIMINARY - silver query set, book-level labels, "
               "pending the expert gold-set",
     "k": K,
+    "query_source": QUERY_SOURCE,
     "n_answerable": full_eval["n_answerable"],
     "n_negative": full_eval["n_negative"],
-    "retrieval": [r.as_row(K) for r in full_eval["retrieval"]],
+    # retrieval is scored in Cell 2 (Cell 3 no longer repeats it)
+    "retrieval": [r.as_row(K) for r in retrieval_only["retrieval"]],
     "generation": {
         "grounded_answer_rate": g.grounded_answer_rate,
         "valid_citation_rate": g.valid_citation_rate,
         "honest_refusal_rate": g.honest_refusal_rate,
         "over_refusal_rate": g.over_refusal_rate,
+        "partial_rate": g.partial_rate,
+        "outcomes_answerable": g.outcomes_answerable,
+        "outcomes_unanswerable": g.outcomes_unanswerable,
         "per_query": g.per_query,
     },
     "ungrounded_control": {k: v for k, v in u.items() if k != "answers"},
@@ -329,7 +354,8 @@ out = {
 # data point instead of overwriting this one.
 suffix = "paidjudge" if globals().get("USE_PAID_JUDGE") else "free"
 p = pathlib.Path("results"); p.mkdir(exist_ok=True)
-target = p / f"phase11_results_{suffix}.json"
+# query source in the name too, so a "generated" and an "authored" run never overwrite
+target = p / f"phase11_results_{QUERY_SOURCE}_{suffix}.json"
 target.write_text(json.dumps(out, indent=2), encoding="utf-8")
 print(json.dumps(out["retrieval"], indent=2))
 print(f"\\nSaved -> {target}")
