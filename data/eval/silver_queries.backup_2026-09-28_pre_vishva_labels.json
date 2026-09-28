@@ -15,8 +15,7 @@
     "provisional_disease_labels": "11 disease queries marked no_coverage carry label_provisional=true. Their labels were assigned from hand-written query wording, but the deployed pipeline uses Strategy B's wording instead. Stage 0 (6o) measures Llama's real queries; if Llama scores higher, these labels are re-derived from that. The 16 domain queries added 2026-09-26 are NOT affected - they have no disease label and are never produced by the vision pipeline.",
     "generated_query_field": "17 disease queries carry generated_query: the query Strategy B (Llama) actually produces from that disease label, recorded 2026-09-26 after the prompt fix (6o, Stage 3 round 2). The deployed system never uses the authored `query` field for these - it only ever sends what the bridge writes - so an evaluation of the real system must use generated_query. The authored wording is retained as a comparison ceiling. Load with load_query_set(query_source='generated') to evaluate the deployed system, or 'authored' (default) for the ceiling. The 23 domain queries and the 2 negative controls have no generated form: the vision pipeline cannot produce them, so they keep their authored wording under either setting.",
     "relevant_books_relabel_2026_09_26": "The 16 domain queries added on 2026-09-26 initially took relevant_books from the top-3 books of their own retrieval run, which made Precision@5, nDCG and MRR circular - retrieval graded against its own output. Symptom: keyword_only P@5 rose 0.33 -> 0.53 purely from adding queries. They are now labelled from each treatise's subject matter, the same basis as the original 24, with the reason recorded per query in relevant_books_basis. Author-assigned, pending expert ratification. Generation metrics were never affected: they use expect_answerable and citation resolution, never relevant_books.",
-    "full_text_review_2026_09_27": "All doubtful labels re-read on FULL passages of the 270-chunk corpus (with Vishvavallabha), using the deployed (generated) wording. Rule applied: a query centred on a lesion's appearance (spots, pustules, powdery coating, corky patches, mould, sunken areas) is no_coverage - no source describes lesions; a query centred on drying, paleness, soil, insects or manure is answerable, fully or in part.",
-    "vishvavallabha_labels_2026_09_28": "Vishvavallabha added to relevant_books by subject matter (its chapter topics), same basis as the other books. Without it, every Vishvavallabha passage retrieved was scored irrelevant, invalidating the 2026-09-28 Cell-2 retrieval table."
+    "full_text_review_2026_09_27": "All doubtful labels re-read on FULL passages of the 270-chunk corpus (with Vishvavallabha), using the deployed (generated) wording. Rule applied: a query centred on a lesion's appearance (spots, pustules, powdery coating, corky patches, mould, sunken areas) is no_coverage - no source describes lesions; a query centred on drying, paleness, soil, insects or manure is answerable, fully or in part."
   },
   "queries": [
     {
@@ -80,15 +79,13 @@
       "query": "long brown withering patches spreading and drying the leaves",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.1669,
       "coverage_tier": "marginal",
-      "generated_query": "Leaves drying and withering on a corn tree.",
-      "relevant_books_basis": "vishvavallabha ch.8: drying of leaves and branches (8.25, 8.28, 8.35)"
+      "generated_query": "Leaves drying and withering on a corn tree."
     },
     {
       "id": "q05",
@@ -114,8 +111,7 @@
       "query": "dark brown spots with concentric rings appearing first on the older lower leaves",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -125,8 +121,7 @@
       "generated_query": "Leaves with dark brown patches spreading until they dry and wither on a potato.",
       "human_grade": "partial",
       "grade_reason": "generated query ends in drying/withering; Vishvavallabha 8.25-28, 8.35 and Vrikshayurveda v.173 treat drying foliage, not the brown patch itself",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "relevant_books_basis": "vishvavallabha ch.8: drying and withering foliage"
+      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
       "id": "q07",
@@ -153,8 +148,7 @@
       "query": "ringed brown lesions enlarging on the leaves and causing them to fall",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -164,8 +158,7 @@
       "generated_query": "leaves with dark brown patches spreading until they dry and wither on a tomato plant.",
       "human_grade": "partial",
       "grade_reason": "same generated wording as q06 - drying/withering is treated, the brown patch is not",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "relevant_books_basis": "vishvavallabha ch.8: drying and withering foliage"
+      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
       "id": "q09",
@@ -175,8 +168,7 @@
       "relevant_books": [
         "vrikshayurveda",
         "upavanavinoda",
-        "brihat_samhita",
-        "vishvavallabha"
+        "brihat_samhita"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -186,8 +178,7 @@
       "generated_query": "Leaves drying and withering on a tomato plant.",
       "human_grade": "partial",
       "grade_reason": "generated query 'Leaves drying and withering' is identical to q04's, which is answerable; Vishvavallabha 8.28 'leaves become dry', 8.35 dieback",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "relevant_books_basis": "vishvavallabha ch.8: drying and withering foliage"
+      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
       "id": "q10",
@@ -247,15 +238,13 @@
       "query": "mottled light and dark green patches with puckering and curling of the leaves",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.2706,
       "coverage_tier": "marginal",
-      "generated_query": "leaves turning mottled yellow-green with curling and gradual withering on a tomato plant.",
-      "relevant_books_basis": "vishvavallabha ch.8: pale, discoloured, sickly leaves (8.16, 8.35, 8.67)"
+      "generated_query": "leaves turning mottled yellow-green with curling and gradual withering on a tomato plant."
     },
     {
       "id": "q14",
@@ -264,15 +253,13 @@
       "query": "leaves turning yellow, cupping upward and the plant remaining stunted",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.5755,
       "coverage_tier": "strong",
-      "generated_query": "leaves turning yellow with excessive paleness and gradual shedding on a tomato plant.",
-      "relevant_books_basis": "vishvavallabha ch.8: pale, yellowing, sickly leaves (8.16, 8.67)"
+      "generated_query": "leaves turning yellow with excessive paleness and gradual shedding on a tomato plant."
     },
     {
       "id": "q15",
@@ -281,8 +268,7 @@
       "query": "fine pale stippling and bronzing of leaves with tiny mites and webbing beneath",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -291,8 +277,7 @@
       "note": "Full-text review 2026-09-27: mites: NITI section_10 identifies mite damage (yellowish leaves); Vishvavallabha 8.36-39 gives a remedy for external insects living on leaves",
       "human_grade": "partial",
       "grade_reason": "mites: NITI section_10 identifies mite damage (yellowish leaves); Vishvavallabha 8.36-39 gives a remedy for external insects living on leaves",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "relevant_books_basis": "vishvavallabha ch.8: insects living on leaves and their remedy (8.36-39)"
+      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
       "id": "q16",
@@ -358,8 +343,7 @@
       "query": "a tree that is weak and poorly nourished with pale drooping foliage in exhausted soil",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -368,8 +352,7 @@
       "note": "Full-text review 2026-09-27: Vishvavallabha 8.61 'a tree afflicted by unhealthy soil should be replanted', 8.67-68 sickly pale falling leaves with remedy - direct answer",
       "human_grade": "answers",
       "grade_reason": "Vishvavallabha 8.61 'a tree afflicted by unhealthy soil should be replanted', 8.67-68 sickly pale falling leaves with remedy - direct answer",
-      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha",
-      "relevant_books_basis": "vishvavallabha ch.8: tree afflicted by unhealthy soil, pale falling leaves (8.61, 8.67-68)"
+      "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
       "id": "q20",
@@ -378,14 +361,12 @@
       "query": "insects boring into the trunk and eating the leaves of a tree",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.6957,
-      "coverage_tier": "strong",
-      "relevant_books_basis": "vishvavallabha ch.8: insects incl. the kandaraka borer living between root and branches (8.35-39)"
+      "coverage_tier": "strong"
     },
     {
       "id": "q21",
@@ -395,14 +376,12 @@
       "relevant_books": [
         "upavanavinoda",
         "vrikshayurveda",
-        "krishi_parashara",
-        "vishvavallabha"
+        "krishi_parashara"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
       "top1_rerank_score": 0.6336,
-      "coverage_tier": "strong",
-      "relevant_books_basis": "vishvavallabha ch.3 examination of ground; ch.4 plantation"
+      "coverage_tier": "strong"
     },
     {
       "id": "q22",
@@ -448,8 +427,7 @@
       "query": "small soft insects clustered on new shoots making the leaves curl",
       "relevant_books": [
         "niti_natural_farming",
-        "vrikshayurveda",
-        "vishvavallabha"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -460,7 +438,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Partial support: NITI section_10 only IDENTIFIES aphid->curled leaves; no remedy in top-1. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.4271.",
-      "relevant_books_basis": "sucking-insect damage: NITI covers pest identification and sprays; Vrikshayurveda treats insect attack on trees | vishvavallabha ch.8: insects on leaves and shoots (8.36-39)"
+      "relevant_books_basis": "sucking-insect damage: NITI covers pest identification and sprays; Vrikshayurveda treats insect attack on trees"
     },
     {
       "id": "n02",
@@ -470,8 +448,7 @@
       "query": "caterpillars chewing holes through the leaves of a young plant",
       "relevant_books": [
         "niti_natural_farming",
-        "vrikshayurveda",
-        "vishvavallabha"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -482,7 +459,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Partial support: top-1 is about raising plants from seed; top-2 only identifies the pest. Counted as answerable, but a refusal here is defensible rather than a clear error. Cross-encoder score 0.9150.",
-      "relevant_books_basis": "chewing-insect damage: same two sources cover insect attack | vishvavallabha ch.8: insects on leaves (8.36-39)"
+      "relevant_books_basis": "chewing-insect damage: same two sources cover insect attack"
     },
     {
       "id": "n03",
@@ -492,8 +469,7 @@
       "query": "ants swarming around the roots and base of a tree",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -503,7 +479,7 @@
       "top1_rerank_score": 0.5795,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "ants are named explicitly among Vrikshayurveda's tree disorders; Upavanavinoda covers the same arbori-horticultural ground | vishvavallabha ch.8: ant infestation (8.25, 8.28)"
+      "relevant_books_basis": "ants are named explicitly among Vrikshayurveda's tree disorders; Upavanavinoda covers the same arbori-horticultural ground"
     },
     {
       "id": "n04",
@@ -513,8 +489,7 @@
       "query": "how to prepare a natural spray to keep insects away from crops",
       "relevant_books": [
         "niti_natural_farming",
-        "vrikshayurveda",
-        "vishvavallabha"
+        "vrikshayurveda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -525,7 +500,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Full-text review 2026-09-27: NITI sections 21-25: pest-control formulations with preparation steps",
-      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies | vishvavallabha ch.8: insect remedy - bark powder soaked in cow's urine (8.39)",
+      "relevant_books_basis": "preparation of a pest deterrent: NITI's bio-input formulations; Vrikshayurveda's fumigation and decoction remedies",
       "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
@@ -558,8 +533,7 @@
       "relevant_books": [
         "vrikshayurveda",
         "kashyapiyakrishisukti",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -569,7 +543,7 @@
       "top1_rerank_score": 0.7365,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "land suitability for planting: Vrikshayurveda describes land recommended for planting, Kashyapiya land selection, Upavanavinoda garden siting | vishvavallabha ch.3: examination and suitability of ground"
+      "relevant_books_basis": "land suitability for planting: Vrikshayurveda describes land recommended for planting, Kashyapiya land selection, Upavanavinoda garden siting"
     },
     {
       "id": "n07",
@@ -580,8 +554,7 @@
       "relevant_books": [
         "kashyapiyakrishisukti",
         "vrikshayurveda",
-        "niti_natural_farming",
-        "vishvavallabha"
+        "niti_natural_farming"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -591,7 +564,7 @@
       "top1_rerank_score": 0.4618,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "soil enrichment before planting: Kashyapiya ploughing and cow dung, Vrikshayurveda manuring, NITI soil-health management | vishvavallabha ch.7: nourishment and growth"
+      "relevant_books_basis": "soil enrichment before planting: Kashyapiya ploughing and cow dung, Vrikshayurveda manuring, NITI soil-health management"
     },
     {
       "id": "n08",
@@ -601,8 +574,7 @@
       "query": "preparing a liquid manure from animal and plant materials to feed the roots",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -613,7 +585,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Full-text review 2026-09-27: Vishvavallabha ch.7 v.2-3: kunapa, the liquid manure - fat, marrow, blood cooked, milk added, kept a fortnight (checked on the page image)",
-      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda | vishvavallabha ch.7: kunapa, the liquid manure (7.2-3)",
+      "relevant_books_basis": "kunapajala, the classical liquid manure, is a Vrikshayurveda subject and recurs in Upavanavinoda",
       "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
@@ -665,8 +637,7 @@
       "query": "how much and how often a young tree should be watered",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -676,7 +647,7 @@
       "top1_rerank_score": 0.5795,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "watering schedules for young trees are a Vrikshayurveda subject; Upavanavinoda covers the same care regime | vishvavallabha ch.5: water management"
+      "relevant_books_basis": "watering schedules for young trees are a Vrikshayurveda subject; Upavanavinoda covers the same care regime"
     },
     {
       "id": "n12",
@@ -686,8 +657,7 @@
       "query": "finding underground water before digging a well",
       "relevant_books": [
         "brihat_samhita",
-        "kashyapiyakrishisukti",
-        "vishvavallabha"
+        "kashyapiyakrishisukti"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -698,7 +668,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Full-text review 2026-09-27: Brihat Samhita ch.54 (Exploration of Water Springs) now in top-5; Kashyapiya section_8 on well digging",
-      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management | vishvavallabha ch.1: groundwater - signs of water below ground",
+      "relevant_books_basis": "Brihat Samhita ch.54 is 'Exploration of Water Springs'; Kashyapiya covers well digging and water management",
       "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
@@ -710,8 +680,7 @@
       "relevant_books": [
         "vrikshayurveda",
         "upavanavinoda",
-        "kashyapiyakrishisukti",
-        "vishvavallabha"
+        "kashyapiyakrishisukti"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -722,7 +691,7 @@
       "score_only_tier": "strong",
       "added": "2026-09-26",
       "note": "Full-text review 2026-09-27: Kashyapiya section_20 planting steps; Vishvavallabha ch.4 propagation and plantation",
-      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice | vishvavallabha ch.4: propagation and plantation",
+      "relevant_books_basis": "planting and transplanting method: Vrikshayurveda and Upavanavinoda on saplings, Kashyapiya on cultivation practice",
       "reviewed": "2026-09-27 full-text, 270-chunk corpus incl. Vishvavallabha"
     },
     {
@@ -733,8 +702,7 @@
       "query": "a tree branch broken by strong wind and how to treat the wound",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -744,7 +712,7 @@
       "top1_rerank_score": 0.8484,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "physical wounds and broken branches are treated explicitly in Vrikshayurveda; Brihat ch.55 and Upavanavinoda cover tree treatment | vishvavallabha ch.8: trees broken by strong wind or wounded (8.3-4) and their care"
+      "relevant_books_basis": "physical wounds and broken branches are treated explicitly in Vrikshayurveda; Brihat ch.55 and Upavanavinoda cover tree treatment"
     },
     {
       "id": "n15",
@@ -754,8 +722,7 @@
       "query": "a tree that does not flower or bear fruit even though it looks healthy",
       "relevant_books": [
         "vrikshayurveda",
-        "upavanavinoda",
-        "vishvavallabha"
+        "upavanavinoda"
       ],
       "relevant_chunk_ids": [],
       "expect_answerable": true,
@@ -765,7 +732,7 @@
       "top1_rerank_score": 0.9346,
       "score_only_tier": "strong",
       "added": "2026-09-26",
-      "relevant_books_basis": "unproductiveness — trees that do not flower or fruit — is a named disorder in both | vishvavallabha ch.8: wind-disorder trees bear no or few flowers (8.9); ch.9 inducing blossom"
+      "relevant_books_basis": "unproductiveness — trees that do not flower or fruit — is a named disorder in both"
     },
     {
       "id": "n16",

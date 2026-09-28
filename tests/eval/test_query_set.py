@@ -203,3 +203,21 @@ def test_relevant_books_are_not_copied_from_retrieval_output() -> None:
             f"{q['id']} has no recorded basis for its relevant_books — an unexplained "
             "label cannot be distinguished from one copied out of a ranking"
         )
+
+
+def test_every_corpus_book_is_a_relevant_label_somewhere() -> None:
+    """A book in the corpus that appears in no query's relevant_books is scored as
+    irrelevant every time it is retrieved. That silently depressed every retrieval
+    variant twice: the new books in 6j, and Vishvavallabha on 2026-09-28. Adding a book
+    to the corpus must come with labelling it."""
+    import yaml
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[2]
+    cfg = yaml.safe_load((root / "configs/corpus/books.yaml").read_text(encoding="utf-8"))
+    built = {b["id"] for b in cfg["books"]
+             if b.get("status") in ("ready", "ready_external")
+             and (root / "corpus/chunks" / f"{b['id']}.jsonl").is_file()
+             and (root / "corpus/chunks" / f"{b['id']}.jsonl").stat().st_size > 0}
+    labelled = {b for c in load_query_set() for b in c.relevant_books}
+    missing = sorted(built - labelled)
+    assert not missing, f"books in the corpus but in no query's relevant_books: {missing}"
