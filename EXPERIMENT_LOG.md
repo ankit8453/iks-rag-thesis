@@ -1673,6 +1673,10 @@ three-way scoring. 76 min grounded + control on a free T4.
 - **Valid citation rate fell 52.6% → 39.6% — unexplained so far.** More answers now cite
   more passages, and some citations do not resolve. Needs the per-query file
   (`results/phase11_answers_generated.jsonl`) before it is interpreted or reported.
+  **Update 2026-09-29: the Colab session was closed before that file was downloaded, so
+  the cause is unresolved. Report 39.6% with this caveat, or re-run before the thesis if
+  the number is to be defended. The per-query save was the right design — it needs
+  a download step in the notebook's last cell so it cannot be lost again.**
 
 ---
 
