@@ -17,7 +17,7 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt, RGBColor
+from docx.shared import Inches, Pt, RGBColor
 
 BODY_FONT = "Times New Roman"
 MONO_FONT = "Consolas"
@@ -120,6 +120,25 @@ def convert(md_path: Path, out_path: Path) -> None:
             continue
 
         if not stripped:
+            i += 1
+            continue
+
+        # image: ![Figure 1. Caption text](relative/path.png)
+        m_img = re.fullmatch(r"!\[(.*?)\]\((.+?)\)", stripped)
+        if m_img:
+            caption, src = m_img.group(1), m_img.group(2)
+            img = (md_path.parent / src) if not Path(src).is_absolute() else Path(src)
+            if img.is_file():
+                doc.add_picture(str(img), width=Inches(6.0))
+                doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+            else:
+                p = doc.add_paragraph()
+                add_inline(p, f"[missing image: {src}]", italic=True)
+            if caption:
+                p = doc.add_paragraph()
+                p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                p.paragraph_format.space_after = Pt(10)
+                add_inline(p, caption, size=9.5, italic=True)
             i += 1
             continue
 

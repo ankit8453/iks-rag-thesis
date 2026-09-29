@@ -117,3 +117,7 @@ corpus/chunks_backup_*/
 newbooks/
 
 data/eval/_label_review_queries.json
+
+# chapter build artefacts (regenerable)
+paper/icssr_chapter/_*
+paper/icssr_chapter/figures/
