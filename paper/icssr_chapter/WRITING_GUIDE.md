@@ -4,6 +4,21 @@
 
 ---
 
+## 0. Workflow as agreed with Dr. Pandey (29 Sep 2026) — supersedes section 4 below
+
+1. **Claude drafts the complete chapter** — done: `CHAPTER_DRAFT_v1.docx` (Word, TNR 12,
+   two block diagrams built as Word tables, two data tables, APA references, AI-use
+   declaration).
+2. **Shivam Dubey (PhD scholar under Dr. Pandey) reviews** and suggests changes → we apply.
+   Hand him with the draft: the 7 references tagged *[verify]* in the reference list, and
+   the one unexplained number (exact-citation rate 39.6%, section 7.5).
+3. **Turnitin** → plagiarism report + AI-content report.
+4. **Revise from the reports.** The AI report names the flagged paragraphs; Ankit rewrites
+   those in his own words. Expect it to flag a good share of a Claude-drafted text — that is
+   normal and is what the revision pass is for. The AI-use declaration at the end of the
+   chapter stays in; publishers require it, and it is the honest position.
+5. Submit via the Google Form by **30 October 2026** with the paper + both reports.
+
 ## 1. What they asked for (from the seminar group message)
 
 | | |

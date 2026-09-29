@@ -166,6 +166,7 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 - **InferAI** (B.Tech guidance) — `inferai/WORK_ORDER_for_Monday_meeting.md`. Journal
   deadline likely 31 Oct. Blocker: 5 authors, journal allows 4 — ask Dr. Pandey.
-- **ICSSR book chapter** — deadline 30 Oct. 3,000–6,000 words, APA, needs a plagiarism
-  report *and* an AI-content report, so it must be rewritten in Ankit's own words.
+- **ICSSR book chapter** — deadline 30 Oct. **Draft v1 complete (29 Sep):**
+  `paper/icssr_chapter/CHAPTER_DRAFT_v1.docx`. Next: Shivam Dubey review → Turnitin →
+  revise flagged paragraphs → submit with both reports. 7 references tagged [verify].
 - **NCSTC proposal** — awaiting Dr. Pandey's decision.
