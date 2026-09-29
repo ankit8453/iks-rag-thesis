@@ -136,6 +136,20 @@ I will prepare the full reference list for you — you don't need to format thes
 
 ---
 
+## 9. What Dr. Pandey's own papers tell us (checked 29 Sep 2026)
+
+From his Google Scholar profile (335 citations, h-index 6):
+
+| his work | what it means for us |
+|---|---|
+| Most-cited papers are **plant-leaf-disease CNNs** (Ecological Informatics 2022, 127 cites; Neural Computing & Applications 2022) and **crop classification from UAV images** (Computers & Electronics in Agriculture 2022, 120 cites) | The vision half of our system is *his* home ground. He will read the disease-model section hardest — keep the Grad-CAM diagnosis, the C-PD retrain and the 72.3% → 66.6% trade-off precise and defensible |
+| His 2022 paper tested on **PlantVillage (98.86%) and the Embrapa dataset (89.24%)** | Embrapa is the Brazilian multi-crop set he gave us for the disease-type experiment — our work continues his own line. Worth one sentence in the chapter and more in the thesis |
+| Recent venues: **IEEE conferences (2025), T&F *Int. J. of Computers and Applications* (2026)**, remote-sensing journals | For the later **journal paper** (not this chapter), IJCA at Taylor & Francis is a natural target — he publishes there, and T&F's AI-disclosure policy is the one we already researched (§4) |
+| **Nothing on RAG, LLMs, or Indian Knowledge Systems** in his record | The retrieval/IKS half is new territory for him — explain it in plain terms even in the thesis, and expect his questions there to be about *evidence*, not method |
+| His papers are accuracy-led (a number in the abstract) | He may instinctively want a headline accuracy. For **this IKS chapter**, lead with the boundary finding and put the numbers in one clean table; for the **thesis**, give him the accuracy tables he expects |
+
+His 2026 IJCA paper (brain-tumour localisation) is paywalled, so its structure could not be read — a different domain anyway.
+
 ## Sources
 
 - [CASRAI — Writing a chapter for an edited volume](https://casrai.org/guides/writing-a-chapter-for-an-edited-academic-book-volume)

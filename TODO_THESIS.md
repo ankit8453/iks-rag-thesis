@@ -134,9 +134,12 @@ In order, cheapest first. Stop as soon as the score is good enough.
 ## Final sequence (agreed 27 Sep)
 
 - [x] Ingest Vishvavallabha → rebuild → verify_corpus PASS (270 chunks) — DONE 27 Sep
-- [ ] Push 270 chunks to HF
-- [ ] `review_labels.py` + full-text read of every doubtful label
-- [ ] Final Phase 11 run (generated queries) — the numbers for the thesis and chapter
+- [x] Push 270 chunks to HF — done
+- [x] `review_labels.py` + full-text read of every doubtful label — done 27 Sep, 27/40 answerable
+- [x] Final Phase 11 run (generated queries) — DONE 28–29 Sep: grounded 51.9%, over-refusal 40.7%,
+      honest refusal 92.3%, unfounded 0%; retrieval P@5 0.80 / Hit@5 0.963.
+      Open: exact-citation rate 39.6% unexplained (per-query file was not downloaded before
+      the Colab session closed). Add a download step to the notebook's last cell.
 
 ## Open / parked
 

@@ -5,11 +5,24 @@ Don't copy bullet wording — it is deliberately rough.*
 
 **Target: ~5,000 words.** Word budget per section is a guide, not a rule.
 
+> **Updated 29 Sep 2026 — all results are FINAL.** Vishvavallabha is in the corpus, the final
+> evaluation has run, every number below is the one to use. Nothing is waiting any more.
+
 | mark | meaning |
 |---|---|
-| 🟢 | **write now** — nothing will change |
-| 🟡 | write now, but leave `[NUM]` where a number may change after Vishvavallabha / final eval |
-| 🔴 | **wait** — depends on results not in yet |
+| 🟢 | **write now** — final |
+| ~~🟡 🔴~~ | (no longer used — every section is 🟢) |
+
+**Final numbers (corpus 270 passages, 7 sources; 40 test questions, 27 answerable):**
+
+| what | number |
+|---|---|
+| answers backed by a real citation (grounded) | **51.9%** — was 13.6% at the start |
+| refusing a question it could answer (over-refusal) | **40.7%** — was 81.8% |
+| correctly refusing an unanswerable question | **92.3%** |
+| invented citations, in every run ever | **0%** |
+| search finds a right book in the top 5 | **96%** (26/27) |
+| citations that point to the exact passage used | 39.6% *(dropped from 52.6% in the previous run; cause not established — say so)* |
 
 **Suggested writing order:** 1 → 2 → 3 → 4 → 5 → 6 → 8 → 7 → 9 → 10 → abstract → title.
 (Abstract and title go LAST — you can only summarise what's already written.)
@@ -68,8 +81,11 @@ Don't copy bullet wording — it is deliberately rough.*
 - Krishi Parashara: seasons, sowing, rain signs
 - Upavanavinoda: gardens, tree care
 - Kashyapiya Krishisukti: cultivation, land, water, seeds
-- Vishvavallabha: 9 chapters — groundwater, wells, soil, planting, water, care,
-  nourishment, **diseases & treatment (79 verses, the biggest chapter)**, botanical wonders
+- Vishvavallabha (Chakrapani Mishra, c.1577, Mewar): 9 chapters — groundwater, wells,
+  soil, planting, water, care, nourishment, **diseases & treatment (79 verses, the biggest
+  chapter)**, botanical wonders. **Added last** — obtained from the Internet Archive as the
+  AAHF 2004 Sadhale edition; the English translation came clean from the archive's own OCR
+  (no re-scanning needed); checked against the printed pages verse by verse
 
 **Para 2 — the key idea: disease by CAUSE**
 - plant disorder explained like Ayurveda for humans: vata / pitta / kapha imbalance
@@ -121,7 +137,8 @@ Don't copy bullet wording — it is deliberately rough.*
 **Para 2 — digital corpus**
 - scanned translations → text (OCR) → split into verse-sized passages
 - each passage tagged: book, chapter, verse, translator
-- size: `[NUM]` passages from `[NUM]` sources (now 233 from 6; will change after Vishvavallabha)
+- size: **270 passages from 7 sources** (6 classical treatises + the NITI manual);
+  every passage has its own unique citation label (book, chapter, verse)
 - one modern source too: NITI Aayog natural-farming manual (pest recipes) — kept separate
   as "modern" tier
 
@@ -169,6 +186,17 @@ digitisation can quietly go wrong.*
 - 5 different passages carried the same label "v.1.2" → a citation couldn't say which one
 - fixed so every passage has its own label
 
+**Lesson 4 — the evaluation can be wrong too, not just the archive**
+- our own test scoring misled us three times: a score that measured word overlap, not
+  answers (marked 16/16 "answerable" — reading the passages gave 8); a citation format that
+  the model copied wrongly (looked like a grounding failure, was a formatting collision);
+  and test labels written before a new book was added (every passage from the new book was
+  scored "wrong")
+- each time the fix was the same: **read the actual passage / answer**, don't trust the
+  number alone
+- for an IKS audience this matters: a digitisation project needs a human reading step at
+  every stage, both in the archive and in how it is judged
+
 **Para — the general point**
 - a digital archive can look complete and still be wrong
 - digitisation needs checking against the physical book, not just automatic tests
@@ -177,9 +205,14 @@ digitisation can quietly go wrong.*
 
 ## 6. How we evaluated  🟢  (~400 words)
 
-- test questions: `[NUM]` total (now 40) — 17 named after modern diseases, 23 ordinary
-  farming questions (pests, soil, sowing season, rain, water, planting)
-- + 2 "trap" questions no book covers → system SHOULD refuse
+- test questions: **40** — 17 named after modern diseases, 23 ordinary farming questions
+  (pests, soil, sowing season, rain, water, planting)
+- of these, **27 answerable**; **11** the books genuinely cannot answer (topic is in scope,
+  no passage exists — decided by reading every retrieved passage in full, not by a score);
+  **2** "trap" questions no book covers at all → system SHOULD refuse
+- important: the disease questions are tested with the wording the **system itself
+  generates** from the disease label, not with hand-written wording — earlier runs used
+  hand-written wording and overstated the system (say this; it is honest and unusual)
 - measured:
   - does search find the right book? (plain words, not formulas)
   - does the answer cite a passage that was really retrieved?
@@ -193,7 +226,7 @@ digitisation can quietly go wrong.*
 
 **7.1 The system never invented a citation  🟢**
 - 0% made-up citations — in every test run
-- refused every trap question it should refuse (100% in earlier runs; `[NUM]` final)
+- refused or declined 12 of the 13 unanswerable questions (**92.3%**)
 
 **7.2 The texts answer ordinary farming questions well  🟢**
 - disease-name questions: **1 of 17** had a genuine match
@@ -205,12 +238,22 @@ digitisation can quietly go wrong.*
   - "broken branch" → honey + ghee
   - "tree won't flower" → Upavanavinoda 177
 
-**7.3 Where the traditions don't meet  🟡**
-- 22 modern disease questions: only **4** had a real match, **13** had none
+**7.3 Where the traditions don't meet  🟢**
+- of the 17 disease-name questions, **11 remain unanswerable** even with all 7 sources
 - not a search failure — the concept doesn't exist in the texts
-- the texts index by cause (vata/pitta/kapha); modern diagnosis by what the spot looks like
-- so there is simply no passage for "Septoria leaf spot"
-- `[NUM]` — update after Vishvavallabha (does its 79-verse disease chapter change this?)
+- the texts index by cause (vata/pitta/kapha, over-watering, insects, bad soil); modern
+  diagnosis by what the spot looks like
+- so there is simply no passage for "Septoria leaf spot" or "powdery mildew"
+- **the Vishvavallabha test (the strongest evidence):** we then added the one classical
+  text with a dedicated 79-verse disease chapter — and it did NOT create a single answer
+  for a spot / pustule / powder / mould question. Its chapter 8 is organised by cause
+  exactly like Vrikshayurveda, and describes symptoms as paleness, drying, dieback, falling
+  bark. Two independent texts, same organisation → **the gap is in the tradition, not in
+  our choice of books**
+- what Vishvavallabha DID add: answers for drying / pale / sickly trees, insect damage on
+  leaves, bad soil, and the classical kunapa liquid-manure recipe (ch.7)
+- the simple rule that emerged: a question about how a **lesion looks** → no answer; a
+  question about **drying, paleness, soil, insects, manure** → answered
 
 **7.4 The AI's wording mattered more than expected  🟢**
 - same question, different words → score 17× different
@@ -222,9 +265,26 @@ digitisation can quietly go wrong.*
 - after rewriting its instructions (no retraining): level with human wording
 - lesson: the bridge is essential, and must itself be tested, not assumed
 
-**7.5 Final answer-quality numbers  🔴**
-- grounded-answer rate, citation accuracy, over-refusal — waiting for final run
-  (citation fix + Vishvavallabha)
+**7.5 Final answer-quality numbers  🟢**  *(present as one table)*
+
+| | first honest run (233 passages, hand-written wording) | **final (270 passages, system's own wording)** |
+|---|---|---|
+| answers backed by a real citation | 13.6% | **51.9%** |
+| refusing a question it could answer | 81.8% | **40.7%** |
+| correctly declining an unanswerable question | 100% | 92.3% |
+| invented citations (model given NO texts) | 0% | **0%** |
+
+- grounded answers ~4× higher; over-refusal halved; never one invented citation
+- what changed between the two columns, in plain words: unique passage labels; the system's
+  query-writing instructions fixed (see 7.4); a citation-format bug fixed (the model was
+  writing "Source 2" instead of the book's name — right passage, unusable reference);
+  fairer scoring of partial answers; 3 wrong test labels corrected; Vishvavallabha added
+- search: finds a right book in the top 5 for 26 of 27 answerable questions; the system
+  beats plain keyword search on every measure, but the margin is modest for ordinary
+  farming questions (they already use the texts' words) and large for disease questions
+- **be honest about one number:** citations pointing at the *exact* passage used fell from
+  52.6% to 39.6% in the final run and we could not establish why before the session data
+  was lost — report it with that caveat
 
 ---
 
@@ -251,7 +311,10 @@ digitisation can quietly go wrong.*
 
 - test questions + labels are ours → need expert validation (agronomist, Sanskrit scholar)
 - English translations only, not Sanskrit originals
-- small test set
+- small test set (40 questions); one exact-citation figure (39.6%) unexplained
+- one classical text (Upavanavinoda's scholarly introduction) still not digitised
+- "correct" means "faithful to the text" — no agronomist has yet judged whether the
+  remedies work
 - future: expert-built questions, Sanskrit + Hindi support, farmer field testing,
   let farmers describe symptoms in their own words
 
@@ -280,5 +343,5 @@ digitisation can quietly go wrong.*
 - [ ] full APA reference list
 - [ ] 1 simple system diagram (from the seminar slides, simplified)
 - [ ] tables: the 6 texts; the findings numbers (7.2, 7.3, 7.4)
-- [ ] fill every `[NUM]` once final results are in
+- [x] fill every `[NUM]` — done 29 Sep, all results final
 - [ ] fact-check each section you send me
