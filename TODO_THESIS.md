@@ -143,6 +143,10 @@ In order, cheapest first. Stop as soon as the score is good enough.
 
 ## Open / parked
 
+- [ ] **Kashyapiya translation check** — 12-verse worksheet against the Chowkhamba edition
+      exists (`seminar/kashyapiya_translation_validation.md`) with empty verdicts. The chapter
+      states this honestly; completing it removes the caveat.
+
 - [ ] **Evaluate the soil advisory path.** The soil model outputs (type, moisture, texture)
       map onto the corpus's *strongest* areas — soil preparation, land suitability,
       watering. **Never evaluated.** May be the strong half of the system.

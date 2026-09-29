@@ -10,8 +10,13 @@
    two block diagrams built as Word tables, two data tables, APA references, AI-use
    declaration).
 2. **Shivam Dubey (PhD scholar under Dr. Pandey) reviews** and suggests changes → we apply.
-   Hand him with the draft: the 7 references tagged *[verify]* in the reference list, and
-   the one unexplained number (exact-citation rate 39.6%, section 7.5).
+   Hand him with the draft: the 6 references tagged *[verify]* in the reference list, the
+   one unexplained number (exact-citation rate 39.6%, section 7.5), and the note that the
+   Kashyapiya verse-by-verse check against the Chowkhamba edition
+   (`seminar/kashyapiya_translation_validation.md`) was prepared but never filled in.
+   The chapter now says so in section 4; finishing that check (12 verses) would let the
+   caveat come out. The AI-use declaration was removed at Ankit's request (29 Sep); put
+   it back only if the organisers' guidelines ask for one.
 3. **Turnitin** → plagiarism report + AI-content report.
 4. **Revise from the reports.** The AI report names the flagged paragraphs; Ankit rewrites
    those in his own words. Expect it to flag a good share of a Claude-drafted text — that is
