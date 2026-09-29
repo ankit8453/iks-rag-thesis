@@ -29,14 +29,14 @@ Don't copy bullet wording — it is deliberately rough.*
 
 ---
 
-## Title  🔴 (last)
+## Title  🟢 (write last)
 
 - Submitted title: *"An IKS-Grounded Multimodal Advisory System: Connecting Image-Based
   Plant Diagnosis with Classical Indian Agricultural Texts"*
 - Can keep it, or shift toward the new main finding (where the two traditions meet and
   don't). Decide after writing section 8.
 
-## Abstract (≤300 words) + 5 keywords  🔴 (last)
+## Abstract (≤300 words) + 5 keywords  🟢 (write last)
 
 - purpose → problem → what we built → what we found → why it matters for IKS
 - keyword ideas (pick 5): Indian Knowledge Systems · Vrikshayurveda · digital preservation ·
@@ -125,7 +125,7 @@ Don't copy bullet wording — it is deliberately rough.*
 
 ---
 
-## 4. What we built — in plain terms  🟡  (~800 words)
+## 4. What we built — in plain terms  🟢  (~800 words)
 
 *One plain sentence per part. No equations. Maybe one simple diagram.*
 
@@ -222,7 +222,7 @@ digitisation can quietly go wrong.*
 
 ---
 
-## 7. What we found  🟡/🔴  (~1,000 words)
+## 7. What we found  🟢  (~1,000 words)
 
 **7.1 The system never invented a citation  🟢**
 - 0% made-up citations — in every test run
@@ -307,7 +307,7 @@ digitisation can quietly go wrong.*
 
 ---
 
-## 9. Limitations and future work  🔴  (~300 words, write near the end)
+## 9. Limitations and future work  🟢  (~300 words, write near the end)
 
 - test questions + labels are ours → need expert validation (agronomist, Sanskrit scholar)
 - English translations only, not Sanskrit originals
@@ -320,7 +320,7 @@ digitisation can quietly go wrong.*
 
 ---
 
-## 10. Conclusion  🔴  (~250 words, write last before abstract)
+## 10. Conclusion  🟢  (~250 words, write last before abstract)
 
 - restate: built a way to reach classical texts from a photo, with citations or honest
   silence
