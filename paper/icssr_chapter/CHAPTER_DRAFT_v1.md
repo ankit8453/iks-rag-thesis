@@ -139,7 +139,7 @@ A side effect is worth recording. Forcing the corpus's vocabulary made the descr
 
 ### 7.5 The numbers
 
-Table 2 gives the final results and the first honest measurement for comparison.
+Table 2 gives the final results and the first honest measurement for comparison; Figure 3 shows the progression across the three evaluation stages.
 
 **Table 2.** Answer quality on the forty-question test set.
 
@@ -150,6 +150,8 @@ Table 2 gives the final results and the first honest measurement for comparison.
 | Unanswerable questions correctly declined | 100% | 92.3% |
 | Invented citations, model given no texts | 0% | **0%** |
 | Search finds a correct treatise among the top five | 100% | 96.3% |
+
+![Figure 3. Answers backed by a genuinely retrieved citation, and answerable questions refused outright, across the three evaluation stages. At every stage the model given no texts at all produced zero invented citations.](figures/fig3_results.png)
 
 Grounded answers rose almost fourfold and outright refusal halved. What changed between the two columns was not the model but the honesty of the plumbing around it: unique passage labels; the bridge's instructions; a citation format the generator had been copying wrongly; fairer scoring of answers that answer part of a question and decline the rest; three test labels corrected on reading; and the sixth treatise. One figure moved the other way and is reported as such: the proportion of citations pointing at the *exact* passage used, as opposed to a passage from the right book, fell from 52.6 to 39.6 per cent in the final run, and the session data needed to establish why was lost before it could be examined. We give the number with that caveat rather than omit it.
 

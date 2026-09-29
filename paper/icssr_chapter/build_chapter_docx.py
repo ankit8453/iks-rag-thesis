@@ -32,7 +32,9 @@ from docx.shared import Cm, Pt, RGBColor  # noqa: E402
 from scripts.md_to_docx import convert  # noqa: E402
 
 MD = HERE / "CHAPTER_DRAFT_v1.md"
-OUT = HERE / "CHAPTER_DRAFT_v1.docx"
+# Optional output name on the command line, so a build can proceed while the canonical
+# file is open in Word (Word locks it; python-docx then cannot overwrite it).
+OUT = HERE / (sys.argv[1] if len(sys.argv) > 1 else "CHAPTER_DRAFT_v1.docx")
 
 FONT = "Times New Roman"
 INK = RGBColor(0x1F, 0x2A, 0x37)
@@ -227,14 +229,107 @@ def main() -> int:
         table = build(doc)                 # appended at the end of the body...
         p._p.addprevious(table._tbl)       # ...then moved to where the picture was
         p._p.getparent().remove(p._p)      # picture paragraph goes; caption stays
-    for p in pics[len(builders):]:         # any extra picture (fig 3) is dropped
-        p._p.getparent().remove(p._p)
+    # The third picture (Figure 3, the results chart) is left in place as a PNG for now;
+    # the Word step below replaces it with a native Word chart.
 
     doc.save(str(OUT)); tmp.unlink(missing_ok=True)
     d = Document(str(OUT))
     print(f"wrote {OUT.relative_to(ROOT)}: {len(d.paragraphs)} paragraphs, "
           f"{len(d.tables)} tables, {len(d.inline_shapes)} images")
-    return 0
+    return insert_native_chart()
+
+
+# --------------------------------------------------------------------------- Figure 3
+# Stage data for the results chart. Kept here, next to the builder, so the chart and the
+# text cannot drift apart: these are the numbers in Table 2 and EXPERIMENT_LOG.md 6m-6p.
+STAGES = [
+    ("Stage 1: 233 passages,\nhand-written wording,\nduplicate labels", 13.6, 81.8),
+    ("Stage 2: 233 passages,\nsystem's own wording,\nunique labels", 16.7, 83.3),
+    ("Stage 3 (final): 270 passages,\n+ Vishvavallabha,\ncitation format fixed", 51.9, 40.7),
+]
+SERIES = ("answers backed by a real citation", "answerable questions refused")
+
+
+def _rgb(r, g, b) -> int:
+    return r + g * 256 + b * 65536
+
+
+def insert_native_chart() -> int:
+    """Replace the Figure 3 picture with a real Word chart, using Word itself.
+
+    python-docx cannot create charts. Word can, through COM: the chart is a genuine Word
+    object with an embedded workbook, so a reviewer who clicks it gets "Edit Data" and
+    the numbers, exactly as if it had been made in Word by hand.
+    """
+    try:
+        import win32com.client  # noqa: PLC0415
+    except ImportError:
+        print("pywin32 not available - Figure 3 left as a picture")
+        return 0
+    word = win32com.client.DispatchEx("Word.Application")
+    word.Visible = False
+    word.DisplayAlerts = 0
+    try:
+        doc = word.Documents.Open(str(OUT))
+        # python-docx's default template is flagged as an older format, so Word opens it
+        # in "Compatibility Mode". Upgrade it: charts behave as in a current document and
+        # the reviewer does not see the compatibility banner in the title bar.
+        if doc.CompatibilityMode < 15:
+            doc.Convert()
+        if doc.InlineShapes.Count < 1:
+            print("no picture found to replace"); doc.Close(False); return 1
+        pic = doc.InlineShapes(1)              # figures 1-2 are tables, so this is fig 3
+        rng = pic.Range
+        pic.Delete()
+        shape = doc.InlineShapes.AddChart2(-1, 51, rng)   # 51 = xlColumnClustered
+        chart = shape.Chart
+
+        chart.ChartData.Activate()
+        wb = chart.ChartData.Workbook
+        ws = wb.Worksheets(1)
+        ws.Cells(1, 1).Value = ""
+        ws.Cells(1, 2).Value = SERIES[0]
+        ws.Cells(1, 3).Value = SERIES[1]
+        for i, (label, grounded, refused) in enumerate(STAGES, start=2):
+            ws.Cells(i, 1).Value = label
+            ws.Cells(i, 2).Value = grounded
+            ws.Cells(i, 3).Value = refused
+        # A string reference, not the Excel Range object: the Range lives in the embedded
+        # workbook's process and Word's Chart.SetSourceData rejects it across that boundary.
+        chart.SetSourceData(f"='{ws.Name}'!$A$1:$C${len(STAGES) + 1}")
+        wb.Close()
+
+        chart.HasTitle = False
+        chart.HasLegend = True
+        chart.Legend.Position = -4107          # xlLegendPositionBottom
+        chart.Legend.Font.Size = 9
+        chart.Legend.Font.Name = FONT
+        vax = chart.Axes(2)                    # xlValue
+        vax.MinimumScale = 0; vax.MaximumScale = 100; vax.MajorUnit = 20
+        vax.HasTitle = True
+        vax.AxisTitle.Text = "per cent of answerable questions"
+        vax.AxisTitle.Font.Size = 9; vax.AxisTitle.Font.Name = FONT
+        vax.TickLabels.Font.Size = 9; vax.TickLabels.Font.Name = FONT
+        vax.HasMajorGridlines = True
+        vax.MajorGridlines.Format.Line.ForeColor.RGB = _rgb(220, 220, 220)
+        cax = chart.Axes(1)                    # xlCategory
+        cax.TickLabels.Font.Size = 8.5; cax.TickLabels.Font.Name = FONT
+        colours = (_rgb(31, 78, 121), _rgb(201, 162, 39))
+        for k in (1, 2):
+            s = chart.SeriesCollection(k)
+            s.Format.Fill.ForeColor.RGB = colours[k - 1]
+            s.HasDataLabels = True
+            s.DataLabels().NumberFormat = '0.0"%"'
+            s.DataLabels().Font.Size = 8.5
+            s.DataLabels().Font.Name = FONT
+        chart.ChartGroups(1).GapWidth = 60
+        shape.Width = 430; shape.Height = 260  # points
+        doc.Save()
+        doc.Close(False)
+        print("Figure 3 inserted as a native Word chart")
+        return 0
+    finally:
+        word.Quit()
 
 
 if __name__ == "__main__":
